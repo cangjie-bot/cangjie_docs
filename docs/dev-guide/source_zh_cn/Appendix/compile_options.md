@@ -545,7 +545,7 @@ $ cjc test.cj --pgo-instr-use=default.profdata -o testOptimized
 参数 `<value>` 一般为符合以下格式的字符串：`<arch>(-<vendor>)-<os>(-<env>)`。其中：
 
 - `<arch>` 表示目标平台的系统架构，例如 `aarch64`，`x86_64` 等；
-- `<vendor>` 表示开发目标平台的厂商，常见的例如 `pc`，`apple` 等，在没有明确平台厂商或厂商不重要的情况下也经常写作 `unknown` 或直接省略；
+- `<vendor>` 表示开发目标平台的厂商，常见的例如 `apple` 等，在没有明确平台厂商或厂商不重要的情况下也经常写作 `unknown` 或直接省略；
 - `<os>` 表示目标平台的操作系统，例如 `Linux`，`Win32` 等；
 - `<env>` 表示目标平台的 ABI 或标准规范，用于更细粒度地区分同一操作系统的不同运行环境，例如 `gnu`，`musl` 等。在操作系统不需要根据 `<env>` 进行更细地区分的时候，此项也可以省略。
 
