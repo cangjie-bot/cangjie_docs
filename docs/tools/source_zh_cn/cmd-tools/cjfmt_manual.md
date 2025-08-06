@@ -132,7 +132,7 @@ multipleLineMethodChainOverLineLength = true
 - `-l` 选项仅适用于格式化单个文件（选项 `-f`）。如果指定了目录（选项 `-d`），则 `-l` 选项无效。
 
 ```shell
-cjfmt -f a.cj -o .cj -l 10:25 // 仅格式化第10行至第25行
+cjfmt -f a.cj -o b.cj -l 10:25 // 仅格式化第10行至第25行
 ```
 
 ## 格式化规则

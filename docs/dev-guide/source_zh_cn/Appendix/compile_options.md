@@ -1006,7 +1006,7 @@ cjc -p my_pkg --test-only -L output -lmain
 
 ## 宏选项
 
-`cjc` 支持以下宏选项，关于宏的更多内容请参见[“宏”](./Chapter_15_Macro.md)章节。
+`cjc` 支持以下宏选项，关于宏的更多内容请参见[“宏”](../Macro/macro_introduction.md)章节。
 
 ### `--compile-macro` <sup>[frontend]</sup>
 

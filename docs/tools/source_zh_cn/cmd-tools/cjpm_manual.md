@@ -1709,7 +1709,7 @@ cj_project
     或者
 
     ```shell
-    cjpm test src src/koo pro/src/zoo
+    cjpm test src src/koo pro0/src/zoo
     ```
 
 - 想要手动删除 `target` 等中间件时，执行如下命令：
