@@ -1,0 +1,6 @@
+- [Tool Usage Guide](source_zh_cn/command_line_overview.md)
+    - [Package Management Tool](source_zh_cn/cmd-tools/cjpm_manual.md)
+    - [Debugging Tool](source_zh_cn/cmd-tools/cjdb_manual.md)
+    - [Formatting Tool](source_zh_cn/cmd-tools/cjfmt_manual.md)
+    - [HLE Tool](source_zh_cn/cmd-tools/HLE_manual.md)
+    - [Language Server Tool](source_zh_cn/cangjie-language-server/LSPServer_manual.md)
