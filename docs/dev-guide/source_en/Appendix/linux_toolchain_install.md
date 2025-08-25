@@ -56,7 +56,7 @@ $ yum install \
       binutils \
       glibc-devel \
       libstdc++-devel \
-      gcc \
+      gcc
 ```
 
 Additionally, OpenSSL 3 needs to be installed. Refer to [Compiling and Installing Dependency Tools](./linux_toolchain_install.md#compiling-and-installing-dependency-tools) for installation methods.
@@ -68,7 +68,7 @@ $ yum install \
       binutils \
       glibc-devel \
       libstdc++-devel \
-      gcc \
+      gcc
 ```
 
 Additionally, OpenSSL 3 needs to be installed. Refer to [Compiling and Installing Dependency Tools](./linux_toolchain_install.md#compiling-and-installing-dependency-tools) for installation methods.

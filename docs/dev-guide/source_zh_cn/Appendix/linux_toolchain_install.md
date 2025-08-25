@@ -56,7 +56,7 @@ $ yum install \
       binutils \
       glibc-devel \
       libstdc++-devel \
-      gcc \
+      gcc
 ```
 
 此外，还需要安装 OpenSSL 3，安装方法请参见[编译安装依赖工具](./linux_toolchain_install.md#编译安装依赖工具)。
@@ -68,7 +68,7 @@ $ yum install \
       binutils \
       glibc-devel \
       libstdc++-devel \
-      gcc \
+      gcc
 ```
 
 此外，还需要安装 OpenSSL 3，安装方法请参见[编译安装依赖工具](./linux_toolchain_install.md#编译安装依赖工具)。
