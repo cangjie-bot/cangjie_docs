@@ -1,6 +1,6 @@
 # TokenKind Type
 
-```cangjie
+``` cangjie
 public enum TokenKind <: ToString {
     DOT|                      /*  "."           */
     COMMA|                    /*  ","           */
@@ -106,7 +106,7 @@ public enum TokenKind <: ToString {
     TRY|                      /*  "try"         */
     CATCH|                    /*  "catch"       */
     FINALLY|                  /*  "finally"     */
-    FOR|                       /*  "for"         */
+    FOR|                      /*  "for"         */
     DO|                       /*  "do"          */
     WHILE|                    /*  "while"       */
     THROW|                    /*  "throw"       */
@@ -144,23 +144,27 @@ public enum TokenKind <: ToString {
     INTEGER_LITERAL|          /*  e.g. "1"      */
     RUNE_BYTE_LITERAL|        /*  e.g. "b'x'"   */
     FLOAT_LITERAL|            /*  e.g. "'1.0'"  */
-    COMMENT|                  /*  e.g. "//xx"   */
-    NL|                       /*  newline       */
-    END|                      /*  end of file   */
-    SENTINEL|                 /*  ";"           */
-    RUNE_LITERAL|             /*  e.g. "r'x'"   */
-    STRING_LITERAL|           /*  e.g. ""xx""   */
+    COMMENT|                  /*  e.g. "//xx"     */
+    NL|                       /*  newline         */
+    END|                      /*  end of file     */
+    SENTINEL|                 /*  ";"             */
+    RUNE_LITERAL|             /*  e.g. "r'x'"      */
+    STRING_LITERAL|           /*  e.g. ""xx""     */
     SINGLE_QUOTED_STRING_LITERAL|  
-                              /*  e.g. "'xx'"   */
-    JSTRING_LITERAL|          /*  e.g. "J"xx""  */
-    MULTILINE_STRING|         /*  e.g. """"aaa"""" */
-    MULTILINE_RAW_STRING|     /*  e.g. "#"aaa"#" */
-    BOOL_LITERAL|             /*  "true" or "false" */
-    UNIT_LITERAL|             /*  "()"          */
-    DOLLAR_IDENTIFIER|        /*  e.g. "$x"     */
-    ANNOTATION|               /*  e.g. "@When"  */
-    AT_EXCL|                  /*  e.g. "@!"     */
+                              /*  e.g. "'xx'"    */
+    JSTRING_LITERAL|          /*  e.g. "J"xx""     */
+    MULTILINE_STRING|         /*  e.g. """"aaa""""   */
+    MULTILINE_RAW_STRING|     /*  e.g. "#"aaa"#"     */
+    BOOL_LITERAL|             /*  "true" or "false"  */
+    UNIT_LITERAL|             /*  "()"               */
+    DOLLAR_IDENTIFIER|        /*  e.g. "$x"          */
+    ANNOTATION|               /*  e.g. "@When"       */
+    AT_EXCL|                  /*  e.g. "@!"          */
     ILLEGAL|
+    HANDLE|                   /*  "handle"           */
+    PERFORM|                  /*  "perform"          */
+    RESUME|                   /*  "resume"           */
+    THROWING|                 /*  "throwing"         */
     ...
 }
 ```

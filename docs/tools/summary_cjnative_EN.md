@@ -4,3 +4,4 @@
     - [Formatting Tool](source_en/cmd-tools/cjfmt_manual.md)
     - [HLE Tool](source_en/cmd-tools/HLE_manual.md)
     - [Language Server Tool](source_en/cangjie-language-server/LSPServer_manual.md)
+    - [CHIR Deserialization Tool](source_en/cmd-tools/chir_dis_manual.md)

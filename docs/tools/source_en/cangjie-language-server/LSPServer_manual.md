@@ -2,25 +2,25 @@
 
 ## Overview
 
-The `Cangjie Language Server` provides language service features such as definition navigation, reference lookup, and code completion for the Cangjie programming language.
+The `Cangjie Language Server` provides language service features such as definition navigation, reference lookup, and code completion based on the Cangjie language.
 
 ## Usage Instructions
 
-The Cangjie Language Server serves as the backend server that delivers Cangjie language services within IDEs, requiring integration with an IDE client. Developers can either use the VSCode plugin released by Cangjie or develop their own IDE client that complies with the LSP protocol.
+The Cangjie Language Server serves as the backend server for providing Cangjie language services in IDEs, requiring integration with an IDE client. Developers can use it with the VSCode plugin released by Cangjie or develop their own IDE clients that comply with the Language Server Protocol (LSP).
 
 The startup parameters for `Cangjie Language Server` are as follows:
 
-```bash
+```shell
 -V                    Optional parameter, enables crash log generation capability for LSPServer  
 --enable-log=<value>  Optional parameter, controls whether to enable log printing. If not set, defaults to true (enabling log printing)  
---log-path=<value>    Optional parameter, sets the directory for generating log files and crash logs. If not set, log files are generated in the LSPServer directory by default  
+--log-path=<value>    Optional parameter, specifies the directory for generating log files and crash logs. If not set, logs will be generated in the LSPServer's working directory by default  
 --disableAutoImport   Optional parameter, disables automatic package import during code completion  
 --test                Optional parameter, starts test mode for running LSPServer test cases  
 ```
 
 ## Usage Example
 
-```bash
+```shell
 LSPServer.exe --enable-log=true --log-path=D:/CangjieLSPLog -V --disableAutoImport
 ```
 
