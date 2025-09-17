@@ -1,0 +1,27 @@
+name: 文档更新自提单|Self-tracking
+description: 您需要自主更新文档时，使用此模板。
+title: "[文档更新自提单]: [xxx模块]"
+labels: ["SelfTracking"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢提交文档更新需求单。
+  - type: textarea
+    attributes:
+      label: 文档更新涉及手册名称
+      description: 请提供文档更新内容所属手册名称，如仓颉编程语言开发指南、仓颉编程语言工具使用指南等。
+    validations:
+      required: true
+  - type: checkboxes
+    id: version
+    attributes:
+      label: 受影响的分支
+      description: 请选择受影响的文档分支：
+      options:
+        - label: main
+          required: false
+        - label: dev
+          required: false
+    validations:
+      required: true
