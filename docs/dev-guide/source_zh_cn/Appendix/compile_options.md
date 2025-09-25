@@ -247,6 +247,8 @@ Hello World
 
 指定导入模块的 AST 文件的搜索路径。
 
+> **说明：** 关于 CJO 文件的详细信息，请参见 [CJO 产物说明](cjo_artifacts.md)。
+
 假设已有以下目录结构，`libs/myModule` 目录中包含 `myModule` 模块的库文件和 `log` 包的 AST 导出文件：
 
 ```text
@@ -275,6 +277,8 @@ main() {
 ### `--scan-dependency` <sup>[frontend]</sup>
 
 通过 `--scan-dependency` 指令可以获得指定包源码或者一个包的 `cjo` 文件对于其他包的直接依赖以及其他信息，以 `json` 格式输出。
+
+> **说明：** 关于 CJO 文件的详细信息，请参见 [CJO 产物说明](cjo_artifacts.md)。
 
 ```cangjie
 // this file is placed under directory pkgA

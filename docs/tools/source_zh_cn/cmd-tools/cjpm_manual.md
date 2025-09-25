@@ -1381,6 +1381,8 @@ cfg3 = "-O2"
 
 `package-option` 选项为 `map` 结构，`pro0.xoo` 名称作为 `key` (`toml` 配置文件中含有 `.` 的字符串作为整体时，需要用 `""` 包含)，所以 `key` 的值为 `libpro0.xoo.so` 。前端文件 `cjo` 的路径作为 `value`，对应于该 `cjo` 的 `.a` 或 `.so` 需放置在相同路径下。
 
+关于 CJO 文件的详细信息，请参见 [CJO 产物说明](../../dev-guide/source_zh_cn/Appendix/cjo_artifacts.md)。
+
 > **注意：**
 >
 > 如果同时通过 `package-option` 和 `path-option` 导入了相同的包，则 `package-option` 字段的优先级更高。
