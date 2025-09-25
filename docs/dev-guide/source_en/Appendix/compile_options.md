@@ -245,6 +245,8 @@ The compiler retains intermediate files like `.bc` and `.o`.
 
 Specifies the search path for imported module AST files.
 
+> **Note:** For detailed information about CJO files, see [CJO Artifacts](cjo_artifacts.md).
+
 Given the following directory structure, where `libs/myModule` contains the `myModule` library and AST export files for the `log` package:
 
 ```text
@@ -273,6 +275,8 @@ Use `--import-path ./libs` to add `./libs` to the AST file search path. `cjc` us
 ### `--scan-dependency` <sup>[frontend]</sup>
 
 The `--scan-dependency` command outputs direct dependencies and other information for a package's source code or `.cjo` file in JSON format.
+
+> **Note:** For detailed information about CJO files, see [CJO Artifacts](cjo_artifacts.md).
 
 ```cangjie
 // this file is placed under directory pkgA

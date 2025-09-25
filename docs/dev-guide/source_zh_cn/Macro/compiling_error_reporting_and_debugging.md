@@ -72,6 +72,8 @@ cjc src/demo.cj -o demo --import-path ./target --output-dir ./target
 
 在 Linux 平台上，将生成用于包管理的 `macro_define.cjo` 和实际的动态库文件。
 
+> **说明：** 关于 CJO 文件的详细信息，请参见 [CJO 产物说明](../Appendix/cjo_artifacts.md)。
+
 若在 Windows 平台：
 
 ```shell
