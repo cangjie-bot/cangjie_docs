@@ -72,6 +72,8 @@ cjc src/demo.cj -o demo --import-path ./target --output-dir ./target
 
 On Linux, this will generate `macro_define.cjo` for package management and the actual dynamic library file.
 
+> **Note:** For detailed information about CJO files, see [CJO Artifacts](../Appendix/cjo_artifacts.md).
+
 For Windows:
 
 ```shell
