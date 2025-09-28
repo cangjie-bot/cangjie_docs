@@ -455,12 +455,12 @@ cjc --scan-dependency pkgA.cjo
 
 ### `--lto=[full|thin]`
 
-使能且指定 `LTO` （`Link Time Optimization` 链接时优化）优化编译模式。
+启用并指定 `LTO` （`Link Time Optimization` 链接时优化）优化编译模式。
 
 **值得注意的是：**
 
 1. `Windows` 以及 `macOS` 平台不支持该功能；
-2. 当使能且指定 `LTO` （`Link Time Optimization` 链接时优化）优化编译模式时，不允许同时使用如下优化编译选项：`-Os`、`-Oz`。
+2. 当启用并指定 `LTO` （`Link Time Optimization` 链接时优化）优化编译模式时，不允许同时使用如下优化编译选项：`-Os`、`-Oz`。
 
 `LTO` 优化支持两种编译模式：
 
@@ -504,7 +504,7 @@ cjc --scan-dependency pkgA.cjo
 
 ### `--pgo-instr-gen`
 
-使能插桩编译，生成携带插桩信息的可执行程序。
+启用插桩编译，生成携带插桩信息的可执行程序。
 
 编译 macOS 与 Windows 目标时暂不支持使用该功能。
 
@@ -1002,13 +1002,13 @@ cjc -p my_pkg --test-only -L output -lmain
 
 ### `--mock <on|off|runtime-error>` <sup>[frontend]</sup>
 
-如果传递了 `on` ，则该包将使能 mock 编译，该选项允许在测试用例中 mock 该包中的类。`off` 是一种显式禁用 mock 的方法。
+如果传递了 `on` ，则该包将启用 mock 编译，该选项允许在测试用例中 mock 该包中的类。`off` 是一种显式禁用 mock 的方法。
 
 > **注意：**
 >
-> 在测试模式下（当使能 `--test` ）自动启用对此包的 mock 支持，不需要显式传递 `--mock` 选项。
+> 在测试模式下（当启用 `--test` ）自动启用对此包的 mock 支持，不需要显式传递 `--mock` 选项。
 
-`runtime-error` 仅在测试模式下可用（当使能 `--test` 时），它允许编译带有 mock 代码的包，但不在编译器中做任何 mock 相关的处理（这些处理可能会造成一些开销并影响测试的运行时性能）。这对于带有 mock 代码用例进行基准测试时可能是有用的。使用此编译选项时，避免编译带有 mock 代码的用例并运行测试，否则将抛出运行时异常。
+`runtime-error` 仅在测试模式下可用（当启用 `--test` 时），它允许编译带有 mock 代码的包，但不在编译器中做任何 mock 相关的处理（这些处理可能会造成一些开销并影响测试的运行时性能）。这对于带有 mock 代码用例进行基准测试时可能是有用的。使用此编译选项时，避免编译带有 mock 代码的用例并运行测试，否则将抛出运行时异常。
 
 ## 宏选项
 
