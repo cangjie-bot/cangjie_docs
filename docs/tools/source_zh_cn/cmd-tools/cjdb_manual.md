@@ -638,6 +638,117 @@ Executable module set to "/0901/cangjie-linux-x86_64-release/bin/test".
 Architecture set to: x86_64-unknown-linux-gnu.
 ```
 
+### 安卓远程调试
+
+- 远程调试需要先在安卓平台启动 `lldb-server` 。
+
+```text
+adb shell /data/local/tmp/lldb-server platform --listen "*:1234"
+```
+
+- 另起窗口启动调试器。
+
+```text
+(cjdb) platform select remote-android
+  Platform: remote-android
+ Connected: no
+(cjdb) platform connect connect://FMR0223A31052288:1234
+  Platform: remote-android
+    Triple: aarch64-unknown-linux-android
+OS Version: 31 (5.10.43)
+  Hostname: localhost
+ Connected: yes
+WorkingDir: /
+    Kernel: #1 SMP PREEMPT Wed Mar 20 12:20:52 CST 2024
+(cjdb) attach 29551
+(cjdb) Process 29551 stopped
+* thread #1, name = 'main', stop reason = signal SIGSTOP
+    frame #0: 0x0000007f83f7c5e4 libc.so`nanosleep + 4
+libc.so`nanosleep:
+->  0x7f83f7c5e4 <+4>:  svc    #0
+    0x7f83f7c5e8 <+8>:  cmn    x0, #0x1, lsl #12         ; =0x1000
+    0x7f83f7c5ec <+12>: cneg   x0, x0, hi
+    0x7f83f7c5f0 <+16>: b.hi   0x7f83f7b6cc              ; __set_errno_internal
+Executable module set to "C:\Users\user\.lldb\module_cache\remote-android\.cache\88DA3010\main".
+Architecture set to: aarch64-unknown-linux-android.
+(cjdb)
+```
+
+远程调试选择安卓平台。
+
+```text
+platform select remote-android
+```
+
+远程调试连接安卓设备。
+
+```text
+platform connect connect://FMR0223A31052288:1234
+```
+
+远程调试附加到进程。
+
+```text
+attach 29551
+```
+
+### ios 模拟器远程调试
+
+由于 `ios` 模拟器运行程序需要使用 `Xcode` 来启动。使用 `cjdb` 调试 `ios` 模拟器上运行的程序时可以按照以下步骤。
+
+1. 先用 `Xcode` 启动被调试程序。
+
+2. 在 `Xcode lldb` 命令行使用 `detach` 命令断开调试。
+
+3. 在命令行启动 `cjdb` 后使用 `attach` 命令加载被调程序。
+
+加载成功以后即可使用 `cjdb` 正常进行调试。由于 `Xcode` 和 `cjdb` 依赖 `llvm` 版本的差异，需要在编译时加上额外的参数 `-gdwarf-4` 。
+
+### ios 真机远程调试
+
+由于 `ios` 真机的安全策略导致 `cjdb` 无法直接调试真机程序。只能使用 `Xcode` 附带的 `lldb` 来进行调试。因此提供了 `Python` 脚本扩展用来支持仓颉程序的调试功能。
+
+调试 `ios` 真机上运行的程序时可以按照以下步骤。编译程序部分可以参考《仓颉编程语言开发指南》的编译和构建章节。
+
+1. 先用 `Xcode` 启动被调试程序。
+
+2. 在 `Xcode` 调试窗口的命令行中加载脚本，命令为 `command script import $CANGJIE_HOME/tools/script/cangjie_cjdb.py` ，其中 `$CANGJIE_HOME` 需要替换成仓颉的安装目录。
+   如果希望每次 `Xcode` 启动调试时自动加载脚本，可以在用户目录下创建 `.lldbinit` 文件并输入上述命令。
+
+3. 加载成功以后即可正常进行调试。
+
+由于 `ios` 真机使用 `Python` 脚本扩展能力，受限于 `lldb` 开放的 `Python` 能力限制，故在支持调试的规格上与 `cjdb` 有差异，表达式、条件断点、 `demangle` 功能暂不支持。 `None` 会显示成 `nullptr` 。
+
+#### 查看仓颉线程调用栈
+
+使用 `cjthread` 命令查看仓颉调用栈。
+
+```text
+  (lldb) cjthread
+  cjthread #6 state: pending name:
+    frame #0: 0x7ffff7f0299d libcangjie-runtime.so`CJ_CJThreadPark
+    frame #1: 0x7ffff7f19f3e libcangjie-runtime.so`CJ_TimerSleep
+    frame #2: 0x7ffff7e1c95a libcangjie-runtime.so`MRT_Sleep
+    frame #3: 0x7ffff7e224c1 libcangjie-runtime.so`CJ_MRT_Sleep
+    frame #4: 0x55555563a5e9 main`std.core.sleep(std.core::Duration) at sleep.cj:36
+    frame #5: 0x5555555f3e0b main`default.create_spawn::lambda.0() at cjthread.cj:8
+    frame #6: 0x5555555f3f67 main`_CCN7default12create_spawnHRNat6StringEEL_E$g
+    frame #7: 0x5555556425ba main`std.core.Future<...>::execute() at future.cj:161
+  cjthread #5 state: pending name:
+    frame #0: 0x7ffff7f0299d libcangjie-runtime.so`CJ_CJThreadPark
+    frame #1: 0x7ffff7f19f3e libcangjie-runtime.so`CJ_TimerSleep
+    frame #2: 0x7ffff7e1c95a libcangjie-runtime.so`MRT_Sleep
+    frame #3: 0x7ffff7e224c1 libcangjie-runtime.so`CJ_MRT_Sleep
+    frame #4: 0x55555563a5e9 main`std.core.sleep(std.core::Duration) at sleep.cj:36
+    frame #5: 0x5555555f3e0b main`default.create_spawn::lambda.0() at cjthread.cj:8
+    frame #6: 0x5555555f3f67 main`_CCN7default12create_spawnHRNat6StringEEL_E$g
+    frame #7: 0x5555556425ba main`std.core.Future<...>::execute() at future.cj:161
+```
+
+> **注意：**
+>
+> 目前无法显示混合调用栈，即调用栈中包含其他语言的调用栈。最大显示 100 个仓颉线程的调用栈。每一个仓颉线程调用栈最多显示 2048 个字节。
+
 ## 注意事项
 
 1. 进行调试的程序必须是已经经过编译的 `debug` 版本，如使用下述命令编译的程序文件：

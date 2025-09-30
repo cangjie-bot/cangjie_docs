@@ -247,8 +247,6 @@ Hello World
 
 指定导入模块的 AST 文件的搜索路径。
 
-> **说明：** 关于 CJO 文件的详细信息，请参见 [CJO 产物说明](cjo_artifacts.md)。
-
 假设已有以下目录结构，`libs/myModule` 目录中包含 `myModule` 模块的库文件和 `log` 包的 AST 导出文件：
 
 ```text
@@ -277,8 +275,6 @@ main() {
 ### `--scan-dependency` <sup>[frontend]</sup>
 
 通过 `--scan-dependency` 指令可以获得指定包源码或者一个包的 `cjo` 文件对于其他包的直接依赖以及其他信息，以 `json` 格式输出。
-
-> **说明：** 关于 CJO 文件的详细信息，请参见 [CJO 产物说明](cjo_artifacts.md)。
 
 ```cangjie
 // this file is placed under directory pkgA
@@ -506,6 +502,14 @@ cjc --scan-dependency pkgA.cjo
     $ cjc test.cj --lto=full --dy-std
     ```
 
+### `--compile-as-exe`
+该选项使能会隐藏 LTO 模式下加载的 bc 文件符号可见性，仅保留 package init 符号可见性。在此基础上，LLVM 原生优化会在此基础上执行激进的无用符号删除。该选项仅在 `--lto` 开启下有效。 
+```shell
+# 编译通过
+$ cjc test.cj --lto=[full|thin] --compile-as-exe
+# 编译报错
+$ cjc test.cj --compile-as-exe
+```
 ### `--pgo-instr-gen`
 
 使能插桩编译，生成携带插桩信息的可执行程序。
@@ -555,10 +559,14 @@ $ cjc test.cj --pgo-instr-use=default.profdata -o testOptimized
 
 目前，`cjc` 已支持交叉编译的本地平台和目标平台如下表所示：
 
-| 本地平台 (host)    | 目标平台 (target)   |
-| ------------------ | ------------------ |
-| x86_64-linux-gnu   | x86_64-windows-gnu     |
-| aarch64-linux-gnu   | x86_64-windows-gnu     |
+| 本地平台 (host)    | 目标平台 (target)   | 支持的软件包 |
+| ------------------ | ------------------ | ------ |
+| x86_64-linux-gnu   | x86_64-windows-gnu     | cangjie-sdk-linux-x64-x.y.z.tar.gz |
+| aarch64-linux-gnu   | x86_64-windows-gnu     | cangjie-sdk-linux-aarch64.x.y.z.tar.gz |
+| x86_64-apple-darwin | aarch64-linux-android31 | cangjie-sdk-mac-x64-android.x.y.z.tar.gz |
+| aarch64-apple-darwin | aarch64-linux-android31 | cangjie-sdk-mac-aarch64-android.x.y.z.tar.gz |
+| aarch64-apple-darwin | aarch64-apple-ios | cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz |
+| aarch64-apple-darwin | aarch64-apple-ios-simulator | cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz |
 
 在使用 `--target` 指定目标平台进行交叉编译之前，请准备好对应目标平台的交叉编译工具链，以及可以在本地平台上运行的、向该目标平台编译的对应 Cangjie SDK 版本。
 
@@ -1084,8 +1092,8 @@ cjc -p my_pkg --test-only -L output -lmain
 
 - 若该编译选项未设置，编译器将根据场景默认开启或关闭激进并行编译：
 
-    - `-O0` 或 `-g`：激进并行编译将由编译器默认开启，且激进并行编译的并行数与 `--jobs` 一致；可以通过 `--aggressive-parallel-compile=<value>` 或 `--apc=<value>` 且 `value <= 1` 关闭激进并行编译。
-    - 非 `-O0` 且非 `-g`：激进并行编译将由编译器默认关闭；可以通过 `--aggressive-parallel-compile=<value>` 或 `--apc=<value>` 且 `value > 1` 开启激进并行编译。
+    - `-O0`：激进并行编译将由编译器默认开启，且激进并行编译的并行数与 `--jobs` 一致；可以通过 `--aggressive-parallel-compile=<value>` 或 `--apc=<value>` 且 `value <= 1` 关闭激进并行编译。
+    - 非 `-O0`：激进并行编译将由编译器默认关闭；如需开启，可指定 `--aggressive-parallel-compile=<value>` 或 `--apc=<value>` 且 `value > 1` ，也可以直接指定 `--apc` 选项。 
 
 ## 优化选项
 

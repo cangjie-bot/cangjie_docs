@@ -72,8 +72,6 @@ cjc src/demo.cj -o demo --import-path ./target --output-dir ./target
 
 在 Linux 平台上，将生成用于包管理的 `macro_define.cjo` 和实际的动态库文件。
 
-> **说明：** 关于 CJO 文件的详细信息，请参见 [CJO 产物说明](../Appendix/cjo_artifacts.md)。
-
 若在 Windows 平台：
 
 ```shell
@@ -312,7 +310,7 @@ cjc --debug-macro demo.cj --import-path ./target
 /* ===== End of the Emit ===== */
 ```
 
-如果宏展开后的代码有语义错误，则编译器的错误信息会溯源到宏展开后代码的具体行列号。仓颉宏的 _debug_ 模式有以下注意事项：
+如果宏展开后的代码有语义错误，则编译器的错误信息会溯源到宏展开后代码的具体行列号。如果在编译时开启了 _debug_ 模式，那么编译器的错误信息中不会打印完整的宏展开代码，仅打印实际错误位置和临时文件路径，开发者可以通过临时文件路径跳转至对应的错误位置；非 _debug_ 模式下，报错信息中会打印出完整的宏展开代码。仓颉宏的 _debug_ 模式有以下注意事项：
 
 - 宏的 _debug_ 模式会重排源码的行列号信息，不适用于某些特殊的换行场景。例如：
 

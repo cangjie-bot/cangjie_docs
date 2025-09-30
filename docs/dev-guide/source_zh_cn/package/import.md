@@ -2,13 +2,14 @@
 
 ## 使用 `import` 语句导入其他包中的声明或定义
 
-在仓颉编程语言中，可以通过 `import fullPackageName.itemName` 的语法导入其他包中的一个顶层声明或定义，`fullPackageName` 为完整路径包名，`itemName` 为声明的名字。导入语句在源文件中的位置必须在包声明之后，其他声明或定义之前。例如：
+在仓颉编程语言中，可以通过 `import orgName::fullPackageName.itemName` 的语法导入其他包中的一个顶层声明或定义，`fullPackageName` 为完整路径包名，`itemName` 为声明的名字。对于无组织名的包，省略组织名和组织名分隔符 `::`。导入语句在源文件中的位置必须在包声明之后，其他声明或定义之前。例如：
 
 ```cangjie
 package a
 import std.math.*
 import package1.foo
 import {package1.foo, package2.bar}
+import org::package1.foo // 导入组织 org 下 package1 包中的子包 foo
 ```
 
 如果要导入的多个 `itemName` 同属于一个 `fullPackageName`，可以使用 `import fullPackageName.{itemName[, itemName]*}` 语法，例如：
@@ -30,6 +31,7 @@ import package1.fuzz
 ```cangjie
 import package1.*
 import {package1.*, package2.*}
+import org::{package1.*, package2.*}
 ```
 
 需要注意：
@@ -39,12 +41,14 @@ import {package1.*, package2.*}
 - 只允许导入当前文件可见的顶层声明或定义，导入不可见的声明或定义将会在导入处报错。
 - 禁止通过 `import` 导入当前源文件所在包的声明或定义。
 - 禁止包间的循环依赖导入，如果包之间存在循环依赖，编译器会报错。
+* `::` 后必须接包名。
+* 使用完整包名访问导入成员时，不能使用组织名。
 
 示例如下：
 
 ```cangjie
 // pkga/a.cj
-package pkga    // Error, packages pkga pkgb are in circular dependencies.
+package pkga    // 错误，pkga 和 pkgb 循环依赖
 import pkgb.*
 
 class C {}
@@ -58,9 +62,15 @@ import pkga.*
 // pkgc/c1.cj
 package pkgc
 
-import pkga.C // Error, 'C' is not accessible in package 'pkga'.
-import pkga.R // OK, R is an external top-level declaration of package pkga.
-import pkgc.f1 // Error, package 'pkgc' should not import itself.
+import pkga.C // 错误, C 在 pkga 不可访问
+import pkga.R // 正确，R 是包 pkga 的 external 的顶层声明
+import pkgc.f1 // 错误，包 pkgc 不能导入自己
+import org::* // 错误，'*' 后应紧跟包名
+import org::pkgf
+import pkgf
+import org2::{
+    pkga.{foo, bar} // 错误，多导入不能嵌套
+}
 
 public func f1() {}
 
@@ -68,19 +78,23 @@ public func f1() {}
 package pkgc
 
 func f2() {
-    /* OK, the imported declaration is visible to all source files of the same package
-     * and accessing import declaration by its name is supported.
-     */
+    // 正确
     R()
 
-    // OK, accessing imported declaration by fully qualified name is supported.
+    // 正确，可以使用完整包名访问导入的声明
     pkga.R()
 
-    // OK, the declaration of current package can be accessed directly.
+    // 正确，本包声明可以直接访问
     f1()
 
-    // OK, accessing declaration of current package by fully qualified name is supported.
+    // 正确，可以使用完整包名访问导入的声明
     pkgc.f1()
+
+    // 错误，不能使用组织名前缀访问声明
+    org::pkgf.f1()
+
+    // 错误，pkgf 在 pkgf 与 org::pkgf 这两个形式上存在歧义
+    pkgf.f1()
 }
 ```
 
@@ -162,19 +176,21 @@ func bar() {
     // main.cj
     import p1 as A
     import p1 as B
-    import p2.f3 as f  // OK
+    import p2.f3 as f  // 正确
     import pkgc.f1 as a
-    import pkgc.f1 as b // OK
+    import pkgc.f1 as b // 正确
+    import org::pkgc as org_pkgc
 
     func f(a: Int32) {}
 
     main() {
-        A.f1()  // OK, package name conflict is resolved by renaming package name.
-        B.f2()  // OK, package name conflict is resolved by renaming package name.
-        p1.f1() // Error, the original package name cannot be used.
-        a()     // OK.
-        b()     // OK.
-        pkgc.f1()    // Error, the original name cannot be used.
+        A.f1()  // 正确
+        B.f2()  // 正确
+        p1.f1() // 错误，p1 是用别名导入的，不能使用原包名
+        a()     // 正确
+        b()     // 正确
+        pkgc.f1()    // 错误，pkgc.f1 被别名导入，不能使用原名字
+        org_pkgc.f1() // 正确
     }
     ```
 

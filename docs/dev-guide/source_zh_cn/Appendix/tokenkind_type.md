@@ -1,6 +1,6 @@
 # TokenKind 类型
 
-```cangjie
+``` cangjie
 public enum TokenKind <: ToString {
     DOT|                      /*  "."           */
     COMMA|                    /*  ","           */
