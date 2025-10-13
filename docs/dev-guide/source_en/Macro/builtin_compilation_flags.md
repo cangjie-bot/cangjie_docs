@@ -38,7 +38,7 @@ For detailed information about conditional compilation, please refer to the [Con
 
 ## @FastNative
 
-To enhance performance in interoperability with `C` language, Cangjie provides the `@FastNative` tag to optimize calls to `C` functions. Note that `@FastNative` can only be used with `foreign` declared functions.
+To improve performance when interoperating with C, Cangjie provides the `@FastNative` tag to optimize calls to C functions. Note that `@FastNative` can only be used with functions declared as `foreign`.
 
 First, compile the following C program to generate the dynamic library file `libcProg.so`:
 
@@ -88,19 +88,12 @@ When using `@FastNative` to modify `foreign` functions, developers must ensure t
 
 ## @Frozen
 
-The `@Frozen` tag can be used to modify functions and properties. If a function or property is guaranteed not to have its internal implementation modified in future versions, it can be marked with `@Frozen`. This tag represents the developer's commitment to the function/property's stability across version updates. Functions and properties marked with `@Frozen` must not undergo any changes to their signatures or bodies in subsequent versions. This means that, under the same compiler and compilation options, the generated artifacts for the function or property must remain identical across two code versions.
+The `@Frozen` annotation can be used to mark functions and properties whose internal implementation is guaranteed not to change in future versions. It signals the developer's commitment to the stability of that function/property across releases. Functions and properties annotated with `@Frozen` must not change their signatures or bodies in subsequent versions. Under the same compiler and compilation options, the generated artifacts for the function or property must therefore remain identical between versions.
 
-The `@Frozen` tag can be applied to:
+The `@Frozen` annotation can only be applied to:
 
-- Global functions
-- Functions in classes, structs, interfaces, extensions, and enums
-- Properties in classes, interfaces, and extensions
-
-The `@Frozen` tag cannot be applied to:
-
-- Other type declarations besides functions and properties
-- Nested functions
-- Expressions
+- All kinds of function definitions except local (nested) functions, including global functions, member functions, constructors, primary constructors, and destructors.
+- All kinds of member property definitions.
 
 Usage example:
 
