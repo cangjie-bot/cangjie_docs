@@ -90,17 +90,10 @@ When using `@FastNative` to modify `foreign` functions, developers must ensure t
 
 The `@Frozen` tag can be used to modify functions and properties. If a function or property is guaranteed not to have its internal implementation modified in future versions, it can be marked with `@Frozen`. This tag represents the developer's commitment to the function/property's stability across version updates. Functions and properties marked with `@Frozen` must not undergo any changes to their signatures or bodies in subsequent versions. This means that, under the same compiler and compilation options, the generated artifacts for the function or property must remain identical across two code versions.
 
-The `@Frozen` tag can be applied to:
+The `@Frozen` tag can only be applied to:
 
-- Global functions
-- Functions in classes, structs, interfaces, extensions, and enums
-- Properties in classes, interfaces, and extensions
-
-The `@Frozen` tag cannot be applied to:
-
-- Other type declarations besides functions and properties
-- Nested functions
-- Expressions
+- All kinds of function definitions except local (nested) functions, including global functions, member functions, constructors, primary constructors, and destructors.
+- All kinds of member property definitions.
 
 Usage example:
 
