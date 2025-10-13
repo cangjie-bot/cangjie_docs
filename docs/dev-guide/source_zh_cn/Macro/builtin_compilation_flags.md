@@ -90,17 +90,10 @@ this is an example
 
 `@Frozen` 标记可用于修饰函数和属性。如果确定某个函数、属性在将来的版本更新中不会去修改它的内部实现，那么可以使用 `@Frozen` 对其进行标记，该标记代表开发者对该函数/属性在未来版本演进的一种承诺。被 `@Frozen` 修饰的函数和属性，在后续的升级版本中，签名和函数体都不能发生任何变化。这意味着，前后两个代码版本，在相同编译器、相同编译选项的情况下，该函数或属性的生成产物完全一致。
 
-`@Frozen` 标记可被用于修饰：
+`@Frozen` 注解仅可用于修饰：
 
-- 全局函数
-- 类、结构、接口、扩展、枚举中的函数
-- 类、接口、扩展中的属性
-
-`@Frozen` 标记不可被用于修饰：
-
-- 除了函数和属性以外的其他类型声明
-- 嵌套函数
-- 表达式
+- 可用于标记除局部（嵌套）函数外的所有种类的函数定义，包括全局函数、成员函数、构造函数、主构造函数和析构函数。
+- 所有种类的成员属性定义。
 
 使用示例如下：
 
@@ -137,7 +130,7 @@ public class testClass {
 ```cangjie
 public macro Component(input: Tokens): Tokens {
     var varDecl = parseDecl(input)
-    if (varDecl.hasAttr("State")) { // 如果该节点被标记了属性且值为 “State” 返回 true, 否则返回 false
+    if (varDecl.hasAttr("State")) { // 如果该节点被标记了属性且值为 "State"，则返回 true，否则返回 false
         var attrs = varDecl.getAttrs() // 返回一组 Tokens
         println(attrs[0].value)
     }
