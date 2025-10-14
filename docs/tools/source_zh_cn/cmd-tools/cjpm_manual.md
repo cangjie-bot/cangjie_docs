@@ -263,6 +263,7 @@ cjpm tree success
 > - `-i, --incremental` 选项目前仅支持基于源码的增量分析。如果导入的库内容有变更，需要开发者重新使用全量方式构建。
 
 编译生成的中间文件默认会存放在 `target` 文件夹，而可执行文件会根据编译模式存放到 `target/release/bin` 或 `target/debug/bin` 文件夹。运行可执行文件的方式可参考 `run`。
+
 为了提供可复制的构建，此命令会创建 `cjpm.lock` 文件，该文件包含所有可传递依赖项的确切版本，这些依赖项将用于所有后续构建，需要更新该文件时请使用 `update` 命令。如果有必要保证每个项目参与者都有可复制的构建，那么此文件应提交到版本控制系统中。
 
 例如：
@@ -2155,16 +2156,16 @@ cjpm build --no-feature-deduce --target=aarch64-linux-android --enable-features=
 对于 `source-set` 字段的配置，示例如下：
 
 ```toml
- # Example syntax:
+# Example syntax:
 
- # 仓颉代码的源码文件目录
- [source-set.epoll]
-   src-dir = "src/net/select/epoll"
-   condition = [ "feature.os.epoll" ]
+# 仓颉代码的源码文件目录
+[source-set.epoll]
+  src-dir = "src/net/select/epoll"
+  condition = [ "feature.os.epoll" ]
 
- [source-set.kqueue]
-   src-dir = "src/net/select/kqueue"
-   condition = [ "feature.os.kqueue" ]
+[source-set.kqueue]
+  src-dir = "src/net/select/kqueue"
+  condition = [ "feature.os.kqueue" ]
 ```
 
 每个源码集声明包含 3 个部分：`source-set` 标识符、`src-dir` 和 `condition`。

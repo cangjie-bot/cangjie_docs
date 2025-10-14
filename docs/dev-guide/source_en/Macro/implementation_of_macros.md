@@ -2,6 +2,10 @@
 
 This chapter introduces the definition and usage of Cangjie macros, which can be categorized into [Non-Attribute Macros](./implementation_of_macros.md#non-attribute-macros) and [Attribute Macros](./implementation_of_macros.md#attribute-macros). Additionally, this chapter will cover the behavior when macros are nested.
 
+> **Note:**
+>
+> Using I/O operations such as file operations, network communication, etc. in macro definitions may lead to unexpected behavior. Please use with caution.
+
 ## Non-Attribute Macros
 
 Non-attribute macros only accept the code to be transformed and do not take other parameters (attributes). Their definition format is as follows:
@@ -297,11 +301,9 @@ Regarding attribute macros, the following points should be noted:
 
 The Cangjie language does not support nested macro definitions but conditionally supports nested macro invocations within macro definitions and macro invocations.
 
-### Nested Macro Invocations in Macro DefinitionsHere is the professional translation of the provided Markdown content from Chinese to English, maintaining all structural and formatting elements:
+### Macro Definitions with Nested Calls
 
 Below is an example of macro definitions containing nested macro calls.
-
-### Macro Definitions with Nested Calls
 
 The `getIdent` macro is defined in macro package `pkg1`:
 
@@ -528,9 +530,7 @@ Macro calls:
 
 Here, `Inner` uses `assertParentContext` to verify it's called within an `Outer` macro. Since this nesting doesn't exist in the example, the compiler reports an error.
 
-Inner macros can also communicate with outer macros via key/value pairs. During execution:
-1. Inner macros send messages via `setItem`
-2. Outer macros receive these messages via `getChildMessages` (a collection of key/value mappings)
+Inner macros can also communicate with outer macros by sending key/value pairs. When an inner macro executes, it sends information to the outer macro by calling the standard library function `setItem`; subsequently, when the outer macro executes, it calls the standard library function `getChildMessages` to receive the information sent by each inner macro (a set of key/value pair mappings). Below is a simple example.
 
 Example macro definitions:
 
@@ -601,11 +601,4 @@ public func getCnt() {
 }
 ```
 
-Workflow:
-1. Inner macros send messages via `setItem`
-2. Outer macro receives messages via `getChildMessages` (multiple `Inner` calls possible)
-3. Values are retrieved via the message object's `getString` method
-
---- 
-
-The translation strictly maintains all Markdown formatting, code blocks, and structural elements while providing accurate technical terminology and natural English flow.
+The specific process is as follows: The inner macro `Inner` sends messages to the outer macro via `setItem`; the `Outer` macro receives an array of message objects sent by `Inner` through the `getChildMessages` function (`Outer` can invoke `Inner` multiple times); finally, the corresponding value is retrieved via the `getString` function of these message objects.

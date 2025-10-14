@@ -72,8 +72,6 @@ cjc src/demo.cj -o demo --import-path ./target --output-dir ./target
 
 On Linux, this will generate `macro_define.cjo` for package management and the actual dynamic library file.
 
-> **Note:** For detailed information about CJO files, see [CJO Artifacts](../Appendix/cjo_artifacts.md).
-
 For Windows:
 
 ```shell
@@ -146,6 +144,7 @@ public func diagReport(level: DiagReportLevel, tokens: Tokens, message: String, 
 ```
 
 Parameter meanings:
+
 - `level`: Error message severity level
 - `tokens`: Tokens corresponding to the source code referenced in the error message
 - `message`: Primary error message
@@ -348,4 +347,3 @@ If the expanded macro code contains semantic errors, the compiler's error messag
       let t = @M(1+2)
   }
   ```
-```

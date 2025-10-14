@@ -51,7 +51,7 @@ Cangjie provides the following built-in conditional variables: `os`, `backend`, 
 
 ### os
 
-`os` represents the target platform's operating system. It supports `==` and `!=` operators. Supported operating systems include: `Windows`, `Linux`, `macOS`.
+`os` represents the target platform's operating system. It supports `==` and `!=` operators. Supported operating systems include: `Windows`, `Linux`, `macOS`, `iOS`.
 
 Usage example:
 
@@ -298,6 +298,7 @@ func fee() {
 }
 main() {
     fee()
+}
 ```
 
 Compile and run the above code using the following command:

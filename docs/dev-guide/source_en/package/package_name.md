@@ -1,15 +1,16 @@
 # Package Declaration
 
-In the Cangjie programming language, package declarations begin with the keyword `package`, followed by the package names from the root package to the current package, separated by `.`. Package names must be valid ordinary identifiers (excluding raw identifiers). For example:
+In the Cangjie programming language, a package declaration starts with the keyword `package`, followed by an optional organization name and the organization name separator '::', then the package names from the root package to the current package separated by '.' on the path. Both organization names and package names must be valid ordinary identifiers (excluding raw identifiers). For example:
 
 ```cangjie
 package pkg1      // root package pkg1
-package pkg1.sub1 // sub-package sub1 under root package pkg1
+package pkg1.sub1 // subpackage sub1 under root package pkg1
+package org1::pkg1.sub1 // subpackage sub1 under root package pkg1 of organization org1
 ```
 
 > **Note:**
 >
-> In the current Windows platform version, package names do not support Unicode characters. Package names must be valid ordinary identifiers containing only ASCII characters.
+> In the current Windows platform version, organization names and package names do not support Unicode characters yet. They must be valid ordinary identifiers containing only ASCII characters.
 
 The package declaration must appear as the first non-empty, non-comment line in a source file, and all source files within the same package must maintain consistent package declarations.
 
