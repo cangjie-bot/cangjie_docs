@@ -84,7 +84,7 @@ true
 
 ## Generic Member Functions
 
-Member functions of classes, structs, and enums can be generic. For example:
+Member functions of classes, structs, enums, and interface can be generic. For example:
 
 <!-- verify -->
 
@@ -109,13 +109,39 @@ enum C {
     }
 }
 
+interface I {
+    func doo<T>(a: T): Unit where T <: ToString
+}
+class D <: I {
+    public func doo<T>(a: T): Unit where T <: ToString {
+        println("${a}")
+    }
+}
+abstract class E {
+    public func eoo1<T>(a: T): Unit where T <: ToString
+    public open func eoo2<T>(a: T): Unit where T <: ToString
+}
+class F <: E {
+    public func eoo1<T>(a: T): Unit where T <: ToString {
+        println("${a}")
+    }
+    public func eoo2<T>(a: T): Unit where T <: ToString {
+        println("${a}")
+    }
+}
 main() {
     var a = A()
     var b = B()
     var c = C.X
+    var d = D()
+    var f = F()
     a.foo<Int64>(10)
     b.bar<String>("abc")
     c.coo<Bool>(false)
+    d.doo<String>("doo")
+    f.eoo1<String>("eoo1")
+    f.eoo2<String>("eoo2")
+    return 0
 }
 ```
 
@@ -125,6 +151,9 @@ The program output will be:
 10
 abc
 false
+doo
+eoo1
+eoo2
 ```
 
 When extending types using the `extend` declaration, the functions within the extension can also be generic. For example, we can add a generic member function to the `Int64` type:
