@@ -1712,6 +1712,30 @@ It is resumed, a = 9
 >
 > 该选项仅能用于编译仓颉标准库 core 包，不能用于编译其他仓颉代码的场景。
 
+### 打印 AST
+
+通过 `--dump-ast`<sup>[frontend]</sup>打印 AST，默认输出到文件，配合 `--dump-to-screen`<sup>[frontend]</sup>可以打印到屏幕上。
+
+### 打印 CHIR
+
+通过 `--dump-chir`<sup>[frontend]</sup>打印 CHIR，默认输出到文件，配合 `--dump-to-screen`<sup>[frontend]</sup>可以打印到屏幕上。
+
+### 打印 IR
+
+通过 `--dump-ir`<sup>[frontend]</sup>打印 IR，默认输出到文件，配合 `--dump-to-screen`<sup>[frontend]</sup>可以打印到屏幕上。
+
+### 打印 AST, CHIR, IR
+
+通过 `--dump-all`<sup>[frontend]</sup>打印 AST, CHIR, IR，默认输出到文件，配合 `--dump-to-screen`<sup>[frontend]</sup>可以打印到屏幕上。
+
+### 将 dump 内容打印到屏幕上
+
+通过 `--dump-to-screen`<sup>[frontend]</sup> 配合 `--dump-ast`<sup>[frontend]</sup>， `--dump-chir`<sup>[frontend]</sup>, `--dump-ir`<sup>[frontend]</sup>,  `--dump-all`<sup>[frontend]</sup> 会将文本内容打印到屏幕上。
+
+> **注意：**
+>
+> 注意打印到屏幕上时仅打印最终的结果。打印到文件时，会在产物目录下创建以 `_AST`, `_CHIR`, `_IR`为后缀的目录，目录下会生成中间过程的信息。
+
 ## `cjc` 用到的环境变量
 
 这里介绍一些仓颉编译器在编译代码的过程中可能使用到的环境变量。
