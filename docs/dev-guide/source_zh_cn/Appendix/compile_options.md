@@ -127,6 +127,21 @@ cjc main.cj -o a.out
 
 文件名的格式应为 `lib[arg].[extension]`。当需要链接库 `a` 时，可以使用选项 `-l a`，库文件搜索目录下的 `liba.a`、`liba.so`（或链接 Windows 目标程序时会搜索 `liba.dll`）等文件会被链接器搜索到并根据需要被链接至最终输出中。
 
+链接 `Windows` 目标程序默认使用 `ld.lld` 链接器, 会搜索 `.dll` 和 `.a` 后缀的库文件。如果要链接 `.lib` 后缀的库文件，请使用选项 `--link-options=/path/to/lib[arg].lib` 指定路径，`[arg]` 为链接库的名称。
+
+假设在 `Windows` 环境中使用 `llvm` 的 `lld` 链接器链接 `OpenSSL` 库文件，编译时出现如下报错：
+
+```shell
+lld: error: unable to find library -lssl
+lld: error: unable to find library -lcrypto
+```
+
+报错原因是缺少 `libssl.lib`，`libcrypto.lib` 链接库文件，需要手动添加的命令如下：
+
+```shell
+cjc --link-options=/path/to/libssl.lib --link-options=/path/to/libcrypto.lib
+```
+
 ### `--library-path <value>`, `-L <value>`, `-L<value>`
 
 指定要链接的库文件所在的目录。
