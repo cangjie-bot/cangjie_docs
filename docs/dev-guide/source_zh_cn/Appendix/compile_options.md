@@ -1712,6 +1712,23 @@ It is resumed, a = 9
 >
 > 该选项仅能用于编译仓颉标准库 core 包，不能用于编译其他仓颉代码的场景。
 
+### 打印抽象语法树
+
+通过 `--dump-ast`<sup>[frontend]</sup>打印抽象语法树，默认输出到文件，配合 `--dump-to-screen`<sup>[frontend]</sup>可以打印到屏幕上。
+
+### 打印 CHIR
+
+通过 `--dump-chir`<sup>[frontend]</sup>打印 CHIR，默认输出到文件，配合 `--dump-to-screen`<sup>[frontend]</sup>可以打印到屏幕上。
+
+### 打印 IR
+
+通过 `--dump-ir`<sup>[frontend]</sup>打印 IR，默认输出到文件，配合 `--dump-to-screen`<sup>[frontend]</sup>可以打印到屏幕上。
+
+### 打印抽象语法树, CHIR, IR
+
+通过 `--dump-all`<sup>[frontend]</sup>打印抽象语法树, CHIR, IR，默认输出到文件，配合 `--dump-to-screen`<sup>[frontend]</sup>可以打印到屏幕上。
+
+
 ## `cjc` 用到的环境变量
 
 这里介绍一些仓颉编译器在编译代码的过程中可能使用到的环境变量。
