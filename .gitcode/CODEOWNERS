@@ -1,15 +1,11 @@
-# 指定根目录下文件的Code Owner
-
-@xuanjz @amy_mayun @luojianing
-
 # 指定流程配置的Code Owner
 
 /.gitcode/ @xuanjz
 
 # 指定docs/dev-guide目录下文件的Code Owner
 
-/docs/dev-guide/ @amy_mayun @luojianing @guoyuqing @wuying21 @Augus_Jan @wyq1213 @Timi3
+/docs/dev-guide/ @xuanjz @wuying21 @Augus_Jan @wyq1213 @Timi3
 
 # 指定docs/tools目录下文件的Code Owner
 
-/docs/tools/ @amy_mayun @luojianing @guoyuqing @chopupu @zjdd @zxudong @Ant2024
+/docs/tools/ @xuanjz @chopupu @zjdd @zxudong @Ant2024
