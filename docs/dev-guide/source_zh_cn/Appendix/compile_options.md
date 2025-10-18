@@ -580,6 +580,7 @@ $ cjc test.cj --pgo-instr-use=default.profdata -o testOptimized
 | aarch64-linux-gnu   | x86_64-windows-gnu     | cangjie-sdk-linux-aarch64.x.y.z.tar.gz |
 | x86_64-apple-darwin | aarch64-linux-android31 | cangjie-sdk-mac-x64-android.x.y.z.tar.gz |
 | aarch64-apple-darwin | aarch64-linux-android31 | cangjie-sdk-mac-aarch64-android.x.y.z.tar.gz |
+| aarch64-apple-darwin | aarch64-linux-android26 | cangjie-sdk-mac-aarch64-android.x.y.z.tar.gz |
 | aarch64-apple-darwin | aarch64-apple-ios | cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz |
 | aarch64-apple-darwin | aarch64-apple-ios-simulator | cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz |
 
