@@ -7,44 +7,50 @@
 - `Linux/macOS` 平台到 `ios-aarch64` 平台的交叉编译构建。
 - `Linux/macOS` 平台到 `ios-simulator-aarch64` 平台的交叉编译构建。
 
-仓颉编程语言现已支持交叉编译至 `Android API 31` 和 `iOS`，方便开发者在不同平台上进行应用开发。
+当前 `cjc` 支持交叉编译至 `Android` 和 `iOS`，方便开发者在不同平台上进行应用开发。
 
-## 仓颉交叉编译至 Android API 31
+## 仓颉交叉编译至 Android
 
 ### 安装包下载
 
 开发者可以使用支持交叉编译的仓颉安装包对特定平台（`android-aarch64`、`android-x86_64`）进行交叉编译。仓颉提供了部分支持交叉编译平台的安装包。
 
-**支持交叉编译至 Android API 31 的仓颉安装包：**
+**支持交叉编译至 Android 的仓颉安装包：**
 
-- `cangjie-sdk-linux-x64-android.x.y.z.tar.gz`
-- `cangjie-sdk-windows-x64-android.x.y.z.zip`
-- `cangjie-sdk-windows-x64-android.x.y.z.exe`
-- `cangjie-sdk-mac-x64-android.x.y.z.tar.gz`
-- `cangjie-sdk-mac-aarch64-android.x.y.z.tar.gz`
+| 主机平台     | 推荐安装包                                     | 支持目标           |
+|:------------:|:------------------------------------------------:|:------------------:|
+| Linux x_64 | `cangjie-sdk-linux-x64-android-X.Y.Z.tar.gz`    | Android API 31/26  |
+| macOS aarch64| `cangjie-sdk-mac-aarch64-android-X.Y.Z.tar.gz`  | Android API 31/26  |
+| Windows x_64|`cangjie-sdk-windows-x64-android-X.Y.Z.zip\|exe`| Android API 31/26  |
 
-例如：若需要在 `linux x64` 平台交叉编译至 `Android API 31`，可以下载安装 `cangjie-sdk-linux-x64-android.x.y.z.tar.gz` 仓颉软件包。
+> **注意：**
+>
+> 当交叉编译目标为 `Android API 26` 时，仓颉运行时不支持异步打点和计数功能。
 
-除了支持交叉编译的仓颉软件包，还需要下载支持 `Android API 31` 的 `Android NDK`，请从 `Android` 官方网站下载最新 `NDK` 软件包。
+除了支持交叉编译的仓颉软件包，还需要下载支持 `Android API 31` 或 `Android API 26` 的 `Android NDK`，请从 `Android` 官方网站下载最新 `NDK` 软件包。
 
 ### 编译
 
-仓颉交叉编译至 `Android API 31` 会需要以下两个依赖目录：
+仓颉交叉编译至 `Android` 会需要以下两个依赖目录：
+| 依赖项                                              | 作用             | 典型路径（需按实际 NDK 位置替换）                                                              |
+| ------------------------------------------------ | -------------- | -------------------------------------------------------------------------------- |
+| 1.**sysroot** 目录                                   | 交叉编译头文件与系统库根目录 | `<ndk-path>/toolchains/llvm/prebuilt/<platform>/sysroot`                         |
+| 2.**libclang\_rt.builtins-aarch64-android.a** 所在目录 | 提供 LLVM 内置运行时库 | `<ndk-path>/toolchains/llvm/prebuilt/<platform>/lib64/clang/<version>/lib/linux` |
 
-1. `sysroot` 目录，该文件由 `Android NDK` 提供，通常位于 `<ndk-path>/toolchains/llvm/prebuilt/<platform>/sysroot` 。
-
-2. `libclang_rt.builtins-aarch64-android.a` 所在的目录，该文件由 `Android NDK` 提供，通常位于 `<ndk-path>/toolchains/llvm/prebuilt/<platform>/lib64/clang/<version>/lib/linux` 。
 
 使用 `cjc` 交叉编译仓颉代码时需要额外指定以下选项（`<>` 部分需要替换为实际目录）：
 
-- `--target=aarch64-linux-android31` 指定目标平台 `Android API 31` 进行交叉编译
+- `--target=aarch64-linux-android31` 指定目标平台 `Android API 31` 进行交叉编译（若需要交叉编译至 `Android API 26`，则可以使用 `--target=aarch64-linux-android26` 选项）
 - `--sysroot=<sysroot-path>` 指定工具链的根目录路径 `<sysroot-path>`
 - `-L<lib-path>` 指定 `libclang_rt.builtins-aarch64-android.a` 所在目录 `<lib-path>`
 
 例如执行命令：
 
 ```shell
-$ cjc main.cj --target=aarch64-linux-android31 --sysroot /opt/buildtools/android_ndk-r25b/toolchains/llvm/prebuilt/linux-x86_64/sysroot -L /opt/buildtools/android_ndk-r25b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/14.0.6/lib/linux
+cjc main.cj \
+  --target=aarch64-linux-android31 \
+  --sysroot /opt/buildtools/android_ndk-r25b/toolchains/llvm/prebuilt/linux-x86_64/sysroot \
+  -L /opt/buildtools/android_ndk-r25b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/14.0.6/lib/linux
 ```
 
 `main.cj` 是交叉编译的仓颉代码， `aarch64-linux-android31` 为目标平台，`/opt/buildtools/android_ndk-r25b/toolchains/llvm/prebuilt/linux-x86_64/sysroot` 为工具链的根目录路径 `<sysroot-path>`， `/opt/buildtools/android_ndk-r25b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/14.0.6/lib/linux` 为`libclang_rt.builtins-aarch64-android.a` 所在目录 `<lib-path>`。
