@@ -701,10 +701,6 @@ platform interface A {
 
 仓颉 extend 支持跨平台特性，用户可以使用 common 和 platform 修饰 extend 及其成员。
 
-> **注意：**
->
-> 泛型 extend 暂不支持此特性。
-
 ```cangjie
 // common file
 package cmp
@@ -763,7 +759,7 @@ platform extend A {
 }
 ```
 
-##### extend 属性
+#### extend 属性
 
 common extend 和 platform extend 的属性需要满足如下限制：
 
@@ -800,6 +796,66 @@ platform extend A {
     }
     prop d: Int64 {
         get() { 1 }
+    }
+}
+```
+
+#### 泛型支持
+
+common extend 声明支持扩展泛型类型和泛型函数, 类型参数在 extend 关键字后声明
+
+```
+// common file
+class Container<T>{
+    var item:?T = Option<T>.None
+}
+
+common extend<T> Container<T>{
+    common func setItem(newItem:T):Unit
+    common func getItem():?T
+}
+
+// platform file
+platform extend<T> Container<T>{
+    platform func setItem(newItem:T){
+        item = newItem
+    }
+    platform func getItem():?T{
+        item
+    }
+}
+```
+
+除了满足 extend 非泛型类型的规则外，extend 泛型类型还需要满足以下要求：
+
++ common extend 和 platform extend 必须具有相同个数的类型参数。
++ common extend 和 platform extend 对应类型参数的约束必须保持一致。
++ common extend 和 platform extend 类型参数允许重命名，但参数结构和约束必须匹配。
+
+##### 泛型成员函数
+
+在 extend 中，无论 extend 本身是否泛型，都可以定义泛型成员函数。泛型成员函数其匹配规则在遵循非泛型 extend 成员函数的基础上，还需满足以下泛型特定要求：
+
++ common 泛型成员函数和 platform 泛型成员函数必须具有相同个数的类型参数。
++ common 泛型成员函数和 platform 泛型成员函数对应类型参数的约束必须保持一致或者更宽松。
++ common 泛型成员函数和 platform 泛型成员函数类型参数允许重命名，但参数结构和约束必须匹配。
+
+```
+// common file
+class Printer {}
+
+common extend Printer {
+    common func printValue1<T>(value: T): Unit where T <: ToString
+    common func printValue2<T>(value: T): Unit where T <: ToString
+}  
+
+// platform file
+platform extend Printer {
+    platform func printValue1<T>(value: T): Unit  where T <: ToString {
+        println(value)
+    }
+    platform func printValue2<T>(value: T): Unit {
+        println(value)
     }
 }
 ```
