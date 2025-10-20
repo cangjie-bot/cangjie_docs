@@ -697,19 +697,15 @@ platform interface A {
 }
 ```
 
-### extend
+#### extend
 
 仓颉 extend 支持跨平台特性，用户可以使用 common 和 platform 修饰 extend 及其成员。
-
-> **注意：**
->
-> 泛型 extend 暂不支持此特性。
 
 ```cangjie
 // common file
 package cmp
 
-class A{}
+class A {}
 
 common extend A {
     common func foo(): Unit
@@ -732,7 +728,29 @@ platform extend A {
 - 当存在多个未声明接口的 common extend 时， 必须存在唯一的 platform extend，禁止多个 common extend 中声明同名私有函数。
 - 当存在声明接口的 common extend 时， common extend 和 platform extend 必须具有完全相同的接口集合。
 
-#### extend 成员函数
+<!---->
+```
+// common file
+package cmp
+common extend Int32 {}
+common extend Int32 {}
+common extend Int64 {}
+
+interface I {}
+class A {}
+common extend A <: I {}
+
+// platform file
+platform extend Int32 {} // ok
+platform extend Int64 {}
+platform extend Int64 {} // error: direct extension of Int64 redefinition
+
+interface B {}
+platform extend A <: I {} // ok
+platform extend A <: B {} // error: the interfaces of platform extend do not match those on common extend
+```
+
+##### extend 成员函数
 
 common extend 和 platform extend 的成员函数需要满足如下限制：
 
@@ -745,12 +763,12 @@ common extend 和 platform extend 的成员函数需要满足如下限制：
 // common file
 package cmp
 
-class A{}
+class A {}
 
 common extend A {
     common func foo1(a: Int64): Unit
     common func foo2(): Unit { println("common") }
-    func foo3(): Unit{}
+    func foo3(): Unit {}
 }
 
 // platform file
@@ -776,14 +794,14 @@ common extend 和 platform extend 的属性需要满足如下限制：
 // common file
 package cmp
 
-class A{}
+class A {}
 
 common extend A {
     common prop a: Int64
     common prop b: Int64 {
         get() { 1 }
     }
-    prop c: Int64{
+    prop c: Int64 {
         get() { 1 }
     }
 }
@@ -800,6 +818,85 @@ platform extend A {
     }
     prop d: Int64 {
         get() { 1 }
+    }
+}
+```
+
+##### 泛型支持
+
+common extend 声明支持扩展泛型类型和泛型函数, 类型参数在 extend 关键字后声明。
+
+```
+// common file
+class Container<T> {
+    var item:?T = Option<T>.None
+}
+
+common extend<T> Container<T> {
+    common func setItem(newItem:T):Unit
+    common func getItem():?T
+}
+
+// platform file
+platform extend<T> Container<T> {
+    platform func setItem(newItem:T) {
+        item = newItem
+    }
+    platform func getItem():?T {
+        item
+    }
+}
+```
+
+除了满足 extend 非泛型类型的规则外，extend 泛型类型还需要满足以下要求：
+
++ common extend 和 platform extend 必须具有相同个数的类型参数。
++ common extend 和 platform extend 对应类型参数的约束必须保持一致。
++ common extend 和 platform extend 类型参数允许重命名，但参数结构和约束必须匹配。
+
+```
+// common file
+package cmp
+
+interface I1 {}
+class B<T, G> {}
+common extend<M, N> B<M, N> where M <: I1 {}
+
+// platform file
+package cmp
+
+common extend<M> B<M, M> where M <: I1 {} // error: platform extend do not match common extend
+
+interface I2 {}
+common extend<M, N> B<M, N> where M <: I2 {} // error: the generic constraints of platform extend do not match those on common extend
+
+common extend<P, Q> B<P, Q> where P <: I1 {} // ok
+```
+
+###### 泛型成员函数
+
+在 extend 中，无论 extend 本身是否泛型，都可以定义泛型成员函数。泛型成员函数其匹配规则在遵循非泛型 extend 成员函数的基础上，还需满足以下泛型特定要求：
+
++ common 泛型成员函数和 platform 泛型成员函数必须具有相同个数的类型参数。
++ common 泛型成员函数和 platform 泛型成员函数对应类型参数的约束必须保持一致或者更宽松。
++ common 泛型成员函数和 platform 泛型成员函数类型参数允许重命名，但参数结构和约束必须匹配。
+
+```
+// common file
+class Printer {}
+
+common extend Printer {
+    common func printValue1<T>(value: T): Unit where T <: ToString
+    common func printValue2<T>(value: T): Unit where T <: ToString
+}
+
+// platform file
+platform extend Printer {
+    platform func printValue1<T>(value: T): Unit  where T <: ToString {
+        println(value)
+    }
+    platform func printValue2<T>(value: T): Unit {
+        println(value)
     }
 }
 ```
