@@ -1020,8 +1020,8 @@ platform interface A {
 
 > **注意：**
 >
-> common extend 成员函数或属性不能同时用 common 和 private 来修饰。
-> 泛型 extend 暂不支持此特性。
+> - common extend成员函数或属性不能同时用common和private来修饰。 
+> - 泛型 extend 暂不支持此特性。
 
 ```cangjie
 // common file
@@ -1047,7 +1047,7 @@ platform extend A {
 
 若存在一个或多个 common extend，则必须存在唯一的 platform extend 与其匹配，且需要满足以下要求：
 
-- 当存在多个未声明接口的 common extend 时， 必须存在唯一的 platform extend，禁止多个 common extend 中声明同名私有函数。
+- 当存在多个未声明接口的 common extend 时， 必须存在唯一的 platform extend。
 - 当存在声明接口的 common extend 时， common extend 和 platform extend 必须具有完全相同的接口集合。
 - 如果是 common extend 泛型声明，还需满足以下泛型特定限制：
   - common extend 泛型声明和 platform extend 泛型声明必须具有相同个数的类型形参。
@@ -1137,7 +1137,7 @@ platform extend A {
 }
 ```
 
-##### extend 属性
+#### extend 属性
 
 common extend 和 platform extend 的属性需要满足如下限制：
 
