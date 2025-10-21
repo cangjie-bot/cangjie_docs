@@ -35,9 +35,8 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 
 |            仓颉类型                            |                    ObjC 类型                       |
 |:----------------------------------------------|:---------------------------------------------------|
-|`@ObjCMirror public interface A <: id`         |        `@protocol A`                               |
-|  `@ObjCMirror public class A <: id`           |        `@interface A`                              |
-|     `@ObjCMirror struct S`                    |        `struct S`                                  |
+|`@ObjCMirror public interface A`         |        `@protocol A`                               |
+|  `@ObjCMirror public class A`           |        `@interface A`                              |
 |    `func fooAndB(a: A, b: B): R`              |        `- (R)foo:(A)a andB:(B)b`                   |
 |  `static func fooAndB(a: A, b: B): R`         |        `+ (R)foo:(A)a andB:(B)b`                   |
 |    `prop foo: R`                              |        `@property(readonly) R foo`                 |
@@ -47,26 +46,28 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 |    `init()`                                   |        `- (instancetype)init`                      |
 |    `let x: R`                                 |        `const R x`                                 |
 |     `var x: R`                                |        `R x`                                       |
-|`@ObjCMirror public interface test <: NSObject`|`@protocol test <NSObject>`                         |
 
 **类型映射：**
 
-| 仓颉类型         |                ObjC 类型      |
-|:----------------|:------------------------------|
-|    `Unit`       |        `void`                 |
-|     `Int8`      |        `signed char`          |
-|    `Int16`      |        `short`                |
-|     `Int32`     |        `int`                  |
-|     `Int64`     |        `long/NSInteger`       |
-|     `Int64`     |        `long long`            |
-|     `UInt8`     |        `unsigned char`        |
-|    `UInt16`     |        `unsigned short`       |
-|    `UInt32`     |        `unsigned int`         |
-|    `UInt64`     |   `unsigned long/NSUInteger`  |
-|    `UInt64`     |   `unsugned long long`        |
-|    `Float32`    |        `float`                |
-|   `Float64`     |        `double`               |
-|  `Bool`         |        `bool/BOOL`            |
+| 仓颉类型                                   |                ObjC 类型      |
+|:------------------------------------------|:------------------------------|
+|    `Unit`                                 |        `void`                 |
+|     `Int8`                                |        `signed char`          |
+|    `Int16`                                |        `short`                |
+|     `Int32`                               |        `int`                  |
+|     `Int64`                               |        `long/NSInteger`       |
+|     `Int64`                               |        `long long`            |
+|     `UInt8`                               |        `unsigned char`        |
+|    `UInt16`                               |        `unsigned short`       |
+|    `UInt32`                               |        `unsigned int`         |
+|    `UInt64`                               |   `unsigned long/NSUInteger`  |
+|    `UInt64`                               |   `unsugned long long`        |
+|    `Float32`                              |        `float`                |
+|   `Float64`                               |        `double`               |
+|  `Bool`                                   |        `bool/BOOL`            |
+| `A` where `A` is `class`                  | `A*`                          |
+| `ObjCPointer<A>` where `A` is `class`     | `A**`                         |
+| `ObjCPointer<A>` where `A` is not `class` | `A*`                          |
 
 注意：
 
@@ -835,6 +836,39 @@ int main(int argc, char** argv) {
 - 不支持继承普通仓颉类。
 - 不支持继承 Impl 类。
 
+## objc.lang support package
+
+`objc.lang` is a package supplied together with the interop library and contains support types that are used to model additional types from Objective-C.
+
+### ObjCPointer
+
+`ObjCPointer` type is defined in the `objc.lang` package and is used to model raw pointers defined in Objective-C. It has the following signature:
+
+```cangjie
+struct ObjCPointer<T> {
+    /* construct ObjCPointer from C Pointer */
+    public init(ptr: CPointer<Unit>)
+    /* check if this pointer is NULL */
+    public func isNull(): Bool
+    /* read the value from the pointer */
+    public func read(): T
+    /* write value to the pointer */
+    public func write(value: T): Unit
+}
+```
+
+Implementations of all `ObjCPointer` methods are provided by the compiler.
+
+The following rules apply to `ObjCPointer`:
+
+- Only concrete Objective-C compatible types can be used to instantiate parameter `T`, including other `ObjCPointer` type. Examples of valid `ObjCPointer` usages: `ObjCPointer<Class>`, `ObjCPointer<Int64>`, `ObjCPointer<ObjCPointer<Bool>>`. Example of invalid `ObjCPointer` usage: `ObjCPointer<U>` where `U` is type parameter, `ObjCPointer<String>`.
+- `ObjCPointer<T>` where `T` is a valid concrete Objective-C compatible type, is Objective-C compatible
+- As a Cangjie class type `A` already corresponds in Objective-C to a pointer type `A*`, a pointer to class `ObjCPointer<A>` corresponds to a pointer-to-pointer `A**`. This is the only way to model an Objective-C pointer-to-pointer in Cangjie.
+
+The following limitations apply:
+
+- Due to the restrictions of Objective-C ARC, `ObjCPointer` to class type **cannot be used** as return type of any Cangjie method or property, including methods and properties of `@ObjCMirror` and `@ObjCImpl` declarations
+
 ## 约束限制
 
 1. 当前版本的 ObjCInteropGen 功能存在如下约束限制：
@@ -845,4 +879,4 @@ int main(int argc, char** argv) {
     - 不支持同时转换多个 .h 头文件
     - 不支持 Bit fields 转换
 
-2. 版本使用过程中需额外下载依赖文件 `cangjie.h` (下载地址： <https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/runtime/src/Cangjie.h>),并集成至项目中。
+2. 版本使用过程中需额外下载依赖文件 `Cangjie.h` (下载地址： <https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/runtime/src/Cangjie.h>),并集成至项目中。
