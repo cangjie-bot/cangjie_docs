@@ -48,10 +48,11 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 |    `let x: R`                                 |        `const R x`                                 |
 |     `var x: R`                                |        `R x`                                       |
 |`@ObjCMirror public interface test <: NSObject`|`@protocol test <NSObject>`                         |
+| `@C struct A                                  |        `struct A`                                  |
 
 **类型映射：**
 
-| 仓颉类型         |                ObjC 类型      |
+| 仓颉类型         |                ObjC 类型       |
 |:----------------|:------------------------------|
 |    `Unit`       |        `void`                 |
 |     `Int8`      |        `signed char`          |
@@ -67,6 +68,7 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 |    `Float32`    |        `float`                |
 |   `Float64`     |        `double`               |
 |  `Bool`         |        `bool/BOOL`            |
+| `struct A`      |   `@C struct A`               |
 
 注意：
 
@@ -834,6 +836,36 @@ int main(int argc, char** argv) {
 - 不支持普通仓颉类继承 Impl 类。
 - 不支持继承普通仓颉类。
 - 不支持继承 Impl 类。
+
+## @C structs support
+
+Structs annotated with `@C` annotation can be used in `@ObjCMirror` and `@ObjcImpl` declaration arguments, return types
+and fields when are used inside `ObjCPointer<T>`. Such annotated struct `X` in Cangjie code corresponds to `struct X`
+type in Objective C code.
+
+Following limitations apply:
+- Structs can contain primitive types, pointers and other @C-annotated structs.
+- For each struct defined in Cangjie or in Objective C, there should be an identical declaration in other language.
+  Differences in fields and their types will lead to runtime errors.
+- Structs should be used along with `ObjCPointer<T>`. For instance, `ObjCPointer<MyStruct>`. Structs passed by value
+  are unstable now.
+
+Example:
+```objc
+// Objective C declaration
+struct X {
+    long a;
+    float b;
+};
+```
+```cangjie
+// Cangjie declaration
+@C
+public struct X {
+    var a: Int64
+    var b: Float32
+}
+```
 
 ## 约束限制
 
