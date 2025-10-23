@@ -1,6 +1,6 @@
 # 指定根目录下文件的Code Owner
 
-@xuanjz @amy_mayun @luojianing
+@xuanjz @amy_mayun
 
 # 指定流程配置的Code Owner
 
@@ -8,8 +8,8 @@
 
 # 指定docs/dev-guide目录下文件的Code Owner
 
-/docs/dev-guide/ @amy_mayun @luojianing @guoyuqing @wuying21 @Augus_Jan @wyq1213 @Timi3
+/docs/dev-guide/ @wuying21 @Augus_Jan @wyq1213 @Timi3
 
 # 指定docs/tools目录下文件的Code Owner
 
-/docs/tools/ @amy_mayun @luojianing @guoyuqing @chopupu @zjdd @zxudong @Ant2024
+/docs/tools/ @chopupu @zjdd @zxudong @Ant2024
