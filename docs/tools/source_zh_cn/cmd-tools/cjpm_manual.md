@@ -329,6 +329,7 @@ Error: cjpm build failed
 - `-g` 用于运行 `debug` 版本的产物
 - `-V, --verbose` 用于展示运行日志
 - `--skip-script` 配置后，将会跳过构建脚本的编译运行
+- `-- <value>` 透传参数给本次运行的二进制产物
 
 例如：
 
@@ -346,6 +347,15 @@ Error: cjpm build failed
 输入: cjpm run --build-args="-s -j16" --run-args="a b c"
 输出: cjpm run success
 ```
+
+```text
+输入: cjpm run --build-args="-s -j16" -- "a b c"
+输出: cjpm run success
+```
+
+> **注意：**
+>
+> `--run-args`选项将在之后的版本被删除，如果将`--run-args`与`--`混用，`--run-args`的透传选项会被忽略。
 
 ### test
 
