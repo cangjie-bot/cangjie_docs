@@ -17,36 +17,17 @@
 
 **支持交叉编译至 Android 的仓颉安装包：**
 
-<div align="center">
-
 | 主机平台     | 推荐安装包                                     | 支持目标           |
-|:------------:|:-----------------------------------------------:|:------------------:|
+|:------------:|:------------------------------------------------:|:------------------:|
 | Linux x_64 | `cangjie-sdk-linux-x64-android-X.Y.Z.tar.gz`    | Android API 31/26  |
 | macOS aarch64| `cangjie-sdk-mac-aarch64-android-X.Y.Z.tar.gz`  | Android API 31/26  |
 | Windows x_64|`cangjie-sdk-windows-x64-android-X.Y.Z.zip\|exe`| Android API 31/26  |
 
-</div>
-
-<!-- 阅读宽度限制 + 居中 -->
-<div align="center">
-
-<!-- 外层表格：只用来限宽，不显示边框 -->
-<table style="max-width: 720px; margin: 0 auto;">
-  <tr>
-    <td>
-
-| 主机平台     | 推荐安装包                                      | 支持目标          |
-| :-----------: | :---------------------------------------------: | :---------------: |
-| Linux x86_64  | `cangjie-sdk-linux-x64-android-X.Y.Z.tar.gz`    | Android API 31/26 |
-| macOS aarch64 | `cangjie-sdk-mac-aarch64-android-X.Y.Z.tar.gz`  | Android API 31/26 |
-| Windows x86_64| `cangjie-sdk-windows-x64-android-X.Y.Z.zip\|exe`| Android API 31/26 |
-
-  </tr>
-</table>
-
-</div>
-
-
+|　主机平台　|　推荐安装包　|　支持目标　|
+|:-----------:|:-------------------------------------------------------------------:|:------------------:|
+| Linux x86_64 | `cangjie-sdk-linux-x64-android-X.Y.Z.tar.gz` | Android API 31/26 |
+| macOS aarch64 | `cangjie-sdk-mac-aarch64-android-X.Y.Z.tar.gz` | Android API 31/26 |
+| Windows x86_64 | `cangjie-sdk-windows-x64-android-X.Y.Z.zip\|exe` | Android API 31/26 |
 > **注意：**
 >
 > 当交叉编译目标为 `Android API 26` 时，仓颉运行时不支持异步打点和计数功能。
@@ -71,7 +52,7 @@
 例如执行命令：
 
 ```shell
-$ cjc main.cj --target=aarch64-linux-android31 --sysroot /opt/buildtools/android_ndk-r25b/toolchains/llvm/prebuilt/linux-x86_64/sysroot -L /opt/buildtools/android_ndk-r25b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/14.0.6/lib/linux
+$ cjc main.cj --target=aarch64-linux-android31 \ --sysroot /opt/buildtools/android_ndk-r25b/toolchains/llvm/prebuilt/linux-x86_64/sysroot \ -L /opt/buildtools/android_ndk-r25b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/14.0.6/lib/linux
 ```
 
 `main.cj` 是交叉编译的仓颉代码， `aarch64-linux-android31` 为目标平台，`/opt/buildtools/android_ndk-r25b/toolchains/llvm/prebuilt/linux-x86_64/sysroot` 为工具链的根目录路径 `<sysroot-path>`， `/opt/buildtools/android_ndk-r25b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/14.0.6/lib/linux` 为`libclang_rt.builtins-aarch64-android.a` 所在目录 `<lib-path>`。
