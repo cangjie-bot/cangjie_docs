@@ -27,6 +27,25 @@
 
 </div>
 
+<!-- 阅读宽度限制 + 居中 -->
+<div align="center">
+
+<!-- 外层表格：只用来限宽，不显示边框 -->
+<table style="max-width: 720px; margin: 0 auto;">
+  <tr>
+    <td>
+
+| 主机平台     | 推荐安装包                                      | 支持目标          |
+| :-----------: | :---------------------------------------------: | :---------------: |
+| Linux x86_64  | `cangjie-sdk-linux-x64-android-X.Y.Z.tar.gz`    | Android API 31/26 |
+| macOS aarch64 | `cangjie-sdk-mac-aarch64-android-X.Y.Z.tar.gz`  | Android API 31/26 |
+| Windows x86_64| `cangjie-sdk-windows-x64-android-X.Y.Z.zip\|exe`| Android API 31/26 |
+
+  </tr>
+</table>
+
+</div>
+
 
 > **注意：**
 >
