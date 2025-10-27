@@ -188,6 +188,7 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 
     @ObjCMirror
     open class Base {
+        public init()
         public open func f(): Unit
     }
     ```
@@ -201,10 +202,10 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
     import interoplib.objc.*
 
     @ObjCImpl
-    public open class Interop <: Base {
+    public class Interop <: Base {
         override public func f(): Unit {
             println("Hello from overridden Cangjie Interop.f()")
-            super.f()
+            Base().f()
         }
     }
     ```
@@ -225,7 +226,6 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
     public class A <: M {
         override public func goo(): Unit {
             println("Hello from overridden A goo()")
-            super.goo()
         }
     }
     ```
@@ -331,7 +331,7 @@ import interoplib.objc.*
 class A <: M {
     @ForeignName["initWithArg2:"]
     public init(arg2: Bool) {
-        super(0, 0.0) // or super()
+        M()
         println("arg2 is ${arg2}")
     }
 }
@@ -344,6 +344,7 @@ class A <: M {
 - 构造函数显式声明时，不为 private/static/const 类型。无显式声明的构造函数时，则无法构建该对象。
 - 仅支持单个命名参数。
 - 暂不支持默认参数值。
+- 暂不支持 super()/this() 调用。
 
 ### 成员函数
 
@@ -377,6 +378,7 @@ import interoplib.objc.*
 
 @ObjCMirror
 open class M {
+    public init()
     @ForeignName["booWithArg0:andArg1:"]
     public static func boo(arg0: Int32, arg1: Bool): Int64
 
@@ -396,9 +398,9 @@ import interoplib.objc.*
 @ObjCImpl
 class A <: M {
     @ForeignName["gooWithArg0:andArg1:"]
-    public override goo(arg0: Int16, arg1: Float32): Float64 {
-        super.goo(arg0, arg1) + 1
-        // we could also call M.boo(...)
+    public override func goo(arg0: Int16, arg1: Float32): Float64 {
+        M.boo(1, true)
+        M().goo(arg0, arg1)
     }
 }
 ```
@@ -435,6 +437,7 @@ import interoplib.objc.*
 
 @ObjCMirror
 open class M {
+    public init()
     protected open mut prop f: IntNative
 }
 ```
@@ -449,11 +452,9 @@ import interoplib.objc.*
 
 @ObjCImpl
 class A <: M {
-    // we could override f
-    // protected override mut prop f: IntNative { get() { super.f + 1 } }
     @ForeignName["gooWithArg0:"]
-    public goo(arg0: IntNative): IntNative{
-        this.f + arg0
+    public func goo(arg0: IntNative): IntNative{
+        M().f + arg0
     }
 }
 ```
@@ -488,6 +489,7 @@ import interoplib.objc.*
 
 @ObjCMirror
 open class M {
+    public init()
     public var m: Float64
 }
 ```
@@ -504,11 +506,11 @@ import interoplib.objc.*
 class A <: M {
     @ForeignName["initWithM:"]
     public init(m: Float64) {
-        super()
+        M()
         this.m = m
     }
     @ForeignName["gooWithArg0:"]
-    public goo(arg0: Float64): Float64 {
+    public func goo(arg0: Float64): Float64 {
         this.m + arg0
     }
 }
@@ -538,7 +540,7 @@ open class M1 {
     @ForeignName["init"]
     public init()
     @ForeignName["goo"]
-    public func goo(): Int64
+    public open func goo(): Int64
 }
 ```
 
@@ -570,8 +572,6 @@ import interoplib.objc.*
 @ObjCImpl
 public class A <: M {
     public init() {
-        super()
-
         println("cj: A.init()")
         let m = M()
     }
@@ -642,11 +642,10 @@ import interoplib.objc.*
 class A <: M {
     @ForeignName["initWithM:"]
     public init(m: Float64) {
-        super()
         this.m = m
     }
     @ForeignName["gooWithArg0:"]
-    public goo(arg0: Float64): Float64 {
+    public func goo(arg0: Float64): Float64 {
         this.m + arg0
     }
 }
@@ -666,7 +665,7 @@ int main(int argc, char** argv) {
 
 > 注意：
 >
-> 暂不支持在普通仓颉类中调用 Impl 类的任意成员。
+> 暂不支持在仓颉中调用 Impl 类的任意成员。
 
 具体规格如下：
 
@@ -678,6 +677,7 @@ int main(int argc, char** argv) {
 - 暂不支持重载函数。
 - 成员函数支持 static/open 修饰。
 - 仅有 public 函数可在 Objc 侧被调用。
+- 暂不支持 super()/this() 调用。
 
 ### 属性
 
@@ -689,7 +689,7 @@ package cjworld
 import interoplib.objc.*
 
 @ObjCMirror
-class M1 {
+public class M1 {
     public prop answer: Float64
 
     @ForeignName["initWithAnswer:"]
@@ -697,7 +697,7 @@ class M1 {
 }
 
 @ObjCMirror
-open class M {
+open public class M {
     public mut prop bar: M1
     @ForeignName["init"]
     public init()
@@ -715,10 +715,9 @@ public class A <: M {
         }
     }
     public init() {
-        super()
         println("cj: A.init()")
         _b = M1(123.123)
-        bar = M1(d)
+        bar = M1(_b.answer)
     }
 }
 ```
@@ -755,36 +754,18 @@ package cjworld
 import interoplib.objc.*
 
 @ObjCMirror
-open class M {
+open public class M {
     @ForeignName["init"]
     public init()
 }
-```
-
-<!-- compile -->
-
-```cangjie
-// M1.cj
-package cjworld
-
-import interoplib.objc.*
 
 @ObjCMirror
-open class M1 {
+open public class M1 {
     @ForeignName["init"]
     public init()
     @ForeignName["foo"]
-    public foo(): Float64
+    public func foo(): Float64
 }
-```
-
-<!-- compile -->
-
-```cangjie
-// A.cj
-package cjworld
-
-import interoplib.objc.*
 
 @ObjCImpl
 public class A <: M {
@@ -834,6 +815,90 @@ int main(int argc, char** argv) {
 - 不支持普通仓颉类继承 Impl 类。
 - 不支持继承普通仓颉类。
 - 不支持继承 Impl 类。
+
+## ObjC使用Cangjie规格
+
+### 新增实验编译选项 `--experimental --enable-interop-cjmapping=<Target Languages>`
+
+启用在FE中支持非C语言的Cangjie互操作。<目标外语>的可能值为Java、ObjC。
+
+### ObjC使用Cangjie结构体
+
+Cangjie与ObjC的互操作中，需要支持在ObjC使用Cangjie的struct数据类型。由于ObjC使用Cangjie的特性仍在开发过程中，当前仅覆盖如下场景：
+
+1. 支持ObjC中调用Cangjie侧public struct的public init方法，public实例方法，public静态方法，访问public struct中的静态/非静态public成员变量，public prop成员
+2. 支持Cangjie侧public struct可以作为ObjC函数的参数类型，返回值类型
+
+示例代码如下所示：
+
+```cangjie
+// cangjie code
+
+package cjworld
+
+import interoplib.objc.*
+
+public struct Vector {
+    let x: Int32
+    let y: Int32
+
+    public init(x: Int32, y: Int32) {
+        this.x = x
+        this.y = y
+    }
+
+    public func dot(v: Vector): Int64 {
+        let res: Int64 = Int64(x * v.x  + y * v.y)
+        println("Hello from dot (${x}, ${y}) . (${v.x}, ${v.y}) = ${res}")
+        return res;
+    }
+
+    public func add(v: Vector): Vector {
+       let res = Vector(x + v.x, y + v.y)
+       println("Hello from add (${x}, ${y}) + (${v.x}, ${v.y}), new Vector = (${res.x}, ${res.y})")
+       return res
+    }
+
+    public static func processPrimitive(intArg: Int32, floatArg: Float64, boolArg: Bool): Unit {
+        println("Hello from static processPrimitive: ${intArg * 2}, ${floatArg + 1.0} + ${!boolArg}")
+    }
+}
+
+```
+
+对应的ObjC代码如下：
+
+```ObjC
+// ObjC code
+
+#import "Vector.h"
+#import <Foundation/Foundation.h>
+
+int main(int argc, char** argv) {
+    @autoreleasepool {
+        [Vector processPrimitive: 1: 2.33: false];
+        Vector* v = [[Vector alloc] init:1 :2];
+        Vector* w = [[Vector alloc] init:3 :4];
+        int dotRes = [v dot: w];
+        Vector* addRes = [v add: w];
+        printf("Get data member in add result = (%d, %d)\n", addRes.x, addRes.y);
+        dotRes = [addRes dot: w];
+    }
+    return 0;
+}
+```
+
+#### 规格约束：
+
+- 要求Cangjie struct无interface实现
+- 暂不支持Cangjie泛型struct
+- 暂不支持ObjC侧对struct成员变量，prop成员的赋值
+- 暂不支持mut函数的调用
+- 暂不支持主构造函数
+- 暂不支持函数参数包含string类型
+- 暂不支持类型检查和类型强转
+- 暂不支持处理异常
+- 暂不支持处理cangjie包粒度编译和ObjC文件粒度编译差异导致的依赖问题，（例如同一cangjie文件中多个struct中的依赖关系，同cangjie包下不同文件下的struct的依赖关系）
 
 ## 约束限制
 
