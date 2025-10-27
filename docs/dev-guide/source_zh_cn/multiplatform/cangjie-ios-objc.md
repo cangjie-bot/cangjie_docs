@@ -35,9 +35,8 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 
 |            仓颉类型                            |                    ObjC 类型                       |
 |:----------------------------------------------|:---------------------------------------------------|
-|`@ObjCMirror public interface A <: id`         |        `@protocol A`                               |
-|  `@ObjCMirror public class A <: id`           |        `@interface A`                              |
-|     `@ObjCMirror struct S`                    |        `struct S`                                  |
+|`@ObjCMirror public interface A`         |        `@protocol A`                               |
+|  `@ObjCMirror public class A`           |        `@interface A`                              |
 |    `func fooAndB(a: A, b: B): R`              |        `- (R)foo:(A)a andB:(B)b`                   |
 |  `static func fooAndB(a: A, b: B): R`         |        `+ (R)foo:(A)a andB:(B)b`                   |
 |    `prop foo: R`                              |        `@property(readonly) R foo`                 |
@@ -47,26 +46,28 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 |    `init()`                                   |        `- (instancetype)init`                      |
 |    `let x: R`                                 |        `const R x`                                 |
 |     `var x: R`                                |        `R x`                                       |
-|`@ObjCMirror public interface test <: NSObject`|`@protocol test <NSObject>`                         |
 
 **类型映射：**
 
-| 仓颉类型         |                ObjC 类型      |
-|:----------------|:------------------------------|
-|    `Unit`       |        `void`                 |
-|     `Int8`      |        `signed char`          |
-|    `Int16`      |        `short`                |
-|     `Int32`     |        `int`                  |
-|     `Int64`     |        `long/NSInteger`       |
-|     `Int64`     |        `long long`            |
-|     `UInt8`     |        `unsigned char`        |
-|    `UInt16`     |        `unsigned short`       |
-|    `UInt32`     |        `unsigned int`         |
-|    `UInt64`     |   `unsigned long/NSUInteger`  |
-|    `UInt64`     |   `unsugned long long`        |
-|    `Float32`    |        `float`                |
-|   `Float64`     |        `double`               |
-|  `Bool`         |        `bool/BOOL`            |
+| 仓颉类型                                   |                ObjC 类型      |
+|:------------------------------------------|:------------------------------|
+|    `Unit`                                 |        `void`                 |
+|     `Int8`                                |        `signed char`          |
+|    `Int16`                                |        `short`                |
+|     `Int32`                               |        `int`                  |
+|     `Int64`                               |        `long/NSInteger`       |
+|     `Int64`                               |        `long long`            |
+|     `UInt8`                               |        `unsigned char`        |
+|    `UInt16`                               |        `unsigned short`       |
+|    `UInt32`                               |        `unsigned int`         |
+|    `UInt64`                               |   `unsigned long/NSUInteger`  |
+|    `UInt64`                               |   `unsugned long long`        |
+|    `Float32`                              |        `float`                |
+|   `Float64`                               |        `double`               |
+|  `Bool`                                   |        `bool/BOOL`            |
+| `A` where `A` is `class`                  | `A*`                          |
+| `ObjCPointer<A>` where `A` is `class`     | `A**`                         |
+| `ObjCPointer<A>` where `A` is not `class` | `A*`                          |
 
 注意：
 
@@ -188,6 +189,7 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 
     @ObjCMirror
     open class Base {
+        public init()
         public open func f(): Unit
     }
     ```
@@ -201,10 +203,10 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
     import interoplib.objc.*
 
     @ObjCImpl
-    public open class Interop <: Base {
+    public class Interop <: Base {
         override public func f(): Unit {
             println("Hello from overridden Cangjie Interop.f()")
-            super.f()
+            Base().f()
         }
     }
     ```
@@ -225,7 +227,6 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
     public class A <: M {
         override public func goo(): Unit {
             println("Hello from overridden A goo()")
-            super.goo()
         }
     }
     ```
@@ -331,7 +332,7 @@ import interoplib.objc.*
 class A <: M {
     @ForeignName["initWithArg2:"]
     public init(arg2: Bool) {
-        super(0, 0.0) // or super()
+        M()
         println("arg2 is ${arg2}")
     }
 }
@@ -344,6 +345,7 @@ class A <: M {
 - 构造函数显式声明时，不为 private/static/const 类型。无显式声明的构造函数时，则无法构建该对象。
 - 仅支持单个命名参数。
 - 暂不支持默认参数值。
+- 暂不支持 super()/this() 调用。
 
 ### 成员函数
 
@@ -377,6 +379,7 @@ import interoplib.objc.*
 
 @ObjCMirror
 open class M {
+    public init()
     @ForeignName["booWithArg0:andArg1:"]
     public static func boo(arg0: Int32, arg1: Bool): Int64
 
@@ -396,9 +399,9 @@ import interoplib.objc.*
 @ObjCImpl
 class A <: M {
     @ForeignName["gooWithArg0:andArg1:"]
-    public override goo(arg0: Int16, arg1: Float32): Float64 {
-        super.goo(arg0, arg1) + 1
-        // we could also call M.boo(...)
+    public override func goo(arg0: Int16, arg1: Float32): Float64 {
+        M.boo(1, true)
+        M().goo(arg0, arg1)
     }
 }
 ```
@@ -435,6 +438,7 @@ import interoplib.objc.*
 
 @ObjCMirror
 open class M {
+    public init()
     protected open mut prop f: IntNative
 }
 ```
@@ -449,11 +453,9 @@ import interoplib.objc.*
 
 @ObjCImpl
 class A <: M {
-    // we could override f
-    // protected override mut prop f: IntNative { get() { super.f + 1 } }
     @ForeignName["gooWithArg0:"]
-    public goo(arg0: IntNative): IntNative{
-        this.f + arg0
+    public func goo(arg0: IntNative): IntNative{
+        M().f + arg0
     }
 }
 ```
@@ -488,6 +490,7 @@ import interoplib.objc.*
 
 @ObjCMirror
 open class M {
+    public init()
     public var m: Float64
 }
 ```
@@ -504,11 +507,11 @@ import interoplib.objc.*
 class A <: M {
     @ForeignName["initWithM:"]
     public init(m: Float64) {
-        super()
+        M()
         this.m = m
     }
     @ForeignName["gooWithArg0:"]
-    public goo(arg0: Float64): Float64 {
+    public func goo(arg0: Float64): Float64 {
         this.m + arg0
     }
 }
@@ -538,7 +541,7 @@ open class M1 {
     @ForeignName["init"]
     public init()
     @ForeignName["goo"]
-    public func goo(): Int64
+    public open func goo(): Int64
 }
 ```
 
@@ -570,8 +573,6 @@ import interoplib.objc.*
 @ObjCImpl
 public class A <: M {
     public init() {
-        super()
-
         println("cj: A.init()")
         let m = M()
     }
@@ -642,11 +643,10 @@ import interoplib.objc.*
 class A <: M {
     @ForeignName["initWithM:"]
     public init(m: Float64) {
-        super()
         this.m = m
     }
     @ForeignName["gooWithArg0:"]
-    public goo(arg0: Float64): Float64 {
+    public func goo(arg0: Float64): Float64 {
         this.m + arg0
     }
 }
@@ -666,7 +666,7 @@ int main(int argc, char** argv) {
 
 > 注意：
 >
-> 暂不支持在普通仓颉类中调用 Impl 类的任意成员。
+> 暂不支持在仓颉中调用 Impl 类的任意成员。
 
 具体规格如下：
 
@@ -678,6 +678,7 @@ int main(int argc, char** argv) {
 - 暂不支持重载函数。
 - 成员函数支持 static/open 修饰。
 - 仅有 public 函数可在 Objc 侧被调用。
+- 暂不支持 super()/this() 调用。
 
 ### 属性
 
@@ -689,7 +690,7 @@ package cjworld
 import interoplib.objc.*
 
 @ObjCMirror
-class M1 {
+public class M1 {
     public prop answer: Float64
 
     @ForeignName["initWithAnswer:"]
@@ -697,7 +698,7 @@ class M1 {
 }
 
 @ObjCMirror
-open class M {
+open public class M {
     public mut prop bar: M1
     @ForeignName["init"]
     public init()
@@ -715,10 +716,9 @@ public class A <: M {
         }
     }
     public init() {
-        super()
         println("cj: A.init()")
         _b = M1(123.123)
-        bar = M1(d)
+        bar = M1(_b.answer)
     }
 }
 ```
@@ -755,36 +755,18 @@ package cjworld
 import interoplib.objc.*
 
 @ObjCMirror
-open class M {
+open public class M {
     @ForeignName["init"]
     public init()
 }
-```
-
-<!-- compile -->
-
-```cangjie
-// M1.cj
-package cjworld
-
-import interoplib.objc.*
 
 @ObjCMirror
-open class M1 {
+open public class M1 {
     @ForeignName["init"]
     public init()
     @ForeignName["foo"]
-    public foo(): Float64
+    public func foo(): Float64
 }
-```
-
-<!-- compile -->
-
-```cangjie
-// A.cj
-package cjworld
-
-import interoplib.objc.*
 
 @ObjCImpl
 public class A <: M {
@@ -835,6 +817,39 @@ int main(int argc, char** argv) {
 - 不支持继承普通仓颉类。
 - 不支持继承 Impl 类。
 
+## objc.lang
+
+是与互操作库一起提供的包，包含用于对 Objective-C 中的其他类型完成映射的支持类型。
+
+### ObjCPointer
+
+`ObjCPointer` 类型定义在 `objc.lang` 包中，用于映射 Objective-C 中定义的原始指针。其签名如下：
+
+```cangjie
+struct ObjCPointer<T> {
+    /* 从 C Pointer构造对象 */
+    public init(ptr: CPointer<Unit>)
+
+    public func isNull(): Bool
+
+    public func read(): T
+
+    public func write(value: T): Unit
+}
+```
+
+`ObjCPointer` 方法的实现均在编译器中。
+
+具体规则如下：
+
+- 只有与 Objective-C 兼容的明确的类型才能用于实例化参数 `T`，包括其他 `ObjCPointer` 类型，例如：`ObjCPointer<Class>`、`ObjCPointer<Int64>`、`ObjCPointer<ObjCPointer<Bool>>`。如下类型不合法：`ObjCPointer<U>`，其中 `U` 为类型参数，`ObjCPointer<String>`。
+- `ObjCPointer<T>` 当 `T` 是一个明确的与 Objective C 兼容的类型时, 该类型为 Objective-C 兼容类型。
+- 由于仓颉类类型 `A` 在 Objective-C 中已经对应了指针类型 `A*`，因此指向类 `ObjCPointer<A>` 的指针对应着指向指针的指针 `A**`。这是在仓颉中模拟 Objective-C 指向指针的唯一方法。
+
+当前约束如下：
+
+- 由于 Objective-C ARC 的限制，`ObjCPointer<class>` 类型**不能**用作任何仓颉方法或属性的返回类型，包括 `@ObjCMirror` 和 `@ObjCImpl` 声明的方法和属性
+
 ## 约束限制
 
 1. 当前版本的 ObjCInteropGen 功能存在如下约束限制：
@@ -845,4 +860,4 @@ int main(int argc, char** argv) {
     - 不支持同时转换多个 .h 头文件
     - 不支持 Bit fields 转换
 
-2. 版本使用过程中需额外下载依赖文件 `cangjie.h` (下载地址： <https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/runtime/src/Cangjie.h>),并集成至项目中。
+2. 版本使用过程中需额外下载依赖文件 `Cangjie.h` (下载地址： <https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/runtime/src/Cangjie.h>),并集成至项目中。

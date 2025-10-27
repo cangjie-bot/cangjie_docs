@@ -331,7 +331,193 @@ platform class A {
 
 ##### class 的继承
 
-common/platform class 的继承暂不支持跨平台特性，将会在后续的版本中支持。
+common/platform class 支持继承，其继承关系的处理与 common/platform 的可见性相关，当子类仅在 platform 中时，在 common 部分中，其不可见。
+
+具体示例如下：
+
+```cangjie
+// common file
+package cmp
+
+public common interface I {
+}
+
+public open common class A <: I {
+    public init() {}
+    public open func foo5(): Unit { println("A::foo5 common") }
+}
+
+public common class A2 <: A {
+    public init() {}
+}
+
+public common class B <: I {
+    public init() {}
+}
+
+public func runCommonA(a: A) {
+    a.foo5()
+}
+
+public func runCommonA2(a: A2) {
+    a.foo5()
+}
+```
+
+```cangjie
+// platform
+package cmp
+
+public platform interface I {
+    func foo5(): Unit { println("I::foo5 platform") }
+}
+
+public open platform class A <: I {
+}
+
+public platform class A2 <: A {
+    public func foo5(): Unit { println("A2::foo5 platform") }
+}
+
+public platform class B <: I {}
+
+public class C <: I {}
+
+public func runPlatformI(a: I) {
+    a.foo5()
+}
+
+public func runPlatformA(a: A) {
+    a.foo5()
+}
+
+public func runPlatformA2(a: A2) {
+    a.foo5()
+}
+```
+
+```cangjie
+// m_common.cj
+import cmp.*
+
+main() {
+    runCommonA(A())
+    runCommonA(A2())
+    runCommonA2(A2())
+}
+```
+
+输出如下：
+
+```plain
+A::foo5 common
+A::foo5 common
+A::foo5 common
+```
+
+```cangjie
+// m_platform.cj
+import cmp.*
+
+main() {
+    runCommonA(A())
+    runCommonA(A2())
+    runCommonA2(A2())
+    println("=")
+    let i1: I = A()
+    let i2: I = A2()
+    let i3: I = B()
+    let i4: I = C()
+    runPlatformI(i1)
+    runPlatformI(i2)
+    runPlatformI(i3)
+    runPlatformI(i4)
+    println("=")
+    runPlatformI(A())
+    runPlatformI(A2())
+    runPlatformA(A())
+    runPlatformA(A2())
+    runPlatformA2(A2())
+}
+```
+
+输出如下：
+
+```plain
+A::foo5 common
+A2::foo5 platform
+A2::foo5 platform
+=
+A::foo5 common
+A2::foo5 platform
+I::foo5 platform
+I::foo5 platform
+=
+A::foo5 common
+A2::foo5 platform
+A::foo5 common
+A2::foo5 platform
+A2::foo5 platform
+```
+
+当前存在如下限制：
+
+- 在 A 包中 platform 中将子类的成员挪到父类声明中，B 包导入 A 包，common/platform 部分的行为不符合预期。
+
+##### abstract class
+
+当 common/platform 为抽象函数时，新增了如下规则：
+
+- 如果成员函数/属性没有 body 体，则必须有 `abstact` 修饰符。
+- 支持 `common abstract`。
+- `abstract common` 修饰的成员可以被 `open platform` 修饰的成员替换。
+
+示例如下:
+
+<!-- compile -->
+
+```cangjie
+// common part
+public common abstract class A {
+    init() {}
+    public common func a(): Int{1}
+    public open func b(): Int{2}
+    public common open func c(): Int {3}
+    public common func d(): Int
+    public common abstract func e(): Int
+    public common abstract func f(): Int
+    public abstract func g(): Int
+
+    public common open prop prop_a: Int{ get() { 1 } }
+    public common prop prop_b: Int { get() { 1 } }
+    public abstract prop prop_c: Int
+}
+
+public class B <: A {
+  public func b(): Int { a() + 10 }
+  public func c(): Int { a() + 20 }
+  public func e(): Int { a() + 30 }
+  public func f(): Int { a() + 40 }
+  public func g(): Int { a() + 50 }
+
+  public prop prop_c: Int { get() { 10 } }
+}
+```
+
+<!-- compile -->
+
+```cangjie
+// platform part
+public platform abstract class A {
+    public platform func a(): Int{4}
+    public platform open func c(): Int {5}
+    public platform func d(): Int {6}
+    public platform open func e(): Int {7}
+    public platform abstract func f(): Int
+
+    public platform open prop prop_a: Int { get() { 2 } }
+}
+```
 
 #### struct
 
@@ -832,6 +1018,11 @@ platform interface A {
 
 仓颉 extend 支持跨平台特性，用户可以使用 common 和 platform 修饰 extend 及其成员。
 
+> **注意：**
+>
+> common extend 成员函数或属性不能同时用 common 和 private 来修饰。
+> 泛型 extend 暂不支持此特性。
+
 ```cangjie
 // common file
 package cmp
@@ -986,6 +1177,54 @@ platform extend A {
     }
 }
 ```
+
+### 导入导出
+
+common 和 platform 的声明支持导入与导出，其规则与其他类型的导入导出规则一致。
+
+具体示例如下：
+
+```cangjie
+// common file
+package cmp
+
+public common func foo(){println("common func foo")}
+```
+
+```cangjie
+// platform file
+package cmp
+public import std.sort.*
+
+public platform func foo(){println("platform func foo")}
+
+public func goo(){
+    println("platform func goo")
+    sort([1, 4, 3])
+}
+```
+
+```cangjie
+// common file
+import cmp.*
+
+main() {
+    foo() // 来自 common 的 foo
+}
+```
+
+```cangjie
+// platform file
+import cmp.*
+
+main() {
+    foo() // 来自 platform 的 foo
+    goo() // 仅在 platform 可见
+    sort([1,4,3]) // 仅在 platform 可见，由于仅在 platform 做了 public import
+}
+```
+
+导入导出的可见性与普通声明在 common/platform 的可见性一致，当定义或重导出只在 platform 中时，在 common 部分中，其不可见。
 
 ### 跨平台编译
 
