@@ -586,6 +586,13 @@ Android/JVM 引入的限制：
 1. 任何使用 Mirror Type 或互操作类型的代码都必须在 Java 虚拟机注册的线程中执行。它可以是在 Java 代码中创建的线程，也可以是使用 Java Invocation API 在 JVM 中注册的 O/S 线程。仓颉编译器 cjc 暂时未对该限制进行编译期检查。
 2. 所有 Mirror Type 和互操作类的 Java 对应类都必须由同一个类加载器加载。
 
+Java GC 的实现引入的限制：
+
+1. JavaMirror/JavaImpl 对象不能赋值给非 JavaMirror/JavaImpl 类、结构体或枚举中的成员变量。
+2. JavaMirror/JavaImpl 对象不能赋值给全局变量。
+3. JavaMirror/JavaImpl 对象不能被 Lambda 或 spawn 块捕获。
+4. JavaMirror/JavaImpl 对象不能被类型转换为非 JavaMirror/JavaImpl 类型（包含隐式转换）。
+
 ## JavaMirror 规格
 
 JavaMirror 为 Java 类型使用仓颉语法形式的表达，由工具自动生成，供开发者使用仓颉的方式调用 Java 方法。
@@ -633,6 +640,38 @@ public class EnhancedLogger <: Logger {
     public func verbose(msg: JString): Unit
 }
 ```
+
+> **注意：**
+>
+> - JavaMirror 的父类仅能为 JavaMirror 或 JObject，当声明中没有父类时，默认父类类型为 JObject。
+> - JavaImpl 的父类仅能为 JavaMirror/JavaImpl 或 JObject，当声明中没有父类时，默认父类类型为 JObject。
+> - 纯仓颉类不能继承 JavaMirror/JavaImpl 类。
+
+### 扩展
+
+JavaMirror 类支持被直接扩展，在扩展中，支持使用任意仓颉语义，包括不存在 Java 映射关系的仓颉类型等。示例如下：
+
+```cangjie
+import std.random.*
+
+@JavaMirror
+public class M {}
+
+extend M {
+    // 注意： `Random` 是纯仓颉类型
+    func foo(rand: Random): Int64 {
+        return rand.nextInt64()
+    }
+
+    func bar(other: M): M {
+        return other
+    }
+}
+```
+
+> **注意：**
+>
+> 不支持扩展接口，包括仓颉接口以及 JavaMirror 接口。
 
 ### 属性
 
@@ -703,9 +742,44 @@ public interface I {
 }
 ```
 
+#### 映射 Default 方法
+
+支持使用 `@JavaHasDefault` 修饰接口中的方法，映射 Java 中的 default 方法。
+
+示例如下：
+
+```java
+public interface I {
+    default int f() {
+        return 1;
+    }
+}
+```
+
+生成的 Mirror 文件如下：
+
+```cangjie
+@JavaMirror
+public interface I {
+    @JavaHasDefault
+    func f(): Int32
+}
+```
+
+可被 JavaImpl 调用：
+
+```cangjie
+@JavaImpl
+public class Impl <: I {
+    public init() {
+        println(f())
+    }
+    // 无需实现 f() 函数。因为 I 中有默认实现
+}
+```
+
 > **注意：**
 >
-> 不支持 `default` 实例方法。
 > 不支持处理 Java interface 中的字段。
 > 不支持处理在 Mirror Type 中包含属性。
 
@@ -823,7 +897,6 @@ JArray 提供了如下能力：
 示例如下：
 
 ```java
-// Main.java
 package com.java.lib;
 
 import cj.Impl;
@@ -836,7 +909,6 @@ public class Main {
 ```
 
 ```java
-// JImpl.Java
 package com.java.lib;
 
 public class JImpl {
@@ -865,8 +937,6 @@ public class JImpl {
 ```
 
 ```cangjie
-// Impl.cj
-
 package cj
 
 import interoplib.interop.*
@@ -1031,7 +1101,7 @@ public class Presenter <: JObject {
     }
 
     public static func isAlive(p: Presenter): Bool {
-        ... // cangjie-side logics
+        ... // 仓颉侧逻辑
     }
 }
 ```
@@ -1073,7 +1143,7 @@ public class Impl <: JObject {
     }
 
     private func foo(): PureCangjieEntity {
-        ... // do any logics
+        /*...*/ 
         return PureCangjieEntity()
     }
 }
@@ -1118,12 +1188,12 @@ func foo(b: B) {
 @JavaMirror
 public class B {
     @ForeignName["bar"]
-    public open func foo() // it's java's B.bar()
+    public open func foo() // java 侧的 B.bar()
 }
 
 @JavaMirror
 public class C <: B {
-    public /* override */ func foo() // it's java's C.bar()
+    public /* override */ func foo() // java 侧的 C.bar()
 }
 
 @JavaImpl
@@ -1151,6 +1221,10 @@ class C extends B {
     public void bar() { /* ... */ }
 }
 ```
+
+### JavaImpl 的扩展
+
+JavaImpl 类型支持直接扩展，规格同 JavaMirror，详见 JavaMirror 章节的[扩展](#扩展)
 
 ## Java使用Cangjie规格
 
