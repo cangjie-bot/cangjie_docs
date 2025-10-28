@@ -241,7 +241,6 @@ count = 1000
 ```cangjie
 import std.sync.Mutex
 
-
 main(): Int64 {
     let mtx: Mutex = Mutex()
     var future: Future<Unit> = spawn {
@@ -432,9 +431,9 @@ public interface Condition {
 
 ```cangjie
 synchronized (obj) {
-  while (<condition is not true>) {
-    obj.wait()
-  }
+    while (<condition is not true>) {
+        obj.wait()
+    }
 }
 ```
 

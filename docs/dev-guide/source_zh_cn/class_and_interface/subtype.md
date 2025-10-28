@@ -66,7 +66,6 @@ class U2 <: U1 {}
 open class S1 {}
 class S2 <: S1 {}
 
-
 func f(a: U1): S2 { S2() }
 func g(a: U2): S1 { S1() }
 

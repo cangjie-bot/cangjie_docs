@@ -182,6 +182,8 @@ main() {
 
 File 打开模式使用示例：
 
+<!-- run -->
+
 ```cangjie
 // 使用指定选项打开模式
 let file = File("./tempFile.txt", Write)
@@ -193,9 +195,11 @@ let file = File("./tempFile.txt", Write)
 
 try-with-resource 语法使用示例：
 
+<!-- run -->
+
 ```cangjie
 try (file2 = File("./tempFile.txt", Read)) {
-    ...
+    // ...
     // 结束使用后自动释放文件
 }
 ```

@@ -83,7 +83,7 @@ public macro M(input: Tokens): Tokens { // macro M 外部可见
 
   编译命令如下，注意这里需要显式链接 B 包动态库：
 
-  ```cangjie
+  ```bash
   cjc C.cj --compile-macro -L. -lB
   ```
 

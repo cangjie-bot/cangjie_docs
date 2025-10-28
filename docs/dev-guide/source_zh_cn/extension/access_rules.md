@@ -389,7 +389,8 @@ main() {
 
 而对于接口扩展，需要同时导入被扩展的类型、扩展的接口和泛型约束（如果有）才能使用。因此在 `package c` 中，需要同时导入 `Foo` 和 `I` 才能使用对应扩展中的函数 `g`。
 
-<!-- compile -->
+<!-- run -access_rules4 -->
+<!-- cfg="-p a --output-type=staticlib" -->
 
 ```cangjie
 // package a
@@ -399,6 +400,9 @@ extend Foo {
     public func f() {}
 }
 ```
+
+<!-- run -access_rules4 -->
+<!-- cfg="-p b --output-type=staticlib liba.a" -->
 
 ```cangjie
 // package b
@@ -414,6 +418,9 @@ extend Foo <: I {
     }
 }
 ```
+
+<!-- run -access_rules4 -->
+<!-- cfg="liba.a libb.a" -->
 
 ```cangjie
 // package c

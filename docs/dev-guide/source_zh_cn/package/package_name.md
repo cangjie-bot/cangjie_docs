@@ -2,8 +2,15 @@
 
 在仓颉编程语言中，包声明以关键字 `package` 开头，后接 root 包至当前包由 `.` 分隔路径上所有包的包名。包名必须是合法的普通标识符（不含原始标识符）。例如：
 
+<!-- compile -->
+
 ```cangjie
 package pkg1      // root 包 pkg1
+```
+
+<!-- compile -->
+
+```cangjie
 package pkg1.sub1 // root 包 pkg1 的子包 sub1
 ```
 
@@ -84,6 +91,9 @@ main(): Int64 {
 另外，包声明不能引起命名冲突：子包不能和当前包的顶层声明同名。
 
 以下是一些错误示例：
+
+<!-- compile -->
+<!-- cfg="-p a --output-type=staticlib" -->
 
 ```cangjie
 // a.cj

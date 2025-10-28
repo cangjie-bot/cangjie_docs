@@ -1405,6 +1405,8 @@ cfg3 = "-O2"
 
 其中，源码 `main.cj` 调用 `pro0.xoo`、`pro0.yoo`、`pro1.zoo` 包的代码示例如下所示。
 
+<!-- only-cjpm -->
+
 ```cangjie
 import pro0.xoo.*
 import pro0.yoo.*
@@ -1595,6 +1597,8 @@ demo
 
 `demo/src/pkg0/pkg0.cj` 需要是一个符合包管理规格的仓颉代码文件，可以不包含功能代码，例如如下形式：
 
+<!-- compile -->
+
 ```cangjie
 package demo.pkg0
 ```
@@ -1618,6 +1622,8 @@ cjpm-xxx(.exe) [args]
 运行 `cjpm-xxx(.exe)` 可能会依赖某些动态库，在这种情况下，开发者需要手动将需要使用的动态库所在的目录添加到环境变量中。
 
 下面以 `cjpm-demo` 为例，该可执行文件由以下仓颉代码编译得到：
+
+<!-- compile -->
 
 ```cangjie
 import std.process.*
@@ -1651,6 +1657,8 @@ main(): Int64 {
 `cjpm` 提供构建脚本机制，开发者可以在构建脚本中定义需要 `cjpm` 在某个命令前后的行为。
 
 构建脚本源文件固定命名为 `build.cj`，位于仓颉项目主目录下，即与 `cjpm.toml` 同级。执行 `init` 命令新建仓颉项目时，`cjpm` 默认不创建 `build.cj`，开发者若有相关需求，可以自行按如下的模板格式在指定位置新建并编辑 `build.cj`。
+
+<!-- compile -->
 
 ```cangjie
 // build.cj
@@ -1731,6 +1739,8 @@ main(): Int64 {
 
 例如，下面的构建脚本 `build.cj` 定义了 `build` 前后的行为：
 
+<!-- compile -->
+
 ```cangjie
 import std.process.*
 
@@ -1768,6 +1778,8 @@ aoo = { path = "./aoo" }
 ```
 
 则可以在构建脚本中导入该依赖，使用依赖中的接口 `aaa()`：
+
+<!-- only-cjpm -->
 
 ```cangjie
 import std.process.*
@@ -1866,6 +1878,9 @@ cj_project
 
 ### 示例的源代码
 
+<!-- compile -pkg0 -->
+<!-- cfg="libpro0.zoo.a libtest.koo.a" -->
+
 ```cangjie
 // cj_project/src/main.cj
 package test
@@ -1886,6 +1901,8 @@ func concatM(s1: String, s2: String): String {
 }
 ```
 
+<!-- only-cjpm -->
+
 ```cangjie
 // cj_project/src/main_test.cj
 package test
@@ -1903,6 +1920,9 @@ public class TestM{
 }
 ```
 
+<!-- compile -pkg0 -->
+<!-- cfg="-p test.koo --output-type=staticlib" -->
+
 ```cangjie
 // cj_project/src/koo/koo.cj
 package test.koo
@@ -1913,6 +1933,8 @@ func concatk(s1: String, s2: String): String {
     return s1 + s2
 }
 ```
+
+<!-- only-cjpm -->
 
 ```cangjie
 // cj_project/src/koo/koo_test.cj
@@ -1931,10 +1953,16 @@ public class TestK{
 }
 ```
 
+<!-- compile -pkg0 -->
+<!-- cfg="-p pro0 --output-type=staticlib" -->
+
 ```cangjie
 // cj_project/pro0/src/pro0.cj
 package pro0
 ```
+
+<!-- compile -pkg0 -->
+<!-- cfg="-p pro0.zoo --output-type=staticlib" -->
 
 ```cangjie
 // cj_project/pro0/src/zoo/zoo.cj
@@ -1946,6 +1974,8 @@ func concatZ(s1: String, s2: String): String {
     return s1 + s2
 }
 ```
+
+<!-- only-cjpm -->
 
 ```cangjie
 // cj_project/pro0/src/zoo/zoo_test.cj

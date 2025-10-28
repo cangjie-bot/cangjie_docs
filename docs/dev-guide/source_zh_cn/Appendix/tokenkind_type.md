@@ -136,7 +136,7 @@ public enum TokenKind <: ToString {
     UNSAFE|                   /*  "unsafe"      */
     OPERATOR|                 /*  "operator"    */
     SPAWN|                    /*  "spawn"       */
-    SYNCHRONIZED|             /*  "synchronized */
+    SYNCHRONIZED|             /*  "synchronized" */
     UPPERBOUND|               /*  "<:"          */
     MAIN|                     /*  "main"        */
     IDENTIFIER|               /*  "x"           */

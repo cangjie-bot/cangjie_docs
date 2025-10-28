@@ -84,7 +84,7 @@ true
 
 ## 泛型成员函数
 
-class、struct 与 enum 的成员函数可以是泛型的。例如：
+class、struct、enum 与 interface 的成员函数可以是泛型的。例如：
 
 <!-- verify -->
 
@@ -109,13 +109,39 @@ enum C {
     }
 }
 
+interface I {
+    func doo<T>(a: T): Unit where T <: ToString
+}
+class D <: I {
+    public func doo<T>(a: T): Unit where T <: ToString {
+        println("${a}")
+    }
+}
+abstract class E {
+    public func eoo1<T>(a: T): Unit where T <: ToString
+    public open func eoo2<T>(a: T): Unit where T <: ToString
+}
+class F <: E {
+    public func eoo1<T>(a: T): Unit where T <: ToString {
+        println("${a}")
+    }
+    public func eoo2<T>(a: T): Unit where T <: ToString {
+        println("${a}")
+    }
+}
 main() {
     var a = A()
     var b = B()
     var c = C.X
+    var d = D()
+    var f = F()
     a.foo<Int64>(10)
     b.bar<String>("abc")
     c.coo<Bool>(false)
+    d.doo<String>("doo")
+    f.eoo1<String>("eoo1")
+    f.eoo2<String>("eoo2")
+    return 0
 }
 ```
 
@@ -125,6 +151,9 @@ main() {
 10
 abc
 false
+doo
+eoo1
+eoo2
 ```
 
 在为类型使用 extend 声明进行扩展时，扩展中的函数也可以是泛型的，例如可以为 `Int64` 类型增加一个泛型成员函数：

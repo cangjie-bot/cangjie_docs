@@ -661,6 +661,8 @@ Architecture set to: x86_64-unknown-linux-gnu.
 
 3. 对于 `Enum` 类型的显示，如果该 `Enum` 的构造器存在参数的情况下，会显示成如下样式：
 
+    <!-- only-cjdb -->
+
     ```cangjie
     enum E {
         Ctor(Int64, String) | Ctor
@@ -816,6 +818,8 @@ Architecture set to: x86_64-unknown-linux-gnu.
     解决方案：删除 `third_party/llvm/bin/debugserver` 文件，重新启动调试。
 
 7. 在打断点调试时，如果该断点处有泛型变元，则泛型变元的名字为 T0, T1, ... Tn。举例如下：
+
+    <!-- only-cjdb -->
 
     ```cangjie
     func global_func_02<K, G>() { 0 }

@@ -13,10 +13,10 @@ interface Iterable<T> {
 }
 ```
 
-iterator 函数要求返回的 Iterator 类型是如下形式（只展示了核心代码）的另一个内置 interface。
+iterator 函数要求返回的 Iterator 类型是如下形式（只展示了核心代码）的另一个内置 abstract class
 
 ```cangjie
-interface Iterator<T> <: Iterable<T> {
+abstract class Iterator<T> <: Iterable<T> {
     mut func next(): Option<T>
     ...
 }
