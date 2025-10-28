@@ -290,6 +290,9 @@ main () {
 
 使用方式如下：
 
+<!-- run -->
+<!-- cfg="--cfg='feature=lion'" -->
+
 ```cangjie
 //source.cj
 @When[(test || feature == "lion") && !debug]

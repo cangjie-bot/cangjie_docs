@@ -59,13 +59,15 @@ import pkga.*
 package pkgc
 
 import pkga.C // Error, 'C' is not accessible in package 'pkga'.
-import pkga.R // OK, R is an external top-level declaration of package pkga.
 import pkgc.f1 // Error, package 'pkgc' should not import itself.
 
 public func f1() {}
 
 // pkgc/c2.cj
 package pkgc
+
+import pkga.R // OK, R is an external top-level declaration of package pkga.
+import pkga
 
 func f2() {
     /* OK, the imported declaration is visible to all source files of the same package
@@ -78,9 +80,6 @@ func f2() {
 
     // OK, the declaration of current package can be accessed directly.
     f1()
-
-    // OK, accessing declaration of current package by fully qualified name is supported.
-    pkgc.f1()
 }
 ```
 
@@ -180,15 +179,25 @@ func bar() {
 
 - 如果没有对导入的存在冲突的名字进行重命名，在 `import` 语句处不报错；在使用处，会因为无法导入唯一的名字而报错。这种情况可以通过 `import as` 定义别名或者 `import fullPackageName` 导入包作为命名空间。
 
+    <!-- compile -import1 -->
+    <!-- cfg="-p p1 --output-type=staticlib" -->
+
     ```cangjie
     // a.cj
     package p1
     public class C {}
+    ```
 
+    <!-- compile -import1 -->
+    <!-- cfg="-p p2 --output-type=staticlib" -->
+
+    ```cangjie
     // b.cj
     package p2
     public class C {}
+    ```
 
+    ```cangjie
     // main1.cj
     package pkga
     import p1.C
@@ -197,7 +206,11 @@ func bar() {
     main() {
         let _ = C() // Error
     }
+    ```
 
+    <!-- compile -import1 -->
+    <!-- cfg="-p pkgb libp1.a libp2.a" -->
+    ```cangjie
     // main2.cj
     package pkgb
     import p1.C as C1
@@ -207,7 +220,12 @@ func bar() {
         let _ = C1() // OK
         let _ = C2() // OK
     }
+    ```
 
+    <!-- compile -import1 -->
+    <!-- cfg="-p pkgc libp1.a libp2.a" -->
+
+    ```cangjie
     // main3.cj
     package pkgc
     import p1
@@ -232,6 +250,9 @@ func bar() {
 
 在下面的例子中，`b` 是 `a` 的子包，在 `a` 中通过 `public import` 重导出了 `b` 中定义的函数 `f`。
 
+<!-- compile -reimport1 -->
+<!-- cfg="-p a --output-type=staticlib" -->
+
 ```cangjie
 package a
 public import a.b.f
@@ -239,11 +260,17 @@ public import a.b.f
 public let x = 0
 ```
 
+<!-- compile -reimport1 -->
+<!-- cfg="-p a/b --output-type=staticlib" -->
+
 ```cangjie
 internal package a.b
 
 public func f() { 0 }
 ```
+
+<!-- compile -reimport1 -->
+<!-- cfg="liba.a liba.b.a" -->
 
 ```cangjie
 import a.f  // OK

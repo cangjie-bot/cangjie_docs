@@ -101,6 +101,8 @@ let b = map.contains("d") // b == false
 
 当想访问指定键对应的元素时，可以使用下标语法访问（下标的类型必须是键类型）。使用不存在的键作为索引会触发运行时异常。
 
+<!-- run.error -->
+
 ```cangjie
 let map = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2)])
 let a = map["a"] // a == 0

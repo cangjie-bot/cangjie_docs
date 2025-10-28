@@ -34,6 +34,8 @@ public class TypeInfo {
 
 例如可以用反射来获取一个自定义类型的类型信息。
 
+<!-- verify -->
+
 ```cangjie
 import std.reflect.*
 
@@ -65,11 +67,15 @@ public class TypeInfo {
 
 请注意，传入参数需要符合 `module.package.type` 的完全限定模式规则。对于编译器预导入的类型，包含 core 包中的类型和编译器内置类型，例如 `primitive type`、`Option`、`Iterable` 等，查找的字符串需要直接使用其类型名，不能带包名和模块名前缀。当运行时无法查询到对应类型的实例，则会抛出 `InfoNotFoundException`。
 
+<!-- compile -->
+
 ```cangjie
+import std.reflect.*
+
 let t1: TypeInfo = TypeInfo.get("Int64")
-let t1: TypeInfo = TypeInfo.get("default.Foo")
-let t2: TypeInfo = TypeInfo.get("std.socket.TcpSocket")
-let t3: TypeInfo = TypeInfo.get("net.http.ServerBuilder")
+let t2: TypeInfo = TypeInfo.get("default.Foo")
+let t3: TypeInfo = TypeInfo.get("std.socket.TcpSocket")
+let t4: TypeInfo = TypeInfo.get("net.http.ServerBuilder")
 ```
 
 采用这种方式时无法获取一个未实例化的泛型类型。
@@ -99,6 +105,8 @@ main() {
 
 例如当想要在运行时对类的某一实例成员变量进行获取与修改。
 
+<!-- verify -->
+
 ```cangjie
 import std.reflect.*
 
@@ -107,7 +115,7 @@ public class Foo {
     public var param2 = 10
 }
 
-main(): Unit{
+main(): Unit {
     let obj = Foo()
     let info = TypeInfo.of(obj)
     let staticVarInfo = info.getStaticVariable("param1")
@@ -141,6 +149,8 @@ obj 的实例成员变量 param2: Int64 = 25
 
 同时也可以通过反射对属性进行检查以及修改。
 
+<!-- verify -->
+
 ```cangjie
 import std.reflect.*
 
@@ -156,7 +166,7 @@ public class Foo {
     }
 }
 
-main(): Unit{
+main(): Unit {
     let obj = Foo()
     let info = TypeInfo.of(obj)
     let instanceProps = info.instanceProperties.toArray()
@@ -189,6 +199,8 @@ obj 的实例成员属性包含[prop p1: Int64, mut prop p2: Int64]
 ```
 
 还可以通过反射机制进行函数调用。
+
+<!-- verify -->
 
 ```cangjie
 import std.reflect.*
