@@ -261,6 +261,7 @@ export MRT_STACK_CHECK=true
 #### `CJ_SOF_SIZE`
 
 When a StackOverflowError occurs, the stack trace will be automatically folded for readability. The default number of folded stack frames is 32. This environment variable controls the length of the folded stack. Valid values are integers within the int range:
+
 - CJ_SOF_SIZE = 0: Prints the entire stack trace.
 - CJ_SOF_SIZE < 0: Prints the specified number of frames from the bottom of the stack.
 - CJ_SOF_SIZE > 0: Prints the specified number of frames from the top of the stack.

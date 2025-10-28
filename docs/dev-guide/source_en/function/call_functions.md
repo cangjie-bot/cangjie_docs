@@ -3,6 +3,7 @@
 A function is invoked in the form `f(arg1, arg2, ..., argn)`, where `f` is the name of the function to be called, and `arg1` through `argn` are the `n` arguments (called actual parameters) passed during invocation. Each actual parameter's type must be a subtype of the corresponding parameter's type. The number of actual parameters can range from zero to multiple. When there are zero parameters, the invocation takes the form `f()`.
 
 Depending on whether the parameters in the function definition are positional or named, the way arguments are passed during invocation differs:  
+
 - For positional parameters, the corresponding argument is an expression.  
 - For named parameters, the argument must be passed in the form `p: e`, where `p` is the name of the named parameter and `e` is the expression (i.e., the value passed to parameter `p`).  
 

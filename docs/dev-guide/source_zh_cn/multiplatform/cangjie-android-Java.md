@@ -1197,7 +1197,7 @@ public struct Vector {
         print("cj: Hello from static func in cj.Vector (${v.x}, ${v.y})\n", flush: true)
     }
 }
-``` 
+```
 
 对应的Java代码如下：
 
@@ -1235,7 +1235,7 @@ public class Main {
 }
 ```
 
-#### 规格约束：
+#### 规格约束
 
 1. 要求Cangjie struct无interface实现
 2. 暂不支持Cangjie泛型struct
@@ -1246,6 +1246,7 @@ public class Main {
 ### Java使用Cangjie的Enum
 
 仓颉枚举类型需要与Java类型建立映射关系，以便用户能够：
+
 1. 在Java端通过调用枚举类型的构造函数来创建枚举对象。
 2. 在语言边界之间传递枚举对象。
 3. 调用枚举中定义的静态或非静态方法。

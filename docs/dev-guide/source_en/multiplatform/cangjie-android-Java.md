@@ -1197,7 +1197,7 @@ public struct Vector {
         print("cj: Hello from static func in cj.Vector (${v.x}, ${v.y})\n", flush: true)
     }
 }
-``` 
+```
 
 Corresponding Java code:
 
@@ -1235,7 +1235,7 @@ public class Main {
 }
 ```
 
-#### Constraints:
+#### Constraints
 
 1. Cangjie structs must not implement interfaces.
 2. Generic Cangjie structs are not yet supported.
@@ -1246,6 +1246,7 @@ public class Main {
 ### Java Usage of Cangjie Enums
 
 Cangjie enum types need to be mapped to Java types to enable:
+
 1. Creating enum objects in Java by calling enum constructors.
 2. Passing enum objects across language boundaries.
 3. Invoking static or non-static methods defined in enums.

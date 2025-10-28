@@ -181,6 +181,7 @@ platform class Container<T> where T <: Comparable<T> {
     }
 }
 ```
+
 ##### class 构造函数
 
 构造函数和主构造函数均已支持跨平台特性。使用中需要满足以下要求：
@@ -865,7 +866,7 @@ platform extend A {
 
 示例1：
 
-```
+```cangjie
 // common file
 package cmp
 common extend Int32 {}
@@ -892,7 +893,7 @@ platform extend C <: B {} // error: the interfaces of platform extend do not mat
 
 示例2：
 
-```
+```cangjie
 // common file
 class Container<T>{
     var item:?T = Option<T>.None
