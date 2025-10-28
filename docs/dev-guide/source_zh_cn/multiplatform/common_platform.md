@@ -62,9 +62,9 @@ common/platform 全局函数必须满足如下限制：
     - 当 common 全局函数包含默认值时，platform 全局函数的相应位置必须为同参数名的命名参数，platform 全局函数不支持默认值。
     - 每个 platform 全局函数必须匹配唯一的 common 全局函数，不可以出现多个平台全局函匹配相同的 common 全局函数。
     - 如果是全局泛型函数，还需满足以下泛型特定限制：
-      - common 全局泛型函数和 platform 全局泛型函数必须具有相同个数的类型形参。
-      - 当 common 全局泛型函数有泛型约束时，platform 全局泛型函数对应类型形参的泛型约束必须保持一致或者更宽松。
-      - common 全局泛型函数和 platform 全局泛型函数类型形参允许重命名，但类型形参结构和泛型约束必须匹配。
+        - common 全局泛型函数和 platform 全局泛型函数必须具有相同个数的类型形参。
+        - 当 common 全局泛型函数有泛型约束时，platform 全局泛型函数对应类型形参的泛型约束必须保持一致或者更宽松。
+        - common 全局泛型函数和 platform 全局泛型函数类型形参允许重命名，但类型形参结构和泛型约束必须匹配。
 
 示例：
 
@@ -124,9 +124,9 @@ platform func printValue2<T>(value: T): Unit {
 - common abstract class 匹配 platform abstract class。
 - common sealed abstract class 匹配 platform sealed abstract class。
 - 如果是 common 修饰的泛型类，还需满足以下泛型特定限制：
-  - common 泛型类和 platform 泛型类必须具有相同个数的类型形参。
-  - 当 common 泛型类泛型约束时，platform 泛型类对应类型形参的泛型约束必须保持一致或者更宽松。
-  - common 泛型类和 platform 泛型类类型形参允许重命名，但参数结构和约束必须匹配。
+    - common 泛型类和 platform 泛型类必须具有相同个数的类型形参。
+    - 当 common 泛型类泛型约束时，platform 泛型类对应类型形参的泛型约束必须保持一致或者更宽松。
+    - common 泛型类和 platform 泛型类类型形参允许重命名，但参数结构和约束必须匹配。
 
 普通类示例：
 
@@ -181,6 +181,7 @@ platform class Container<T> where T <: Comparable<T> {
     }
 }
 ```
+
 ##### class 构造函数
 
 构造函数和主构造函数均已支持跨平台特性。使用中需要满足以下要求：
@@ -529,9 +530,9 @@ public platform abstract class A {
 - common struct 和 platform struct 接口实现性必须相同。
 - common struct 和 platform struct 必须同时被 @C 修饰或同时不被修饰。
 - 如果是 common 修饰的泛型 struct ，还需满足以下泛型特定限制：
-  - common 泛型 struct 和 platform 泛型 struct 必须具有相同个数的类型形参。
-  - 当 common 泛型 struct 有泛型约束时，platform 泛型 struct 对应类型形参的泛型约束必须保持一致或者更宽松。
-  - common 泛型 struct 和 platform 泛型 struct 类型形参允许重命名，但参数结构和泛型约束必须匹配。
+    - common 泛型 struct 和 platform 泛型 struct 必须具有相同个数的类型形参。
+    - 当 common 泛型 struct 有泛型约束时，platform 泛型 struct 对应类型形参的泛型约束必须保持一致或者更宽松。
+    - common 泛型 struct 和 platform 泛型 struct 类型形参允许重命名，但参数结构和泛型约束必须匹配。
 
 普通 struct 示例：
 
@@ -764,9 +765,9 @@ platform enum A {
     - 对于 exhaustive enum，platform enum 中必须包含 common enum 的全部构造器，platform enum 中不可以增加新的构造器。
     - 对于 non-exhaustive enum，platform enum 中必须包含 common enum 的全部构造器，platform enum 中可以增加新的构造器。
 - 如果是 common 修饰的泛型 enum，还需满足以下泛型特定限制：
-  - common 泛型 enum 和 platform 泛型 enum 必须具有相同个数的类型形参。
-  - 当 common 泛型 enum 有泛型约束时，platform 泛型 enum 对应类型形参的泛型约束必须保持一致或者更宽松。
-  - common 泛型 enum 和 platform 泛型 enum 类型形参允许重命名，但参数结构和泛型约束必须匹配。
+    - common 泛型 enum 和 platform 泛型 enum 必须具有相同个数的类型形参。
+    - 当 common 泛型 enum 有泛型约束时，platform 泛型 enum 对应类型形参的泛型约束必须保持一致或者更宽松。
+    - common 泛型 enum 和 platform 泛型 enum 类型形参允许重命名，但参数结构和泛型约束必须匹配。
 
 ```cangjie
 // common file
@@ -916,9 +917,9 @@ platform interface A {
 - common sealed interface 匹配 platform sealed interface。
 - sealed interface 的直接子类型必须定义在在同一个 common 包里。
 - 如果是 common 修饰的泛型 interface ，还需满足以下泛型特定限制：
-  - common 泛型 interface 和 platform 泛型 interface 必须具有相同个数的类型形参。
-  - 当 common 泛型 interface 有泛型约束时，platform 泛型 interface 对应类型形参的泛型约束必须保持一致或者更宽松。
-  - common 泛型 interface 和 platform 泛型 interface 类型形参允许重命名，但参数结构和泛型约束必须匹配。
+    - common 泛型 interface 和 platform 泛型 interface 必须具有相同个数的类型形参。
+    - 当 common 泛型 interface 有泛型约束时，platform 泛型 interface 对应类型形参的泛型约束必须保持一致或者更宽松。
+    - common 泛型 interface 和 platform 泛型 interface 类型形参允许重命名，但参数结构和泛型约束必须匹配。
 
 ```cangjie
 // common file
@@ -1050,13 +1051,13 @@ platform extend A {
 - 当存在多个未声明接口的 common extend 时， 必须存在唯一的 platform extend，禁止多个 common extend 中声明同名私有函数。
 - 当存在声明接口的 common extend 时， common extend 和 platform extend 必须具有完全相同的接口集合。
 - 如果是 common extend 泛型声明，还需满足以下泛型特定限制：
-  - common extend 泛型声明和 platform extend 泛型声明必须具有相同个数的类型形参。
-  - 当 common extend 泛型声明有泛型约束时，platform extend 泛型声明对应类型形参的泛型约束必须保持一致。
-  - common extend 泛型声明和 platform extend 泛型声明形参允许重命名，但参数结构和泛型约束必须匹配
+    - common extend 泛型声明和 platform extend 泛型声明必须具有相同个数的类型形参。
+    - 当 common extend 泛型声明有泛型约束时，platform extend 泛型声明对应类型形参的泛型约束必须保持一致。
+    - common extend 泛型声明和 platform extend 泛型声明形参允许重命名，但参数结构和泛型约束必须匹配
 
-示例1：
+示例 1：
 
-```
+```cangjie
 // common file
 package cmp
 common extend Int32 {}
@@ -1081,9 +1082,9 @@ platform extend A <: I {} // ok
 platform extend C <: B {} // error: the interfaces of platform extend do not match those on common extend
 ```
 
-示例2：
+示例 2：
 
-```
+```cangjie
 // common file
 class Container<T>{
     var item:?T = Option<T>.None
