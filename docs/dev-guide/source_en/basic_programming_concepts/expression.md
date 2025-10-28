@@ -296,7 +296,7 @@ For example, the following program uses a `do-while` expression to approximate t
 
 <!-- run -->
 
-```cangjie```
+```cangjie
 import std.random.Random
 
 main() {

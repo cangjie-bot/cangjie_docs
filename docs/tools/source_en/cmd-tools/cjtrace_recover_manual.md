@@ -6,8 +6,8 @@
 
 If developers enable obfuscation when compiling Cangjie applications, the stack trace information in exceptions thrown during runtime will also be obfuscated, making it difficult to identify the root cause of issues. `cjtrace-recover` helps developers restore obfuscated exception stack traces for better problem diagnosis. Specifically, it can recover the following two types of information:
 
-- Obfuscated function names  
-- Obfuscated path names  
+- Obfuscated function names
+- Obfuscated path names
 
 ## Usage Instructions
 
