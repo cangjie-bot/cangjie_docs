@@ -43,7 +43,7 @@ Submission Steps:
 3. After completing the modifications, you can click the Markdown preview button in the upper right corner of the page to confirm the modification results.
 4. After confirming that everything is correct, fill in the modification comments and supplementary information, and the Signed-off-by email in the submission panel on the left.
 
-    Example: `Signed-off-by: user.name <user.email>` // Ensure it matches the DOC signing email
+    Example: `Signed-off-by: user.name <user.email>` // Ensure it matches the DCO signing email
 
 The Cangjie Document team will review and merge your changes. Thank you for your support and assistance with Cangjie Document.
 

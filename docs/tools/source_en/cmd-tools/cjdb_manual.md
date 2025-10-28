@@ -600,6 +600,7 @@ There are two ways to load the target program using the launch method:
 (cjdb) file test
 Current executable set to '/0901/cangjie/test' (x86_64).
 (cjdb)
+
 ```
 
 ### Attach Mode
