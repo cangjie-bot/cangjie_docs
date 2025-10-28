@@ -318,6 +318,7 @@ main() {
     let pi = 4.0 * Float64(hitPoints) / Float64(totalPoints)
     println("Approximate value of pi: ${pi}")
 }
+
 ```
 
 Running the above program will output:
