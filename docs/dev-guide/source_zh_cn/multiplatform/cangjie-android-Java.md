@@ -1226,18 +1226,18 @@ class C extends B {
 
 JavaImpl 类型支持直接扩展，规格同 JavaMirror，详见 JavaMirror 章节的[扩展](#扩展)
 
-## Java使用Cangjie规格
+## Java 使用 Cangjie 规格
 
 ### 新增实验编译选项 `--experimental --enable-interop-cjmapping=<Target Languages>`
 
-启用在FE中支持非C语言的Cangjie互操作。<目标外语>的可能值为Java、ObjC。
+启用在 FE 中支持非 C 语言的 Cangjie 互操作。<目标外语>的可能值为 Java、ObjC。
 
-### Java使用Cangjie结构体
+### Java 使用 Cangjie 结构体
 
-Cangjie与Java的互操作中，需要支持在Java使用Cangjie的struct数据类型。由于Java使用Cangjie的特性仍在开发过程中，当前仅覆盖如下场景：
+Cangjie 与 Java 的互操作中，需要支持在 Java 使用 Cangjie 的 struct 数据类型。由于 Java 使用 Cangjie 的特性仍在开发过程中，当前仅覆盖如下场景：
 
-1. 支持Java中调用Cangjie侧public struct的public实例方法，静态方法
-2. 支持Cangjie侧public struct可以作为Java函数的参数类型，返回值类型
+1. 支持 Java 中调用 Cangjie 侧 public struct 的 public 实例方法，静态方法
+2. 支持 Cangjie 侧 public struct 可以作为 Java 函数的参数类型，返回值类型
 
 示例代码如下所示：
 
@@ -1271,9 +1271,9 @@ public struct Vector {
         print("cj: Hello from static func in cj.Vector (${v.x}, ${v.y})\n", flush: true)
     }
 }
-``` 
+```
 
-对应的Java代码如下：
+对应的 Java 代码如下：
 
 ```java
 package com.java.lib;
@@ -1309,23 +1309,24 @@ public class Main {
 }
 ```
 
-#### 规格约束：
+#### 规格约束
 
-1. 要求Cangjie struct无interface实现
-2. 暂不支持Cangjie泛型struct
-3. 暂不支持Java侧对struct成员变量的访问
-4. 暂不支持mut函数的调用
+1. 要求 Cangjie struct 无 interface 实现
+2. 暂不支持 Cangjie 泛型 struct
+3. 暂不支持 Java 侧对 struct 成员变量的访问
+4. 暂不支持 mut 函数的调用
 5. 暂不支持属性
 
-### Java使用Cangjie的Enum
+### Java 使用 Cangjie 的 Enum
 
-仓颉枚举类型需要与Java类型建立映射关系，以便用户能够：
-1. 在Java端通过调用枚举类型的构造函数来创建枚举对象。
+仓颉枚举类型需要与 Java 类型建立映射关系，以便用户能够：
+
+1. 在 Java 端通过调用枚举类型的构造函数来创建枚举对象。
 2. 在语言边界之间传递枚举对象。
 3. 调用枚举中定义的静态或非静态方法。
 4. 支持枚举属性的访问。
 
-示例代码如下，仓颉的枚举类型会被映射到Java的Class类型：
+示例代码如下，仓颉的枚举类型会被映射到 Java 的 Class 类型：
 
 ```cangjie
 // Cangjie
@@ -1356,7 +1357,7 @@ public enum TimeUnit {
 }
 ```
 
-映射后的Java代码如下：
+映射后的 Java 代码如下：
 
 ```java
 public class TimeUnit {
@@ -1411,10 +1412,10 @@ public class TimeUnit {
 
 目前枚举支持与其他语言特性组合仍在开发过程中，暂不支持如下场景：
 
-1. 要求Cangjie enum无interface实现
-2. 要求Cangjie enum成员函数中不使用泛型
-3. 要求Cangjie enum成员函数中不使用Lamda
-4. 要求Cangjie enum中不包含操作符重载
-5. 要求Cangjie enum中仅使用基础的数据类型
-6. 要求Cangjie 不适应extend对enum进行拓展
-7. 不支持option
+1. 要求 Cangjie enum 无 interface 实现
+2. 要求 Cangjie enum 成员函数中不使用泛型
+3. 要求 Cangjie enum 成员函数中不使用 Lamda
+4. 要求 Cangjie enum 中不包含操作符重载
+5. 要求 Cangjie enum 中仅使用基础的数据类型
+6. 要求 Cangjie 不适应 extend 对 enum 进行拓展
+7. 不支持 option

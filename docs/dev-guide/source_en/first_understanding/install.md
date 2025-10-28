@@ -117,7 +117,7 @@ On Windows, Cangjie provides two formats of installation packages: `exe` and `zi
 
 To verify the installation, execute `cjc -v` in the same command environment. If the Cangjie compiler version information is displayed, the toolchain has been successfully installed.
 
-**Important Note:**  
+**Important Note:**
 Similar to Linux, the environment variables configured by the `envsetup` script are only effective for the current command-line session. To make the Cangjie toolchain automatically available upon command prompt or terminal startup, configure the system as follows:
 
 - For bash environments, follow these steps:
@@ -149,8 +149,8 @@ Similar to Linux, the environment variables configured by the `envsetup` script 
 
         1. In the "User variables" or "System variables" section, locate and select the `Path` variable, then click "Edit" to open the "Edit Environment Variable" window.
 
-        2. Click "New" and enter the following paths one by one:  
-           `%CANGJIE_HOME%\bin`, `%CANGJIE_HOME%\tools\bin`, `%CANGJIE_HOME%\tools\lib`, `%CANGJIE_HOME%\runtime\lib\windows_x86_64_llvm` (`%CANGJIE_HOME%` is the extraction path of the Cangjie package). For example, if the package is extracted to `D:\cangjie`, the new environment variables should be:  
+        2. Click "New" and enter the following paths one by one:
+           `%CANGJIE_HOME%\bin`, `%CANGJIE_HOME%\tools\bin`, `%CANGJIE_HOME%\tools\lib`, `%CANGJIE_HOME%\runtime\lib\windows_x86_64_llvm` (`%CANGJIE_HOME%` is the extraction path of the Cangjie package). For example, if the package is extracted to `D:\cangjie`, the new environment variables should be:
            `D:\cangjie\bin`, `D:\cangjie\tools\bin`, `D:\cangjie\tools\lib`, `D:\cangjie\runtime\lib\windows_x86_64_llvm`.
 
         3. (For current user settings only) Click "New" and enter the current user directory path, appending `.cjpm\bin` to it. For example, if the user path is `C:\Users\bob`, enter `C:\Users\bob\.cjpm\bin`.
@@ -169,7 +169,7 @@ Similar to Linux, the environment variables configured by the `envsetup` script 
 
     6. Click "OK" to complete the setup.
 
-    > **Note:**  
+    > **Note:**
     > After configuration, you may need to restart the command-line window or the system for the changes to take effect.
 
     After configuration, the Cangjie compilation toolchain will be directly available upon Windows Command Prompt (CMD) or PowerShell startup.

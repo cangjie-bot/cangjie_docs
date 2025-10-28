@@ -126,19 +126,19 @@ Distribute cjo files along with corresponding library files (.a or .so) to provi
 
 ## Frequently Asked Questions
 
-### What if cjo files are out of sync with source files?
+### What if cjo files are out of sync with source files
 
 Delete outdated cjo files and recompile the corresponding packages.
 
-### How to view dependency information of cjo files?
+### How to view dependency information of cjo files
 
 Use [`cjc --scan-dependency`](compile_options.md#--scan-dependency-frontend) `mypackage.cjo` command to view dependency relationships.
 
-### Why can't cjo files be found?
+### Why can't cjo files be found
 
 Check if [`--import-path`](compile_options.md#--import-path-value-frontend) settings are correct and ensure cjo files are in the specified search paths.
 
-### Can cjo files be used across platforms?
+### Can cjo files be used across platforms
 
 Currently, cjo files do not support cross-platform usage. It is recommended to regenerate the corresponding cjo files on the target platform. Future versions are planned to support cross-platform usage.
 

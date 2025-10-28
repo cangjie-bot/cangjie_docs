@@ -422,7 +422,7 @@ cjc --scan-dependency pkgA.cjo
 
 当编译可执行程序时（即指定了 `--output-type=exe` 时），`cjc` 默认静态链接仓颉库的 std 模块。
 
-### <span id="--dy-std">`--dy-std`
+### `--dy-std`
 
 动态链接仓颉库的 std 模块。
 
@@ -516,7 +516,7 @@ cjc --scan-dependency pkgA.cjo
 
 ### `--compile-as-exe`
 
-该选项使能会隐藏 LTO 模式下加载的 bc 文件符号可见性，仅保留 package init 符号可见性。在此基础上，LLVM 原生优化会在此基础上执行激进的无用符号删除。该选项仅在 `--lto` 开启下有效。 
+该选项使能会隐藏 LTO 模式下加载的 bc 文件符号可见性，仅保留 package init 符号可见性。在此基础上，LLVM 原生优化会在此基础上执行激进的无用符号删除。该选项仅在 `--lto` 开启下有效。
 
 ```shell
 # 编译通过

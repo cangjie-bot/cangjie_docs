@@ -307,24 +307,24 @@ tests/LLVM/test02/src/3.cj
 
 For scenarios where long-running network service programs cannot terminate normally and generate `gcda` coverage data, a manual exit script must be executed to generate `gcda` coverage data.
 
-1) Save the following script as `stop.sh` (this script relies on `gdb`):
+1. Save the following script as `stop.sh` (this script relies on `gdb`):
 
-```shell
-#!/bin/sh
-SERVER_NAME=$1
+    ```shell
+    #!/bin/sh
+    SERVER_NAME=$1
 
-pid=`ps -ef | grep $SERVER_NAME | grep -v "grep" | awk '{print $2}'`
-echo $pid
-gdb -q attach $pid <<__EOF__
-p exit(0)
-__EOF__
-```
+    pid=`ps -ef | grep $SERVER_NAME | grep -v "grep" | awk '{print $2}'`
+    echo $pid
+    gdb -q attach $pid <<__EOF__
+    p exit(0)
+    __EOF__
+    ```
 
-2) After the long-running service program completes its business logic coverage, execute `stop.sh {service_name}`. For example, if the long-running service process is started with `./main`, stop the process to generate `gcda` data as follows:
+2. After the long-running service program completes its business logic coverage, execute `stop.sh {service_name}`. For example, if the long-running service process is started with `./main`, stop the process to generate `gcda` data as follows:
 
-```shell
-sh stop.sh ./main
-```
+    ```shell
+    sh stop.sh ./main
+    ```
 
 ### Filenames with Special Characters
 
