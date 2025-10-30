@@ -422,7 +422,7 @@ cjc --scan-dependency pkgA.cjo
 
 当编译可执行程序时（即指定了 `--output-type=exe` 时），`cjc` 默认静态链接仓颉库的 std 模块。
 
-### <span id="--dy-std">`--dy-std`
+### `--dy-std`
 
 动态链接仓颉库的 std 模块。
 
@@ -472,7 +472,7 @@ cjc --scan-dependency pkgA.cjo
 **值得注意的是：**
 
 1. `Windows` 以及 `macOS` 平台不支持该功能；
-2. 当使能且指定 `LTO` （`Link Time Optimization` 链接时优化）优化编译模式时，不允许同时使用如下优化编译选项：`-Os`、`-Oz`。
+2. 当启用并指定 `LTO` （`Link Time Optimization` 链接时优化）优化编译模式时，不允许同时使用如下优化编译选项：`-Os`、`-Oz`。
 
 `LTO` 优化支持两种编译模式：
 
@@ -516,7 +516,7 @@ cjc --scan-dependency pkgA.cjo
 
 ### `--compile-as-exe`
 
-该选项使能会隐藏 LTO 模式下加载的 bc 文件符号可见性，仅保留 package init 符号可见性。在此基础上，LLVM 原生优化会在此基础上执行激进的无用符号删除。该选项仅在 `--lto` 开启下有效。 
+该选项使能会隐藏 LTO 模式下加载的 bc 文件符号可见性，仅保留 package init 符号可见性。在此基础上，LLVM 原生优化会在此基础上执行激进的无用符号删除。该选项仅在 `--lto` 开启下有效。
 
 ```shell
 # 编译通过
@@ -1033,9 +1033,9 @@ cjc -p my_pkg --test-only -L output -lmain
 
 > **注意：**
 >
-> 在测试模式下（当使能 `--test` ）自动启用对此包的 mock 支持，不需要显式传递 `--mock` 选项。
+> 在测试模式下（当使用 `--test` 时）自动启用对此包的 mock 支持，不需要显式传递 `--mock` 选项。
 
-`runtime-error` 仅在测试模式下可用（当使能 `--test` 时），它允许编译带有 mock 代码的包，但不在编译器中做任何 mock 相关的处理（这些处理可能会造成一些开销并影响测试的运行时性能）。这对于带有 mock 代码用例进行基准测试时可能是有用的。使用此编译选项时，避免编译带有 mock 代码的用例并运行测试，否则将抛出运行时异常。
+`runtime-error` 仅在测试模式下可用（当使用 `--test` 时），它允许编译带有 mock 代码的包，但不在编译器中做任何 mock 相关的处理（这些处理可能会造成一些开销并影响测试的运行时性能）。这对于带有 mock 代码用例进行基准测试时可能是有用的。使用此编译选项时，避免编译带有 mock 代码的用例并运行测试，否则将抛出运行时异常。
 
 ## 宏选项
 
@@ -1719,6 +1719,30 @@ It is resumed, a = 9
 > **注意：**
 >
 > 该选项仅能用于编译仓颉标准库 core 包，不能用于编译其他仓颉代码的场景。
+
+### 打印 AST
+
+可通过 `--dump-ast`<sup>[frontend]</sup>打印 AST。默认输出到文件，产物目录会创建以包名（或使用 `-o` 指定的产物名）命名的 *_AST 目录，文件命名为 `编号_编译阶段名称_ast.txt`。加上 --dump-to-screen<sup>[frontend]</sup> 可输出到屏幕。
+
+### 打印 CHIR
+
+可通过 `--dump-chir`<sup>[frontend]</sup>打印 CHIR。默认输出到文件，产物目录会创建以包名（或使用 `-o` 指定的产物名）命名的 *_CHIR 目录，文件命名为 `编号_PASS阶段名称.chirtxt`。加上 --dump-to-screen<sup>[frontend]</sup> 可输出到屏幕。
+
+### 打印 LLVM IR
+
+可通过 `--dump-ir`<sup>[frontend]</sup>打印 LLVM IR。默认输出到文件，产物目录会创建以包名（或使用 `-o` 指定的产物名）命名的 *_IR 目录并在 *_IR 目录下创建 `阶段编号_subModules` 子文件夹，文件名为 `子模块编号加-包名.ll`， 子模块的编号和数量与编译并发度相关。加上 --dump-to-screen<sup>[frontend]</sup> 可输出到屏幕。
+
+### 打印 AST, CHIR, LLVM IR
+
+可通过 `--dump-all`<sup>[frontend]</sup>打印 AST, CHIR, LLVM IR。默认输出到文件，产物目录会创建以包名（或使用 `-o` 指定的产物名）命名的 *_AST, *_CHIR, *_IR 目录。加上 --dump-to-screen<sup>[frontend]</sup> 可输出到屏幕。
+
+### 将 dump 内容打印到屏幕上
+
+可通过 `--dump-to-screen`<sup>[frontend]</sup> 配合前端相关的转储选项（如 `--dump-ast`<sup>[frontend]</sup>， `--dump-chir`<sup>[frontend]</sup>, `--dump-ir`<sup>[frontend]</sup>和 `--dump-all`<sup>[frontend]</sup>）将相应的中间表示文本内容打印到屏幕上。
+
+> **注意：**
+>
+> 输出到屏幕时仅显示最终结果；输出到文件时会在产物目录下创建以 `_AST`, `_CHIR`, `_IR` 为后缀的目录，用以保存中间过程的详细信息。
 
 ## `cjc` 用到的环境变量
 

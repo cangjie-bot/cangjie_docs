@@ -9,8 +9,20 @@ body:
         感谢提交文档更新需求单。
   - type: textarea
     attributes:
+      label: 问题描述
+      description: 请描述下您的问题：
+    validations:
+      required: true
+  - type: checkboxes
+    id: docs_name
+    attributes:
       label: 文档更新涉及手册名称
-      description: 请提供文档更新内容所属手册名称，如仓颉编程语言开发指南、仓颉编程语言工具使用指南等。
+      description: 请提供文档更新内容所属手册：
+      options:
+        - label: 仓颉编程语言开发指南
+          required: false
+        - label: 仓颉编程语言工具使用指南
+          required: false
     validations:
       required: true
   - type: checkboxes

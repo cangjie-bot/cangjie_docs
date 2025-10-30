@@ -712,7 +712,7 @@ To debug programs running on an iOS device, follow these steps. For compilation 
 
 1. First, launch the target program using `Xcode`.
 
-2. Load the script in the `Xcode` debug window command line using the command: `command script import $CANGJIE_HOME/tools/script/cangjie_cjdb.py`, where `$CANGJIE_HOME` should be replaced with the Cangjie installation directory.  
+2. Load the script in the `Xcode` debug window command line using the command: `command script import $CANGJIE_HOME/tools/script/cangjie_cjdb.py`, where `$CANGJIE_HOME` should be replaced with the Cangjie installation directory.
    To automatically load the script every time `Xcode` starts debugging, create a `.lldbinit` file in the user directory and enter the above command.
 
 3. Once successfully loaded, normal debugging can proceed.

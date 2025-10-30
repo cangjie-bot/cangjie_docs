@@ -42,7 +42,7 @@ When a macro is applied to a declaration, the parentheses can generally be omitt
 
 Special notes on the legality of `Tokens` within parentheses:
 
-- The input must consist of a sequence of valid `Token`s. Symbols like "#", "`", "\\", etc., when used alone, are not valid Cangjie `Token`s and are not supported as input values.
+- The input must consist of a sequence of valid `Token`s. Symbols like "#", "\`", ", "\\", etc., when used alone, are not valid Cangjie `Token`s and are not supported as input values.
 
 - If the input contains unmatched parentheses, they must be escaped using the escape symbol "\\".
 
@@ -272,7 +272,7 @@ Regarding attribute macros, the following points should be noted:
 
 - Special notes on the legality of attribute parameters inside square brackets:
 
-    - The input must consist of a sequence of valid `Token`s. Symbols like "#", "`", "\\", etc., when used alone, are not valid Cangjie `Token`s and are not supported as input values.
+    - The input must consist of a sequence of valid `Token`s. Symbols like "#", "\`", "\\", etc., when used alone, are not valid Cangjie`Token`s and are not supported as input values.
 
     - If the input contains unmatched square brackets, they must be escaped using the escape symbol "\\".
 

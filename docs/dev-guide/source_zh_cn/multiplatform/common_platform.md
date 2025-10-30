@@ -62,9 +62,9 @@ common/platform 全局函数必须满足如下限制：
     - 当 common 全局函数包含默认值时，platform 全局函数的相应位置必须为同参数名的命名参数，platform 全局函数不支持默认值。
     - 每个 platform 全局函数必须匹配唯一的 common 全局函数，不可以出现多个平台全局函匹配相同的 common 全局函数。
     - 如果是全局泛型函数，还需满足以下泛型特定限制：
-      - common 全局泛型函数和 platform 全局泛型函数必须具有相同个数的类型形参。
-      - 当 common 全局泛型函数有泛型约束时，platform 全局泛型函数对应类型形参的泛型约束必须保持一致或者更宽松。
-      - common 全局泛型函数和 platform 全局泛型函数类型形参允许重命名，但类型形参结构和泛型约束必须匹配。
+        - common 全局泛型函数和 platform 全局泛型函数必须具有相同个数的类型形参。
+        - 当 common 全局泛型函数有泛型约束时，platform 全局泛型函数对应类型形参的泛型约束必须保持一致或者更宽松。
+        - common 全局泛型函数和 platform 全局泛型函数类型形参允许重命名，但类型形参结构和泛型约束必须匹配。
 
 示例：
 
@@ -105,9 +105,8 @@ platform func foo4(a!: Int64): Unit {}   // ok
 platform func printValue1<R>(value: R): Unit  where R <: ToString {
     println(value)
 }
-platform func printValue2<T>(value: T): Unit {
-    println(value)
-}
+platform func printValue2<T>(value: T): Unit {}
+
 
 ```
 
@@ -124,9 +123,9 @@ platform func printValue2<T>(value: T): Unit {
 - common abstract class 匹配 platform abstract class。
 - common sealed abstract class 匹配 platform sealed abstract class。
 - 如果是 common 修饰的泛型类，还需满足以下泛型特定限制：
-  - common 泛型类和 platform 泛型类必须具有相同个数的类型形参。
-  - 当 common 泛型类泛型约束时，platform 泛型类对应类型形参的泛型约束必须保持一致或者更宽松。
-  - common 泛型类和 platform 泛型类类型形参允许重命名，但参数结构和约束必须匹配。
+    - common 泛型类和 platform 泛型类必须具有相同个数的类型形参。
+    - 当 common 泛型类泛型约束时，platform 泛型类对应类型形参的泛型约束必须保持一致或者更宽松。
+    - common 泛型类和 platform 泛型类类型形参允许重命名，但参数结构和约束必须匹配。
 
 普通类示例：
 
@@ -181,6 +180,7 @@ platform class Container<T> where T <: Comparable<T> {
     }
 }
 ```
+
 ##### class 构造函数
 
 构造函数和主构造函数均已支持跨平台特性。使用中需要满足以下要求：
@@ -331,7 +331,193 @@ platform class A {
 
 ##### class 的继承
 
-common/platform class 的继承暂不支持跨平台特性，将会在后续的版本中支持。
+common/platform class 支持继承，其继承关系的处理与 common/platform 的可见性相关，当子类仅在 platform 中时，在 common 部分中，其不可见。
+
+具体示例如下：
+
+```cangjie
+// common file
+package cmp
+
+public common interface I {
+}
+
+public open common class A <: I {
+    public init() {}
+    public open func foo5(): Unit { println("A::foo5 common") }
+}
+
+public common class A2 <: A {
+    public init() {}
+}
+
+public common class B <: I {
+    public init() {}
+}
+
+public func runCommonA(a: A) {
+    a.foo5()
+}
+
+public func runCommonA2(a: A2) {
+    a.foo5()
+}
+```
+
+```cangjie
+// platform
+package cmp
+
+public platform interface I {
+    func foo5(): Unit { println("I::foo5 platform") }
+}
+
+public open platform class A <: I {
+}
+
+public platform class A2 <: A {
+    public func foo5(): Unit { println("A2::foo5 platform") }
+}
+
+public platform class B <: I {}
+
+public class C <: I {}
+
+public func runPlatformI(a: I) {
+    a.foo5()
+}
+
+public func runPlatformA(a: A) {
+    a.foo5()
+}
+
+public func runPlatformA2(a: A2) {
+    a.foo5()
+}
+```
+
+```cangjie
+// m_common.cj
+import cmp.*
+
+main() {
+    runCommonA(A())
+    runCommonA(A2())
+    runCommonA2(A2())
+}
+```
+
+输出如下：
+
+```plain
+A::foo5 common
+A::foo5 common
+A::foo5 common
+```
+
+```cangjie
+// m_platform.cj
+import cmp.*
+
+main() {
+    runCommonA(A())
+    runCommonA(A2())
+    runCommonA2(A2())
+    println("=")
+    let i1: I = A()
+    let i2: I = A2()
+    let i3: I = B()
+    let i4: I = C()
+    runPlatformI(i1)
+    runPlatformI(i2)
+    runPlatformI(i3)
+    runPlatformI(i4)
+    println("=")
+    runPlatformI(A())
+    runPlatformI(A2())
+    runPlatformA(A())
+    runPlatformA(A2())
+    runPlatformA2(A2())
+}
+```
+
+输出如下：
+
+```plain
+A::foo5 common
+A2::foo5 platform
+A2::foo5 platform
+=
+A::foo5 common
+A2::foo5 platform
+I::foo5 platform
+I::foo5 platform
+=
+A::foo5 common
+A2::foo5 platform
+A::foo5 common
+A2::foo5 platform
+A2::foo5 platform
+```
+
+当前存在如下限制：
+
+- 在 A 包中 platform 中将子类的成员挪到父类声明中，B 包导入 A 包，common/platform 部分的行为不符合预期。
+
+##### abstract class
+
+当 common/platform 为抽象函数时，新增了如下规则：
+
+- 如果成员函数/属性没有 body 体，则必须有 `abstact` 修饰符。
+- 支持 `common abstract`。
+- `abstract common` 修饰的成员可以被 `open platform` 修饰的成员替换。
+
+示例如下:
+
+<!-- compile -->
+
+```cangjie
+// common part
+public common abstract class A {
+    init() {}
+    public common func a(): Int{1}
+    public open func b(): Int{2}
+    public common open func c(): Int {3}
+    public common func d(): Int
+    public common abstract func e(): Int
+    public common abstract func f(): Int
+    public abstract func g(): Int
+
+    public common open prop prop_a: Int{ get() { 1 } }
+    public common prop prop_b: Int { get() { 1 } }
+    public abstract prop prop_c: Int
+}
+
+public class B <: A {
+  public func b(): Int { a() + 10 }
+  public func c(): Int { a() + 20 }
+  public func e(): Int { a() + 30 }
+  public func f(): Int { a() + 40 }
+  public func g(): Int { a() + 50 }
+
+  public prop prop_c: Int { get() { 10 } }
+}
+```
+
+<!-- compile -->
+
+```cangjie
+// platform part
+public platform abstract class A {
+    public platform func a(): Int{4}
+    public platform open func c(): Int {5}
+    public platform func d(): Int {6}
+    public platform open func e(): Int {7}
+    public platform abstract func f(): Int
+
+    public platform open prop prop_a: Int { get() { 2 } }
+}
+```
 
 #### struct
 
@@ -343,9 +529,9 @@ common/platform class 的继承暂不支持跨平台特性，将会在后续的�
 - common struct 和 platform struct 接口实现性必须相同。
 - common struct 和 platform struct 必须同时被 @C 修饰或同时不被修饰。
 - 如果是 common 修饰的泛型 struct ，还需满足以下泛型特定限制：
-  - common 泛型 struct 和 platform 泛型 struct 必须具有相同个数的类型形参。
-  - 当 common 泛型 struct 有泛型约束时，platform 泛型 struct 对应类型形参的泛型约束必须保持一致或者更宽松。
-  - common 泛型 struct 和 platform 泛型 struct 类型形参允许重命名，但参数结构和泛型约束必须匹配。
+    - common 泛型 struct 和 platform 泛型 struct 必须具有相同个数的类型形参。
+    - 当 common 泛型 struct 有泛型约束时，platform 泛型 struct 对应类型形参的泛型约束必须保持一致或者更宽松。
+    - common 泛型 struct 和 platform 泛型 struct 类型形参允许重命名，但参数结构和泛型约束必须匹配。
 
 普通 struct 示例：
 
@@ -578,9 +764,9 @@ platform enum A {
     - 对于 exhaustive enum，platform enum 中必须包含 common enum 的全部构造器，platform enum 中不可以增加新的构造器。
     - 对于 non-exhaustive enum，platform enum 中必须包含 common enum 的全部构造器，platform enum 中可以增加新的构造器。
 - 如果是 common 修饰的泛型 enum，还需满足以下泛型特定限制：
-  - common 泛型 enum 和 platform 泛型 enum 必须具有相同个数的类型形参。
-  - 当 common 泛型 enum 有泛型约束时，platform 泛型 enum 对应类型形参的泛型约束必须保持一致或者更宽松。
-  - common 泛型 enum 和 platform 泛型 enum 类型形参允许重命名，但参数结构和泛型约束必须匹配。
+    - common 泛型 enum 和 platform 泛型 enum 必须具有相同个数的类型形参。
+    - 当 common 泛型 enum 有泛型约束时，platform 泛型 enum 对应类型形参的泛型约束必须保持一致或者更宽松。
+    - common 泛型 enum 和 platform 泛型 enum 类型形参允许重命名，但参数结构和泛型约束必须匹配。
 
 ```cangjie
 // common file
@@ -730,9 +916,9 @@ platform interface A {
 - common sealed interface 匹配 platform sealed interface。
 - sealed interface 的直接子类型必须定义在在同一个 common 包里。
 - 如果是 common 修饰的泛型 interface ，还需满足以下泛型特定限制：
-  - common 泛型 interface 和 platform 泛型 interface 必须具有相同个数的类型形参。
-  - 当 common 泛型 interface 有泛型约束时，platform 泛型 interface 对应类型形参的泛型约束必须保持一致或者更宽松。
-  - common 泛型 interface 和 platform 泛型 interface 类型形参允许重命名，但参数结构和泛型约束必须匹配。
+    - common 泛型 interface 和 platform 泛型 interface 必须具有相同个数的类型形参。
+    - 当 common 泛型 interface 有泛型约束时，platform 泛型 interface 对应类型形参的泛型约束必须保持一致或者更宽松。
+    - common 泛型 interface 和 platform 泛型 interface 类型形参允许重命名，但参数结构和泛型约束必须匹配。
 
 ```cangjie
 // common file
@@ -832,6 +1018,10 @@ platform interface A {
 
 仓颉 extend 支持跨平台特性，用户可以使用 common 和 platform 修饰 extend 及其成员。
 
+> **注意：**
+>
+> common extend 成员函数或属性不能同时用 common 和 private 来修饰。
+
 ```cangjie
 // common file
 package cmp
@@ -856,16 +1046,16 @@ platform extend A {
 
 若存在一个或多个 common extend，则必须存在唯一的 platform extend 与其匹配，且需要满足以下要求：
 
-- 当存在多个未声明接口的 common extend 时， 必须存在唯一的 platform extend，禁止多个 common extend 中声明同名私有函数。
-- 当存在声明接口的 common extend 时， common extend 和 platform extend 必须具有完全相同的接口集合。
+- 当[直接扩展](../extension/direct_extension.md)被 common 修饰时， 必须存在唯一的 platform extend。
+- 当[接口扩展](../extension/interface_extension.md)被 common 修饰时， common extend 和 platform extend 必须具有完全相同的接口集合。
 - 如果是 common extend 泛型声明，还需满足以下泛型特定限制：
-  - common extend 泛型声明和 platform extend 泛型声明必须具有相同个数的类型形参。
-  - 当 common extend 泛型声明有泛型约束时，platform extend 泛型声明对应类型形参的泛型约束必须保持一致。
-  - common extend 泛型声明和 platform extend 泛型声明形参允许重命名，但参数结构和泛型约束必须匹配
+    - common extend 泛型声明和 platform extend 泛型声明必须具有相同个数的类型形参。
+    - 当 common extend 泛型声明有泛型约束时，platform extend 泛型声明对应类型形参的泛型约束必须保持一致。
+    - common extend 泛型声明和 platform extend 泛型声明形参允许重命名，但参数结构和泛型约束必须匹配
 
-示例1：
+示例 1：
 
-```
+```cangjie
 // common file
 package cmp
 common extend Int32 {}
@@ -890,9 +1080,9 @@ platform extend A <: I {} // ok
 platform extend C <: B {} // error: the interfaces of platform extend do not match those on common extend
 ```
 
-示例2：
+示例 2：
 
-```
+```cangjie
 // common file
 class Container<T>{
     var item:?T = Option<T>.None
@@ -986,6 +1176,54 @@ platform extend A {
     }
 }
 ```
+
+### 导入导出
+
+common 和 platform 的声明支持导入与导出，其规则与其他类型的导入导出规则一致。
+
+具体示例如下：
+
+```cangjie
+// common file
+package cmp
+
+public common func foo(){println("common func foo")}
+```
+
+```cangjie
+// platform file
+package cmp
+public import std.sort.*
+
+public platform func foo(){println("platform func foo")}
+
+public func goo(){
+    println("platform func goo")
+    sort([1, 4, 3])
+}
+```
+
+```cangjie
+// common file
+import cmp.*
+
+main() {
+    foo() // 来自 common 的 foo
+}
+```
+
+```cangjie
+// platform file
+import cmp.*
+
+main() {
+    foo() // 来自 platform 的 foo
+    goo() // 仅在 platform 可见
+    sort([1,4,3]) // 仅在 platform 可见，由于仅在 platform 做了 public import
+}
+```
+
+导入导出的可见性与普通声明在 common/platform 的可见性一致，当定义或重导出只在 platform 中时，在 common 部分中，其不可见。
 
 ### 跨平台编译
 
