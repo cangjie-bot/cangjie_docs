@@ -1,12 +1,12 @@
-# 包管理工具
+# 项目管理工具
 
 ## 功能简介
 
-`CJPM（Cangjie Package Manager）` 是仓颉语言的官方包管理工具，用于对仓颉项目模块系统进行管理与维护，涵盖模块初始化、依赖检查与更新等操作。它提供统一的编译入口，支持增量编译、并行编译等，支持自定义编译命令。
+`cjpm` 是仓颉语言的项目管理工具，用于对仓颉项目模块系统进行管理与维护，涵盖模块初始化、依赖检查与更新等操作。它提供统一的编译入口，支持增量编译、并行编译等，支持自定义编译命令。
 
 ## 使用说明
 
-执行 `cjpm -h` 命令，查阅包管理工具的使用说明，如下所示。
+执行 `cjpm -h` 命令，查阅项目管理工具的使用说明，如下所示。
 
 ```text
 Cangjie Package Manager
@@ -24,6 +24,8 @@ Available subcommands:
   test             Unittest a local package or module
   bench            Run benchmarks in a local package or module
   clean            Clean up the target directory
+  bundle           Make distributable tarball of current module
+  publish          Publish a module to central repository
   install          Install a cangjie binary
   uninstall        Uninstall a cangjie binary
 
@@ -141,7 +143,7 @@ Error: can not find the following dependencies
 
 ### update
 
-`update` 用于将 `cjpm.toml` 里的内容更新到 `cjpm.lock`。当 `cjpm.lock` 不存在时，将会生成该文件。`cjpm.lock` 文件记录着 `git` 依赖的版本号等元信息，用于下次构建使用。
+`update` 用于将 `cjpm.toml` 里的内容更新到 `cjpm.lock`。当 `cjpm.lock` 不存在时，将会生成该文件。`cjpm.lock` 文件记录着 `git` 依赖和中心仓依赖的版本号等元信息，用于下次构建使用。
 
 `update` 有以下可配置项：
 
@@ -670,9 +672,79 @@ Summary: TOTAL: 1
 >
 > 在 `Windows` 平台上，在子进程执行完成后立即清理子进程的可执行文件或父目录可能会失败。如果遇到该问题，可以在一小段延迟后重新尝试 `clean` 命令。
 
+### bundle
+
+`bundle` 用于将当前仓颉项目打包成符合仓颉中心仓格式的制品源码包。
+
+`bundle` 有多个可配置项：
+
+- `-V, --verbose` 用于展示安装日志。
+- `--skip-test` 用于跳过单元测试阶段。
+- `--skip-lint` 用于跳过静态检查阶段。
+
+`bundle` 打包流程如下：
+
+1. 模块检查
+
+    一个可以被成功打包的 `cjpm` 模块，需要满足以下条件：
+
+    - 模块名、组织名满足规格要求：
+        - 长度范围为 [3, 64]，且符合模块名和组织名规格；
+        - 不能为任何仓颉语法中的关键字（大小写不敏感）；
+        - 组织名不能为 `default`
+    - `cjpm.toml` 中包含模块说明 `description`；
+    - 根目录下包含中文文档 `README_zh.md` 或英文文档 `README.md`；
+    - 模块的依赖项均为中心仓形式。
+
+    若模块不满足上述条件，则打包失败。
+
+2. 编译检查：进行编译检查，确保模块能够编译通过；如果未配置 `--skip-test`，则会运行单元测试。编译和测试失败均会导致打包失败。
+3. 代码静态检查：如果未配置 `--skip-lint`，则会调用 `cjlint` 进行代码静态检查，出现 `error` 级别的错误则会导致打包失败。
+4. 打包：基于用户配置，将当前模块打包成 `tar.gz` 格式的制品源码包，参考 [`include/exclude` 字段](#include-exclude)。制品源码包位于编译产物目录中，文件名为 `模块名-版本号.cjp`。同时，生成制品包对应的元数据文件，也位于编译产物目录中，文件名为 `meta-data.json`。
+
+例如，有以下的待打包模块 `demo`，`cjpm.toml` 中配置的版本号 `version = "1.0.0"`：
+
+```text
+demo
+├── src
+│    ├── demo.cj
+│    ├── demo-config.txt
+│    └── aoo
+│         ├── aoo.cj
+│         └── aoo-config.txt
+├── test
+│    ├── test.cj
+│    └── test-config.txt
+├── README.md
+└── cjpm.toml
+```
+
+由于未配置编译产物目录，因此默认目录为 `target`。执行 `cjpm bundle` 后，`target` 目录中会有如下内容：
+
+```text
+target
+├── demo-1.0.0.cjp  # 制品源码包
+├── meta-data.json  # 制品元数据
+└── 其他编译产物
+```
+
+使用 `tar` 命令以 `tar.gz` 格式解压 `demo-1.0.0.cjp`，会得到与上例中 `demo` 目录相同的内容。
+
+### publish
+
+`publish` 用于将制品源码包上传到中心仓。
+
+执行 `publish` 命令时，`cjpm` 会检查编译产物目录中是否有名为 `模块名-版本号.cjp` 的制品源码包和元数据文件 `meta-data.json`，若任意一个文件不存在，或者元数据中的制品包校验码与制品包不匹配，则重新执行默认 `bundle` 流程。然后，`cjpm` 会将制品源码包和元数据上传到中心仓。
+
+> **注意：**
+>
+> 使用 `publish` 功能需要正确进行中心仓配置，参考[项目管理配置文件说明](#项目管理配置文件说明)。
+
 ### install
 
 `install` 用于安装仓颉项目，执行该命令前会先进行编译，然后将编译产物安装到指定路径，安装产物以仓颉项目名命名（`Windows` 系统上会有 `.exe` 后缀）。`install` 安装的项目产物类型需要是 `executable`。
+
+`install` 有可选参数 `[org::]name-version`，当存在该参数时，`cjpm` 将会从中心仓下载 `org` 组织（若不配置则为无组织）下的名为 `name`，版本号为 `version` 的源码包并编译安装；若存在多个该配置，则会依次安装。
 
 `install` 有多个可配置项：
 
@@ -695,7 +767,7 @@ Summary: TOTAL: 1
 
 `install` 功能有如下注意事项：
 
-- `install` 共有两种安装方式：安装本地项目（通过 `--path` 配置项目路径）和安装 `git` 项目（通过 `--git` 配置项目 `url`）。这两种安装方式至多只能配置一种，否则 `install` 将报错。任意一种均未配置时，默认安装当前目录下的本地项目。
+- `install` 共有三种安装方式：安装本地项目（通过 `--path` 配置项目路径），安装 `git` 项目（通过 `--git` 配置项目 `url`）和安装中心仓项目（通过 `[org::]name-version` 配置组织名、模块名和版本号）。这三种安装方式至多只能配置一种，否则 `install` 将报错。任意一种均未配置时，默认安装当前目录下的本地项目。
 - `install` 编译项目时，默认开启增量编译。
 - `git` 相关配置仅在配置 `--git` 后生效，否则会被忽略，包括 `--branch`, `--tag` 和 `--commit`。当配置多个 `git` 相关配置时，仅会生效优先级更高的配置，优先级排序为 `--commit` > `--branch` > `--tag`。
 - 若已存在同名可执行文件被安装，则原来的文件将被替换。
@@ -711,6 +783,8 @@ Summary: TOTAL: 1
 ```text
 cjpm install --path path/to/project # 从本地路径 path/to/project 中安装
 cjpm install --git url              # 从 git 对应地址安装
+cjpm install aoo-1.0.0              # 从中心仓安装名为 aoo 的，版本号为 1.0.0 的项目
+cjpm install org::boo-2.0.0         # 从中心仓安装 org 组织下名为 boo 的，版本号为 2.0.0 的项目
 ```
 
 ### uninstall
@@ -733,6 +807,7 @@ cjpm install --git url              # 从 git 对应地址安装
 [package] # 单模块配置字段，与 workspace 字段不能同时存在
   cjc-version = "1.0.0" # 所需 `cjc` 的最低版本要求，必需
   name = "demo" # 模块名及模块 root 包名，必需
+  organization = "" # 组织名, 非必需
   description = "nothing here" # 描述信息，非必需
   version = "1.0.0" # 模块版本信息，必需
   compile-option = "" # 额外编译命令选项，非必需
@@ -742,6 +817,17 @@ cjpm install --git url              # 从 git 对应地址安装
   src-dir = "" # 指定源码存放路径，非必需
   target-dir = "" # 指定产物存放路径，非必需
   package-configuration = {} # 单包配置选项，非必需
+  include = ["src"] # 指定打包范围，非必需
+  exclude = ["*.txt"] # 指定打包排除范围，非必需
+
+  # 中心仓制品展示相关字段
+  authors = ["Tom", "Joan"] # 作者 ID 列表，非必需
+  repository = "" # 制品仓代码 url，非必需
+  homepage = "" # 制品主页 url，非必需
+  documentation = "" # 制品文档页 url，非必需
+  tag = [] # 制品标签，非必需
+  category = [] # 制品分类，非必需
+  license = [] # 协议列表，非必需
 
 [workspace] # 工作空间管理字段，与 package 字段不能同时存在
   members = [] # 工作空间成员模块列表，必需
@@ -802,11 +888,78 @@ cjpm install --git url              # 从 git 对应地址安装
 
 当前仓颉模块名称，同时也是模块 `root` 包名。
 
-一个合法的仓颉模块名称必须是一个合法的标识符。标识符可由字母、数字、下划线组成，标识符的开头必须是字母，例如 `cjDemo` 或者 `cj_demo_1`。
+一个合法的仓颉模块名称必须是一个合法的标识符。标识符可由字母、数字、下划线组成，标识符的开头必须是字母或若干下划线加字母的组合，例如 `cjDemo`，`_cj_demo_1` 或者 `__cj_demo_1`。
 
 > **注意：**
 >
 > 当前仓颉模块名暂不支持使用 Unicode 字符，仓颉模块名必须是一个仅含 ASCII 字符的合法的标识符。
+
+### "organization"
+
+当前仓颉模块组织名。若不配置该字段，则当前仓颉模块为无组织模块。
+
+一个合法的仓颉组织名名称必须是一个合法的标识符，标准与 `name` 相同。
+
+`organization` 配置后，模块代码中包声明及包导入需以 `组织名 + ::` 为前缀的型式带上组织名，模块代码的相关产物名、目录名将以 `@ + 组织名` 为后缀的型式带上组织名，例子如下：
+
+```toml
+# cjpm.toml
+[package]
+  name = "demo"
+  organization = "org"      # 配置组织名
+```
+
+```text
+# demo 模块结构
+|-- src
+    |-- demo.cj
+    |-- xoo
+        |-- xoo.cj
+    |-- yoo
+        |-- yoo.cj
+```
+
+```cangjie
+# xoo.cj
+package org::demo.xoo       # 带有组织名的包声明
+
+public let x: Int64 = 0
+```
+
+```cangjie
+# yoo.cj
+package org::demo.yoo       # 带有组织名的包声明
+
+public let y: Int64 = 0
+```
+
+```cangjie
+# demo.cj
+package org::demo           # 带有组织名的包声明
+
+import org::demo.xoo.*      # 带有组织名的包导入
+import org::demo.yoo.*      # 带有组织名的包导入
+
+main(): Int64 {
+    println(x)
+    println(y)
+    println("hello world")
+    return 0
+}
+```
+
+```text
+# 模块产物目录及产物
+|-- target
+   |-- release
+        |-- demo@org                  # 目录带上组织名
+            |-- libdemo@org.so        # 产物带上组织名
+            |-- libdemo.xoo@org.so
+            |-- libdemo.yoo@org.so
+            |-- demo@org.cjo
+            |-- demo.xoo@org.cjo
+            |-- demo.yoo@org.cjo
+```
 
 ### "description"
 
@@ -814,7 +967,7 @@ cjpm install --git url              # 从 git 对应地址安装
 
 ### "version"
 
-当前仓颉模块版本号，由模块所有者管理，主要供模块校验使用。模块版本号的格式同 `cjc-version`。
+当前仓颉模块版本号。模块版本号的格式同 `cjc-version`。
 
 ### "compile-option"
 
@@ -965,6 +1118,96 @@ src
 - 除该模块 `root` 包以外的所有包（该模块下的所有子包，以及该模块直接、间接依赖的其他模块的包含 `root` 包的所有包），会以 `LTO` 优化编译模式编译成 `.bc` 文件；
 - 该模块的 `root` 包会被编译成动态库，并且链入上述所有 `.bc` 文件，无论对应的包是否被该 `root` 包导入。
 
+### "include", "exclude"
+
+这两个字段用于 `bundle` 命令，可以指定打包时的文件范围。`include` 和 `exclude` 均为字符串数组形式，每个字符串代表一条匹配规则，匹配规则格式符合 `gitignore` 屏蔽格式。
+
+`bundle` 命令仅会检查并打包当前项目目录下的文件。基于开发者配置的 `include` 和 `exclude` 字段，最终 `bundle` 命令的打包范围确定规则如下：
+
+- 无关配置，一定会被打包的文件：项目根目录下的 `cjpm.toml`, `README.md` 和 `README_zh.md`
+- 无关配置，一定不会被打包的文件：
+    - 项目根目录下的 `cjpm.lock` 和 `cjpm-config.toml`
+    - 编译产物目录和构建脚本产物目录
+    - 所有二进制文件
+- 除了上述文件范围，其他的文件遵循以下规则：
+    - 若文件匹配任意 `include` 规则，且不匹配任意 `exclude` 规则，则该文件会被打包
+    - 若 `include` 中没有配置，则会打包当前目录下所有不匹配任意 `exclude` 规则的文件
+
+例如，有以下的待打包模块 `demo`：
+
+```text
+demo
+├── src
+│    ├── demo.cj
+│    ├── demo-config.txt
+│    └── aoo
+│         ├── aoo.cj
+│         └── aoo-config.txt
+├── test
+│    ├── test.cj
+│    └── test-config.txt
+├── README.md
+└── cjpm.toml
+```
+
+则基于不同的配置，打包范围示例如下：
+
+```toml
+[package]
+  include = []
+  exclude = []
+# 结果：打包上述文件列表中的所有文件
+```
+
+```toml
+[package]
+  include = ["src"]
+  exclude = []
+# 结果：打包 cjpm.toml, README.md 和 src 目录
+```
+
+```toml
+[package]
+  include = []
+  exclude = ["*.txt"]
+# 结果：排除所有 txt 文件，打包其余文件
+```
+
+```toml
+[package]
+  include = ["src"]
+  exclude = ["*.txt"]
+# 结果：打包 cjpm.toml, README.md 和 src 目录中除了 .txt 文件以外的其他文件
+```
+
+### "authors"
+
+该字段用于配置模块作者 ID 列表，以在中心仓页面展示。
+
+### "repository"
+
+若源码模块同时上传到某个在线代码仓库，可在此配置对应 url，以在中心仓页面展示。
+
+### "homepage"
+
+若开发者为源码模块定制了主页，可在此配置对应 url，以在中心仓页面展示。
+
+### "documentation"
+
+若开发者为源码模块定制了文档网页，可在此配置对应 url，以在中心仓页面展示。
+
+### "tag"
+
+该字段用于为源码模块指定制品标签，上限 5 个。
+
+### "category"
+
+该字段用于为源码模块指定制品分类，上限 5 个。
+
+### "license"
+
+该字段用于指定源码模块满足的协议列表。
+
 ### "workspace"
 
 该字段可管理多个模块作为一个工作空间，支持以下配置项：
@@ -1018,7 +1261,7 @@ abc = { path = "libs" }
 
 ### "dependencies"
 
-该字段通过源码方式导入依赖的其它仓颉模块，里面配置了当前构建所需要的其它模块的信息。目前，该字段支持本地路径依赖和远程 `git` 依赖。
+该字段通过源码方式导入依赖的其它仓颉模块，里面配置了当前构建所需要的其它模块的信息。目前，该字段支持本地路径依赖，远程 `git` 依赖和中心仓依赖。
 
 要指定本地依赖项，请使用 `path` 字段，并且它必须包含有效的本地路径。例如，下面的两个子模块 `pro0` 和 `pro1` 和主模块的代码结构如下：
 
@@ -1063,6 +1306,22 @@ abc = { path = "libs" }
 在这种情况下， `cjpm` 将下载对应存储库的最新版本，并将当前 `commit-hash` 保存在 `cjpm.lock` 文件中。所有后续的 `cjpm` 调用都将使用保存的版本，直到使用 `cjpm update`。
 
 通常需要一些身份验证才能访问 `git` 存储库。 `cjpm` 不要求提供所需的凭据，因此应使用现有的 `git` 身份验证支持。如果用于 `git` 的协议是 `https` ，则需要使用一些现有的 git 凭据帮助程序。在 `Windows` 上，可在安装 `git` 时一起安装凭据帮助程序，默认使用。在 `Linux/macOS` 上，请参见 `git` 官方文档中 `git-config` 的配置说明，了解有关设置凭据帮助程序的详细信息。如果协议是 `ssh` 或 `git` ，则应使用基于密钥的身份验证。如果密钥受密码短语保护，则开发者应确保 `ssh-agent` 正在运行，并且在使用 `cjpm` 之前通过 `ssh-add` 添加密钥。
+
+要指定中心仓依赖项，请使用 `version` 字段。例如，下面的配置可用于导入中心仓的源码模块：
+
+```toml
+[dependencies]
+  aoo = { version = "1.0.0" }         # 导入模块名为 aoo，版本号为 1.0.0 的中心仓模块
+  "org::boo" = { version = "2.0.0" }  # 导入 org 组织下名为 boo，版本号为 2.0.0 的中心仓模块
+```
+
+同时，`cjpm.toml` 提供了简化的中心仓依赖配置方式，下面的配置方式等价于上述配置：
+
+```toml
+[dependencies]
+  aoo = "1.0.0"
+  "org::boo" = "2.0.0"
+```
 
 `dependencies` 字段可以通过 `output-type` 属性指定编译产物类型，指定的类型可以与源码依赖自身的编译产物类型不一致，且仅能为 `static` 或者 `dynamic`， 如下所示：
 
@@ -1570,9 +1829,42 @@ aoo = { path = "${DEPENDENCY_PATH}/aoo" }
     - 构建脚本依赖列表 `script-dependencies` 中本地依赖项的 `path` 字段
     - 二进制依赖字段 `bin-dependencies` 中的 `path-option` 和 `package-option` 字段
 
+## 项目管理配置文件说明
+
+项目管理配置文件 `cjpm-config.toml` 用来配置中心仓地址、本地仓路径等内容，`cjpm` 主要通过此文件对接中心仓，管理从中心仓下载的依赖模块。
+
+`cjpm-config.toml` 可配置在三个位置，执行 `cjpm` 命令时，会按照从上到下的优先级读取：
+
+- 执行命令的当前 `cjpm` 模块目录下，与 `cjpm.toml` 同级的 `cjpm-config.toml`；
+- 用户空间目录下 `.cjpm` 目录内的 `cjpm-config.toml`，`Linux/macOS` 中为 `$HOME/.cjpm`，`Windows` 中为 `%USERPROFILE%/.cjpm`；
+- 仓颉 sdk 目录下的 `tools/config/cjpm-config.toml`。
+
+读取到一个有效的 `cjpm-config.toml` 后，`cjpm` 会使用该文件作为本次命令执行的配置，并忽略更低优先级的配置文件。
+
+配置文件格式如下所示：
+
+```toml
+[repository.local]
+  path = "/path/to/local/repository"
+
+[repository.home]
+  registry = "central/repo/url"
+  token = "user-token"
+```
+
+配置内容说明如下：
+
+- `repository.home` 用于配置中心仓 url 和用户的个人 token，`cjpm` 会与 `registry` 字段中的中心仓地址进行交互，交互请求中会附带用户 token 信息。
+- `repository.local` 用于配置存放从中心仓和 git 下载的源码模块的本地路径，不配置时默认为用户空间目录下的 `.cjpm` 目录。确定本地路径后，git 源码模块会下载到该路径的 `git` 目录下，中心仓源码模块会下载到 `repository/source` 目录下。
+
 ## 配置和缓存文件夹
 
-`cjpm` 通过 `git` 下载文件的存储路径可以通过 `CJPM_CONFIG` 环境变量指定。如果未指定，则 `Linux/macOS` 上的默认位置为 `$HOME/.cjpm`，`Windows` 上的默认位置为 `%USERPROFILE%/.cjpm` 。
+`cjpm` 通过 `git` 和中心仓下载文件的存储路径可以通过 `CJPM_CONFIG` 环境变量指定。如果未指定，则 `Linux/macOS` 上的默认位置为 `$HOME/.cjpm`，`Windows` 上的默认位置为 `%USERPROFILE%/.cjpm` 。
+
+> **注意：**
+>
+> - 该配置功能等同于 `cjpm-config.toml` 中的 `repository.local`。该配置仅在无有效 `cjpm-config.toml` 配置或是有效配置为仓颉 `sdk` 中的 `tools/config/cjpm-config.toml` 时才会生效。
+> - 该配置会在未来被废弃，请使用 `cjpm-config.toml` 代替。
 
 ## 仓颉包管理规格说明
 

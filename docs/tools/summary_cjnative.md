@@ -1,5 +1,5 @@
 - [工具使用指南](source_zh_cn/command_line_overview.md)
-    - [包管理工具](source_zh_cn/cmd-tools/cjpm_manual.md)
+    - [项目管理工具](source_zh_cn/cmd-tools/cjpm_manual.md)
     - [调试工具](source_zh_cn/cmd-tools/cjdb_manual.md)
     - [格式化工具](source_zh_cn/cmd-tools/cjfmt_manual.md)
     - [静态检查工具](source_zh_cn/cmd-tools/cjlint_manual.md)
