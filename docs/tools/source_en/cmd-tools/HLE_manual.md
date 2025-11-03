@@ -4,7 +4,8 @@
 
 `HLE` (Hyper-Lang extension) is an automatic code template generation tool for Cangjie-ARKTS interoperation.
 
-This tool takes ARKTS interface declaration files (such as files with .d.ts or .d.ets extensions) as input, and outputs a directory containing BUILD.gn files and an src folder. The src folder contains .cj files storing the generated interoperation code. The tool also outputs a JSON file containing all information from the ARKTS files.
+This tool takes ARKTS interface declaration files (such as files with .d.ts or .d.ets extensions) as input, and outputs a directory containing BUILD.gn files and an src folder. The src folder contains .cj files storing the generated interoperation code. The tool also outputs a JSON file containing all information from the ARKTS files.Please refer to the following conversion rules: [Rules for generating Cangjie glue code using the ArkTS third-party module](cj-dts2cj-translation-rules.md)
+
 
 ## Parameter Descriptions
 

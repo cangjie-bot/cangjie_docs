@@ -4,7 +4,11 @@
 
 `HLE`(Hyper-Lang extension)是一个仓颉调用ArkTS互操作代码模板自动生成工具。
 
+<<<<<<< HEAD
 该工具的输入是ArkTS接口声明文件，例如后缀.d.ts或者.d.ets结尾的文件，输出为包含BUILD.gn文件和src文件夹。src文件夹中包含的cj文件中存放生成的互操作代码。工具也会输出包含ArkTS文件的所有信息的json文件。
+=======
+该工具的输入是 ArkTS 接口声明文件，例如后缀 .d.ts 或者 .d.ets 结尾的文件，输出为包含 BUILD.gn 文件和 src 文件夹。src 文件夹中包含的 cj 文件中存放生成的互操作代码。工具也会输出包含 ArkTS 文件的所有信息的 json 文件，转换规则请参见：[ArkTS三方模块生成仓颉胶水代码的规则](cj-dts2cj-translation-rules.md)
+>>>>>>> 0ad60dc (feat: added doc of hle)
 
 ## 参数含义
 
