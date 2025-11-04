@@ -43,7 +43,7 @@ Creative Commons License version 4.0
 3. 修改完成后，可单击页面右上角 Markdown 预览按钮，确认修改结果。
 4. 确认无误后，在左侧提交面板中填写修改意见和补充信息、Signed-off-by 邮箱信息触发校验，选择合入的分支，单击“提交”完成修改。
 
-    例如：Signed-off-by: user.name <user.email> //与 DOC 签署邮箱保持一致
+    例如：`Signed-off-by: user.name <user.email>` //与 DCO 签署邮箱保持一致
 
 仓颉文档团队成员将评审并合并您的修改内容，感谢您对仓颉文档的支持和帮助。
 
