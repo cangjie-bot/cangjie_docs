@@ -13,3 +13,17 @@ body:
       description: 请描述下您的问题
     validations:
       required: true
+  - type: checkboxes
+    id: version
+    attributes:
+      label: 受影响的分支版本
+      description: 请选择您的问题涉及的文档分支版本：
+      options:
+        - label: dev
+          required: false
+        - label: main
+          required: false
+        - label: release/1.0
+          required: false
+    validations:
+      required: true
