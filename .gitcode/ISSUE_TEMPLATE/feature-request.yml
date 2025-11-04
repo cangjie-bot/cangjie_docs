@@ -10,24 +10,26 @@ body:
   - type: textarea
     attributes:
       label: 新需求提供了什么功能？
-      description: 请描述下新需求的功能是什么，解决了什么问题
+      description: 请描述下新需求的功能是什么，解决了什么问题：
     validations:
       required: true
   - type: textarea
     attributes:
       label: 该需求带来的价值、应用场景？
-      description: 请描述下该需求的价值，应用场景等。
+      description: 请描述下该需求的价值，应用场景等：
     validations:
       required: false
   - type: checkboxes
     id: version
     attributes:
-      label: 新需求涉及的分支
-      description: 请选择涉及的分支：
+      label: 新需求涉及的分支或版本
+      description: 请选择涉及的分支或版本：
       options:
+        - label: dev
+          required: false
         - label: main
           required: false
-        - label: dev
+        - label: LTS 1.0.x
           required: false
     validations:
       required: true
