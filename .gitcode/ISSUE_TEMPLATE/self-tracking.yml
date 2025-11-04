@@ -13,27 +13,37 @@ body:
       description: 请描述下您的问题：
     validations:
       required: true
+  - type: textarea
+    attributes:
+      label: 文档更新涉及子系统模块
+      description: 请提供文档更新内容所属子系统名称，如：仓颉xxx语言特性、互操作、命令行工具等：
+    validations:
+      required: true
   - type: checkboxes
     id: docs_name
     attributes:
-      label: 文档更新涉及手册名称
-      description: 请提供文档更新内容所属手册：
+      label: 文档更新涉及手册或模块
+      description: 请提供文档更新内容所属手册或模块：
       options:
-        - label: 仓颉编程语言开发指南
+        - label: 仓颉编程语言开发指南（dev-guide）
           required: false
-        - label: 仓颉编程语言工具使用指南
+        - label: 仓颉编程语言工具使用指南（tools）
+          required: false
+        - label: 仓库配置相关
           required: false
     validations:
       required: true
   - type: checkboxes
     id: version
     attributes:
-      label: 受影响的分支
-      description: 请选择受影响的文档分支：
+      label: 受影响的分支版本
+      description: 请选择自提修改涉及的文档分支版本：
       options:
+        - label: dev
+          required: false
         - label: main
           required: false
-        - label: dev
+        - label: release/1.0
           required: false
     validations:
       required: true
