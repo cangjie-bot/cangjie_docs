@@ -73,7 +73,7 @@ func f() {
 
 示例 3：捕获的变量必须在闭包定义前完成初始化。
 
-<!-- compile.error -error-->
+<!-- compile.error -->
 
 ```cangjie
 func f() {
@@ -121,7 +121,7 @@ func f() {
     let y = 2
 
     func g() {
-        println(x)  // OK, captured a mutable variable.
+        println(x)  // OK, captured a mutable variable
     }
     let b = g       // Error, g cannot be assigned to a variable
 
@@ -136,7 +136,7 @@ func f() {
 
 示例 6.1：`g` 捕获了 `var` 声明的变量 `x`，`f` 调用了 `g`，且 `g` 捕获的 `x` 不在 `f` 内定义，`f` 同样不能作为一等公民使用：
 
-<!-- compile.error -error-->
+<!-- compile.error -->
 
 ```cangjie
 func h(){
