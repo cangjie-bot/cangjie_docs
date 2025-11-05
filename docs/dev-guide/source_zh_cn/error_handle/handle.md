@@ -9,7 +9,7 @@
 异常处理由 `try` 表达式完成，可分为：
 
 - 不涉及资源自动管理的普通 try 表达式。
-- 会进行资源自动管理 try-with-resources 表达式。
+- 会进行资源自动管理的 try-with-resources 表达式。
 
 ## 普通 try 表达式
 

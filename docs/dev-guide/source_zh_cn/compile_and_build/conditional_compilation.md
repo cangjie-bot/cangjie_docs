@@ -28,6 +28,8 @@ main(): Int64 {
 
 - 仓颉不支持编译条件嵌套，以下写法均不允许：
 
+    <!-- compile.error -->
+
     ```cangjie
     @When[os == "Windows"]
     @When[os == "Linux"]    // Error, illegal nested when conditional compilation
@@ -39,10 +41,12 @@ main(): Int64 {
 
 - `@When[...]` 作为内置编译标记，在导入前处理，由宏展开生成的代码中含有 `@When[...]` 会编译报错，如：
 
+    <!-- compile.error -->
+
     ```cangjie
-    @M0                     // macro which returns the input
+    @Derive[ToString]
     @When[os == "Linux"]    // Error, unexpected when conditional compilation directive
-    func A(){}
+    class A {}
     ```
 
 ## 内置编译条件变量
@@ -289,6 +293,9 @@ main () {
 仓颉条件编译允许开发者自由组合多个条件编译选项。支持逻辑运算符组合多个条件，支持括号运算符明确优先级。
 
 使用方式如下：
+
+<!-- verify -->
+<!-- cfg="--cfg='feature=lion'" -->
 
 ```cangjie
 //source.cj

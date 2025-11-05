@@ -71,15 +71,25 @@ extend Foo {
 
 只能在 `package a` 或者在 `package b` 中为 `Foo` 实现 `Bar`。
 
-<!-- compile.error -->
+<!-- compile.error -extend1 -->
+<!-- cfg="-p a --output-type=staticlib" -->
 
 ```cangjie
 // package a
 public class Foo {}
+```
 
+<!-- compile.error -extend1 -->
+<!-- cfg="-p b --output-type=staticlib" -->
+```cangjie
 // package b
 public interface Bar {}
+```
 
+<!-- compile.error -extend1 -->
+<!-- cfg="-p c liba.a libb.a --output-type=staticlib" -->
+
+```cangjie
 // package c
 import a.Foo
 import b.Bar
@@ -281,6 +291,8 @@ main() {
 
 如下代码所示，在包 `a` 中，虽然接口访问修饰符为 `private`，但 `Foo` 的扩展仍然会被导出。
 
+<!-- compile -extend1 -->
+
 ```cangjie
 // package a
 package a
@@ -389,7 +401,8 @@ main() {
 
 而对于接口扩展，需要同时导入被扩展的类型、扩展的接口和泛型约束（如果有）才能使用。因此在 `package c` 中，需要同时导入 `Foo` 和 `I` 才能使用对应扩展中的函数 `g`。
 
-<!-- compile -->
+<!-- run -access_rule4 -->
+<!-- cfg="-p a --output-type=staticlib" -->
 
 ```cangjie
 // package a
@@ -399,6 +412,9 @@ extend Foo {
     public func f() {}
 }
 ```
+
+<!-- run -access_rule4 -->
+<!-- cfg="-p b --output-type=staticlib liba.a" -->
 
 ```cangjie
 // package b
@@ -414,6 +430,9 @@ extend Foo <: I {
     }
 }
 ```
+
+<!-- run -access_rule4 -->
+<!-- cfg="liba.a libb.a" -->
 
 ```cangjie
 // package c
