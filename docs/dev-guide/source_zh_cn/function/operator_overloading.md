@@ -135,7 +135,7 @@
         public operator func ()(): Unit {}
 
         public func foo() {
-            this()  // Error, this() calls the constructor of A.
+            this()  // Error, this() calls the constructor of A
             super() // Error
         }
     }

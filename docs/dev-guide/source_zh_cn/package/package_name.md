@@ -2,9 +2,21 @@
 
 在仓颉编程语言中，包声明以关键字 `package` 开头，后接一个可选的组织名和组织名分隔符 '::'，然后是 root 包至当前包由 `.` 分隔路径上所有包的包名。组织名和包名必须是合法的普通标识符（不含原始标识符）。例如：
 
+<!-- compile -->
+
 ```cangjie
 package pkg1      // root 包 pkg1
+```
+
+<!-- compile -->
+
+```cangjie
 package pkg1.sub1 // root 包 pkg1 的子包 sub1
+```
+
+<!-- compile -->
+
+```cangjie
 package org1::pkg1.sub1 // org1 组织名 的 root 包 pkg1 的子包 sub1
 ```
 
@@ -14,7 +26,7 @@ package org1::pkg1.sub1 // org1 组织名 的 root 包 pkg1 的子包 sub1
 
 包声明必须在源文件的非空非注释的首行，且同一个包中的不同源文件的包声明必须保持一致。
 
-<!-- compile.error -->
+<!-- compile -->
 <!-- cfg="-p test --output-type=staticlib" -->
 
 ```cangjie
@@ -22,7 +34,11 @@ package org1::pkg1.sub1 // org1 组织名 的 root 包 pkg1 的子包 sub1
 // Comments are accepted
 package test
 // declarations...
+```
 
+<!-- code_check_manual -->
+
+```cangjie
 // file 2
 let a = 1 // Error, package declaration must appear first in a file
 package test

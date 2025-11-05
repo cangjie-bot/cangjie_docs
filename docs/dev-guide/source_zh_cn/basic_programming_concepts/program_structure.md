@@ -197,6 +197,7 @@ main() {
 ```
 
 此外，对于 [try-catch](../error_handle/handle.md#普通-try-表达式) 场景，编译器会假设 try 块总是全部被执行，且总是抛异常，从而进行相关报错，见如下示例：
+
 <!-- compile.error -->
 
 ```cangjie

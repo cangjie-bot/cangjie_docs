@@ -62,8 +62,8 @@ cjo 文件主要通过 [`--import-path`](compile_options.md#--import-path-value-
 .
 ├── libs
 |   └── myModule
-|       ├── log.cjo
-|       └── libmyModule.a
+|       ├── myModule.log.cjo
+|       └── libmyModule.log.a
 └── main.cj
 ```
 
@@ -73,7 +73,7 @@ cjo 文件主要通过 [`--import-path`](compile_options.md#--import-path-value-
 $ cjc main.cj --import-path ./libs libmyModule.a
 ```
 
-编译器会使用 `./libs/myModule/log.cjo` 文件来对 `main.cj` 文件进行语义检查与编译。
+编译器会使用 `./libs/myModule/myModule.log.cjo` 文件来对 `main.cj` 文件进行语义检查与编译。
 
 ### 在 CJPM 中的使用
 
