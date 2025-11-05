@@ -13,10 +13,12 @@
 int rand();
 
 // stdio.h
-int printf (const char *fmt, ...);
+int printf(const char *fmt, ...);
 ```
 
 那么在仓颉中调用这两个函数的方式如下：
+
+<!-- run -->
 
 ```cangjie
 // declare the function by `foreign` keyword, and omit `@C`
@@ -46,6 +48,8 @@ main() {
 7. 仓颉（CJNative 后端）虽然提供了栈扩容能力，但是由于 C 侧函数实际使用栈大小仓颉无法感知，所以 ffi 调用进入 C 函数后，仍然存在栈溢出的风险（可能导致程序运行时崩溃或者产生不可预期的行为），需要开发者根据实际情况，修改 `cjStackSize` 的配置。
 
 一些不合法的 `foreign` 声明的示例代码如下：
+
+<!-- compile.error -->
 
 ```cangjie
 foreign func rand(): Int32 { // compiler error
@@ -127,6 +131,8 @@ main() {
 `inout` 修饰的变量，可以是定义在顶层作用域中的变量、局部变量、`struct` 中的成员变量，但不能直接或间接来源于 `class` 的实例成员变量。
 
 下面是一个例子：
+
+<!-- compile.error -->
 
 ```cangjie
 foreign func foo1(ptr: CPointer<Int32>): Unit
@@ -268,6 +274,7 @@ main() {
       return count;
   }
   ```
+  <!-- code_check_manual -->
 
   ```cangjie
   foreign func getCount(): Int64
@@ -474,6 +481,8 @@ main() {
 
 `VArray` 作为参数的使用示例如下：
 
+<!-- code_check_manual -->
+
 ```cangjie
 foreign func cfoo1(a: CPointer<Int32>): Unit
 foreign func cfoo2(a: VArray<Int32, $3>): Unit
@@ -487,6 +496,8 @@ void cfoo2(int a[3]) { ... }
 ```
 
 调用 `CFunc` 时，需要通过 `inout` 修饰 `VArray` 类型变量：
+
+<!-- code_check_manual -->
 
 ```cangjie
 var a: VArray<Int32, $3> = [1, 2, 3]
@@ -577,6 +588,8 @@ main() {
 
 仓颉还提供了 `sizeOf` 和 `alignOf` 两个函数，用于获取上述 C 互操作类型的内存占用和内存对齐数值（单位：字节），函数声明如下：
 
+<!-- code_no_check -->
+
 ```cangjie
 public func sizeOf<T>(): UIntNative where T <: CType
 public func alignOf<T>(): UIntNative where T <: CType
@@ -584,7 +597,7 @@ public func alignOf<T>(): UIntNative where T <: CType
 
 使用示例：
 
-<!-- run -->
+<!-- verify -->
 
 ```cangjie
 @C
@@ -664,6 +677,8 @@ void set_callback(callback cb);
 
 对应的，在仓颉里面这个函数可以声明为：
 
+<!-- code_check_manual -->
+
 ```cangjie
 foreign func set_callback(cb: CFunc<(Int32) -> Unit>): Unit
 ```
@@ -677,6 +692,8 @@ CFunc 类型的变量可以从 C 侧传递过来，也可以在仓颉侧构造�
 > `foreign` 修饰的函数与 `@C` 修饰的函数，这两种 `CFunc` 的命名不建议使用 `CJ_`（不区分大小写）作为前缀，否则可能与标准库及运行时等编译器内部符号出现冲突，导致未定义行为。
 
 示例如下：
+
+<!-- code_check_manual -->
 
 ```cangjie
 @C
@@ -751,6 +768,8 @@ void drawPicture(Point* point, Cube* cube) {
 ```
 
 仓颉代码如下：
+
+<!-- code_check_manual -->
 
 ```cangjie
 // main.cj

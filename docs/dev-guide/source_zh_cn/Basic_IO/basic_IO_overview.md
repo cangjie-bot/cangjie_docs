@@ -39,14 +39,17 @@ interface InputStream {
 
 输入流读取示例：
 
+<!-- run -->
+
 ```cangjie
 import std.io.InputStream
+import std.io.ByteBuffer
 
 main() {
-    let input: InputStream = ...
+    let input: InputStream = ByteBuffer("Hello World".toArray())
     let buf = Array<Byte>(256, repeat: 0)
     while (input.read(buf) > 0) {
-        println(buf)
+        println(String.fromUtf8(buf))
     }
 }
 ```
@@ -63,6 +66,8 @@ main() {
 
 OutputStream 接口定义：
 
+<!-- run -->
+
 ```cangjie
 interface OutputStream {
     func write(buffer: Array<Byte>): Unit
@@ -77,12 +82,15 @@ interface OutputStream {
 
 输出流写入示例：
 
+<!-- run -->
+
 ```cangjie
 import std.io.OutputStream
+import std.io.ByteBuffer
 
 main() {
-    let output: OutputStream = ...
-    let buf = Array<Byte>(256, repeat: 111)
+    let output: OutputStream = ByteBuffer()
+    let buf = "Hello World".toArray()
     output.write(buf)
     output.flush()
 }
