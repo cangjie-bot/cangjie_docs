@@ -14,14 +14,18 @@ HashMap 是一种哈希表，提供对其包含的元素的快速访问。表中
 
 仓颉使用 `HashMap<K, V>` 表示 HashMap 类型，K 表示 HashMap 的键类型，K 必须是实现了 Hashable 和 `Equatable<K>` 接口的类型，例如数值或 String。V 表示 HashMap 的值类型，V 可以是任意类型。
 
+<!-- compile.error -hashmap1 -->
+
 ```cangjie
-var a: HashMap<Int64, Int64> = ... // HashMap whose key type is Int64 and value type is Int64
-var b: HashMap<String, Int64> = ... // HashMap whose key type is String and value type is Int64
+var a: HashMap<Int64, Int64> = HashMap<Int64, Int64>() // HashMap whose key type is Int64 and value type is Int64
+var b: HashMap<String, Int64> = HashMap<String, Int64>() // HashMap whose key type is String and value type is Int64
 ```
 
 元素类型不相同的 HashMap 是不相同的类型，所以它们之间不可以互相赋值。
 
 因此以下例子是不合法的。
+
+<!-- compile.error -hashmap1 -->
 
 ```cangjie
 b = a // Type mismatch
@@ -100,6 +104,8 @@ let b = map.contains("d") // b == false
 ```
 
 当想访问指定键对应的元素时，可以使用下标语法访问（下标的类型必须是键类型）。使用不存在的键作为索引会触发运行时异常。
+
+<!-- run.error -->
 
 ```cangjie
 let map = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2)])
