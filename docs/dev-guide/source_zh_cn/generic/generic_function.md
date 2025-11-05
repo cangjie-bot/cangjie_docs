@@ -112,15 +112,18 @@ enum C {
 interface I {
     func doo<T>(a: T): Unit where T <: ToString
 }
+
 class D <: I {
     public func doo<T>(a: T): Unit where T <: ToString {
         println("${a}")
     }
 }
+
 abstract class E {
     public func eoo1<T>(a: T): Unit where T <: ToString
     public open func eoo2<T>(a: T): Unit where T <: ToString
 }
+
 class F <: E {
     public func eoo1<T>(a: T): Unit where T <: ToString {
         println("${a}")
@@ -129,6 +132,7 @@ class F <: E {
         println("${a}")
     }
 }
+
 main() {
     var a = A()
     var b = B()

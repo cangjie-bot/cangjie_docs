@@ -27,6 +27,7 @@ import std.time.*
 import std.sync.*
 import std.collection.*
 import stdx.log.*
+import stdx.crypto.kit
 
 let server = ServerBuilder()
                         .addr("127.0.0.1")

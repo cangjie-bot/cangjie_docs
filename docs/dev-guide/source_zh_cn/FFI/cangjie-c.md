@@ -13,10 +13,12 @@
 int rand();
 
 // stdio.h
-int printf (const char *fmt, ...);
+int printf(const char *fmt, ...);
 ```
 
 那么在仓颉中调用这两个函数的方式如下：
+
+<!-- run -->
 
 ```cangjie
 // declare the function by `foreign` keyword, and omit `@C`
@@ -46,6 +48,8 @@ main() {
 7. 仓颉（CJNative 后端）虽然提供了栈扩容能力，但是由于 C 侧函数实际使用栈大小仓颉无法感知，所以 ffi 调用进入 C 函数后，仍然存在栈溢出的风险（可能导致程序运行时崩溃或者产生不可预期的行为），需要开发者根据实际情况，修改 `cjStackSize` 的配置。
 
 一些不合法的 `foreign` 声明的示例代码如下：
+
+<!-- compile.error -->
 
 ```cangjie
 foreign func rand(): Int32 { // compiler error
@@ -127,6 +131,8 @@ main() {
 `inout` 修饰的变量，可以是定义在顶层作用域中的变量、局部变量、`struct` 中的成员变量，但不能直接或间接来源于 `class` 的实例成员变量。
 
 下面是一个例子：
+
+<!-- compile.error -->
 
 ```cangjie
 foreign func foo1(ptr: CPointer<Int32>): Unit
@@ -584,7 +590,7 @@ public func alignOf<T>(): UIntNative where T <: CType
 
 使用示例：
 
-<!-- run -->
+<!-- verify -->
 
 ```cangjie
 @C

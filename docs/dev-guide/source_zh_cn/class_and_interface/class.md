@@ -207,7 +207,7 @@ class B <: A {
     }
 }
 
-main() {
+main(): Int64 {
     B()
     0
 }
