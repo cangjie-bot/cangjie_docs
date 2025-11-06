@@ -69,6 +69,9 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 | `ObjCPointer<A>` where `A` is `class`     | `A**`                         |
 | `ObjCPointer<A>` where `A` is not `class` | `A*`                          |
 | `struct A`                                | `@C struct A`                 |
+| `ObjCBlock`                               | `Block`                       |
+| `ObjCFunc`                                | `function type`               |
+| `ObjCId`                                  | `id`                          |
 
 注意：
 
@@ -826,6 +829,8 @@ int main(int argc, char** argv) {
 
 `ObjCPointer` 类型定义在 `objc.lang` 包中，用于映射 Objective-C 中定义的原始指针。其签名如下：
 
+<!-- compile -->
+
 ```cangjie
 struct ObjCPointer<T> {
     /* 从 C Pointer构造对象 */
@@ -851,7 +856,7 @@ struct ObjCPointer<T> {
 
 - 由于 Objective-C ARC 的限制，`ObjCPointer<class>` 类型**不能**用作任何仓颉方法或属性的返回类型，包括 `@ObjCMirror` 和 `@ObjCImpl` 声明的方法和属性
 
-## @C structs
+### @C structs
 
 使用 `@C` 注解的结构体，在 `ObjCPointer<T>` 内部使用时，可以用于 `@ObjCMirror` 和 `@ObjcImpl` 的声明参数、返回类型、
 字段和属性。仓颉代码中此类注解的结构体 `X` 对应于 Objective C 代码中的 `struct X` 类型。
@@ -872,6 +877,8 @@ struct X {
 };
 ```
 
+<!-- compile -->
+
 ```cangjie
 @C
 public struct X {
@@ -879,6 +886,58 @@ public struct X {
     var b: Float32
 }
 ```
+
+### ObjCBlock
+
+`ObjCBlock` 类型定义在 `objc.lang` 包中，用于映射 Objective-C 的 `Block` 类型。其签名如下：
+
+<!-- compile -->
+
+```cangjie
+public class ObjCBlock<F> {
+
+    public ObjCBlock(let ptr: CPointer) 
+
+    public prop call: F 
+
+    public unsafe func unsafeGetNativeABIPointer(): CPointer
+
+    public unsafe func unsafeGetFunctionPointer(): CPointer 
+}
+```
+
+`ObjCBlock` 方法的实现均在编译器中。
+
+### ObjCFunc
+
+`ObjCFunc` 类型定义在 `objc.lang` 包中，用于映射 Objective-C 的函数。其签名如下：
+
+<!-- compile -->
+
+```cangjie
+public struct ObjCFunc<F> {
+
+    public ObjCFunc(let ptr: CPointer)
+
+    public prop call: F
+
+    public unsafe func unsafeGetFunctionPointer(): CPointer
+}
+```
+
+`ObjCFunc` 方法的实现均在编译器中。
+
+### ObjCId
+
+`ObjCId` 类型定义在 `objc.lang` 包中，用于映射 Objective-C 的 `id` 类型。其签名如下：
+
+<!-- compile -->
+
+```cangjie
+public interface ObjCId 
+```
+
+`ObjCId` 方法的实现在编译器中。
 
 ## 约束限制
 
