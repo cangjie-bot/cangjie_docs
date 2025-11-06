@@ -139,6 +139,8 @@ cjlint --import-path "fileDir1 fileDir2"
 
 **单行屏蔽正确示例 1**，屏蔽 G.FUN.02 告警
 
+<!-- compile -->
+
 ```cangjie
 func foo(a: Int64, b: Int64, c: Int64, d: Int64) { /* cjlint-ignore !G.FUN.02 */
     return a + b + c
@@ -147,6 +149,8 @@ func foo(a: Int64, b: Int64, c: Int64, d: Int64) { /* cjlint-ignore !G.FUN.02 */
 
 **单行屏蔽正确示例 2**，屏蔽 G.FUN.02 告警
 
+<!-- compile -->
+
 ```cangjie
 func foo(a: Int64, b: Int64, c: Int64, d: Int64) { // cjlint-ignore !G.FUN.02 description
     return a + b + c
@@ -154,6 +158,8 @@ func foo(a: Int64, b: Int64, c: Int64, d: Int64) { // cjlint-ignore !G.FUN.02 de
 ```
 
 **多行屏蔽正确示例 1**，屏蔽 G.FUN.02 告警
+
+<!-- compile -->
 
 ```cangjie
 /*cjlint-ignore -start !G.FUN.02 description */
@@ -165,6 +171,8 @@ func foo(a: Int64, b: Int64, c: Int64, d: Int64) {
 
 **多行屏蔽正确示例 2**，屏蔽 G.FUN.02 告警
 
+<!-- compile -->
+
 ```cangjie
 // cjlint-ignore -start !G.FUN.02 description
 func foo(a: Int64, b: Int64, c: Int64, d: Int64) {
@@ -174,6 +182,8 @@ func foo(a: Int64, b: Int64, c: Int64, d: Int64) {
 ```
 
 **多行屏蔽正确示例 3**，屏蔽 G.FUN.02 告警
+
+<!-- compile -->
 
 ```cangjie
 /**
@@ -187,6 +197,8 @@ func foo(a: Int64, b: Int64, c: Int64, d: Int64) {
 
 **单行屏蔽<font color="#dd0000">错误</font>示例 1**，屏蔽 G.FUN.02 告警
 
+<!-- compile -->
+
 ```cangjie
 func foo(a: Int64, b: Int64, c: Int64, d: Int64) { /*cjlint-ignore !G.FUN.02!G.FUN.01*/
     return a + b + c                               // ERROR: 规则间没用空格隔开，屏蔽告警失败
@@ -195,6 +207,8 @@ func foo(a: Int64, b: Int64, c: Int64, d: Int64) { /*cjlint-ignore !G.FUN.02!G.F
 
 **单行屏蔽<font color="#dd0000">错误</font>示例 2**，屏蔽 G.FUN.02 告警
 
+<!-- compile -->
+
 ```cangjie
 func foo(a: Int64, b: Int64, c: Int64, d: Int64) { /*cjlint-ignore !G.FUN.02description*/
     return a + b + c                               // ERROR: 规则与描述信息没用空格隔开，屏蔽告警失败
@@ -202,6 +216,8 @@ func foo(a: Int64, b: Int64, c: Int64, d: Int64) { /*cjlint-ignore !G.FUN.02desc
 ```
 
 **多行屏蔽<font color="#dd0000">错误</font>示例 1**，屏蔽 G.FUN.02 告警
+
+<!-- compile -->
 
 ```cangjie
 /* cjlint-ignore -start

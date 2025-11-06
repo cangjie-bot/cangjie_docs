@@ -61,6 +61,8 @@ cjcov -version 或者 cjcov -v
 
     `main.cj` 源码内容如下：
 
+    <!-- compile -->
+
     ```cangjie
     main(): Int64 {
         print("hello world\n")
@@ -397,11 +399,15 @@ src
 
 - 全局变量的定义，示例如下：
 
+<!-- compile -->
+
     ```cangjie
     let HIGH_1_UInt8: UInt8 = 0b10000000;
     ```
 
 - 成员变量仅声明未初始化赋值，示例如下：
+
+<!-- compile.error -->
 
     ```cangjie
     public class StringBuilder <: Collection & ToString {
@@ -413,11 +419,15 @@ src
 
 - 仅有函数声明未包含函数体（包括 `foreign` 函数等），示例如下：
 
+<!-- compile.error -->
+
     ```cangjie
     foreign func cj_core_free(p: CPointer): Unit
     ```
 
 - 枚举类型定义，示例如下：
+
+<!-- compile -->
 
     ```cangjie
     enum Numeric {
@@ -426,6 +436,8 @@ src
     ```
 
 - class、extend 等定义，其中 extend 和 class 所在的一行不会记录到覆盖率数据中，示例如下：
+
+<!-- compile.error -->
 
     ```cangjie
     extend Int8 <: Formatter { // This line wil not account for the coverage.

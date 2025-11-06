@@ -141,6 +141,8 @@ cjfmt -f a.cj -o b.cj -l 10:25 // 仅格式化第10行至第25行
 
 【正例】
 
+<!-- compile.error -->
+
 ```cangjie
 // 第一部分，版权信息
 /*
@@ -172,6 +174,8 @@ class Helper {
 
 【正例】
 
+<!-- compile -->
+
 ```cangjie
 class ListItem {
     var content: Array<Int64> // 符合：相对类声明缩进 4 个空格
@@ -188,6 +192,8 @@ class ListItem {
 - 使用统一的大括号换行风格，对于非空块状结构，大括号使用 K&R 风格。
 
 【正例】
+
+<!-- compile -->
 
 ```cangjie
 enum TimeUnit { // 符合：跟随声明放行末，前置 1 空格
@@ -218,6 +224,8 @@ let add = {
 - 按照仓颉语言编程规范中的规则 G.FMT.10，使用空格突出关键字和重要信息。
 
 【正例】
+
+<!-- compile.error -->
 
 ```cangjie
 var isPresent: Bool = false  // 符合：变量声明冒号之后有一个空格
@@ -250,6 +258,8 @@ x++ // 符合：一元操作符和操作数之间不留空格
 
 【反例】
 
+<!-- compile.error -->
+
 ```cangjie
 class MyApp <: App {
     let album = albumCreate()
@@ -273,6 +283,8 @@ class MyApp <: App {
 
 【格式化前】
 
+<!-- compile.error -->
+
 ```cangjie
 package demo.analyzer.filter.impl; // 冗余的分号
 
@@ -285,6 +297,8 @@ func fn(a: Int64): Unit {
 ```
 
 【格式化后】
+
+<!-- compile.error -->
 
 ```cangjie
 package demo.analyzer.filter.impl // 冗余的分号
@@ -301,12 +315,16 @@ func fn(a: Int64): Unit {
 
 以下是推荐的顶层元素的修饰符排列优先级：
 
+<!-- compile.error -->
+
 ```cangjie
 public
 open/abstract
 ```
 
 以下是推荐的实例成员函数或实例成员属性的修饰符排序优先级：
+
+<!-- compile.error -->
 
 ```cangjie
 public/protected/private
@@ -316,6 +334,8 @@ override
 
 以下是推荐的静态成员函数的修饰符排序优先级：
 
+<!-- compile.error -->
+
 ```cangjie
 public/protected/private
 static
@@ -323,6 +343,8 @@ redef
 ```
 
 以下是推荐的成员变量的修饰符排序优先级：
+
+<!-- compile.error -->
 
 ```cangjie
 public/protected/private
@@ -332,6 +354,8 @@ static
 - 多行注释的格式化行为
 
 以 `*` 开头的注释， `*` 会互相对齐， 不以 `*` 开头的注释，则会保持注释原样。若 `*` 后存在多余空格，则会将多余空格删除。
+
+<!-- compile -->
 
 ```cangjie
 // 格式化前
