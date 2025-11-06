@@ -779,6 +779,8 @@ attach 29551
 
 3. 对于 `Enum` 类型的显示，如果该 `Enum` 的构造器存在参数的情况下，会显示成如下样式：
 
+<!-- code_no_check -->
+
     ```cangjie
     enum E {
         Ctor(Int64, String) | Ctor
@@ -934,6 +936,8 @@ attach 29551
     解决方案：删除 `third_party/llvm/bin/debugserver` 文件，重新启动调试。
 
 7. 在打断点调试时，如果该断点处有泛型变元，则泛型变元的名字为 T0, T1, ... Tn。举例如下：
+
+<!-- code_no_check -->
 
     ```cangjie
     func global_func_02<K, G>() { 0 }
