@@ -13,7 +13,7 @@
 
 **涉及的概念：**
 
-1. Mirror Type：镜像类型，Java 类型使用仓颉语法形式的表达，供开发者使用仓颉的方式调用 ObjC 方法。
+1. Mirror Type：镜像类型，ObjC 类型使用仓颉语法形式的表达，供开发者使用仓颉的方式调用 ObjC 方法。
 2. CFFI：C Foreign Function Interface，是 Java/Objetive C/仓颉等高级编程语言提供的 C 语言外部接口。
 3. 胶水代码：用于弥合不同编程语言差异的中间代码。
 4. 互操作代码：ObjC 调用仓颉方法的实现代码，或仓颉调用 ObjC 的实现代码。
@@ -72,6 +72,7 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 | `ObjCBlock`                               | `Block`                       |
 | `ObjCFunc`                                | `function type`               |
 | `ObjCId`                                  | `id`                          |
+| `A` where `A` is `interface`              | `id<A>`                       |
 
 注意：
 
@@ -189,7 +190,7 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
     // Base.cj
     package example
 
-    import interoplib.objc.*
+    import objc.lang.*
 
     @ObjCMirror
     open class Base {
@@ -204,7 +205,7 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
     // Interop.cj
     package example
 
-    import interoplib.objc.*
+    import objc.lang.*
 
     @ObjCImpl
     public class Interop <: Base {
@@ -225,7 +226,7 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
     // A.cj
     package cjworld
 
-    import interoplib.objc.*
+    import objc.lang.*
 
     @ObjCImpl
     public class A <: M {
@@ -279,7 +280,7 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
     ObjCInteropGen --help
     ```
 
-## ObjCMirror 规格
+## ObjCMirror 类
 
 ObjCMirror 为 ObjC 类型使用仓颉语法形式的表达，由工具自动生成，供开发者使用仓颉的方式调用 ObjC 方法。
 
@@ -313,7 +314,7 @@ ObjCMirror 为 ObjC 类型使用仓颉语法形式的表达，由工具自动生
 // M.cj
 package cjworld
 
-import interoplib.objc.*
+import objc.lang.*
 
 @ObjCMirror
 open class M {
@@ -330,7 +331,7 @@ open class M {
 // A.cj
 package cjworld
 
-import interoplib.objc.*
+import objc.lang.*
 
 @ObjCImpl
 class A <: M {
@@ -345,11 +346,11 @@ class A <: M {
 当前具体规格如下：
 
 - ObjCMirror 类 的构造函数可有零个、一个或多个参数。
-- 构造函数的参数和返回值类型可为具备与 Objc 的映射关系的基础类型、Mirror 类型或 Impl 类型。
+- 构造函数的参数和返回值类型可为具备与 ObjC 的映射关系的基础类型、Mirror 类型或 Impl 类型。
 - 构造函数显式声明时，不为 private/static/const 类型。无显式声明的构造函数时，则无法构建该对象。
 - 仅支持单个命名参数。
 - 暂不支持默认参数值。
-- 暂不支持 super()/this() 调用。
+- 暂不支持 this() 调用。
 
 ### 成员函数
 
@@ -379,7 +380,7 @@ class A <: M {
 // M.cj
 package cjworld
 
-import interoplib.objc.*
+import objc.lang.*
 
 @ObjCMirror
 open class M {
@@ -398,7 +399,7 @@ open class M {
 // A.cj
 package cjworld
 
-import interoplib.objc.*
+import objc.lang.*
 
 @ObjCImpl
 class A <: M {
@@ -413,7 +414,7 @@ class A <: M {
 具体规格如下：
 
 - ObjCMirror 类 的成员函数可有零个、一个或多个参数。
-- 函数的参数和返回值类型可为具备与 Objc 的映射关系的基础类型、Mirror 类型或 Impl 类型。
+- 函数的参数和返回值类型可为具备与 ObjC 的映射关系的基础类型、Mirror 类型或 Impl 类型。
 - 仅支持单个命名参数。
 - 不支持在 Mirror 类中新增成员函数，运行时将有异常。
 - 支持 static/open 类型。
@@ -438,7 +439,7 @@ class A <: M {
 // M.cj
 package cjworld
 
-import interoplib.objc.*
+import objc.lang.*
 
 @ObjCMirror
 open class M {
@@ -453,7 +454,7 @@ open class M {
 // A.cj
 package cjworld
 
-import interoplib.objc.*
+import objc.lang.*
 
 @ObjCImpl
 class A <: M {
@@ -466,10 +467,9 @@ class A <: M {
 
 具体规格如下：
 
-- 类型可为具备与 Objc 的映射关系的基础类型、Mirror 类型或 Impl 类型。
+- 类型可为具备与 ObjC 的映射关系的基础类型、Mirror 类型或 Impl 类型。
 - 不支持 private/const 成员。
 - 支持 static/open 修饰。
-- 暂不支持重载。
 
 ### 成员变量
 
@@ -490,7 +490,7 @@ double m;
 // M.cj
 package cjworld
 
-import interoplib.objc.*
+import objc.lang.*
 
 @ObjCMirror
 open class M {
@@ -505,7 +505,7 @@ open class M {
 // A.cj
 package cjworld
 
-import interoplib.objc.*
+import objc.lang.*
 
 @ObjCImpl
 class A <: M {
@@ -524,7 +524,7 @@ class A <: M {
 具体规格如下：
 
 - 支持可变变量 var、不可变变量 let。
-- 类型可为具备与 Objc 的映射关系的基础类型、Mirror 类型或 Impl 类型。
+- 类型可为具备与 ObjC 的映射关系的基础类型、Mirror 类型或 Impl 类型。
 - 不支持 static/const 类型变量。
 
 ### 继承
@@ -538,7 +538,7 @@ Mirror 类支持继承 open Mirror 类。
 // M1.cj
 package cjworld
 
-import interoplib.objc.*
+import objc.lang.*
 
 @ObjCMirror
 open class M1 {
@@ -555,7 +555,7 @@ open class M1 {
 // M.cj
 package cjworld
 
-import interoplib.objc.*
+import objc.lang.*
 
 @ObjCMirror
 open class M <: M1 {
@@ -572,7 +572,7 @@ open class M <: M1 {
 // A.cj
 package cjworld
 
-import interoplib.objc.*
+import objc.lang.*
 
 @ObjCImpl
 public class A <: M {
@@ -610,19 +610,83 @@ int main(int argc, char** argv) {
 
 ### 约束限制
 
-- 暂不支持主构造函数。（暂不支持的特性将出现未知错误）
 - 暂不支持 String 类型。（暂不支持的特性将出现未知错误）
 - 暂不支持类型检查和类型强转。（暂不支持的特性将出现未知错误）
 - 暂不支持处理异常。（暂不支持的特性将出现未知错误）
 - 不支持普通仓颉类继承 Mirror 类。
 - 不支持继承普通仓颉类。
-- 当成员函数或构造函数有参数时，必须使用 @ForeignName。
+- 当成员函数或构造函数有超过一个的参数时，必须使用 @ForeignName。
 
 > 注意：
 >
 > 支持在 Impl 类或普通仓颉类中调用 Mirror 类成员，规格一致。
 
-## ObjCImpl 规格
+## ObjCMirror 接口
+
+支持映射 ObjC 中的 `protocol` 为接口，`interface` 为 `open class`，具体示例如下：
+
+```objc
+// Foo.h
+@protocol Foo : <NSObject>
+- (void) foo;
+@end
+```
+
+```objc
+// M.h
+@interface M : NSObject
+- (void) acceptFoo: (id<Foo>)foo;
+@end
+```
+
+<!-- compile -->
+
+```cangjie
+// Foo.cj
+@ObjCMirror
+public interface Foo {
+    // 不支持构造函数。
+    func foo(): Unit
+}
+```
+
+<!-- compile -->
+
+```cangjie
+// M.cj
+@ObjCMirror
+public open class M {
+    public init()
+    public open func acceptFoo(foo: Foo): Unit 
+}
+```
+
+<!-- compile -->
+
+```cangjie
+// A.cj
+@ObjCImpl
+class A <: M {
+    public init() {}
+
+    public func acceptFoo(foo: Foo) {
+        foo.foo()
+    }
+}
+```
+
+具体规格如下:
+
+- 支持成员函数，规则同 [ObjCMirror 类](#成员函数)
+- 支持属性，规则同 [ObjCMirror 类](#属性)
+- 暂不支持默认成员实现。
+- 暂不支持映射 ObjC protocols 的构造函数。
+- 暂不支持映射 ObjC protocols 的 @optional 和 @required 成员函数。
+- 暂不支持成员变量。
+- @ObjCMirror 接口仅支持继承 @ObjCMirror 接口，不支持其他类型。
+- 当成员函数或构造函数有超过一个的参数时，必须使用 @ForeignName。
+
+## ObjCImpl 类
 
 ObjCImpl 为仓颉注解，语义为该类的方法与成员可以被 ObjC 函数调用。编译期间编译器会为 `@ObjCImpl` 的仓颉类生成对应的 objc 代码。
 
@@ -641,7 +705,7 @@ ObjCImpl 为仓颉注解，语义为该类的方法与成员可以被 ObjC 函�
 // A.cj
 package cjworld
 
-import interoplib.objc.*
+import objc.lang.*
 
 @ObjCImpl
 class A <: M {
@@ -668,21 +732,15 @@ int main(int argc, char** argv) {
 }
 ```
 
-> 注意：
->
-> 暂不支持在仓颉中调用 Impl 类的任意成员。
-
 具体规格如下：
 
 - ObjCImpl 类 的成员函数可有零个、一个或多个参数。
-- 函数的参数和返回值类型可为具备与 Objc 的映射关系的基础类型、Mirror 类型或 Impl 类型。
+- 函数的参数和返回值类型可为具备与 ObjC 的映射关系的基础类型、Mirror 类型或 Impl 类型。
 - 构造函数必须显式声明。
 - 仅支持单个命名参数。
 - 暂不支持默认参数值。
-- 暂不支持重载函数。
 - 成员函数支持 static/open 修饰。
-- 仅有 public 函数可在 Objc 侧被调用。
-- 暂不支持 super()/this() 调用。
+- 仅有 public 函数可在 ObjC 侧被调用。
 
 ### 属性
 
@@ -691,7 +749,7 @@ int main(int argc, char** argv) {
 ```cangjie
 package cjworld
 
-import interoplib.objc.*
+import objc.lang.*
 
 @ObjCMirror
 public class M1 {
@@ -743,10 +801,9 @@ int main(int argc, char** argv) {
 
 具体规格如下：
 
-- 类型可为具备与 Objc 的映射关系的基础类型、Mirror 类型或 Impl 类型。
+- 类型可为具备与 ObjC 的映射关系的基础类型、Mirror 类型或 Impl 类型。
 - 支持 static/open 修饰。
-- 暂不支持重载。
-- 仅 public 类型可在 Objc 侧被调用。
+- 仅 public 类型可在 ObjC 侧被调用。
 
 ### 成员变量
 
@@ -756,7 +813,7 @@ int main(int argc, char** argv) {
 // M.cj
 package cjworld
 
-import interoplib.objc.*
+import objc.lang.*
 
 @ObjCMirror
 open public class M {
@@ -806,20 +863,25 @@ int main(int argc, char** argv) {
 具体规格如下：
 
 - 支持可变变量 var、不可变变量 let。
-- 类型可为具备与 Objc 的映射关系的基础类型、Mirror 类型或 Impl 类型。
-- 仅 public 类型可在 Objc 侧被调用。
+- 类型可为具备与 ObjC 的映射关系的基础类型、Mirror 类型或 Impl 类型。
+- 仅 public 类型可在 ObjC 侧被调用。
 
 ### 约束限制
 
-- 暂不支持主构造函数。
 - 暂不支持 String 类型。
 - 暂不支持类型检查和类型强转。
-- 暂不支持在 ObjC 测继承 Impl 类。
+- 暂不支持在 ObjC 侧继承 Impl 类。
 - 暂不支持处理异常。
-- 当成员函数或构造函数有参数时，必须使用 @ForeignName。（当该函数为重载函数时则不需要，但当前暂不支持重载，因此该规则暂不应用。）
+- 当成员函数或构造函数有超过一个参数时，必须使用 @ForeignName。（当该函数为重载函数时则不需要）
 - 不支持普通仓颉类继承 Impl 类。
 - 不支持继承普通仓颉类。
 - 不支持继承 Impl 类。
+- Impl 类必须继承 Mirror 类。
+- Impl 可以实现零个或多个 Mirror 接口。
+
+> 注意：
+>
+> 暂不支持在仓颉中调用 Impl 类的任意成员。
 
 ## objc.lang
 
@@ -856,36 +918,19 @@ struct ObjCPointer<T> {
 
 - 由于 Objective-C ARC 的限制，`ObjCPointer<class>` 类型**不能**用作任何仓颉方法或属性的返回类型，包括 `@ObjCMirror` 和 `@ObjCImpl` 声明的方法和属性
 
-### @C structs
+### ObjCId
 
-使用 `@C` 注解的结构体，在 `ObjCPointer<T>` 内部使用时，可以用于 `@ObjCMirror` 和 `@ObjcImpl` 的声明参数、返回类型、
-字段和属性。仓颉代码中此类注解的结构体 `X` 对应于 Objective C 代码中的 `struct X` 类型。
-
-约束如下：
-
-- 结构体可以包含原始类型、指针和其他带有 @C 注解的结构体。
-- 对于在仓颉或 Objective C 中定义的每个结构体，在对应的另一个语言中都应该有相同的声明。字段及其类型的差异可能会导致运行时错误。
-- 结构体应与 `ObjCPointer<T>` 一起使用。例如，`ObjCPointer<MyStruct>`。通过值传递的结构体现在不稳定。
-- struct 的类型别名 typedef 暂不支持。
-
-示例如下：
-
-```objc
-struct X {
-    long a;
-    float b;
-};
-```
-
-<!-- compile -->
+`ObjCId` 类型定义在 `objc.lang` 包中，用作所有 Mirror 类型的父类型。它是 ObjC 在仓颉世界中的 `id` 类型代表。其签名如下：
 
 ```cangjie
-@C
-public struct X {
-    var a: Int64
-    var b: Float32
-}
+@ObjCMirror
+public interface ObjCId {}
 ```
+
+具体规格如下：
+
+- 任意 @ObjCMirror 或 @ObjCImpl 均可以实现该接口。
+- 默认所有 Mirror 类型均继承该接口，因此需导入 `import objc.lang.ObjCId` 。
 
 ### ObjCBlock
 
@@ -927,17 +972,35 @@ public struct ObjCFunc<F> {
 
 `ObjCFunc` 方法的实现均在编译器中。
 
-### ObjCId
+## @C structs
 
-`ObjCId` 类型定义在 `objc.lang` 包中，用于映射 Objective-C 的 `id` 类型。其签名如下：
+使用 `@C` 注解的结构体，在 `ObjCPointer<T>` 内部使用时，可以用于 `@ObjCMirror` 和 `@ObjcImpl` 的声明参数、返回类型、字段和属性。仓颉代码中此类注解的结构体 `X` 对应于 Objective C 代码中的 `struct X` 类型。
+
+约束如下：
+
+- 结构体可以包含原始类型、指针和其他带有 @C 注解的结构体。
+- 对于在仓颉或 Objective C 中定义的每个结构体，在对应的另一个语言中都应该有相同的声明。字段及其类型的差异可能会导致运行时错误。
+- 结构体应与 `ObjCPointer<T>` 一起使用。例如，`ObjCPointer<MyStruct>`。通过值传递的结构体现在不稳定。
+- struct 的类型别名 typedef 暂不支持。
+
+示例如下：
+
+```objc
+struct X {
+    long a;
+    float b;
+};
+```
 
 <!-- compile -->
 
 ```cangjie
-public interface ObjCId 
+@C
+public struct X {
+    var a: Int64
+    var b: Float32
+}
 ```
-
-`ObjCId` 方法的实现在编译器中。
 
 ## 约束限制
 
