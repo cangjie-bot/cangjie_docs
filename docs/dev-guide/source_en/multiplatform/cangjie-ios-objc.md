@@ -47,26 +47,28 @@ To automatically generate glue code, cjc requires symbol information about the O
 |    `init()`                                       |        `- (instancetype)init`                      |
 |    `let x: R`                                     |        `const R x`                                 |
 |     `var x: R`                                    |        `R x`                                       |
-|`@ObjCMirror public interface test <: NSObject`    |`@protocol test <NSObject>`                         |
 
 **Type Mapping:**
 
-| Cangjie Type         |                ObjC Type      |
-|:---------------------|:------------------------------|
-|    `Unit`            |        `void`                 |
-|     `Int8`           |        `signed char`          |
-|    `Int16`           |        `short`                |
-|     `Int32`          |        `int`                  |
-|     `Int64`          |        `long/NSInteger`       |
-|     `Int64`          |        `long long`            |
-|     `UInt8`          |        `unsigned char`        |
-|    `UInt16`          |        `unsigned short`       |
-|    `UInt32`          |        `unsigned int`         |
-|    `UInt64`          |   `unsigned long/NSUInteger`  |
-|    `UInt64`          |   `unsugned long long`        |
-|    `Float32`         |        `float`                |
-|   `Float64`          |        `double`               |
-|  `Bool`              |        `bool/BOOL`            |
+| Cangjie Type                              |                ObjC Type      |
+|:------------------------------------------|:------------------------------|
+|    `Unit`                                 |        `void`                 |
+|     `Int8`                                |        `signed char`          |
+|    `Int16`                                |        `short`                |
+|     `Int32`                               |        `int`                  |
+|     `Int64`                               |        `long/NSInteger`       |
+|     `Int64`                               |        `long long`            |
+|     `UInt8`                               |        `unsigned char`        |
+|    `UInt16`                               |        `unsigned short`       |
+|    `UInt32`                               |        `unsigned int`         |
+|    `UInt64`                               |   `unsigned long/NSUInteger`  |
+|    `UInt64`                               |   `unsugned long long`        |
+|    `Float32`                              |        `float`                |
+|   `Float64`                               |        `double`               |
+|  `Bool`                                   |        `bool/BOOL`            |
+| `A` where `A` is `class`                  | `A*`                          |
+| `ObjCPointer<A>` where `A` is `class`     | `A**`                         |
+| `ObjCPointer<A>` where `A` is not `class` | `A*`                          |
 
 Notes:
 
@@ -835,6 +837,39 @@ Specific specifications:
 - Inheriting from regular Cangjie classes is not supported.
 - Inheriting from Impl classes is not supported.
 
+## objc.lang support package
+
+`objc.lang` is a package supplied together with the interop library and contains support types that are used to model additional types from Objective-C.
+
+### ObjCPointer
+
+`ObjCPointer` type is defined in the `objc.lang` package and is used to model raw pointers defined in Objective-C. It has the following signature:
+
+```cangjie
+struct ObjCPointer<T> {
+    /* construct ObjCPointer from C Pointer */
+    public init(ptr: CPointer<Unit>)
+    /* check if this pointer is NULL */
+    public func isNull(): Bool
+    /* read the value from the pointer */
+    public func read(): T
+    /* write value to the pointer */
+    public func write(value: T): Unit
+}
+```
+
+Implementations of all `ObjCPointer` methods are provided by the compiler.
+
+The following rules apply to `ObjCPointer`:
+
+- Only concrete Objective-C compatible types can be used to instantiate parameter `T`, including other `ObjCPointer` type. Examples of valid `ObjCPointer` usages: `ObjCPointer<Class>`, `ObjCPointer<Int64>`, `ObjCPointer<ObjCPointer<Bool>>`. Example of invalid `ObjCPointer` usage: `ObjCPointer<U>` where `U` is type parameter, `ObjCPointer<String>`.
+- `ObjCPointer<T>` where `T` is a valid concrete Objective-C compatible type, is Objective-C compatible
+- As a Cangjie class type `A` already corresponds in Objective-C to a pointer type `A*`, a pointer to class `ObjCPointer<A>` corresponds to a pointer-to-pointer `A**`. This is the only way to model an Objective-C pointer-to-pointer in Cangjie.
+
+The following limitations apply:
+
+- Due to the restrictions of Objective-C ARC, `ObjCPointer` to class type **cannot be used** as return type of any Cangjie method or property, including methods and properties of `@ObjCMirror` and `@ObjCImpl` declarations
+
 ## Constraints and Limitations
 
 1. The current version of ObjCInteropGen has the following constraints:
@@ -845,4 +880,4 @@ Specific specifications:
     - Converting multiple `.h` header files simultaneously is not supported.
     - Bit fields cannot be converted.
 
-2. Additional dependency file `cangjie.h` must be downloaded (available at <https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/runtime/src/Cangjie.h>) and integrated into the project.
+2. Additional dependency file `Cangjie.h` must be downloaded (available at <https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/runtime/src/Cangjie.h>) and integrated into the project.
