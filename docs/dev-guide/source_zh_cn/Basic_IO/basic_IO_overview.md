@@ -27,8 +27,6 @@ Stream 主要面向处理原始二进制数据，Stream 中最小的数据单元
 
 InputStream 接口定义：
 
-<!-- run -->
-
 ```cangjie
 interface InputStream {
     func read(buffer: Array<Byte>): Int64
@@ -39,11 +37,13 @@ interface InputStream {
 
 输入流读取示例：
 
+<!-- run -->
 ```cangjie
 import std.io.InputStream
+import std.io.ByteBuffer
 
 main() {
-    let input: InputStream = ...
+    let input: InputStream = ByteBuffer([1, 2, 3, 4, 5])
     let buf = Array<Byte>(256, repeat: 0)
     while (input.read(buf) > 0) {
         println(buf)
