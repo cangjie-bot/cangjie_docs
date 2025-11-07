@@ -47,7 +47,7 @@ main(): Int64 {
 
 ## 内置编译条件变量
 
-仓颉提供的内置条件变量有: `os`、 `backend`、 `arch`、 `cjc_version`、 `debug` 和 `test`。
+仓颉提供的内置条件变量有: `os`、 `arch`、 `env`、 `backend`、 `cjc_version`、 `debug` 和 `test`。
 
 ### os
 
@@ -82,6 +82,54 @@ main() {
 
 如果在 `Windows` 环境下编译执行，会得到 `Windows, NOT Linux` 的信息；如果是在 `Linux` 环境下，则会得到 `Linux, NOT Windows` 的信息。
 
+### arch
+
+`arch` 表示目标平台的处理器架构。`arch` 条件支持 `==` 和 `!=` 两种操作符。
+
+支持的处理器架构有：`x86_64`、`aarch64`。
+
+使用方式如下：
+
+<!-- run -->
+
+```cangjie
+@When[arch == "aarch64"]
+var arch = "aarch64"
+
+@When[arch == "x86_64"]
+var arch = "x86_64"
+
+main() {
+    println(arch)
+}
+```
+
+在 `x86_64` 架构的目标平台编译执行，会得到 `x86_64` 的信息；在 `aarch64` 架构的目标平台编译执行，会得到 `aarch64` 的信息。
+
+### env
+
+`env` 表示目标平台的 ABI。`env` 条件支持 `==` 和 `!=` 两种操作符。
+
+支持的目标平台的 ABI 有：`ohos`、`musl`、`simulator`、`android`。
+
+使用方式如下：
+
+<!-- run -->
+
+```cangjie
+@When[env == "ohos"]
+var env = "ohos"
+
+@When[env != "ohos"]
+var env = "other"
+
+main() {
+    println(env)
+}
+```
+
+在 OpenHarmony 目标平台上编译执行，会得到 `ohos` 的信息；在其他目标平台编译执行，会得到 `other` 的信息。
+
 ### backend
 
 `backend` 表示目标平台的后端类型，用于支持多种后端条件编译。`backend` 条件支持 `==` 和 `!=` 两种操作符。
@@ -107,30 +155,6 @@ main() {
 ```
 
 用 `cjnative` 后端的发布包编译执行，会得到 `cjnative backend` 的信息。
-
-### arch
-
-`arch` 表示目标平台的处理器架构。`arch` 条件支持 `==` 和 `!=` 两种操作符。
-
-支持的处理器架构有：`x86_64`、`aarch64`。
-
-使用方式如下：
-
-<!-- run -->
-
-```cangjie
-@When[arch == "aarch64"]
-var arch = "aarch64"
-
-@When[arch == "x86_64"]
-var arch = "x86_64"
-
-main() {
-    println(arch)
-}
-```
-
-在 `x86_64` 架构的目标平台编译执行，会得到 `x86_64` 的信息；在 `aarch64` 架构的目标平台编译执行，会得到 `aarch64` 的信息。
 
 ### cjc_version
 
@@ -288,7 +312,7 @@ main () {
 
 仓颉条件编译允许开发者自由组合多个条件编译选项。支持逻辑运算符组合多个条件，支持括号运算符明确优先级。
 
-使用方式如下：
+使用方式示例一：
 
 ```cangjie
 //source.cj
@@ -312,3 +336,43 @@ $ cjc --cfg="feature=lion" source.cj -o runner.out
 ```text
 feature lion
 ```
+
+使用方式示例二：
+
+仓颉交叉编译至目标平台 `aarch64-linux-android31`，条件变量设置如下面代码所示，至于交叉编译至其他平台，条件编译的设置请参考 [目标平台和条件编译映射表](#目标平台和条件编译映射表)
+
+<!-- run -->
+
+```cangjie
+@When[os == "Linux" && arch == "aarch64" && env == "android"]
+func foo() {
+    "target aarch64-linux-android31 run"
+}
+
+main() {
+    println(foo())
+}
+```
+
+## 附录
+### 目标平台和条件编译映射表
+
+仓颉交叉编译支持的目标平台由内置条件变量 `os`、 `arch`、 `env` 共同确定，三者与目标平台的对应关系如下表所示：
+
+| 目标平台                      | arch      | os        | env         |
+| ----------------------------- | --------- | --------- | ----------- |
+| x86_64-windows-gnu            | "x86_64"  | "Windows" |             |
+| x86_64-linux-gnu              | "x86_64"  | "Linux"   |             |
+| x86_64-apple-darwin           | "x86_64"  | "macOS"   |             |
+| x86_64-linux-ohos             | "x86_64"  | "Linux"   | "ohos"      |
+| x86_64-w64-mingw32            | "x86_64"  | "Windows" |             |
+| x86_64-linux-android[31+]<sup>[android target]</sup>     | "x86_64"  | "Linux"   | "android"   |
+| aarch64-linux-gnu             | "aarch64" | "Linux"   |             |
+| aarch64-linux-android[31+]<sup>[android target]</sup>    | "aarch64" | "Linux"   | "android"   |
+| aarch64-apple-darwin          | "aarch64" | "macOS"   |             |
+| aarch64-linux-ohos            | "aarch64" | "Linux"   | "ohos"      |
+| arm64-apple-ios[11+]<sup>[ios target]</sup>           | "aarch64" | "iOS"     |             |
+| arm64-apple-ios[11+]-simulator<sup>[ios target]</sup> | "aarch64" | "iOS"     | "simulator" |
+
+<sup>[android target]</sup> x86_64-linux-android[31+] 中 android 后缀的数字用于指定 Android API Level。未指定数字时，默认 API Level 为 31；指定数字（如 x86_64-linux-android33）表示 Android API Level 为 33，指定的数字应大于等于31。
+<sup>[ios target]</sup> arm64-apple-ios[11+] 中 ios 后缀的数字用于指定 ios 版本信息。未指定数字时，默认为 11；指定数字（如 arm64-apple-ios26）表示 ios 版本为 26，指定的数字应大于等于 11。
