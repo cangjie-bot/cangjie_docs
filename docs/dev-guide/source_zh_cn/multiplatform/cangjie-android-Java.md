@@ -1504,8 +1504,6 @@ public interface A {
 }
 ```
 
-映射后的 Java 代码如下：
-
 ```Java
 package UNNAMED;
 
@@ -1526,8 +1524,6 @@ final class A_fwd {
 }
 ```
 
-#### 规格约束
-
 目前接口支持与其他语言特性组合仍在开发过程中，暂不支持如下场景：
 
 - 要求 Cangjie interface 不继承其他 interface
@@ -1536,3 +1532,95 @@ final class A_fwd {
 - 要求 Cangjie interface 中仅使用基础的数据类型
 - 要求 Cangjie 不适应 extend 对 interaface 进行扩展
 - 不支持 option
+
+### Java 使用 Cangjie 的 Extend
+
+仓颉 extend 语法中定义的非 private 成员需要映射到 Java，以支持用户在 Java 侧调用其中定义的静态或非静态方法及属性。
+
+示例代码如下，仓颉的 extend 语法会被映射到 Java：
+
+<!-- compiler -->
+```cangjie
+public class User {
+    public let id: Int32
+    public init(id: Int32) {
+        this.id = id
+    }
+    public var a: Int32 = 0
+    public static var b: Int32 = 0
+}
+
+extend User {
+    public func getId(): Int32 {
+        return id
+    }
+    public static func hello(): Unit {
+    }
+}
+
+extend User {
+    public mut prop pp: Int32 {
+        get() {
+            a
+        }
+        set(val) {
+            a = val
+        }
+    }
+
+    public static mut prop sp: Int32 {
+        get() {
+            b
+        }
+        set(val) {
+            b = val
+        }
+    }
+}
+```
+
+映射后的 Java 代码如下：
+
+```java
+public class User {
+    public int getId() {
+        return getId(this.self);
+    }
+
+    public native int getId(long self);
+
+    public static native void hello();
+
+    public int getPp() {
+        return getPpImpl(this.self);
+    }
+
+    public native int getPpImpl(long self);
+
+    public void setPp(int pp) {
+        setPpImpl(this.self, pp);
+    }
+
+    public native void setPpImpl(long self, int pp);
+
+    public static int getSp() {
+        return getSpImpl();
+    }
+
+    public static native int getSpImpl();
+
+    public static void setSp(int sp) {
+        setSpImpl(sp);
+    }
+
+    public static native void setSpImpl(int sp);
+}
+```
+
+#### 规格约束
+
+- 支持直接扩展和接口扩展
+- extend 语法内部定义成员仅支持仓颉基础数据类型
+- 接口扩展不支持 @JavaMirror 属性相关接口
+- 直接扩展不支持操作符重载
+- 直接扩展和接口扩展均不支持泛型
