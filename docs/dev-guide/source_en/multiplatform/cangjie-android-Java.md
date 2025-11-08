@@ -1345,3 +1345,96 @@ Support for combining enums with other language features is still under developm
 5. Cangjie enums must only use basic data types.
 6. Cangjie enums must not be extended using `extend`.
 7. Option types are not supported.
+
+### Java Usage of Cangjie Extend
+
+The non private members defined in the Cangjie extend syntax need to be mapped to Java to support users calling
+static or non static methods and properties defined in it on the Java side.
+
+Example code showing how Cangjie extend are mapped to Java:
+
+<!-- compiler -->
+```cangjie
+public class User {
+    public let id: Int32
+    public init(id: Int32) {
+        this.id = id
+    }
+    public var a: Int32 = 0
+    public static var b: Int32 = 0
+}
+
+extend User {
+    public func getId(): Int32 {
+        return id
+    }
+    public static func hello(): Unit {
+    }
+}
+
+extend User {
+    public mut prop pp: Int32 {
+        get() {
+            a
+        }
+        set(val) {
+            a = val
+        }
+    }
+
+    public static mut prop sp: Int32 {
+        get() {
+            b
+        }
+        set(val) {
+            b = val
+        }
+    }
+}
+```
+
+Mapped Java code:
+
+```java
+public class User {
+    public int getId() {
+        return getId(this.self);
+    }
+
+    public native int getId(long self);
+
+    public static native void hello();
+
+    public int getPp() {
+        return getPpImpl(this.self);
+    }
+
+    public native int getPpImpl(long self);
+
+    public void setPp(int pp) {
+        setPpImpl(this.self, pp);
+    }
+
+    public native void setPpImpl(long self, int pp);
+
+    public static int getSp() {
+        return getSpImpl();
+    }
+
+    public static native int getSpImpl();
+
+    public static void setSp(int sp) {
+        setSpImpl(sp);
+    }
+
+    public static native void setSpImpl(int sp);
+}
+```
+
+#### Constraints
+
+1. Support Direct Extensions and Interface Extensions
+2. Extend defined members only support Cangjie basic data types
+3. Interface Extensions not support @JavaMirror attribute related interfaces
+4. Direct Extensions not support Operator overloading.
+5. Direct Extensions and Interface Extensions not support Generic.
