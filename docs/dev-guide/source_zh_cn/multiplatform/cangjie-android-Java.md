@@ -1419,3 +1419,62 @@ public class TimeUnit {
 5. 要求 Cangjie enum 中仅使用基础的数据类型
 6. 要求 Cangjie 不适应 extend 对 enum 进行拓展
 7. 不支持 option
+
+### Java 使用 Cangjie 的 Class
+
+支持Java使用Cangjie Class, 规格如下：
+- 允许Java类继承Cangjie的 public open Class。
+- 允许访问父类中的非private方法(包括public、protected方法)。
+- 允许重写父类中的非静态非private open方法(包括public、protected方法)。
+- 支持基础数据类型作为函数参数类型。
+
+示例代码如下：
+
+Cangjie 侧 Class M 定义
+
+```cangjie
+// Cangjie
+public open class M 
+{
+    public init () {}
+    public open func goo():Unit {}
+    public open func foo(): Unit 
+    {
+        goo()
+    }
+}
+```
+
+Java 侧继承 class M：
+
+```java
+public class A extends M 
+{
+    public A() {}
+    @Override
+    public void goo() {
+        //Override implementation
+    }
+
+}
+```
+
+Java 侧实例化 class A：
+
+```java
+public class Main 
+{
+    public static void main (String[] args) {
+        M m = new A();
+    }
+
+}
+```
+
+#### 规格约束
+
+目前Java使用Cangjie Class暂不支持如下场景：
+
+- 不支持使用仓颉泛型Class
+- 不支持访问继承Cangjie class的普通成员变量、静态成员变量、静态成员方法、prop成员。
+- 不支持跨包引用
