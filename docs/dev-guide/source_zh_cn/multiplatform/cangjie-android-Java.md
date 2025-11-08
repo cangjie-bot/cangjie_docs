@@ -1228,7 +1228,7 @@ JavaImpl 类型支持直接扩展，规格同 JavaMirror，详见 JavaMirror 章
 
 ## Java 使用 Cangjie 规格
 
-### 新增实验编译选项 `--experimental --enable-interop-cjmapping=<Target Languages>`
+### 新增试验编译选项 `--experimental --enable-interop-cjmapping=<Target Languages>`
 
 启用在 FE 中支持非 C 语言的 Cangjie 互操作。<目标外语>的可能值为 Java、ObjC。
 
@@ -1419,3 +1419,62 @@ public class TimeUnit {
 5. 要求 Cangjie enum 中仅使用基础的数据类型
 6. 要求 Cangjie 不适应 extend 对 enum 进行拓展
 7. 不支持 option
+
+### Java 使用 Cangjie 的 Class
+
+Java Class类型和 仓颉的 Class 建立映射关系，并支持：
+1. 同一包内Java侧继承Cangjie的 public open class。
+2. 访问父类非private函数(public、protected)。
+3. 重写非静态非private open函数(public、protected)。
+4. 函数参与类型支持基础数据类型。
+
+示例代码如下：
+
+Cangjie 侧 Class M 定义
+
+```cangjie
+// Cangjie
+public open class M 
+{
+    public init () {}
+    public open func goo():Unit {}
+    public open func foo(): Unit 
+    {
+        goo()
+    }
+}
+```
+
+Java 侧继承 class M：
+
+```java
+public class A extends M 
+{
+    public A() {}
+    @Override
+    public void goo() {
+        //Override implementation
+    }
+
+}
+```
+
+Java 侧实例化 class A：
+
+```java
+public class Main 
+{
+    public static void main (String[] args) {
+        M m = new A();
+    }
+
+}
+```
+
+#### 规格约束
+
+目前Java使用Cangjie Class暂不支持如下场景：
+
+1. 仓颉泛型Class
+2. Java侧访问继承的Cangjie class的普通成员变量、静态成员变量、静态成员方法、prop
+3. 跨包引用依赖
