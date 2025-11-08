@@ -1419,3 +1419,97 @@ public class TimeUnit {
 5. 要求 Cangjie enum 中仅使用基础的数据类型
 6. 要求 Cangjie 不适应 extend 对 enum 进行拓展
 7. 不支持 option
+
+### Java 使用 Cangjie 的 Extend
+
+仓颉extend语法内部定义的非private成员需要映射到Java，以便用户能够：
+
+1. 在 Java 端调用extend语法中定义的静态或非静态方法。
+2. 在 Java 端调用extend语法中定义的静态或非静态属性。
+
+示例代码如下，仓颉的extend语法会被映射到 Java：
+
+```cangjie
+public class User {
+    public let id: Int32
+    public init(id: Int32) {
+        this.id = id
+    }
+    public var a: Int32 = 0
+    public static var b: Int32 = 0
+}
+
+extend User {
+    public func getId(): Int32 {
+        return id
+    }
+    public static func hello(): Unit {
+    }
+}
+
+extend User {
+    public mut prop pp: Int32 {
+        get() {
+            a
+        }
+        set(val) {
+            a = val
+        }
+    }
+
+    public static mut prop sp: Int32 {
+        get() {
+            b
+        }
+        set(val) {
+            b = val
+        }
+    }
+}
+```
+
+映射后的 Java 代码如下：
+
+```java
+public class User {
+    public int getId() {
+        return getId(this.self);
+    }
+
+    public native int getId(long self);
+
+    public static native void hello();
+
+    public int getPp() {
+        return getPpImpl(this.self);
+    }
+
+    public native int getPpImpl(long self);
+
+    public void setPp(int pp) {
+        setPpImpl(this.self, pp);
+    }
+
+    public native void setPpImpl(long self, int pp);
+
+    public static int getSp() {
+        return getSpImpl();
+    }
+
+    public static native int getSpImpl();
+
+    public static void setSp(int sp) {
+        setSpImpl(sp);
+    }
+
+    public static native void setSpImpl(int sp);
+}
+```
+
+#### 规格约束
+
+1. 支持 直接扩展 和 接口扩展
+2. extend语法内部定义成员 仅支持 仓颉基础数据类型
+3. 接口扩展 不支持 @JavaMirror属性相关interface
+4. 直接扩展 不支持 操作符重载
+5. 直接扩展和接口扩展 均不支持 泛型
