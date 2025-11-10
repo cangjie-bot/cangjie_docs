@@ -1345,3 +1345,59 @@ Support for combining enums with other language features is still under developm
 5. Cangjie enums must only use basic data types.
 6. Cangjie enums must not be extended using `extend`.
 7. Option types are not supported.
+
+### Java Usage of Cangjie Interfaces
+
+Cangjie interface types need to be mapped to Java types to enable:
+
+1. Use the Cangjie interface type as the parameter type for Java functions.
+2. Implement the Cangjie interface on the Java side and pass it as a parameter of type Cangjie interface.
+3. Call the default implementation in the Cangjie interface.
+
+Example code showing how Cangjie enums are mapped to Java classes:
+
+```cangjie
+// cangjie code
+package UNNAMED
+
+public interface A {
+    func foo() : Unit {
+        println("Hello World!")
+    }
+
+    func goo() : Unit
+}
+```
+
+Mapped Java code:
+
+```Java
+package UNNAMED;
+
+public interface A {
+    public default void foo() {
+        A_fwd.foo_default_impl(this);
+    }
+    public void goo();
+}
+
+final class A_fwd {
+    private A_fwd() {}
+    static {
+        loadLibrary("cj");
+    }
+
+    public static native void foo_default_impl(A selfobj);
+}
+```
+
+#### Constraints
+
+Support for combining interfaces with other language features is still under development. The following scenarios are currently unsupported:
+
+1. Cangjie interfaces must not inherit from other interfaces.
+2. Cangjie interface member functions must not use generics.
+3. Cangjie interface member functions must be non static
+4. Cangjie interfaces must only use basic data types.
+5. Cangjie interfaces must not be extended using `extend`.
+6. Option types are not supported.
