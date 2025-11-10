@@ -42,6 +42,8 @@ func power_10(n: Int64) {
 
 Of course, manually writing this code is tedious. The goal is to automatically generate this code given the value of `e`. Macros can achieve this. The usage example is as follows:
 
+<!-- code_no_check -->
+
 ```cangjie
 public func power_10(n: Int64) {
     @power[10](n)
@@ -49,6 +51,8 @@ public func power_10(n: Int64) {
 ```
 
 The macro-expanded code is (from the `.macrocall` file):
+
+<!-- code_no_check -->
 
 ```cangjie
 public func power_10(n: Int64) {
@@ -154,6 +158,8 @@ The output is:
 Memoization is a common technique in dynamic programming algorithms. It stores the results of already computed subproblems so that when the same subproblem appears again, the result can be directly retrieved from the table, avoiding redundant computations and improving algorithm efficiency.
 
 Typically, using memoization requires developers to manually implement storage and retrieval functionality. With macros, this process can be automated. The macro's effect is as follows:
+
+<!-- code_no_check -->
 
 ```cangjie
 @Memoize[true]

@@ -139,6 +139,8 @@ The custom error interface mimics the native compiler's error output format, sup
 
 The `diagReport` function prototype is as follows:
 
+<!-- code_no_check -->
+
 ```cangjie
 public func diagReport(level: DiagReportLevel, tokens: Tokens, message: String, hint: String): Unit
 ```
@@ -295,6 +297,8 @@ cjc --debug-macro demo.cj --import-path ./target
 
 In debug mode, a temporary file `demo.cj.macrocall` will be generated, containing the macro-expanded code as follows:
 
+<!-- code_no_check -->
+
 ```cangjie
 // demo.cj.macrocall
 /* ===== Emitted by MacroCall @Outer in demo.cj:3:1 ===== */
@@ -313,6 +317,8 @@ If the expanded macro code contains semantic errors, the compiler's error messag
 
 - The _debug_ mode of macros will rearrange the source code's line and column information and is not suitable for certain special line-breaking scenarios. For example:
 
+  <!-- code_no_check -->
+
   ```cangjie
   // before expansion
   @M{} - 2 // macro M returns 2
@@ -328,6 +334,8 @@ If the expanded macro code contains semantic errors, the compiler's error messag
 
 - Debugging macro calls within macro definitions is not supported and will result in compilation errors.
 
+  <!-- compile.error -->
+
   ```cangjie
   public macro M(input: Tokens) {
       let a = @M2(1+2) // M2 is inside macro M, not suitable for debug mode.
@@ -336,6 +344,8 @@ If the expanded macro code contains semantic errors, the compiler's error messag
   ```
 
 - Debugging macros with parentheses is not supported.
+
+  <!-- compile.error -->
 
   ```cangjie
   // main.cj

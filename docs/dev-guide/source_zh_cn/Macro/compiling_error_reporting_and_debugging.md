@@ -139,6 +139,8 @@ public macro B(input: Tokens) {
 
 `diagReport` 的函数原型如下：
 
+<!-- code_no_check -->
+
 ```cangjie
 public func diagReport(level: DiagReportLevel, tokens: Tokens, message: String, hint: String): Unit
 ```
@@ -296,6 +298,8 @@ cjc --debug-macro demo.cj --import-path ./target
 
 在 _debug_ 模式下，会生成临时文件 _demo.cj.macrocall_，对应宏展开的部分如下：
 
+<!-- code_no_check -->
+
 ```cangjie
 // demo.cj.macrocall
 /* ===== Emitted by MacroCall @Outer in demo.cj:3:1 ===== */
@@ -314,6 +318,8 @@ cjc --debug-macro demo.cj --import-path ./target
 
 - 宏的 _debug_ 模式会重排源码的行列号信息，不适用于某些特殊的换行场景。例如：
 
+  <!-- code_no_check -->
+
   ```cangjie
   // before expansion
   @M{} - 2 // macro M return 2
@@ -329,6 +335,8 @@ cjc --debug-macro demo.cj --import-path ./target
 
 - 不支持宏调用在宏定义内的调试，会编译报错。
 
+  <!-- compile.error -->
+
   ```cangjie
   public macro M(input: Tokens) {
       let a = @M2(1+2) // M2 is in macro M, not suitable for debug mode.
@@ -337,6 +345,8 @@ cjc --debug-macro demo.cj --import-path ./target
   ```
 
 - 不支持带括号宏的调试。
+
+  <!-- compile.error -->
 
   ```cangjie
   // main.cj
