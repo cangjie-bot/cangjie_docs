@@ -1338,10 +1338,68 @@ public class TimeUnit {
 
 Support for combining enums with other language features is still under development. The following scenarios are currently unsupported:
 
-1. Cangjie enums must not implement interfaces.
-2. Cangjie enum member functions must not use generics.
-3. Cangjie enum member functions must not use lambdas.
-4. Cangjie enums must not contain operator overloading.
-5. Cangjie enums must only use basic data types.
-6. Cangjie enums must not be extended using `extend`.
+1. Cangjie enums must not implement interfaces.	
+2. Cangjie enum member functions must not use generics.	
+3. Cangjie enum member functions must not use lambdas.	
+4. Cangjie enums must not contain operator overloading.	
+5. Cangjie enums must only use basic data types.	
+6. Cangjie enums must not be extended using `extend`.	
 7. Option types are not supported.
+
+### Java Usage of Cangjie Interfaces
+
+Cangjie interface types need to be mapped to Java types to enable:
+
+- Use the Cangjie interface type as the parameter type for Java functions.
+- Implement the Cangjie interface on the Java side and pass it as a parameter of type Cangjie interface.
+- Call the default implementation in the Cangjie interface.
+
+Example code showing how Cangjie enums are mapped to Java classes:
+
+<!-- compile -->
+
+```cangjie
+// cangjie code
+package UNNAMED
+
+public interface A {
+    func foo() : Unit {
+        println("Hello World!")
+    }
+
+    func goo() : Unit
+}
+```
+
+Mapped Java code:
+
+```Java
+package UNNAMED;
+
+public interface A {
+    public default void foo() {
+        A_fwd.foo_default_impl(this);
+    }
+    public void goo();
+}
+
+final class A_fwd {
+    private A_fwd() {}
+    static {
+        loadLibrary("cj");
+    }
+
+    public static native void foo_default_impl(A selfobj);
+}
+```
+
+#### Constraints
+
+Support for combining interfaces with other language features is still under development. The following scenarios are currently unsupported:
+
+- Cangjie interfaces must not inherit from other interfaces.
+- Cangjie interface member functions must not use generics.
+- Cangjie interface member functions must be non static
+- Cangjie interfaces must only use basic data types.
+- Cangjie interfaces must not be extended using `extend`.
+- Option types are not supported.

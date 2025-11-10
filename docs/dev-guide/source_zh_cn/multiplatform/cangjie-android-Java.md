@@ -1412,10 +1412,68 @@ public class TimeUnit {
 
 目前枚举支持与其他语言特性组合仍在开发过程中，暂不支持如下场景：
 
-1. 要求 Cangjie enum 无 interface 实现
-2. 要求 Cangjie enum 成员函数中不使用泛型
-3. 要求 Cangjie enum 成员函数中不使用 Lamda
-4. 要求 Cangjie enum 中不包含操作符重载
-5. 要求 Cangjie enum 中仅使用基础的数据类型
-6. 要求 Cangjie 不适应 extend 对 enum 进行拓展
+1. 要求 Cangjie enum 无 interface 实现	
+2. 要求 Cangjie enum 成员函数中不使用泛型	
+3. 要求 Cangjie enum 成员函数中不使用 Lamda	
+4. 要求 Cangjie enum 中不包含操作符重载	
+5. 要求 Cangjie enum 中仅使用基础的数据类型	
+6. 要求 Cangjie 不适应 extend 对 enum 进行拓展	
 7. 不支持 option
+
+### Java 使用 Cangjie 的 Interface
+
+仓颉接口类型需要与 Java 类型建立映射关系，以便用户能够：
+
+- 将仓颉接口类型作为 Java 函数的参数类型。
+- 在 Java 端实现仓颉接口，并作为仓颉接口类型的参数传递。
+- 调用仓颉接口中的默认实现。
+
+示例代码如下，仓颉的接口类型会被映射到 Java 的 interface 类型：
+
+<!-- compile -->
+
+```cangjie
+// cangjie code
+package UNNAMED
+
+public interface A {
+    func foo() : Unit {
+        println("Hello World!")
+    }
+
+    func goo() : Unit
+}
+```
+
+映射后的 Java 代码如下：
+
+```Java
+package UNNAMED;
+
+public interface A {
+    public default void foo() {
+        A_fwd.foo_default_impl(this);
+    }
+    public void goo();
+}
+
+final class A_fwd {
+    private A_fwd() {}
+    static {
+        loadLibrary("cj");
+    }
+
+    public static native void foo_default_impl(A selfobj);
+}
+```
+
+#### 规格约束
+
+目前接口支持与其他语言特性组合仍在开发过程中，暂不支持如下场景：
+
+- 要求 Cangjie interface 不继承其他 interface
+- 要求 Cangjie interface 成员函数中不使用泛型
+- 要求 Cangjie interface 成员函数非 static
+- 要求 Cangjie interface 中仅使用基础的数据类型
+- 要求 Cangjie 不适应 extend 对 interaface 进行拓展
+- 不支持 option
