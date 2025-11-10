@@ -42,6 +42,8 @@ func power_10(n: Int64) {
 
 当然，手动编写这些代码非常繁琐，希望在给定 `e` 的值之后，自动将这些代码生成出来。宏可以做到这一点。使用案例如下：
 
+<!-- code_no_check -->
+
 ```cangjie
 public func power_10(n: Int64) {
     @power[10](n)
@@ -49,6 +51,8 @@ public func power_10(n: Int64) {
 ```
 
 这个宏展开的代码是（根据 `.macrocall` 文件）：
+
+<!-- code_no_check -->
 
 ```cangjie
 public func power_10(n: Int64) {
@@ -154,6 +158,8 @@ main() {
 Memoize（记忆化）是动态规划算法的常用手段。它将已经计算过的子问题的结果存储起来，当同一个子问题再次出现时，可以直接查询表来获取结果，从而避免重复的计算，提高算法的效率。
 
 通常 Memoize 的使用需要开发者手动实现存储和提取的功能。通过宏，可以自动化这一过程。宏的效果如下：
+
+<!-- code_no_check -->
 
 ```cangjie
 @Memoize[true]
