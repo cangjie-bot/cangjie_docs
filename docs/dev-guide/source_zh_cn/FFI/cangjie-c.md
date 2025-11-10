@@ -18,6 +18,7 @@ int printf (const char *fmt, ...);
 
 那么在仓颉中调用这两个函数的方式如下：
 
+<!-- run -->
 ```cangjie
 // declare the function by `foreign` keyword, and omit `@C`
 foreign func rand(): Int32
@@ -47,6 +48,7 @@ main() {
 
 一些不合法的 `foreign` 声明的示例代码如下：
 
+<!-- compile.error -->
 ```cangjie
 foreign func rand(): Int32 { // compiler error
     return 0
@@ -127,7 +129,7 @@ main() {
 `inout` 修饰的变量，可以是定义在顶层作用域中的变量、局部变量、`struct` 中的成员变量，但不能直接或间接来源于 `class` 的实例成员变量。
 
 下面是一个例子：
-
+<!-- compile.error -->
 ```cangjie
 foreign func foo1(ptr: CPointer<Int32>): Unit
 
@@ -269,6 +271,7 @@ main() {
   }
   ```
 
+  <!-- run -->
   ```cangjie
   foreign func getCount(): Int64
   // Cangjie invokes the preceding C language logic
@@ -474,6 +477,7 @@ main() {
 
 `VArray` 作为参数的使用示例如下：
 
+<!-- compile -->
 ```cangjie
 foreign func cfoo1(a: CPointer<Int32>): Unit
 foreign func cfoo2(a: VArray<Int32, $3>): Unit
@@ -488,6 +492,7 @@ void cfoo2(int a[3]) { ... }
 
 调用 `CFunc` 时，需要通过 `inout` 修饰 `VArray` 类型变量：
 
+<!-- run -->
 ```cangjie
 var a: VArray<Int32, $3> = [1, 2, 3]
 unsafe {
@@ -664,6 +669,7 @@ void set_callback(callback cb);
 
 对应的，在仓颉里面这个函数可以声明为：
 
+<!-- compile -->
 ```cangjie
 foreign func set_callback(cb: CFunc<(Int32) -> Unit>): Unit
 ```
@@ -678,6 +684,7 @@ CFunc 类型的变量可以从 C 侧传递过来，也可以在仓颉侧构造�
 
 示例如下：
 
+<!-- compile -->
 ```cangjie
 @C
 func myCallback(s: Int32): Unit {
