@@ -148,6 +148,7 @@ main() {
 
 File 类定义：
 
+<!-- code_no_check -->
 ```cangjie
 public class File <: Resource & IOStream & Seekable {
     ...

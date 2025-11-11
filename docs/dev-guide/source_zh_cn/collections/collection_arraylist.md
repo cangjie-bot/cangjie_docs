@@ -91,6 +91,7 @@ The size of arraylist is 3
 
 当想访问单个指定位置的元素时，可以使用下标语法访问（下标的类型必须是 Int64）。非空 ArrayList 的第一个元素总是从位置 0 开始的。可以从 0 开始访问 ArrayList 的任意一个元素，直到最后一个位置（ArrayList 的 size - 1）。使用负数或大于等于 size 的索引会触发运行时异常。
 
+<!-- code_no_check -->
 ```cangjie
 let a = list[0] // a == 0
 let b = list[1] // b == 1
