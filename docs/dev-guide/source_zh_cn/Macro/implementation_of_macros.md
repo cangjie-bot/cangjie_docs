@@ -10,7 +10,7 @@
 
 非属性宏只接受被转换的代码，不接受其他参数（属性），其定义格式如下：
 
-<!-- code_check_manual -->
+<!-- code_no_check -->
 
 ```cangjie
 import std.ast.*
@@ -22,7 +22,7 @@ public macro MacroName(args: Tokens): Tokens {
 
 宏的调用格式如下：
 
-<!-- code_check_manual -->
+<!-- code_no_check -->
 
 ```cangjie
 @MacroName(...)
@@ -32,7 +32,7 @@ public macro MacroName(args: Tokens): Tokens {
 
 当宏作用于声明时，一般可以省略括号。参考如下示例：
 
-<!-- code_check_manual -->
+<!-- code_no_check -->
 
 ```cangjie
 @MacroName func name() {}        // Before a FuncDecl
@@ -56,7 +56,7 @@ public macro MacroName(args: Tokens): Tokens {
 
 对于输入的特殊说明，可以参考如下示例：
 
-<!-- code_check_manual -->
+<!-- code_no_check -->
 
 ```cangjie
 // Illegal input Tokens
@@ -120,7 +120,7 @@ public macro MacroName(args: Tokens): Tokens {
 
   在用例中添加了打印信息，其中宏定义中的 `I'm in macro body` 将在编译 `macro_call.cj` 的期间输出。同时，宏调用点被展开，如编译如下代码：
 
-  <!-- code_check_manual -->
+  <!-- code_no_check -->
 
   ```cangjie
   let a: Int64 = @testDef(1 + 2)
@@ -128,7 +128,7 @@ public macro MacroName(args: Tokens): Tokens {
 
   编译器将宏返回的 `Tokens` 更新到调用点的语法树上，得到如下代码：
 
-  <!-- code_check_manual -->
+  <!-- code_no_check -->
 
   ```cangjie
   let a: Int64 = 1 + 2
@@ -136,7 +136,7 @@ public macro MacroName(args: Tokens): Tokens {
 
   也就是说，可执行程序中的代码实际变为了：
 
-  <!-- code_check_manual -->
+  <!-- code_no_check -->
 
   ```cangjie
   main(): Int64 {
@@ -302,7 +302,7 @@ struct Data {
 
     - 输入的内容中，若希望 "@" 作为输入的 `Token` 则必须使用转义符号 "\\" 对其进行转义。
 
-    <!-- code_check_manual -->
+    <!-- code_no_check -->
 
     ```cangjie
     // Illegal attribute Tokens
@@ -416,7 +416,7 @@ public macro Prop(input:Tokens):Tokens {
 
 会先被展开成如下代码，再进行编译。
 
-<!-- code_check_manual -->
+<!-- code_no_check -->
 
 ```cangjie
 public macro Prop(input: Tokens): Tokens {
@@ -519,7 +519,7 @@ main(): Int64 {
 
 嵌套宏可以出现在带括号和不带括号的宏调用中，二者可以组合，但开发者需要保证没有歧义，且明确宏的展开顺序：
 
-<!-- code_check_manual -->
+<!-- code_no_check -->
 
 ```cangjie
 var a = @foo(@foo1(2 * 3)+@foo2(1 + 3))  // foo1, foo2 have to be defined.
