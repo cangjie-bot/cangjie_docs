@@ -275,6 +275,8 @@ main() {
   }
   ```
 
+  <!--compile-->
+
   ```cangjie
   foreign func getCount(): Int64
   // Cangjie invokes the preceding C language logic
@@ -480,6 +482,8 @@ main() {
 
 `VArray` 作为参数的使用示例如下：
 
+<!--compile-->
+
 ```cangjie
 foreign func cfoo1(a: CPointer<Int32>): Unit
 foreign func cfoo2(a: VArray<Int32, $3>): Unit
@@ -493,6 +497,8 @@ void cfoo2(int a[3]) {}
 ```
 
 调用 `CFunc` 时，需要通过 `inout` 修饰 `VArray` 类型变量：
+
+<!--compile-->
 
 ```cangjie
 var a: VArray<Int32, $3> = [1, 2, 3]
@@ -583,6 +589,8 @@ main() {
 
 仓颉还提供了 `sizeOf` 和 `alignOf` 两个函数，用于获取上述 C 互操作类型的内存占用和内存对齐数值（单位：字节），函数声明如下：
 
+<!--code_no_check-->
+
 ```cangjie
 public func sizeOf<T>(): UIntNative where T <: CType
 public func alignOf<T>(): UIntNative where T <: CType
@@ -670,6 +678,8 @@ void set_callback(callback cb);
 
 对应的，在仓颉里面这个函数可以声明为：
 
+<!--compile-->
+
 ```cangjie
 foreign func set_callback(cb: CFunc<(Int32) -> Unit>): Unit
 ```
@@ -683,6 +693,8 @@ CFunc 类型的变量可以从 C 侧传递过来，也可以在仓颉侧构造�
 > `foreign` 修饰的函数与 `@C` 修饰的函数，这两种 `CFunc` 的命名不建议使用 `CJ_`（不区分大小写）作为前缀，否则可能与标准库及运行时等编译器内部符号出现冲突，导致未定义行为。
 
 示例如下：
+
+<!--compile-->
 
 ```cangjie
 @C
