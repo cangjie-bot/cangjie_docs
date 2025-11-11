@@ -4,6 +4,8 @@
 
 在仓颉编程语言中，可以通过 `import fullPackageName.itemName` 的语法导入其他包中的一个顶层声明或定义，`fullPackageName` 为完整路径包名，`itemName` 为声明的名字。导入语句在源文件中的位置必须在包声明之后，其他声明或定义之前。例如：
 
+<!-- code_check_manual -->
+
 ```cangjie
 package a
 import std.math.*
@@ -13,11 +15,15 @@ import {package1.foo, package2.bar}
 
 如果要导入的多个 `itemName` 同属于一个 `fullPackageName`，可以使用 `import fullPackageName.{itemName[, itemName]*}` 语法，例如：
 
+<!-- code_check_manual -->
+
 ```cangjie
 import package1.{foo, bar, fuzz}
 ```
 
 这等价于：
+
+<!-- code_check_manual -->
 
 ```cangjie
 import package1.foo
@@ -26,6 +32,8 @@ import package1.fuzz
 ```
 
 除了通过 `import fullPackagename.itemName` 语法导入一个特定的顶层声明或定义外，还可以使用 `import packageName.*` 语法将 `packageName` 包中所有可见的顶层声明或定义全部导入。例如：
+
+<!-- code_check_manual -->
 
 ```cangjie
 import package1.*
@@ -41,6 +49,8 @@ import {package1.*, package2.*}
 - 禁止包间的循环依赖导入，如果包之间存在循环依赖，编译器会报错。
 
 示例如下：
+
+<!-- code_check_manual -->
 
 ```cangjie
 // pkga/a.cj
@@ -85,6 +95,9 @@ func f2() {
 
 在仓颉编程语言中，导入的声明或定义如果和当前包中的顶层声明或定义重名且不构成函数重载，则导入的声明和定义会被遮盖；导入的声明或定义如果和当前包中的顶层声明或定义重名且构成函数重载，函数调用时将会根据函数重载的规则进行函数决议。
 
+<!-- compile -over_res -->
+<!-- cfg="-p pkga --output-type=staticlib"-->
+
 ```cangjie
 // pkga/a.cj
 package pkga
@@ -92,9 +105,15 @@ package pkga
 public struct R {}            // R1
 public func f(a: Int32) {}    // f1
 public func f(a: Bool) {} // f2
+```
 
+<!-- compile -over_res -->
+<!-- cfg="-p pkgb libpkga.a --output-type=staticlib"-->
+
+```cangjie
 // pkgb/b.cj
 package pkgb
+
 import pkga.*
 
 func f(a: Int32) {}         // f3
@@ -103,7 +122,7 @@ struct R {}                 // R2
 func bar() {
     R()     // OK, R2 shadows R1.
     f(1)    // OK, invoke f3 in current package.
-    f(true) // OK, invoke f2 in the imported package
+    f(true) // OK, invoke f2 in the pkga
 }
 ```
 
@@ -196,6 +215,8 @@ func bar() {
     package p2
     public class C {}
     ```
+
+    <!-- code_check_manual -->
 
     ```cangjie
     // main1.cj

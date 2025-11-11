@@ -35,6 +35,9 @@ $ cjc tool.cj --output-type=dylib
 
 假设有文件 `log/printer.cj`：
 
+<!-- compile -p -->
+<!-- cfg="-p log --output-type=staticlib" -->
+
 ```cangjie
 package log
 
@@ -44,6 +47,9 @@ public func printLog(message: String) {
 ```
 
 与文件 `main.cj`:
+
+<!-- compile -p -->
+<!-- cfg="liblog.a" -->
 
 ```cangjie
 import log.*
@@ -71,43 +77,7 @@ $ cjc main.cj liblog.a
 
 ### `--module-name <value>` <sup>[frontend]</sup>
 
-指定要编译的模块的名称。
-
-假设有文件 `my_module/src/log/printer.cj`：
-
-```cangjie
-package log
-
-public func printLog(message: String) {
-    println("[Log]: ${message}")
-}
-```
-
-与文件 `main.cj`:
-
-```cangjie
-import my_module.log.*
-
-main() {
-    printLog("Everything is great")
-}
-```
-
-可以使用
-
-```shell
-$ cjc -p my_module/src/log --module-name my_module --output-type=staticlib -o my_module/liblog.a
-```
-
-来编译 `log` 包并指定其模块名为 `my_module`，`cjc` 会在 `my_module` 目录下生成一个 `my_module/liblog.a` 文件。
-
-然后可以使用 `liblog.a` 文件来编译导入了 `log` 包的 `main.cj` ，编译命令如下：
-
-```shell
-$ cjc main.cj my_module/liblog.a
-```
-
-`cjc` 会将 `main.cj` 与 `liblog.a` 一同编译成一个可执行文件 `main` 。
+该选项已废弃，并会在未来版本被移除。当前版本使用该选项没有功能性作用。
 
 ### `--output <value>`, `-o <value>`, `-o<value>` <sup>[frontend]</sup>
 
@@ -260,6 +230,8 @@ Hello World
 
 且有如下 `main.cj` 文件：
 
+<!-- code_check_manual -->
+
 ```cangjie
 import myModule.log.printLog
 
@@ -275,6 +247,7 @@ main() {
 ### `--scan-dependency` <sup>[frontend]</sup>
 
 通过 `--scan-dependency` 指令可以获得指定包源码或者一个包的 `cjo` 文件对于其他包的直接依赖以及其他信息，以 `json` 格式输出。
+<!-- code_check_manual -->
 
 ```cangjie
 // this file is placed under directory pkgA
@@ -860,7 +833,7 @@ cjc a.cj --test
 >
 > 不保证用例每次执行的用时都相同。
 
-```cangjie
+```text
 case1
 --------------------------------------------------------------------------------------------------
 TP: default, time elapsed: 29710 ns, Result:
@@ -886,14 +859,16 @@ application
 可以在 `application`目录下使用 `-p` 编译选项配合编译整包：
 
 ```shell
-cjc pkgc --test -p
+cjc --test -p pkgc
 ```
 
 来编译整个 `pkgc` 包下的测试用例 `a1.cj` 和 `a2.cj`。
 
+<!-- code_check_manual -->
+
 ```cangjie
 /*a1.cj*/
-package a
+package pkgc
 
 import std.unittest.*
 import std.unittest.testmacro.*
@@ -907,9 +882,11 @@ public class TestA {
 }
 ```
 
+<!-- code_check_manual -->
+
 ```cangjie
 /*a2.cj*/
-package a
+package pkgc
 
 import std.unittest.*
 import std.unittest.testmacro.*
@@ -925,7 +902,7 @@ public class TestB {
 
 执行 `main` 会有如下输出（**输出信息仅供参考**）：
 
-```cangjie
+```text
 case1
 --------------------------------------------------------------------------------------------------
 TP: a, time elapsed: 367800 ns, Result:
@@ -964,6 +941,8 @@ Summary: TOTAL: 2
 
 示例:
 
+<!-- code_check_manual -->
+
 ```cangjie
 /*main.cj*/
 package my_pkg
@@ -972,11 +951,13 @@ func concatM(s1: String, s2: String): String {
     return s1 + s2
 }
 
-main() {
+main(): Int64 {
     println(concatM("a", "b"))
     0
 }
 ```
+
+<!-- code_check_manual -->
 
 ```cangjie
 /*main_test.cj*/
@@ -1300,6 +1281,8 @@ obf_func2 name2
 
 例如，假设在包 `packA` 中有以下代码：
 
+<!-- compile -->
+
 ```cangjie
 package packA
 class MyClassA {
@@ -1594,6 +1577,9 @@ Effect Handler 允许程序员将副作用操作与其处理逻辑解耦，从�
 与传统异常机制不同，Effect Handler 在处理效应后可以选择 恢复执行（`resume`），即向原始调用点注入一个值并继续运行。这种“恢复”能力使得程序员可以对控制流进行更精细的操作，特别适合用于构建模拟器、解释器或协作式多任务系统等需要高度控制的场景。
 
 示例：
+
+<!-- verify -->
+<!-- cfg="--enable-eh --experimental" -->
 
 ```cangjie
 import stdx.effect.Command
