@@ -91,6 +91,7 @@ public class A {
 
 相应的 Mirror Type 如下所示：
 
+<!-- compile -->
 ```cangjie
 // 仓颉代码
 // src/cj/javaworld/src/A.cj
@@ -258,6 +259,7 @@ open class A {
 
     继续上面的例子，InteropExample 类表示如下：
 
+    <!-- compile -->
     ```cangjie
     // 仓颉代码
     package cjworld
@@ -432,6 +434,7 @@ open class A {
 
     生成的`src/cj/UNNAMED/src/com/example/c/C.cj`如下：
 
+    <!-- compile -->
     ```cangjie
     package com.example.c
 
@@ -451,23 +454,14 @@ open class A {
 
     按照仓颉语法调用类 C 的函数。
 
-    **示例：**
-
-    ```cangjie
-    // 仓颉代码
-    import javaworld.A
-    import javaworld.C
-        ...
-        var maybe_s: ?JString = C.g(a, i)
-        ...
-    ```
-
     在[互操作类示例](#使用场景举例) [从 Java 调用仓颉](#java-调用仓颉)一节中：
 
+    <!-- compile -->
     ```cangjie
     // 仓颉代码
     package cjworld
 
+    import interoplib.interop.*
     import java.lang.*
     import javaworld.A
     import javaworld.B
@@ -498,33 +492,24 @@ open class A {
 
 ### java.lang.JObject
 
+<!-- compile -->
 ```cangjie
+package java.lang
+
+import interoplib.interop.*
+
 @JavaMirror["java.lang.Object"]
 open class JObject {
-    ...
+    // 注释内容 ...
     public func hashCode(): Int64
     @ForeignName["hashCode"]
     public open func hashCode32(): Int32
-    ...
+    // 注释内容 ...
     public func toString(): String
     @ForeignName["toString"]
     public open func toJString(): JString
-    ...
+    // 注释内容 ...
 }
-```
-
-```cangjie
-@ForeignName["hashCode"]
-public open func hashCode32(): Int32
-```
-
-```cangjie
-public func toString(): String
-```
-
-```cangjie
-@ForeignName["toString"]
-public open func toJString(): JString
 ```
 
 上述 `public func hashCode(): Int64` 对应 Java.lang.Object 中的 `hashCode` 方法，返回值类型为 `Int64`。
@@ -535,17 +520,18 @@ public open func toJString(): JString
 
 ### java.lang.JString
 
+<!-- compile -->
 ```cangjie
+package java.lang
+
+import interoplib.interop.*
+
 @JavaMirror["java.lang.String"]
 open class JString {
-    ...
+    // 注释内容 ...
     public init(cjString: String)
-    ...
+    // 注释内容 ...
 }
-```
-
-```cangjie
-public init(cjString: String)
 ```
 
 上述`public init(cjString: String)`使用仓颉`String`初始化 Java String(`JString`)对象。
@@ -558,17 +544,19 @@ public init(cjString: String)
 
 ### java.lang.JArray
 
+<!-- compile -->
 ```cangjie
-public init(length: Int32)
-```
+package java.lang
 
-```cangjie
-public prop length: Int32
-```
+import interoplib.interop.*
 
-```cangjie
-public operator func [](index: Int32): T
-public operator func [](index: Int32, value!: T): Unit
+@JavaMirror["[]"]
+public class JArray<T> <: JObject {
+    public init(length: Int32)
+    public prop length: Int32
+    public operator func [](index: Int32): T
+    public operator func [](index: Int32, value!: T): Unit
+}
 ```
 
 ## 特性和限制
@@ -604,8 +592,11 @@ JavaMirror 为 Java 类型使用仓颉语法形式的表达，由工具自动生
 ### 调用构造函数
 
 支持在 JavaImpl 类中调用 JavaMirror 类的构造函数。
-
+<!-- compile -->
 ```cangjie
+import interoplib.interop.*
+import java.lang.*
+
 @JavaMirror
 public class Mirror {
     public init()
@@ -627,8 +618,10 @@ public class Main <: JObject {
 
 Java 中的继承关系可被映射。
 
+<!-- compile -->
 ```cangjie
-import java.lang.JObject
+import java.lang.*
+import interoplib.interop.*
 
 @JavaMirror
 public open class Logger {
@@ -651,8 +644,11 @@ public class EnhancedLogger <: Logger {
 
 JavaMirror 类支持被直接扩展，在扩展中，支持使用任意仓颉语义，包括不存在 Java 映射关系的仓颉类型等。示例如下：
 
+<!-- compile -->
 ```cangjie
 import std.random.*
+import java.lang.*
+import interoplib.interop.*
 
 @JavaMirror
 public class M {}
@@ -677,7 +673,11 @@ extend M {
 
 JavaMirror 类支持可变属性、静态属性等。
 
+<!-- compile -->
 ```cangjie
+import java.lang.*
+import interoplib.interop.*
+
 @JavaMirror
 public class Mirror {
     public mut prop self: Mirror
@@ -704,7 +704,11 @@ public class Mirror {
 
 支持 JavaMirror 的成员函数可带返回值、参数、可为静态方法。
 
+<!-- compile -->
 ```cangjie
+import java.lang.*
+import interoplib.interop.*
+
 @JavaMirror
 class B {
     public func foo(): String
@@ -733,7 +737,11 @@ public interface I {
 }
 ```
 
+<!-- compile -->
 ```cangjie
+import java.lang.*
+import interoplib.interop.*
+
 @JavaMirror
 public interface I {
     static func staticMethod(): Int64
@@ -758,7 +766,11 @@ public interface I {
 
 生成的 Mirror 文件如下：
 
+<!-- compile -->
 ```cangjie
+import java.lang.*
+import interoplib.interop.*
+
 @JavaMirror
 public interface I {
     @JavaHasDefault
@@ -768,7 +780,11 @@ public interface I {
 
 可被 JavaImpl 调用：
 
+<!-- compile -->
 ```cangjie
+import java.lang.*
+import interoplib.interop.*
+
 @JavaImpl
 public class Impl <: I {
     public init() {
@@ -789,8 +805,12 @@ public class Impl <: I {
 
 具体示例如下：
 
+<!-- compile -->
 ```cangjie
 package cj.com
+
+import java.lang.*
+import interoplib.interop.*
 
 @JavaMirror["java.com.AbstractMirror"]
 abstract class AbstractMirror {
@@ -842,8 +862,12 @@ public class ImplAbstractMirror extends AbstractMirror {
 
 在仓颉侧使用该抽象类
 
+<!-- compile -->
 ```cangjie
 package cj.com
+
+import java.lang.*
+import interoplib.interop.*
 
 @JavaImpl["java.com.Impl"]
 class Impl <: JObject {
@@ -936,6 +960,7 @@ public class JImpl {
 }
 ```
 
+<!-- compile -->
 ```cangjie
 package cj
 
@@ -1000,7 +1025,11 @@ JString 类型支持在仓颉和 Java 侧做字符串数据的映射，支持从
 
 例如如下示例，可使用 JString 的方法将仓颉字符串映射至 Java 侧作为函数参数被调用：
 
+<!-- compile -->
 ```cangjie
+import java.lang.*
+import interoplib.interop.*
+
 @JavaMirror
 class B {
     public func foo(s: JString): Unit
@@ -1014,6 +1043,7 @@ func useFoo() {
 
 在 `@JavaMirror` 类中，`String` 可作为函数返回值类型，隐式将 JString 转换为仓颉的 String 类型。
 
+<!-- compile -->
 ```cangjie
 // ...
 class JObject {
@@ -1078,7 +1108,11 @@ Presenter p = Presenter(true);
 
 在仓颉中调用 JavaImpl 的成员函数同普通仓颉方法。在 Java 中调用 JavaImpl 的成员函数如下：
 
+<!-- compile -->
 ```cangjie
+import java.lang.*
+import interoplib.interop.*
+
 @JavaMirror
 public class Handler {
     public prop isAlive: Bool
@@ -1130,7 +1164,11 @@ public class Main {
 
 对于 JavaImpl 类，可增加纯仓颉的私有方法（不可被其他类型调用），该方法不需遵守参数和返回值只能为 Java 兼容类型的约束。
 
+<!-- compile -->
 ```cangjie
+import java.lang.*
+import interoplib.interop.*
+
 struct PureCangjieEntity {
 
 }
@@ -1153,7 +1191,11 @@ public class Impl <: JObject {
 
 `as`、`is` 和类型匹配支持 @JavaMirror 和 @JavaImpl 类作为类型操作数。在这种情况下，可以使用 Java 的 instanceof 函数来检查实际类型。此外，还支持接口或继承链的子类型关系。
 
+<!-- compile -->
 ```cangjie
+import java.lang.*
+import interoplib.interop.*
+
 @JavaMirror
 public class B {}
 
@@ -1184,7 +1226,11 @@ func foo(b: B) {
 - 在 `@JavaMirror` 类中的原始方法使用 `@ForeignName["name"]` 注解时，该方法及其所有重写都将调用 Java 方法 `name`。因此 `name` 必须与 Java 中的方法的签名一致。
 - 在 `@JavaImpl` 类中的原始方法使用 `@ForeignName["name"]` 注解时，将生成名为 `name` 的方法。
 
+<!-- compile -->
 ```cangjie
+import java.lang.*
+import interoplib.interop.*
+
 @JavaMirror
 public class B {
     @ForeignName["bar"]
@@ -1241,6 +1287,7 @@ Cangjie 与 Java 的互操作中，需要支持在 Java 使用 Cangjie 的 struc
 
 示例代码如下所示：
 
+<!-- compile -->
 ```cangjie
 // cangjie code
 
@@ -1328,6 +1375,7 @@ public class Main {
 
 示例代码如下，仓颉的枚举类型会被映射到 Java 的 Class 类型：
 
+<!-- compile -->
 ```cangjie
 // Cangjie
 // =============================================
@@ -1432,6 +1480,7 @@ public class TimeUnit {
 
 Cangjie 侧 Class M 定义
 
+<!-- compile -->
 ```cangjie
 // Cangjie
 public open class M 
