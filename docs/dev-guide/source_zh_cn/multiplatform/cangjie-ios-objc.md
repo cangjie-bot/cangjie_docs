@@ -186,35 +186,37 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 
     生成的镜像文件 `Base.cj` 如下：
 
-    ```cangjie
-    // Base.cj
-    package example
+<!-- compile -->
+```cangjie
+// Base.cj
+package example
 
-    import objc.lang.*
+import objc.lang.*
 
-    @ObjCMirror
-    open class Base {
-        public init()
-        public open func f(): Unit
-    }
-    ```
+@ObjCMirror
+open class Base {
+    public init()
+    public open func f(): Unit
+}
+```
 
     如果需要基于 `Base` 对部分函数进行重写，示例如下：
 
-    ```cangjie
-    // Interop.cj
-    package example
+<!-- compile -->
+```cangjie
+// Interop.cj
+package example
 
-    import objc.lang.*
+import objc.lang.*
 
-    @ObjCImpl
-    public class Interop <: Base {
-        override public func f(): Unit {
-            println("Hello from overridden Cangjie Interop.f()")
-            Base().f()
-        }
+@ObjCImpl
+public class Interop <: Base {
+    override public func f(): Unit {
+        println("Hello from overridden Cangjie Interop.f()")
+        Base().f()
     }
-    ```
+}
+```
 
 3. 开发互操作代码，使用步骤 2 中生成的 Mirror Type 创建 ObjC 对象、调用 ObjC 方法。
 
@@ -222,19 +224,20 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 
     例如如下示例，可通过 ObjCImpl 类型继承 Mirror Type 调用 ObjC 类型构造函数：
 
-    ```cangjie
-    // A.cj
-    package cjworld
+<!-- compile -->
+```cangjie
+// A.cj
+package cjworld
 
-    import objc.lang.*
+import objc.lang.*
 
-    @ObjCImpl
-    public class A <: M {
-        override public func goo(): Unit {
-            println("Hello from overridden A goo()")
-        }
+@ObjCImpl
+public class A <: M {
+    override public func goo(): Unit {
+        println("Hello from overridden A goo()")
     }
-    ```
+}
+```
 
 4. 使用 cjc 编译互操作代码和 'Mirror Type.cj' 类型。cjc 将生成：
 

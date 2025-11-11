@@ -17,6 +17,7 @@
 
 如下示例，定义了公共部分代码和全局函数 foo。
 
+<!-- compile -->
 ```cangjie
 package cmp
 ​
@@ -27,6 +28,7 @@ public common func foo(): Unit {
 
 如下示例，定义了平台部分代码和全局函数 foo。
 
+<!-- compile -->
 ```cangjie
 package cmp
 ​
@@ -46,6 +48,7 @@ public platform func foo(): Unit {
 全局函数支持跨平台特性，用户可以使用 common 和 platform 修饰全局函数。
 common 全局函数，可以包含函数实现，也可以不包含函数实现。
 
+<!-- compile -->
 ```cangjie
 common func foo(): Int64
 common func goo(a: Int64): Int64 { 1 }
@@ -70,6 +73,7 @@ common/platform 全局函数必须满足如下限制：
 
 在公共文件中，可以定义一些 common 全局函数。
 
+<!-- compile -->
 ```cangjie
 // common file
 pkg cjmp
@@ -86,6 +90,7 @@ common func printValue2<T>(value: T): Unit where T <: ToString
 
 在平台文件中，基于 common 全局函数，定义 platform 全局函数。
 
+<!-- compile -->
 ```cangjie
 // platform file
 pkg cjmp
@@ -129,6 +134,7 @@ platform func printValue2<T>(value: T): Unit {}
 
 普通类示例：
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -139,7 +145,10 @@ common class A {
     common func foo(): Unit
     common prop p: Int64
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -155,6 +164,7 @@ platform class A {
 
 泛型类示例：
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -166,7 +176,10 @@ common class Container<T> where T <: Comparable<T> {
     common func set(newValue: T): Unit
     common func map<R>(convert: (T) -> R): Container<R> where R <: Comparable<R>
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -194,6 +207,7 @@ platform class Container<T> where T <: Comparable<T> {
 - common class 或 platform class 中必须存在至少一个显示定义的构造函数。
 - 静态初始化器不支持被 common/platform 修饰。
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -203,7 +217,10 @@ common class A {
     common init(a: String) {}
     init(a: Bool) {}
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -226,6 +243,7 @@ common class 和 platform class 的成员变量需要满足如下限制：
 - common/platform class 支持普通成员变量，且 common class 或 platform class 中均可以定义。
 - class 的静态成员变量暂不支持跨平台特性，将会在后续的版本中支持。
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -240,7 +258,10 @@ common class A {
         c = 1
     }
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -262,6 +283,7 @@ common class 和 platform class 的成员函数需要满足如下限制：
 - common/platform class 支持普通成员函数，且 common class 或 platform class 中均可以定义。
 - common 泛型成员函数和 platform 泛型成员函数，还需满足泛型特定限制，规则同全局泛型函数。
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -272,7 +294,10 @@ common class A {
     common func foo3(): Unit {}
     func foo4() {}
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -294,6 +319,7 @@ common class 和 platform class 的属性需要满足如下限制：
 - common 属性和 platform 属性的类型、可见性和可赋值性必须相同。
 - common/platform class 支持普通属性，且 common class 或 platform class 中均可以定义。
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -310,7 +336,10 @@ common class A {
         get() { 1 }
     }
 }
+```
 
+<!-- compile -->
+```
 // platform file
 package cmp
 
@@ -335,6 +364,7 @@ common/platform class 支持继承，其继承关系的处理与 common/platform
 
 具体示例如下：
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -364,6 +394,7 @@ public func runCommonA2(a: A2) {
 }
 ```
 
+<!-- compile -->
 ```cangjie
 // platform
 package cmp
@@ -396,6 +427,7 @@ public func runPlatformA2(a: A2) {
 }
 ```
 
+<!-- run -->
 ```cangjie
 // m_common.cj
 import cmp.*
@@ -535,6 +567,7 @@ public platform abstract class A {
 
 普通 struct 示例：
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -545,7 +578,10 @@ common struct A {
     common func foo(): Unit
     common prop p: Int64
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -561,6 +597,7 @@ platform struct A {
 
 泛型 struct 示例：
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -574,7 +611,10 @@ common struct Point<T> where T <: Add {
     common var y: T
     common init(x: T, y: T) { this.x = x; this.y = y }
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -596,6 +636,7 @@ platform struct Point<T> where T <: Add {
 - common/platform struct 支持普通构造函数，在 common struct 或 platform struct 中均可以定义。
 - 静态初始化器不支持被 common/platform 修饰。
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -604,7 +645,10 @@ common struct A {
     common init(a: String) {}
     init(a: Bool) {}
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -626,6 +670,7 @@ common struct 和 platform struct 的成员变量需要满足如下限制：
 - common/platform struct 支持普通成员变量，且 common struct 或 platform struct 中均可以定义。
 - struct 的静态成员变量暂不支持跨平台特性，将会在后续的版本中支持。
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -640,7 +685,10 @@ common struct A {
         c = 1
     }
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -662,6 +710,7 @@ common struct 和 platform struct 的成员函数需要满足如下限制：
 - common/platform struct 支持普通成员函数，且 common struct 或 platform struct 中均可以定义。
 - common 泛型成员函数和 platform 泛型成员函数，还需满足泛型特定限制，规则同全局泛型函数。
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -672,7 +721,10 @@ common struct A {
     common func foo3(): Unit {}
     func foo4() {}
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -694,6 +746,7 @@ common struct 和 platform struct 的属性需要满足如下限制：
 - common 属性和 platform 属性的类型、可见性和可赋值性必须相同。
 - common/platform struct 支持普通属性，且 common struct 或 platform struct 中均可以定义。
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -710,7 +763,10 @@ common struct A {
         get() { 1 }
     }
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -733,6 +789,7 @@ platform struct A {
 
 仓颉 enum 支持跨平台特性，用户可以使用 common 和 platform 修饰 enum 及其部分成员。
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -742,7 +799,10 @@ common enum A {
     common func foo(): Unit
     common prop p: Int64
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -768,6 +828,7 @@ platform enum A {
     - 当 common 泛型 enum 有泛型约束时，platform 泛型 enum 对应类型形参的泛型约束必须保持一致或者更宽松。
     - common 泛型 enum 和 platform 泛型 enum 类型形参允许重命名，但参数结构和泛型约束必须匹配。
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -785,7 +846,10 @@ common enum Either<L, R> where L <: Equatable<L>, R <: Equatable<R> {
     common func goo(x:L): Unit
     common func foo<M>(x:M): Unit
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -814,6 +878,7 @@ common enum 和 platform enum 的成员函数需要满足如下限制：
 - common/platform enum 支持普通成员函数，且 common enum 或 platform enum 中均可以定义。
 - common 泛型成员函数和 platform 泛型成员函数，还需满足泛型特定限制，规则同全局泛型函数。
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -826,7 +891,10 @@ common enum A {
     common func foo3(): Unit {}
     func foo4() {}
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -848,6 +916,7 @@ common enum 和 platform enum 的属性需要满足如下限制：
 - common 属性和 platform 属性的类型、可见性和可赋值性必须相同。
 - common/platform enum 支持普通属性，且 common enum 或 platform enum 中均可以定义。
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -866,7 +935,10 @@ common enum A {
         get() { 1 }
     }
 }
+```
 
+<!-- compile -->
+```
 // platform file
 package cmp
 
@@ -889,6 +961,7 @@ platform enum A {
 
 仓颉 interface 支持跨平台特性，用户可以使用 common 和 platform 修饰 interface 及其部分成员。
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -897,7 +970,10 @@ common interface A {
     common func foo(): Unit
     common prop p: Int64
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -920,6 +996,7 @@ platform interface A {
     - 当 common 泛型 interface 有泛型约束时，platform 泛型 interface 对应类型形参的泛型约束必须保持一致或者更宽松。
     - common 泛型 interface 和 platform 泛型 interface 类型形参允许重命名，但参数结构和泛型约束必须匹配。
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -931,7 +1008,10 @@ common interface Entity {
 common interface Repository<T> where T <: Entity {
     common func save(entity: T): Unit
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -954,6 +1034,7 @@ common interface 和 platform interface 的成员函数需要满足如下限制�
 - common/platform interface 支持普通成员函数，且 common interface 或 platform interface 中均可以定义。
 - platform interface 新增的普通函数必须包含完整实现。
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -964,7 +1045,10 @@ common interface A {
     common func foo3(): Unit {}
     func foo4(): Int64
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -985,6 +1069,7 @@ common interface 和 platform interface 的属性需要满足如下限制：
 - common/platform interface 支持普通属性，且 common interface 或 platform interface 侧均可以存在。
 - platform interface 新增的属性必须包含完整实现。
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -997,7 +1082,10 @@ common interface A {
     }
     prop d: Int64
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -1022,6 +1110,7 @@ platform interface A {
 >
 > common extend 成员函数或属性不能同时用 common 和 private 来修饰。
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -1033,6 +1122,8 @@ common extend A {
     common prop p: Int64
 }
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -1055,6 +1146,7 @@ platform extend A {
 
 示例 1：
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -1068,7 +1160,10 @@ common extend A <: I {}
 
 class C {}
 common extend C <: I {}
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 platform extend Int32 {} // ok
 platform extend Int64 {}
@@ -1082,6 +1177,7 @@ platform extend C <: B {} // error: the interfaces of platform extend do not mat
 
 示例 2：
 
+<!-- compile -->
 ```cangjie
 // common file
 class Container<T>{
@@ -1092,7 +1188,10 @@ common extend<T> Container<T>{
     common func setItem(newItem:T):Unit
     common func getItem():?T
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 platform extend<T> Container<T>{
     platform func setItem(newItem:T){
@@ -1114,6 +1213,7 @@ common extend 和 platform extend 的成员函数需要满足如下限制：
 - common/platform extend 支持普通成员函数，且 common extend 或 platform extend 中均可以定义。
 - common 泛型成员函数和 platform 泛型成员函数，还需满足泛型特定限制，规则同全局泛型函数。
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -1126,6 +1226,10 @@ common extend A {
     func foo3(): Unit {}
 }
 
+```
+
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -1145,6 +1249,7 @@ common extend 和 platform extend 的属性需要满足如下限制：
 - common 属性和 platform 属性的类型、可见性和可赋值性必须相同。
 - common/platform extend 支持普通属性，且 common extend 或 platform extend 中均可以定义。
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -1160,7 +1265,10 @@ common extend A {
         get() { 1 }
     }
 }
+```
 
+<!-- compile -->
+```cangjie
 // platform file
 package cmp
 
@@ -1183,6 +1291,7 @@ common 和 platform 的声明支持导入与导出，其规则与其他类型的
 
 具体示例如下：
 
+<!-- compile -->
 ```cangjie
 // common file
 package cmp
@@ -1190,6 +1299,7 @@ package cmp
 public common func foo(){println("common func foo")}
 ```
 
+<!-- compile -->
 ```cangjie
 // platform file
 package cmp
@@ -1203,6 +1313,7 @@ public func goo(){
 }
 ```
 
+<!-- compile -->
 ```cangjie
 // common file
 import cmp.*
@@ -1212,6 +1323,7 @@ main() {
 }
 ```
 
+<!-- compile -->
 ```cangjie
 // platform file
 import cmp.*
@@ -1270,6 +1382,7 @@ cjmp_project(package cjmp)
 
 公共定义文件。
 
+<!-- compile -->
 ```cangjie
 // common.cj
 package example.cmp
@@ -1279,6 +1392,7 @@ public common func Platform(): String
 
 Linux 平台文件。
 
+<!-- compile -->
 ```cangjie
 // linux.cj
 package example.cmp
@@ -1289,6 +1403,7 @@ public platform func Platform(): String {
 
 Windows 平台文件。
 
+<!-- compile -->
 ```cangjie
 // windows.cj
 package example.cmp
@@ -1299,6 +1414,7 @@ public platform func Platform(): String {
 
 macOs 平台文件。
 
+<!-- compile -->
 ```cangjie
 // macos.cj
 package example.cmp
@@ -1309,6 +1425,7 @@ public platform func Platform(): String {
 
 应用侧代码。
 
+<!-- compile -->
 ```cangjie
 // app.cj
 import example.cmp.Platform
