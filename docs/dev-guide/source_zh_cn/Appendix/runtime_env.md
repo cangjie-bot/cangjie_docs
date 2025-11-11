@@ -325,6 +325,8 @@ export cjGwpAsanHelp=true
 
     向前越界数组时，runtime 会报告 Head canary 检测失败，使用 `array[-1]` 表示。例如：
 
+    <!-- compile -->
+
     ```cangjie
     unsafe {
         let array = Array<UInt8>(4, item: 0)
@@ -346,6 +348,8 @@ export cjGwpAsanHelp=true
 2. 向后越界
 
     向后越界数组时，runtime 会报告 Tail canary 检测失败，并给出相对该数组（`array`）的位置。例如：
+
+    <!-- compile -->
 
     ```cangjie
     unsafe {
@@ -371,6 +375,8 @@ export cjGwpAsanHelp=true
 使用 acquireArrayRawData 获取了数组的指针，但是未配套使用 releaseArrayRawData 释放数组的引用，可能造成仓颉 GC（Garbage Collection）异常。
 
 在 runtime 退出时会检测被采样的数组是否调用了 releaseArrayRawData 释放。未释放时，会报告所有未释放的数组对应的堆地址。例如：
+
+<!-- compile -->
 
 ```cangjie
 unsafe {
