@@ -1478,3 +1478,10 @@ public class Main
 - 不支持使用仓颉泛型 Class
 - 不支持访问继承 Cangjie class 的普通成员变量、静态成员变量、静态成员方法、prop 成员
 - 不支持跨包引用
+
+## 约束限制
+
+1.  当前版本的 Java 互操作方案存在如下约束限制：
+     - 不支持 Java Mirror 和 Impl 类的实例逃逸出线程范围，包括成为 global variable、static varialble 或 global variable、static varialble 的 filed variable
+     - 不支持 Java Mirror 和 Impl 类的实例成为 Java Mirror 或 Java Impl 对象的 filed variable
+     - 不支持 Java Mirror 和 Impl 类的实例被 lambda 块或 spawn 线程捕获
