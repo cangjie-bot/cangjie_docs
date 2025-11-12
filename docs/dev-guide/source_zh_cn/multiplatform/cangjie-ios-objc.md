@@ -949,4 +949,9 @@ public interface ObjCId
     - 不支持同时转换多个 .h 头文件
     - 不支持 Bit fields 转换
 
-2. 版本使用过程中需额外下载依赖文件 `Cangjie.h` (下载地址： <https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/runtime/src/Cangjie.h>),并集成至项目中。
+2.  当前版本的 ObjC 互操作方案存在如下约束限制：
+     - 不支持 ObjC Mirror 和 Impl 类的实例逃逸出线程范围，包括成为 global variable、static varialble 或 global variable、static varialble 的 filed variable
+     - 不支持 ObjC Mirror 和 Impl 类的实例成为 ObjC Mirror 或 ObjC Impl 对象的 filed variable
+     - 不支持 ObjC Mirror 和 Impl 类的实例被 lambda 块或 spawn 线程捕获
+
+3. 版本使用过程中需额外下载依赖文件 `Cangjie.h` (下载地址： <https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/runtime/src/Cangjie.h>),并集成至项目中。
