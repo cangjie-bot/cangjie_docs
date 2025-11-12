@@ -68,6 +68,7 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 | `A` where `A` is `class`                  | `A*`                          |
 | `ObjCPointer<A>` where `A` is `class`     | `A**`                         |
 | `ObjCPointer<A>` where `A` is not `class` | `A*`                          |
+| `Option<A>` where `A` is `class`          | `A*`                          |
 | `struct A`                                | `@C struct A`                 |
 | `ObjCBlock`                               | `Block`                       |
 | `ObjCFunc`                                | `function type`               |
@@ -975,6 +976,71 @@ public interface ObjCId {}
 
 - 任意 @ObjCMirror 或 @ObjCImpl 均可以实现该接口。
 - 默认所有 Mirror 类型均继承该接口，因此需导入 `import objc.lang.ObjCId` 。
+
+## Option types and nullability
+
+Generally, any `Option<A>` type on Cangjie side would be translated to `A*` in Objective-C, given that the `A` is **Objective-C compatible non-primitive type**.
+
+That way we can treat entity of such type as regular `Option` type on Cangjie side, when passed to Objective-C `Some(x)` would became pointer of given type, and `None` would translate into `nil`.
+
+The opposite transformations are also valid - when unwrapping entity of `Option` type passed from Objective-C, we would get `Some(x)` if passed pointer is not null and `None` if we got `nil`.
+
+Examples:
+
+```objc
+// OBJECTIVE-C
+- (F*) instantiateOptionFNil {
+    return nil;
+}
+```
+
+```cangjie
+// CANGJIE
+let fNil = instantiateOptionFNil()
+match (fNil) {
+    case Some(_) => println("cj: instantiateOptionFNil ERROR")
+    case None => println("cj: Got expected None from instantiateOptionFNil")
+}
+```
+
+Above example would print `cj: Got expected None from instantiateOptionFNil`, and vice-versa:
+
+```objc
+// OBJECTIVE-C
+- (void) oneParamOption: (F*) param {
+    printf("objc: oneParamOption called");
+    if (param == nil) {
+        printf(" - param is nil\n");
+    } else {
+        printf(" - param is not nil\n");
+    }
+}
+```
+
+```cangjie
+// CANGJIE
+oneParamOption(Option<F>.None)
+```
+
+Above example would print `objc: oneParamOption called - param is nil`.
+
+Simplified illustration of transformations performed by compiler in both cases:
+
+```cangjie
+// UNWRAP [OPTION -> OBJC-POINTER]
+match(entity) {
+    None -> CPointer()
+    Some(t) -> Unwrap(t)
+}
+
+// WRAP [OBJC-POINTER -> OPTION]
+{
+    match (pointer.isNull()) {
+        case false => Some(T(handle)) | Some(getFromRegistry(handle))
+        case true => None
+    }
+}()
+```
 
 ## @C structs
 
