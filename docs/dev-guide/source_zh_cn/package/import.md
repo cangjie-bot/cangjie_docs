@@ -231,6 +231,7 @@ func bar() {
 
     <!-- compile -import1 -->
     <!-- cfg="-p pkgb libp1.a libp2.a" -->
+
     ```cangjie
     // main2.cj
     package pkgb
@@ -272,6 +273,15 @@ func bar() {
 在下面的例子中，`b` 是 `a` 的子包，在 `a` 中通过 `public import` 重导出了 `b` 中定义的函数 `f`。
 
 <!-- compile -reimport1 -->
+<!-- cfg="-p a/b --output-type=staticlib" -->
+
+```cangjie
+internal package a.b
+
+public func f() { 0 }
+```
+
+<!-- compile -reimport1 -->
 <!-- cfg="-p a --output-type=staticlib" -->
 
 ```cangjie
@@ -279,15 +289,6 @@ package a
 public import a.b.f
 
 public let x = 0
-```
-
-<!-- compile -reimport1 -->
-<!-- cfg="-p a/b --output-type=staticlib" -->
-
-```cangjie
-internal package a.b
-
-public func f() { 0 }
 ```
 
 <!-- compile -reimport1 -->

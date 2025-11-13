@@ -90,24 +90,24 @@ export cjHeapUtilization=0.8
 export cjHeapGrowth=0.15
 ```
 
-### `cjAlloctionRate`
+### `cjAllocationRate`
 
 指定仓颉运行时分配对象的速率，该值必须大于 0，单位为 MB/s，表示每秒可分配对象的数量。默认值为 10240，表示每秒可分配 10240 MB 对象。
 
 例如：
 
 ```shell
-export cjAlloctionRate=10240
+export cjAllocationRate=10240
 ```
 
-### `cjAlloctionWaitTime`
+### `cjAllocationWaitTime`
 
 指定仓颉运行时分配对象时的等待时间，该值必须大于 0，支持单位为 s、ms、us、ns，推荐单位为纳秒（ns）。若本次分配对象距离上一次分配对象的时间间隔小于此值，则将等待。默认值为 1000 ns。
 
 例如：
 
 ```shell
-export cjAlloctionWaitTime=1000ns
+export cjAllocationWaitTime=1000ns
 ```
 
 ### `cjGCThreshold`
@@ -329,11 +329,10 @@ export cjGwpAsanHelp=true
 
     ```cangjie
     unsafe {
-        let array = Array<UInt8>(4, item: 0)
-        let cp = acquireArrayRawData(array)
-        // array 数组实际可访问的范围是 [0, 4)，而下述写操作访问了第 -2 个字节，导致仓颉堆内存向前溢出 2 个字节。错误报告中使用 array[-1] 表示该向前越界行为。
-        cp.pointer.read(-2)
-        releaseArrayRawData(array)
+        var array = Array<UInt8>(4, repeat: 1)
+        var cp = acquireArrayRawData<UInt8>(array)
+        cp.pointer.write(-1, 2)
+        releaseArrayRawData(cp)
     }
     ```
 
@@ -341,7 +340,7 @@ export cjGwpAsanHelp=true
 
     ```text
     2025-05-22 10:57:13.432786 41217 F Gwp-Asan sanity check failed on raw array addr 0x7f7c887368
-    2025-05-22 10:57:13.432863 41217 F Head canary (array[-1]) mismatch: expect: 0x2, actual: 0x200000000000002
+    2025-05-22 10:57:13.432863 41217 F Head canary (array[-1]) mismatch: expect: 0x4, actual: 0x200000000000004
     2025-05-22 10:57:13.432878 41217 F Gwp-Asan Aborted.
     ```
 
@@ -353,12 +352,12 @@ export cjGwpAsanHelp=true
 
     ```cangjie
     unsafe {
-        let array = Array<UInt8>(4, item: 0)
+        let array = Array<UInt8>(4, repeat: 0)
         let cp = acquireArrayRawData(array)
 
         // array 数组实际可访问的范围是 [0, 4)，而下述写操作访问了第 6 个字节，导致仓颉堆内存向前溢出 2 个字节。错误报告中使用 array[size+1] 表示该向后越界行为。
-        cp.pointer.read(5)
-        releaseArrayRawData(array)
+        cp.pointer.write(5, 2)
+        releaseArrayRawData(cp)
     }
     ```
 
@@ -366,7 +365,7 @@ export cjGwpAsanHelp=true
 
     ```text
     2025-05-22 10:53:09.564580 37872 F Gwp-Asan sanity check failed on raw array addr 0x7f6278a368
-    2025-05-22 10:53:09.564761 37872 F Tail canary (array[size+1]) mismatch: expect: 0x6, actual: 0x2
+    2025-05-22 10:53:09.564761 37872 F Tail canary (array[size+1]) mismatch: expect: 0x4, actual: 0x2
     2025-05-22 10:53:09.564788 37872 F Gwp-Asan Aborted.
     ```
 
@@ -380,7 +379,7 @@ export cjGwpAsanHelp=true
 
 ```cangjie
 unsafe {
-    let array = Array<UInt8>(4, item: 0)
+    let array = Array<UInt8>(4, repeat: 0)
     let cp = acquireArrayRawData(array)
     cp.pointer.read()
 

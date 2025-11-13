@@ -13,7 +13,7 @@
 int rand();
 
 // stdio.h
-int printf (const char *fmt, ...);
+int printf(const char *fmt, ...);
 ```
 
 那么在仓颉中调用这两个函数的方式如下：
@@ -274,8 +274,7 @@ main() {
       return count;
   }
   ```
-
-  <!--compile-->
+  <!-- code_check_manual -->
 
   ```cangjie
   foreign func getCount(): Int64
@@ -482,7 +481,7 @@ main() {
 
 `VArray` 作为参数的使用示例如下：
 
-<!--compile-->
+<!-- code_check_manual -->
 
 ```cangjie
 foreign func cfoo1(a: CPointer<Int32>): Unit
@@ -492,13 +491,13 @@ foreign func cfoo2(a: VArray<Int32, $3>): Unit
 对应的 C 侧函数定义可以是：
 
 ```c
-void cfoo1(int *a) {}
-void cfoo2(int a[3]) {}
+void cfoo1(int *a) { ... }
+void cfoo2(int a[3]) { ... }
 ```
 
 调用 `CFunc` 时，需要通过 `inout` 修饰 `VArray` 类型变量：
 
-<!--compile-->
+<!-- code_check_manual -->
 
 ```cangjie
 var a: VArray<Int32, $3> = [1, 2, 3]
@@ -589,7 +588,7 @@ main() {
 
 仓颉还提供了 `sizeOf` 和 `alignOf` 两个函数，用于获取上述 C 互操作类型的内存占用和内存对齐数值（单位：字节），函数声明如下：
 
-<!--code_no_check-->
+<!-- code_no_check -->
 
 ```cangjie
 public func sizeOf<T>(): UIntNative where T <: CType
@@ -678,7 +677,7 @@ void set_callback(callback cb);
 
 对应的，在仓颉里面这个函数可以声明为：
 
-<!--compile-->
+<!-- code_check_manual -->
 
 ```cangjie
 foreign func set_callback(cb: CFunc<(Int32) -> Unit>): Unit
@@ -694,7 +693,7 @@ CFunc 类型的变量可以从 C 侧传递过来，也可以在仓颉侧构造�
 
 示例如下：
 
-<!--compile-->
+<!-- code_check_manual -->
 
 ```cangjie
 @C
@@ -769,6 +768,8 @@ void drawPicture(Point* point, Cube* cube) {
 ```
 
 仓颉代码如下：
+
+<!-- code_check_manual -->
 
 ```cangjie
 // main.cj

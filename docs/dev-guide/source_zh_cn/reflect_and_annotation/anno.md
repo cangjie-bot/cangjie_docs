@@ -194,7 +194,8 @@ public class TestA {
 - 只能应用于具有合适的最后一个表达式的 lambda。
 - lambda 的最后一个表达式应该是调用、成员访问或引用表达式，要求是：
     - 顶级函数或变量；
-    - 静态函数、属性或字段；
+    - 扩展中的静态函数；
+    - 类中的静态函数、属性或字段；
     - foreign 声明​​；
     - 不是局部函数或变量；
     - 非私有声明；
@@ -206,6 +207,8 @@ public class TestA {
 自定义注解机制用来让反射（详见[反射章节](dynamic_feature.md)）获取标注内容，目的是在类型元数据之外提供更多的有用信息，以支持更复杂的逻辑。
 
 开发者可以通过自定义类型标注 `@Annotation` 方式创建自己的自定义注解。`@Annotation` 只能修饰 `class`，并且不能是 `abstract` 或 `open` 或 `sealed` 修饰的 `class`。当一个 `class` 声明它标注了 `@Annotation`，那么它必须要提供至少一个 `const init` 函数，否则编译器会报错。
+
+开发者也可以使用 @!Annotation 的语法创建自定义注解。这是为后续功能预留的语法，当前版本下与 @Annotation 等效。
 
 下面的例子定义了一个自定义注解 `@Version`，并用其修饰 `A`, `B` 和 `C`。在 `main` 中，通过反射获取到类上的 `@Version` 注解信息，并将其打印出来。
 
@@ -287,17 +290,6 @@ A is Marked
 B is Marked
 ```
 
-对于同一个注解目标，同一个注解类不允许声明多次，即不可重复。
-
-<!-- verify.error -->
-<!-- cfg="--Marked" -->
-
-```cangjie
-@Marked
-@Marked // Error
-class A {}
-```
-
 `Annotation` 不会被继承，因此一个类型的注解元数据只会来自它定义时声明的注解。如果需要父类型的注解元数据信息，需要开发者自己用反射接口查询。
 
 下面的例子中，`A` 被 `@Marked` 注解修饰，`B` 继承 `A`，但是 `B` 没有 `A` 的注解。
@@ -335,7 +327,7 @@ main() {
 A is Marked
 ```
 
-自定义注解可以用在类型声明（`class`、`struct`、`enum`、`interface`）、成员函数/构造函数中的参数、构造函数声明、成员函数声明、成员变量声明、成员属性声明。也可以限制自己可以使用的位置，这样可以减少开发者的误用，这类注解需要在声明 `@Annotation` 时标注 `target` 参数，参数类型为 `Array<AnnotationKind>`。其中，`AnnotationKind` 是标准库中定义的 `enum`。当没有限定 target 的时候，该自定义注解可以用在以上全部位置。当限定 target 时，只能用在声明的列表中。
+自定义注解可以用在类型声明（`class`、`struct`、`enum`、`interface`）、函数参数（包括全局函数、成员函数、构造函数中的参数）、构造函数声明、成员函数声明、成员变量声明、成员属性声明、枚举构造器、全局函数、全局变量、扩展声明。也可以限制自己可以使用的位置，这样可以减少开发者的误用，这类注解需要在声明 `@Annotation` 时标注 `target` 参数，参数类型为 `Array<AnnotationKind>`。其中，`AnnotationKind` 是标准库中定义的 `enum`。当没有限定 target 的时候，该自定义注解可以用在以上全部位置。当限定 target 时，只能用在声明的列表中。
 
 <!-- compile -->
 
@@ -347,12 +339,17 @@ public enum AnnotationKind {
     | MemberProperty
     | MemberFunction
     | MemberVariable
+    | EnumConstructor
+    | GlobalFunction
+    | GlobalVariable
+    | Extension
+    | ...
 }
 ```
 
 下面的例子中，自定义注解通过 `target` 限定只能用在成员函数上，用在其他位置会编译报错。
 
-<!--compile.error -->
+<!-- compile.error -->
 
 ```cangjie
 @Annotation[target: [MemberFunction]]

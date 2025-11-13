@@ -25,7 +25,7 @@ $ cjc tool.cj --output-type=dylib
 
 可以将 `tool.cj` 编译成一个动态链接库，在 Linux 平台上，`cjc` 会生成一个名为 `libtool.so` 的动态链接库文件。
 
-**值得注意的是**，若编译可执行程序时链接了仓颉的动态库文件，必须同时指定 `--dy-std` 与 `--dy-libs` 选项，详情请见 [`--dy-std` 选项说明](#--dy-std)。
+**值得注意的是**，若编译可执行程序时链接了仓颉的动态库文件，必须同时指定 `--dy-std` 选项，详情请见 [`--dy-std` 选项说明](#--dy-std)。
 
 <sup>[frontend]</sup> 在 `cjc-frontend` 中，编译流程仅进行至 `LLVM IR`，因此输出总是 `.bc` 文件，但不同的 `--output-type` 类型仍会影响前端编译的策略。
 
@@ -116,6 +116,8 @@ void printHello() {
 ```
 
 仓颉文件 `main.cj`：
+
+<!- code_check_manual -->
 
 ```cangjie
 foreign func printHello(): Unit
@@ -223,8 +225,8 @@ Hello World
 .
 ├── libs
 |   └── myModule
-|       ├── log.cjo
-|       └── libmyModule.a
+|       ├── myModule.log.cjo
+|       └── libmyModule.log.a
 └── main.cj
 ```
 
@@ -240,13 +242,14 @@ main() {
 }
 ```
 
-可以通过使用 `--import-path ./libs` 来将 `./libs` 加入导入模块的 AST 文件搜索路径，`cjc` 会使用 `./libs/myModule/log.cjo` 文件来对 `main.cj` 文件进行语义检查与编译。
+可以通过使用 `--import-path ./libs` 来将 `./libs` 加入导入模块的 AST 文件搜索路径，`cjc` 会使用 `./libs/myModule/myModule.log.cjo` 文件来对 `main.cj` 文件进行语义检查与编译。
 
 `--import-path` 提供与 `CANGJIE_PATH` 环境变量相同的功能，但通过 `--import-path` 设置的路径拥有更高的优先级。
 
 ### `--scan-dependency` <sup>[frontend]</sup>
 
 通过 `--scan-dependency` 指令可以获得指定包源码或者一个包的 `cjo` 文件对于其他包的直接依赖以及其他信息，以 `json` 格式输出。
+
 <!-- code_check_manual -->
 
 ```cangjie
@@ -393,28 +396,16 @@ cjc --scan-dependency pkgA.cjo
 
 **值得注意的是：**
 
-1. `--static-std` 和 `--dy-std` 选项一起使用时，仅最后一个选项生效。
-2. `--dy-std` 与 `--static-libs` 选项不可一起使用，否则会报错。
-3. 当编译可执行程序时链接了仓颉动态库（即通过 `--output-type=dylib` 选项编译的产物），必须显式指定 `--dy-std` 选项动态链接标准库，否则可能导致程序集中出现多份标准库，最终可能会导致运行时问题。
+1. `--static-std` 和 `--dy-std` 选项一起叠加使用，仅最后的那个选项生效；
+2. 当编译可执行程序时链接了仓颉动态库（即通过 `--output-type=dylib` 选项编译的产物），必须显式指定 `--dy-std` 选项动态链接标准库，否则可能导致程序集中出现多份标准库，最终可能会导致运行时问题。
 
 ### `--static-libs`
 
-静态链接仓颉库中除 std 及运行时模块外的其他模块。
-
-此选项仅在编译动态链接库或可执行文件时生效。`cjc` 默认静态链接仓颉库中除 std 及运行时模块外的其他模块。
+该选项已废弃，并会在未来版本被移除。当前版本使用该选项没有功能性作用。
 
 ### `--dy-libs`
 
-动态链接仓颉库非 std 的其他模块。
-
-此选项仅在编译动态链接库或可执行文件时生效。
-
-**值得注意的是：**
-
-1. `--static-libs` 和 `--dy-libs` 选项一起使用时，仅最后一个选项生效；
-2. `--static-std` 与 `--dy-libs` 选项不可一起使用，否则会报错；
-3. `--dy-std` 单独使用时，会默认生效 `--dy-libs` 选项，并有相关告警信息提示；
-4. `--dy-libs` 单独使用时，会默认生效 `--dy-std` 选项，并有相关告警信息提示。
+该选项已废弃，并会在未来版本被移除。当前版本使用该选项没有功能性作用。
 
 ### `--stack-trace-format=[default|simple|all]`
 
@@ -466,7 +457,7 @@ cjc --scan-dependency pkgA.cjo
     >
     > `LTO` 模式下的静态库（`.bc` 文件）输入时需要将该文件的路径输入仓颉编译器。
 
-3. 在 `LTO` 模式下，静态链接标准库（`--static-std` & `--static-libs`）时，标准库的代码也会参与 `LTO` 优化，并静态链接到可执行文件；动态链接标准库（`--dy-std` & `--dy-libs`）时，在 `LTO` 模式下依旧使用标准库中的动态库参与链接。
+3. 在 `LTO` 模式下，静态链接标准库（`--static-std`）时，标准库的代码也会参与 `LTO` 优化，并静态链接到可执行文件；动态链接标准库（`--dy-std`）时，在 `LTO` 模式下依旧使用标准库中的动态库参与链接。
 
     ```shell
     # 静态链接，标准库代码也参与 LTO 优化
@@ -793,11 +784,11 @@ cjc --target=arch-os-env --sysroot /usr/sdk/arch-os-env hello.cj -o hello
 
 ### `--profile-compile-time` <sup>[frontend]</sup>
 
-打印各编译阶段的时间消耗数据。
+输出各编译阶段时间消耗数据到一份文件中，该文件以 .time.prof 为后缀， 保存在 `output` 指定的目录中，若`output` 指定的是一个文件，则 .time.prof 与该文件同级。
 
 ### `--profile-compile-memory` <sup>[frontend]</sup>
 
-打印各编译阶段的内存消耗数据。
+输出各编译阶段内存消耗数据到一份文件中，该文件以 .mem.prof 为后缀， 保存在 `output` 指定的目录中，若`output` 指定的是一个文件，则 .mem.prof 与该文件同级。
 
 ## 单元测试选项
 
@@ -806,6 +797,7 @@ cjc --target=arch-os-env --sysroot /usr/sdk/arch-os-env hello.cj -o hello
 `unittest` 测试框架提供的入口，由宏自动生成。当使用 `cjc --test` 选项编译时，程序入口不再是 `main`，而是 `test_entry`。unittest 测试框架的使用方法请参见《仓颉编程语言标准库 API》文档。
 
 对于 `pkgc` 目录下的仓颉文件 `a.cj`:
+
 <!-- run -->
 
 ```cangjie
@@ -976,9 +968,9 @@ class Tests {
 
 ```shell
 # Compile the production part of the package first, only `main.cj` file would be compiled here
-cjc -p my_pkg --output-type=static -o=output/libmain.a
+cjc -p my_pkg --output-type=staticlib -o=output/libmain.a
 # Compile the test part of the package, Only `main_test.cj` file would be compiled here
-cjc -p my_pkg --test-only -L output -lmain
+cjc -p my_pkg --test-only -L output -lmain --import-path output
 ```
 
 ### `--mock <on|off|runtime-error>` <sup>[frontend]</sup>
@@ -1615,7 +1607,7 @@ main() {
 
 输出结果如下：
 
-```shell
+```text
 About to perform
 It is performed
 It is resumed, a = 9

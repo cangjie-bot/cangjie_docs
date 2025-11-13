@@ -70,6 +70,7 @@ public class TypeInfo {
 请注意，传入参数需要符合 `module.package.type` 的完全限定模式规则。对于编译器预导入的类型，包含 core 包中的类型和编译器内置类型，例如 `primitive type`、`Option`、`Iterable` 等，查找的字符串需要直接使用其类型名，不能带包名和模块名前缀。当运行时无法查询到对应类型的实例，则会抛出 `InfoNotFoundException`。
 
 示例：（会运行报错）
+
 <!-- run.error -->
 
 ```cangjie

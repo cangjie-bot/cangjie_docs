@@ -106,11 +106,11 @@ count = 1000
 
 ```cangjie
 var obj: AtomicInt32 = AtomicInt32(1)
-var x = obj.load() // x: 1, the type is Int32
+var x: Int32 = obj.load() // x: 1
 x = obj.swap(2) // x: 1
 x = obj.load() // x: 2
-var y = obj.compareAndSwap(2, 3) // y: true, the type is Bool.
-y = obj.compareAndSwap(2, 3) // y: false, the value in obj is no longer 2 but 3. Therefore, the CAS operation fails.
+var y: Bool = obj.compareAndSwap(2, 3) // y: true
+y = obj.compareAndSwap(2, 3) // y: false, the value in obj is no longer 2 but 3. Therefore, the CAS operation fails
 x = obj.fetchAdd(1) // x: 3
 x = obj.load() // x: 4
 ```
@@ -139,7 +139,7 @@ class A {}
 
 main() {
     var obj = AtomicBool(true)
-    var x1 = obj.load() // x1: true, the type is Bool
+    var x1 : Bool = obj.load() // x1: true
     println(x1)
     var t1 = A()
     var obj2 = AtomicReference(t1)
@@ -243,6 +243,7 @@ count = 1000
 
 ```cangjie
 import std.sync.Mutex
+
 
 main(): Int64 {
     let mtx: Mutex = Mutex()
@@ -431,17 +432,7 @@ public interface Condition {
 3. 等待某个其他线程使用同一个 `Condition` 实例的 `notify` 或 `notifyAll` 方法向该线程发出信号；
 4. 当前线程被唤醒后，会自动尝试重新获取锁，且持有锁的重入状态与第 2 步记录的重入次数相同；但是如果尝试获取锁失败，则当前线程会阻塞在该锁上。
 
-`wait` 方法接受一个可选参数 `timeout`。需要注意的是，业界很多常用的常规操作系统不保证调度的实时性，因此无法保证一个线程会被阻塞“精确的 N 纳秒”——可能会观察到与系统相关的不精确情况。此外，当前语言规范明确允许实现产生虚假唤醒——在这种情况下，`wait` 返回值是由实现决定的——可能为 `true` 或 `false`。因此鼓励开发者始终将 `wait` 包在一个循环中：
-
-<!-- code_no_check -->
-```cangjie
-synchronized (obj) {
-    while (<condition is not true>) {
-        obj.wait()
-    }
-}
-```
-
+`wait` 方法接受一个可选参数 `timeout`。需要注意的是，业界很多常用的常规操作系统不保证调度的实时性，因此无法保证一个线程会被阻塞“精确的 N 纳秒”——可能会观察到与系统相关的不精确情况。此外，当前语言规范明确允许实现产生虚假唤醒——在这种情况下，`wait` 返回值是由实现决定的——可能为 `true` 或 `false`。因此鼓励开发者始终将 `wait` 包在一个循环中。
 以下是使用 `Condition` 的一个正确示例：
 
 <!-- verify -->
