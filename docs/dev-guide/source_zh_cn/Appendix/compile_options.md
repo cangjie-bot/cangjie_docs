@@ -1615,7 +1615,7 @@ main() {
 
 输出结果如下：
 
-```shell
+```text
 About to perform
 It is performed
 It is resumed, a = 9
