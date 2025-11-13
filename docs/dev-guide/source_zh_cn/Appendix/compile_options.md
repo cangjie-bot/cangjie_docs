@@ -1114,6 +1114,17 @@ cjc -p my_pkg --test-only -L output -lmain --import-path output
 
 `runtime-error` 仅在测试模式下可用（当使能 `--test` 时），它允许编译带有 mock 代码的包，但不在编译器中做任何 mock 相关的处理（这些处理可能会造成一些开销并影响测试的运行时性能）。这对于带有 mock 代码用例进行基准测试时可能是有用的。使用此编译选项时，避免编译带有 mock 代码的用例并运行测试，否则将抛出运行时异常。
 
+mock=on 模式编译暂不支持编译带有如下语言特性的文件，对于存在如下特性的文件，编译期可能出现崩溃：
+
+- 非本包的 class 扩展本包接口。
+- VArray 类型。
+- 带泛型参数的类做直接扩展的节点，例如：`extend<T> class C <T> `。
+- 对被扩展的接口中带有带泛型参数的成员函数未处理，例如：`interface I { static func f<T> (v:T) {v} }`。
+- 接口类型作为泛型约束。
+- 函数类型变量。
+- 互操作 inout 变量。
+- Common/Platform 特性。详见[跨平台](../multiplatform/common_platform.md)。
+
 ## 宏选项
 
 `cjc` 支持以下宏选项，关于宏的更多内容请参见[“宏的简介”](../Macro/macro_introduction.md)章节。
