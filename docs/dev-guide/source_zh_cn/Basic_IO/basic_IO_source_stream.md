@@ -34,7 +34,7 @@ import std.env.*
 
 标准输入流读取示例：
 
-<!-- run -->
+<!-- compile -->
 
 ```cangjie
 import std.env.getStdIn

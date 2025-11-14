@@ -299,7 +299,7 @@ extend<T> Foo<T> <: I0 {}
 
 当在其他包中为 `Foo` 类型扩展时，扩展是否导出由实现接口和泛型约束的访问修饰符决定。实现接口至少存在一个导出的接口，且所有的泛型约束均可导出时，该扩展将被导出。
 
-<!-- code_check_manual -->
+<!-- code_no_check -->
 
 ```cangjie
 // package b

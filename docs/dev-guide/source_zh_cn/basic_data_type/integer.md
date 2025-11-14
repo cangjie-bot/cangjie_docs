@@ -65,10 +65,12 @@ var z = 0o432i32  // z is 282 with type Int32
 <!-- compile -->
 
 ```cangjie
-var a = b'x'                    // a is 120 with type UInt8
-var b = b'\n'                   // b is 10 with type UInt8
-var c = b'\u{78}'               // c is 120 with type UInt8
-c = b'\u{90}' - b'\u{66}' + c   // c is 162 with type UInt8
+main(): Unit {
+    var a = b'x'                    // a is 120 with type UInt8
+    var b = b'\n'                   // b is 10 with type UInt8
+    var c = b'\u{78}'               // c is 120 with type UInt8
+    c = b'\u{90}' - b'\u{66}' + c   // c is 162 with type UInt8
+}
 ```
 
 `b'x'` 表示类型为 UInt8 大小是 120 的字面值。另外还可以通过 `b'\u{78}'` 这种转义形式表示类型为 `UInt8`，16 进制大小为 0x78 或 10 进制大小为 120 的字面值。需要注意的是，`\u` 内部最多有两位 16 进制数，并且值必须小于 256（十进制）。
