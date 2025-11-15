@@ -12,6 +12,8 @@ import std.collection.*
 
 仓颉使用 `HashSet<T>` 表示 HashSet 类型，T 表示 HashSet 的元素类型，T 必须是实现了 Hashable 和 `Equatable<T>` 接口的类型，例如数值或 String。
 
+<!-- code_no_check -->
+
 ```cangjie
 var a: HashSet<Int64> = ... // HashSet whose element type is Int64
 var b: HashSet<String> = ... // HashSet whose element type is String
@@ -20,6 +22,8 @@ var b: HashSet<String> = ... // HashSet whose element type is String
 元素类型不相同的 HashSet 是不相同的类型，所以它们之间不可以互相赋值。
 
 因此以下例子是不合法的。
+
+<!-- code_no_check -->
 
 ```cangjie
 b = a // Type mismatch

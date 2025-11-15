@@ -58,12 +58,16 @@ src
 
 则 `a.cj`、`b.cj`、`c.cj`、`main.cj` 中的包声明可以为:
 
+<!-- compile -->
+
 ```cangjie
 // a.cj
 // in file a.cj, the declared package name must correspond to relative path directory_0/directory_1.
 
 package default.directory_0.directory_1
 ```
+
+<!-- compile -->
 
 ```cangjie
 // b.cj
@@ -72,12 +76,16 @@ package default.directory_0.directory_1
 package default.directory_0.directory_1
 ```
 
+<!-- compile -->
+
 ```cangjie
 // c.cj
 // in file c.cj, the declared package name must correspond to relative path directory_0.
 
 package default.directory_0
 ```
+
+<!-- compile -->
 
 ```cangjie
 // main.cj
