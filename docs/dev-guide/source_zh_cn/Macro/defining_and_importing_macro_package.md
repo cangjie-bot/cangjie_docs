@@ -59,7 +59,7 @@ public macro M(input: Tokens): Tokens { // macro M 外部可见
   }
   ```
 
-  编译命令如下，这里选择使用 `--output-type` 选项将 B 包编译成动态库，关于 cjc 编译选项介绍可以参考 "附录 > cjc 编译选项"。
+  编译命令如下，这里选择使用 `--output-type` 选项将 B 包编译成动态库。
 
   ```shell
   cjc B.cj --output-type=dylib -o libB.so
@@ -90,7 +90,7 @@ public macro M(input: Tokens): Tokens { // macro M 外部可见
 - 在 `main.cj` 中使用 `M2` 宏
 
   <!-- compile -macro5 -->
-  <!-- cfg="--compile-macro -L. -lB" -->
+  <!-- cfg="-L. -lB" -->
 
   ```cangjie
   import C.*
@@ -102,11 +102,13 @@ public macro M(input: Tokens): Tokens { // macro M 外部可见
 
   编译命令如下：
 
-  ```cangjie
+  ```shell
   cjc main.cj -o main -L. -lB
   ```
 
   `main.cj`中 `M2` 宏展开后的结果如下：
+
+  <!-- code_no_check -->
 
   ```cangjie
   import C.*

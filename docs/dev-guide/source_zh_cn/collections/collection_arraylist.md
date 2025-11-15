@@ -16,6 +16,8 @@ ArrayList 具备非常好的扩容能力，适合于需要频繁增加和删除�
 
 ArrayList 的可变性是一个非常有用的特征，可以让同一个 ArrayList 实例的所有引用都共享同样的元素，并且对它们统一进行修改。
 
+<!-- code_no_check -->
+
 ```cangjie
 var a: ArrayList<Int64> = ... // ArrayList whose element type is Int64
 var b: ArrayList<String> = ... // ArrayList whose element type is String
@@ -24,6 +26,8 @@ var b: ArrayList<String> = ... // ArrayList whose element type is String
 元素类型不相同的 ArrayList 是不相同的类型，所以它们之间不可以互相赋值。
 
 因此以下例子是不合法的。
+
+<!-- code_no_check -->
 
 ```cangjie
 b = a // Type mismatch
@@ -92,6 +96,7 @@ The size of arraylist is 3
 当想访问单个指定位置的元素时，可以使用下标语法访问（下标的类型必须是 Int64）。非空 ArrayList 的第一个元素总是从位置 0 开始的。可以从 0 开始访问 ArrayList 的任意一个元素，直到最后一个位置（ArrayList 的 size - 1）。使用负数或大于等于 size 的索引会触发运行时异常。
 
 <!-- code_no_check -->
+
 ```cangjie
 let a = list[0] // a == 0
 let b = list[1] // b == 1
