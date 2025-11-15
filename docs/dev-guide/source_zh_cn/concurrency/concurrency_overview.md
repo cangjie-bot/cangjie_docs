@@ -9,6 +9,8 @@
 
 在大多数情况下，开发者只需要面向仓颉线程进行并发编程而不需要考虑这些细节。但在进行跨语言编程时，开发者需要谨慎调用可能发生阻塞的 foreign 函数，例如 IO 相关的操作系统调用等。例如，下列示例代码中的新线程会调用 foreign 函数 `socket_read`。在程序运行过程中，某一 native 线程将调度并执行该仓颉线程，在进入到 foreign 函数中后，系统调用会直接阻塞当前 native 线程直到函数执行完成。native 线程在阻塞期间将无法调度其他仓颉线程来执行，这会降低程序执行的吞吐量。
 
+<!-- code_no_check -->
+
 ```cangjie
 foreign socket_read(sock: Int64): CPointer<Int8>
 

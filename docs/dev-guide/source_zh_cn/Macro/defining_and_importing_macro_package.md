@@ -90,7 +90,7 @@ public macro M(input: Tokens): Tokens { // macro M 外部可见
 - 在 `main.cj` 中使用 `M2` 宏
 
   <!-- compile -macro5 -->
-  <!-- cfg="--compile-macro -L. -lB" -->
+  <!-- cfg="-L. -lB" -->
 
   ```cangjie
   import C.*
@@ -102,11 +102,13 @@ public macro M(input: Tokens): Tokens { // macro M 外部可见
 
   编译命令如下：
 
-  ```cangjie
+  ```shell
   cjc main.cj -o main -L. -lB
   ```
 
   `main.cj`中 `M2` 宏展开后的结果如下：
+
+  <!>
 
   ```cangjie
   import C.*

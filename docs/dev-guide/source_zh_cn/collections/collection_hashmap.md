@@ -14,6 +14,8 @@ HashMap 是一种哈希表，提供对其包含的元素的快速访问。表中
 
 仓颉使用 `HashMap<K, V>` 表示 HashMap 类型，K 表示 HashMap 的键类型，K 必须是实现了 Hashable 和 `Equatable<K>` 接口的类型，例如数值或 String。V 表示 HashMap 的值类型，V 可以是任意类型。
 
+<!-- code_no_check -->
+
 ```cangjie
 var a: HashMap<Int64, Int64> = ... // HashMap whose key type is Int64 and value type is Int64
 var b: HashMap<String, Int64> = ... // HashMap whose key type is String and value type is Int64
@@ -22,6 +24,8 @@ var b: HashMap<String, Int64> = ... // HashMap whose key type is String and valu
 元素类型不相同的 HashMap 是不相同的类型，所以它们之间不可以互相赋值。
 
 因此以下例子是不合法的。
+
+<!-- code_no_check -->
 
 ```cangjie
 b = a // Type mismatch

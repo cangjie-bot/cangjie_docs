@@ -117,7 +117,7 @@ void printHello() {
 
 仓颉文件 `main.cj`：
 
-<!- code_check_manual -->
+<!-- code_check_manual -->
 
 ```cangjie
 foreign func printHello(): Unit
