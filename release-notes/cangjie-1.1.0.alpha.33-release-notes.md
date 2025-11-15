@@ -20,19 +20,21 @@
 
 ### 新增特性
 
-    注意该节按需提供，若没有，则删除
+* 新增 `--dump-ast`, `--dump-chir`, `--dump-ir`, `--dump-all`, `--dump-to-screen` 选项供编译器开发者调试分析编译器行为，查看编译过程中的可读形式的抽象表达，详见[编译选项](../docs/dev-guide/source_zh_cn/Appendix/compile_options.md)。
 
 ### 变更特性
 
-    注意该节按需提供，若没有，则删除
+* 加强静态变量的初始化检查，存在破坏性变更。详见 [issue 105](https://gitcode.com/Cangjie/cangjie_compiler/issues/105)。
 
 |变更前|变更后|适配举例|
 |---|---|--|
-|  | | |  
+| 对于函数或者 lambda 表达式中的静态成员变量赋值认为是合法的初始化，未编译报错 | 对于函数或者 lambda 表达式中的静态成员变量赋值会编译报错 |将原先在函数或者lambda中赋值当做初始化的的代码修改为在静态变量定义时或者static init()函数内初始化，对于需要函数中赋值的情况可以使用Option进行包装为var变量（以None为初值）同时更名，新增prop于原变量名相同，在getter和setter 中适配变量赋值逻辑。 |  
 
 ### 修复问题
 
-    注意该节按需提供，若没有，则删除 
+* [在不同文件的同名private函数，会被报冲突](https://gitcode.com/Cangjie/cangjie_compiler/issues/57)
+* [let变量在lambda中被赋值了两次,未编译报错](https://gitcode.com/Cangjie/cangjie_compiler/issues/105)
+
 
 ## 运行时
 
