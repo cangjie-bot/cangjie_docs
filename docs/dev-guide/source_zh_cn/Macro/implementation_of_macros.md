@@ -616,8 +616,8 @@ public macro Inner(input: Tokens): Tokens {
 
 宏调用如下：
 
-<!-- run -macro11 -->
-<!-- cfg="--compile-macro" -->
+<!-- run -macro10 -->
+<!-- cfg="--debug-macro" -->
 
 ```cangjie
 import define.*

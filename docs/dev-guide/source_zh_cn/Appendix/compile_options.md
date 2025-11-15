@@ -77,7 +77,9 @@ $ cjc main.cj liblog.a
 
 ### `--module-name <value>` <sup>[frontend]</sup>
 
-该选项已废弃，并会在未来版本被移除。当前版本使用该选项没有功能性作用。
+> **说明：**
+>
+> 该选项已废弃，并会在未来版本被移除。当前版本使用该选项没有功能性作用。
 
 ### `--output <value>`, `-o <value>`, `-o<value>` <sup>[frontend]</sup>
 
@@ -117,7 +119,7 @@ void printHello() {
 
 仓颉文件 `main.cj`：
 
-<!- code_check_manual -->
+<!-- code_check_manual -->
 
 ```cangjie
 foreign func printHello(): Unit
@@ -399,13 +401,17 @@ cjc --scan-dependency pkgA.cjo
 1. `--static-std` 和 `--dy-std` 选项一起叠加使用，仅最后的那个选项生效。
 2. 当编译可执行程序时链接了仓颉动态库（即通过 `--output-type=dylib` 选项编译的产物），必须显式指定 `--dy-std` 选项动态链接标准库，否则可能导致程序集中出现多份标准库，最终可能会导致运行时问题。
 
-> **说明：**
-
-`--static-libs`该选项已废弃，并会在未来版本被移除。当前版本使用该选项没有功能性作用。
+### `--static-libs`
 
 > **说明：**
 
-`--dy-libs`该选项已废弃，并会在未来版本被移除。当前版本使用该选项没有功能性作用。
+> 该选项已废弃，并会在未来版本被移除。当前版本使用该选项没有功能性作用。
+
+### `--dy-libs`
+
+> **说明：**
+>
+> 该选项已废弃，并会在未来版本被移除。当前版本使用该选项没有功能性作用。
 
 ### `--stack-trace-format=[default|simple|all]`
 
