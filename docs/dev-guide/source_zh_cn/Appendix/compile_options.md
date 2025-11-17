@@ -404,7 +404,7 @@ cjc --scan-dependency pkgA.cjo
 ### `--static-libs`
 
 > **说明：**
-
+>
 > 该选项已废弃，并会在未来版本被移除。当前版本使用该选项没有功能性作用。
 
 ### `--dy-libs`
