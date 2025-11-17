@@ -21,6 +21,7 @@
 ### 新增特性
 
 * 新增 `--dump-ast`, `--dump-chir`, `--dump-ir`, `--dump-all`, `--dump-to-screen` 选项供编译器开发者调试分析编译器行为，查看编译过程中的可读形式的抽象表达，详见[编译选项](../docs/dev-guide/source_zh_cn/Appendix/compile_options.md)。
+* common/platform 关键字支持修饰泛型 extend 语法，详见[跨平台](../docs/dev-guide/source_zh_cn/multiplatform/common_platform.md)。
 
 ### 变更特性
 
