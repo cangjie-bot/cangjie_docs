@@ -373,13 +373,13 @@ main() {
 | x86_64-apple-darwin           | "x86_64"  | "macOS"   |             |
 | x86_64-linux-ohos             | "x86_64"  | "Linux"   | "ohos"      |
 | x86_64-w64-mingw32            | "x86_64"  | "Windows" | "gnu"       |
-| x86_64-linux-android[31+]<sup>[android target]</sup>     | "x86_64"  | "Linux"   | "android"   |
+| x86_64-linux-android[26+]<sup>[android target]</sup>     | "x86_64"  | "Linux"   | "android"   |
 | aarch64-linux-gnu             | "aarch64" | "Linux"   | "gnu"       |
-| aarch64-linux-android[31+]<sup>[android target]</sup>    | "aarch64" | "Linux"   | "android"   |
+| aarch64-linux-android[26+]<sup>[android target]</sup>    | "aarch64" | "Linux"   | "android"   |
 | aarch64-apple-darwin          | "aarch64" | "macOS"   |             |
 | aarch64-linux-ohos            | "aarch64" | "Linux"   | "ohos"      |
 | arm64-apple-ios[11+]<sup>[ios target]</sup>           | "aarch64" | "iOS"     |             |
 | arm64-apple-ios[11+]-simulator<sup>[ios target]</sup> | "aarch64" | "iOS"     | "simulator" |
 
-<sup>[android target]</sup> x86_64-linux-android[31+] 中 android 后缀的数字用于指定 Android API Level。未指定数字时，默认 API Level 为 31；指定数字（如 x86_64-linux-android33）表示 Android API Level 为 33，指定的数字应大于等于31。
+<sup>[android target]</sup> x86_64-linux-android[31+] 中 android 后缀的数字用于指定 Android API Level。未指定数字时，默认 API Level 为 31；指定数字（如 x86_64-linux-android33）表示 Android API Level 为 33，指定的数字应大于等于26。
 <sup>[ios target]</sup> arm64-apple-ios[11+] 中 ios 后缀的数字用于指定 ios 版本信息。未指定数字时，默认为 11；指定数字（如 arm64-apple-ios26）表示 ios 版本为 26，指定的数字应大于等于 11。
