@@ -473,6 +473,7 @@ class A <: M {
 - 类型可为具备与 ObjC 的映射关系的基础类型、Mirror 类型或 Impl 类型。
 - 不支持 private/const 成员。
 - 支持 static/open 修饰。
+- 暂不支持映射 assign/readonly 等 attribute，仓颉侧映射均按照 readwrite 处理，在 objc 侧处理上述 attribute 的属性时，以 objc 规格为准。
 
 ### 成员变量
 
@@ -978,13 +979,13 @@ public interface ObjCId {}
 
 ## @C structs
 
-使用 `@C` 注解的结构体，在 `ObjCPointer<T>` 内部使用时，可以用于 `@ObjCMirror` 和 `@ObjcImpl` 的声明参数、返回类型、字段和属性。仓颉代码中此类注解的结构体 `X` 对应于 Objective C 代码中的 `struct X` 类型。
+使用 `@C` 注解的结构体，在 `ObjCPointer<T>` 内部使用时，可以用于 `@ObjCMirror` 和 `@ObjcImpl` 的声明参数、返回类型、字段和属性。仓颉代码中此类注解的结构体 `X` 对应于 Objective C 代码中的 `struct X` 类型，前述类型需同时在仓颉侧和 ObjC 侧均存在。
 
 约束如下：
 
-- 结构体可以包含原始类型、指针和其他带有 @C 注解的结构体。
+- 结构体可以包含基础类型、CPointer 指针和其他带有 @C 注解的结构体。
 - 对于在仓颉或 Objective C 中定义的每个结构体，在对应的另一个语言中都应该有相同的声明。字段及其类型的差异可能会导致运行时错误。
-- 结构体应与 `ObjCPointer<T>` 一起使用。例如，`ObjCPointer<MyStruct>`。通过值传递的结构体现在不稳定。
+- 结构体应与 `ObjCPointer<T>` 一起使用。例如，`ObjCPointer<MyStruct>`。通过值传递的结构体暂不支持。
 - struct 的类型别名 typedef 暂不支持。
 
 示例如下：
@@ -1005,6 +1006,85 @@ public struct X {
     var b: Float32
 }
 ```
+
+## @optional 方法
+
+支持在仓颉侧调用 ObjC 的 @optional 方法。例如：
+
+```objc
+@protocol K
+@optional
+- (void) unimplemented;
+- (void) implemented;
+@end
+```
+
+ObjC 的 `@optional` 注解块中的方法不要求必须有实现，当仓颉侧对该类 ObjC 代码生成 Mirror 对象后，在运行时，从 Cangjie 调用此类方法，由于该方法并无具体实现，则会导致运行时错误。为了避免这种情况，仓颉侧支持 `@ObjCOptional` 注解，使得在调用该方法时，若方法未实现，则抛出`ObjCOptionalMethodUnimplementedException` 异常，否则，正常调用该方法。
+
+<!-- compile -->
+```cangjie
+@ObjCMirror
+open class M {
+    @ObjCOptional
+    @ForeignName["foo"]
+    public func foo(): Unit
+}
+```
+
+在调用处可增加 `try-catch` 捕获异常：
+
+<!-- code_no_check -->
+```cangjie
+try {
+    m.foo()
+} catch (e: ObjCOptionalMethodUnimplementedException) {
+    println("cj: caught ObjCOptionalMethodUnimplementedException!")
+}
+```
+
+## @property 属性
+
+支持通过 `@ForeignGetterName` 和 `@ForeignSetterName` 映射 ObjC 的 @property 语法。
+在 Mirror类中，具有 `@ForeignGetterName` 和 `@ForeignSetterName` 注解的属性将改变从 Cangjie 端访问属性时使用的方法。默认生成的选择器（来自属性名或 `@ForeignName` 注解）会被指定的选择器覆盖。在下面的示例中，Objective-C 端重新定义了属性的 getter 和 setter 名称：
+
+```objc
+@interface Component
+@property (getter=isShared, setter=applyShared:) BOOL shared;
+/*...*/
+@end
+```
+
+生成的 ObjMirror 使用上述注解指示了 ObjC 侧正确的名称：
+
+```cangjie
+@ObjCMirror
+class Component {
+    @ForeignGetterName["isShared"]
+    @ForeignSetterName["applyShared:"]
+    public mut prop shared: Bool
+}
+```
+
+支持在 ObjCImpl 类中使用该注解，在 ObjC 侧调用属性方法时，需使用注解所指示的名称。
+
+```cangjie
+@ObjCImpl
+class ComponentChild <: Component {
+
+    @ForeignName["_count"]
+    @ForeignSetterName["putCount:"]
+    public mut prop count: Int64 {
+        get() { 42 }
+        set(value) {}
+    }
+}
+```
+
+具体约束如下：
+
+- 注解仅支持一个字符串类型的参数。
+- 不支持修饰重载的属性。
+- `@ForeignSetterName` 不支持修饰可变类型。
 
 ## 版本约束限制
 

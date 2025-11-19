@@ -1118,8 +1118,8 @@ cjc -p my_pkg --test-only -L output -lmain --import-path output
 
 - 跨包类扩展本包接口：即非本包定义的类实现或扩展本包中的接口。
 - VArray 类型的使用。
-- 带泛型参数的类的直接扩展，例如：`extend<T> class C <T>`。
-- 被扩展的接口中带有带泛型参数的成员函数，例如：
+- 具有泛型参数的类的直接扩展，例如：`extend<T> class C <T>`。
+- 被扩展的接口中包含具有泛型参数的成员函数，例如：
 
 <!-- compile -->
 ```cangjie
