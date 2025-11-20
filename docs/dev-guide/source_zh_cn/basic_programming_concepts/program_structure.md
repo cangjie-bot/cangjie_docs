@@ -196,6 +196,27 @@ main() {
 }
 ```
 
+对于函数和 [lambda](../function/lambda.md#lambda-表达式) 中进行的静态成员变量赋值，编译器无法判断函数或者 `lambda` 是否会执行，会倾向于保守策略进行编译报错，见如下示例：
+
+<!-- compile.error -->
+
+```cangjie
+func foo(a: () -> Unit){
+    // 业务逻辑处理
+}
+
+class A {
+    public static var ctx: Int64 // 编译报错，静态变量 ctx 没有初始化
+
+    static init() {
+        let lambda1 = {=> ctx = 10}
+        foo(lambda1)
+    }
+}
+
+main() {}
+```
+
 此外，对于 [try-catch](../error_handle/handle.md#普通-try-表达式) 场景，编译器会假设 try 块总是全部被执行，且总是抛异常，从而进行相关报错，见如下示例：
 <!-- compile.error -->
 
