@@ -20,6 +20,8 @@
 
 ### 新增特性
 
+* Android 交叉编译及运行平台支持范围扩大至 API level 26 及以上，支持 `--target=aarch64-linux-android26` 编译选项（仅支持 Android 交叉编译的仓颉 SDK 可用）
+* 提供 OHOS 版本仓颉 SDK，支持在鸿蒙 PC 运行仓颉编译器进行仓颉代码的编译
 
 ### 变更特性
 
