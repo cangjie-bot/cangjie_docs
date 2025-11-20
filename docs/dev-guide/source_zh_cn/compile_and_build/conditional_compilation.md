@@ -112,9 +112,9 @@ main() {
 
 ### env
 
-`env` 表示目标平台的 ABI。`env` 条件支持 `==` 和 `!=` 两种操作符。
+`env` 在其他条件变量的基础上提供额外信息，比如目标平台的 ABI （Application Binary Interface），用于消除目标平台之间的起义。`env` 条件支持 `==` 和 `!=` 两种操作符。
 
-支持的目标平台的 ABI 有：`ohos`、`musl`、`simulator`、`android`。
+支持的目标平台的 ABI 有：`ohos`、`musl`、`simulator`、`android`以及缺省（空字符串）。
 
 使用方式如下：
 
@@ -370,15 +370,15 @@ main() {
 | ----------------------------- | --------- | --------- | ----------- |
 | x86_64-windows-gnu            | "x86_64"  | "Windows" | "gnu"       |
 | x86_64-linux-gnu              | "x86_64"  | "Linux"   | "gnu"       |
-| x86_64-apple-darwin           | "x86_64"  | "macOS"   |             |
+| x86_64-apple-darwin           | "x86_64"  | "macOS"   | ""            |
 | x86_64-linux-ohos             | "x86_64"  | "Linux"   | "ohos"      |
 | x86_64-w64-mingw32            | "x86_64"  | "Windows" | "gnu"       |
 | x86_64-linux-android[26+]<sup>[android target]</sup>     | "x86_64"  | "Linux"   | "android"   |
 | aarch64-linux-gnu             | "aarch64" | "Linux"   | "gnu"       |
 | aarch64-linux-android[26+]<sup>[android target]</sup>    | "aarch64" | "Linux"   | "android"   |
-| aarch64-apple-darwin          | "aarch64" | "macOS"   |             |
+| aarch64-apple-darwin          | "aarch64" | "macOS"   | ""            |
 | aarch64-linux-ohos            | "aarch64" | "Linux"   | "ohos"      |
-| arm64-apple-ios[11+]<sup>[ios target]</sup>           | "aarch64" | "iOS"     |             |
+| arm64-apple-ios[11+]<sup>[ios target]</sup>           | "aarch64" | "iOS"     |    ""         |
 | arm64-apple-ios[11+]-simulator<sup>[ios target]</sup> | "aarch64" | "iOS"     | "simulator" |
 
 <sup>[android target]</sup> x86_64-linux-android[26+] 中 android 后缀的数字用于指定 Android API Level。未指定数字时，默认 API Level 为 26；指定数字（如 x86_64-linux-android33）表示 Android API Level 为 33，指定的数字应大于等于26。
