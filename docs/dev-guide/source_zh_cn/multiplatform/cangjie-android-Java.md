@@ -1067,7 +1067,7 @@ JavaImpl 为仓颉注解，语义为该类的方法与成员可以被 Java 函�
 
 支持 JavaImpl 类的构造函数被 JavaImpl 类调用。
 
-```cangie
+```cangjie
 @JavaMirror
 public class Handler {
     public prop isAlive: Bool
