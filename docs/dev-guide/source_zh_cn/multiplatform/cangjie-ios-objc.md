@@ -976,6 +976,48 @@ public interface ObjCId {}
 - 任意 @ObjCMirror 或 @ObjCImpl 均可以实现该接口。
 - 默认所有 Mirror 类型均继承该接口，因此需导入 `import objc.lang.ObjCId` 。
 
+## @optional methods support
+
+Objective-C protocols have a feature called "optional methods". We can declare them like this:
+
+```c
+@protocol K
+@optional
+- (void) unimplemented;
+- (void) implemented;
+@end
+```
+
+Methods, defined within `@optional` block are not mandatory to implement when implementing protocol. That means that we could have Mirrors, that have some selectors from protocols, but do not actually respond to them. In runtime callling such method from Cangjie would result in runtime error. To prevent this, we implement annotation `@ObjCOptional`, which signals the compiler to insert a special code guard before calling this method and throw `ObjCOptionalMethodUnimplementedException` exception on CJ side, if method is not implemented, or call method normally otherwise:
+
+```c
+@ObjCMirror
+open class M {
+    @ObjCOptional
+    @ForeignName["foo"]
+    public func foo(): Unit
+}
+
+...
+m.foo() ->
+    match(respondsToSelector($obj, selector)) {
+        true => msgSend(...)
+        false => throw ObjCOptionalMethodUnimplementedException()
+    }
+```
+
+That way developer is able to handle optional method using `try-catch`:
+
+```c
+try {
+    m.foo()
+} catch (e: ObjCOptionalMethodUnimplementedException) {
+    println("cj: caught ObjCOptionalMethodUnimplementedException!")
+}
+```
+
+
+
 ## @C structs
 
 使用 `@C` 注解的结构体，在 `ObjCPointer<T>` 内部使用时，可以用于 `@ObjCMirror` 和 `@ObjcImpl` 的声明参数、返回类型、字段和属性。仓颉代码中此类注解的结构体 `X` 对应于 Objective C 代码中的 `struct X` 类型。
