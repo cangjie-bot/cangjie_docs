@@ -1006,6 +1006,66 @@ public struct X {
 }
 ```
 
+## ObjC 使用 Cangjie 规格
+
+### 新增实验编译选项 `--experimental --enable-interop-cjmapping=<Target Languages>`
+
+该选项启用前端（FE）对非 C 语言的 Cangjie 互操作支持。目前支持的值为 Java 和 ObjC。
+
+### ObjC 使用 Cangjie 接口
+
+为实现 Cangjie 与 Objective-C 的互操作，需将 Cangjie 的接口类型映射为 ObjC 的协议（@protocol）。映射后，用户可：
+
+- 将 Cangjie 接口映射为 ObjC 协议；
+- 在 ObjC 函数中使用该协议作为参数类型；
+- 在 ObjC 类中采纳该协议，并将其实例作为函数参数传递。
+
+#### 示例
+
+Cangjie 源码：
+
+<!-- compile -->
+
+```cangjie
+// cangjie code
+package UNNAMED
+
+public interface A {
+    public func foo() : Unit
+    public func goo(a: Int32, b:Int32) : Unit
+    public func koo() : Int32
+    public func hoo(a: Int32) : Int32
+}
+```
+
+生成的 ObjC 头文件（A.h）：
+
+```ObjC
+// A.h
+#import <Foundation/Foundation.h>
+#import <stddef.h>
+@protocol A
+- (void)foo;
+- (void)goo:(int32_t)a :(int32_t)b;
+- (int32_t)koo;
+- (int32_t)hoo:(int32_t)a;
+@end
+
+```
+
+#### 规格约束
+
+由于与其他语言特性的集成仍在开发中，以下场景暂不支持：
+
+- Cangjie 接口不得继承其他接口；
+- 接口成员函数不得使用泛型；
+- 成员函数不得为 static；
+- 成员函数不得包含默认实现；
+- 不支持函数重载；
+- 仅允许使用基础数据类型（如 Int32、Unit 等）；
+- 不支持通过 extend 对接口进行扩展；
+- 不支持 Option 类型。
+
 ## 版本约束限制
 
 1. 当前版本的 ObjCInteropGen 功能存在如下约束限制：
