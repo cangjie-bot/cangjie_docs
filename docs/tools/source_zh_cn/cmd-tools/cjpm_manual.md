@@ -1282,6 +1282,38 @@ demo
 
 该字段用于为源码模块指定制品分类，上限 5 个。
 
+指定的制品分类需要在仓颉中心仓提供的制品分类范围内。仓颉中心仓制品分类列表如下：
+
+| 分类名 | category |
+| :---: | :---: |
+| 网络 | Network |
+| 数据库驱动 | Database Driver |
+| 数据封装传递 | Data Encapsulation and Transfer |
+| 数据解析 | Data Analysis |
+| 数据库框架 | Database Framework |
+| 对象存储 | Object Storage |
+| 分布式 | Distributed |
+| 任务调度 | Task Scheduling |
+| 安全类 | Security |
+| 工具类 | Utility |
+| 日志类 | Logging |
+| 算法类 | Algorithm |
+| 音视频 | Audio and Video |
+| 字符编码 | Character Encoding |
+| 图像处理 | Image Processing |
+| 开发者工具 | Developer Tools |
+| 动画类 | Animation |
+| 基础设施 | Infrastructure |
+| 地理信息 | Geographic Information |
+| UI 类 | UI |
+| 科学计算 | Scientific Computing |
+| 编程框架 | Programming Framework |
+| 数据监控 | Data Monitoring |
+| 熔断降级 | Circuit Breaker and Downgrading |
+| 消息队列 | Message Queue |
+
+配置 `category` 字段时，配置的值大小写不敏感，但是在最后生成的元数据当中会被转化为上述的标准格式。
+
 ### "license"
 
 该字段用于指定源码模块满足的协议列表。
