@@ -5,6 +5,8 @@
     - [tatic Analysis Tool](source_en/cmd-tools/cjlint_manual.md)
     - [Coverage Statistics Tool](source_en/cmd-tools/cjcov_manual.md)
     - [HLE Tool](source_en/cmd-tools/HLE_manual.md)
+        - [ArkTS三方模块生成仓颉胶水代码的转换规则](source_en/cmd-tools/cj-dts2cj-translation-rules.md)
+        - [HLE工具](source_en/cmd-tools/cj-c2cj-translation-rules.md)
     - [Language Server Tool](source_en/cangjie-language-server/LSPServer_manual.md)
     - [CHIR Deserialization Tool](source_en/cmd-tools/chir_dis_manual.md)
     - [Exception Stack Trace Recovery Tool](source_en/cmd-tools/chir_dis_manual.md)
