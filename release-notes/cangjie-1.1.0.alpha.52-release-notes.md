@@ -1,8 +1,8 @@
-# Cangjie 1.1.0.alpha.33 Release Notes
+# Cangjie 1.1.0.alpha.52 Release Notes
 
 ## 版本介绍
 
-该版本版本号 `1.1.0.alpha.33`, 构建时间 xxx，构建 id xxx.
+该版本版本号 `1.1.0.alpha.52`, 构建时间 xxx，构建 id xxx.
 
 本版新增 xx 等特性，删除 xx 等特性，变更特性和修复问题做一个总结，描述需要开发者关注的重大特性和问题修复。
 
