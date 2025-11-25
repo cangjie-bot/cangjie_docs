@@ -56,11 +56,6 @@
 
 ## 标准库
 
-
-### 新增特性
-
-* std.net.tls 支持自定义证书校验模式CustomVerify。
-
 ### 变更特性
 
 * 异常链特性：给Exception预埋private成员变量。
