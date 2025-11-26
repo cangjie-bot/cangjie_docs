@@ -7,17 +7,78 @@
 /.gitcode/ @xuanjz
 
 # 指定docs/dev-guide目录下文件的Code Owner
+/docs/dev-guide/ @xuanjz @wuying21
 
-/docs/dev-guide/ @wuying21 @Augus_Jan @wyq1213 @Timi3
+/docs/dev-guide/summary_cjnative.md @xuanjz @Timi3 @wuying21
+/docs/dev-guide/summary_cjnative_EN.md @xuanjz @Timi3 @guoyuqing
+
+/docs/dev-guide/source_zh_cn/Appendix/cangjie_package_compatibility.md @Cangjie-hljyaozhen @Timi3 @wuying21
+/docs/dev-guide/source_zh_cn/Appendix/cjo_artifacts.md @Augus_Jan @Timi3 @wuying21
+/docs/dev-guide/source_zh_cn/Appendix/compile_options.md @neilliuistaken @ozzy_young @wuying21
+/docs/dev-guide/source_zh_cn/Appendix/keyword.md @kkkkkkkbbbbbbb @Timi3 @wuying21
+/docs/dev-guide/source_zh_cn/Appendix/linux_toolchain_install.md @neilliuistaken @ozzy_young @wuying21
+/docs/dev-guide/source_zh_cn/Appendix/operator_function.md @kkkkkkkbbbbbbb @Timi3 @wuying21
+/docs/dev-guide/source_zh_cn/Appendix/operator.md @kkkkkkkbbbbbbb @Timi3 @wuying21
+/docs/dev-guide/source_zh_cn/Appendix/runtime_env.md @lrb @DawnJee @wuying21
+/docs/dev-guide/source_zh_cn/Appendix/tokenkind_type.md @kkkkkkkbbbbbbb @Timi3 @wuying21
+/docs/dev-guide/source_zh_cn/basic_data_type/ @kkkkkkkbbbbbbb @Timi3 @wuying21
+/docs/dev-guide/source_zh_cn/Basic_IO/ @chongweizhi @chaosjohn @wuying21
+/docs/dev-guide/source_zh_cn/basic_programming_concepts/ @kkkkkkkbbbbbbb @Timi3 @wuying21
+/docs/dev-guide/source_zh_cn/class_and_interface/ @Mr_Kang_Yi @Timi3 @wuying21
+/docs/dev-guide/source_zh_cn/collections/ @EMROF @chaosjohn @wuying21
+/docs/dev-guide/source_zh_cn/compile_and_build/cjc_usage.md @neilliuistaken @ozzy_young @wuying21
+/docs/dev-guide/source_zh_cn/compile_and_build/cjpm_usage.md @zjdd @zxudong @wuying21
+/docs/dev-guide/source_zh_cn/compile_and_build/conditional_compilation.md @xiaoxuheng @mini-tang @wuying21
+/docs/dev-guide/source_zh_cn/compile_and_build/cross_compilation.md @neilliuistaken @ozzy_young @wuying21
+/docs/dev-guide/source_zh_cn/concurrency/ @cocoix @chaosjohn @wuying21
+/docs/dev-guide/source_zh_cn/deploy_and_run/ @lrb @DawnJee @wuying21
+/docs/dev-guide/source_zh_cn/enum_and_pattern_match/ @Tadddy @Timi3 @wuying21
+/docs/dev-guide/source_zh_cn/error_handle/ @Tadddy @Timi3 @wuying21
+/docs/dev-guide/source_zh_cn/extension/ @Augus_Jan @Timi3 @wuying21
+/docs/dev-guide/source_zh_cn/FFI/ @gaoxiang999 @xuanjz @wuying21
+/docs/dev-guide/source_zh_cn/first_understanding/ @kkkkkkkbbbbbbb @Timi3 @wuying21
+/docs/dev-guide/source_zh_cn/function/ @Cangjie-hljyaozhen @Timi3 @wuying21
+/docs/dev-guide/source_zh_cn/generic/ @Mr_Kang_Yi @Timi3 @wuying21
+/docs/dev-guide/source_zh_cn/Macro/ @xiaxue0215 @mini-tang @wuying21
+/docs/dev-guide/source_zh_cn/multiplatform/ @jiadiliu @HsError @wuying21 
+/docs/dev-guide/source_zh_cn/Net/ @cocoix @chaosjohn @wuying21
+/docs/dev-guide/source_zh_cn/package/ @Augus_Jan @Timi3 @wuying21
+/docs/dev-guide/source_zh_cn/reflect_and_annotation/ @cocoix @chaosjohn @wuying21
+/docs/dev-guide/source_zh_cn/struct/ @Cangjie-hljyaozhen @Timi3 @wuying21
+
+/docs/dev-guide/source_en/Appendix/cangjie_package_compatibility.md @Cangjie-hljyaozhen @Timi3 @guoyuqing
+/docs/dev-guide/source_en/Appendix/cjo_artifacts.md @Augus_Jan @Timi3 @guoyuqing
+/docs/dev-guide/source_en/Appendix/compile_options.md @neilliuistaken @ozzy_young @guoyuqing
+/docs/dev-guide/source_en/Appendix/keyword.md @kkkkkkkbbbbbbb @Timi3 @guoyuqing
+/docs/dev-guide/source_en/Appendix/linux_toolchain_install.md @neilliuistaken @ozzy_young @guoyuqing
+/docs/dev-guide/source_en/Appendix/operator_function.md @kkkkkkkbbbbbbb @Timi3 @guoyuqing
+/docs/dev-guide/source_en/Appendix/operator.md @kkkkkkkbbbbbbb @Timi3 @guoyuqing
+/docs/dev-guide/source_en/Appendix/runtime_env.md @lrb @DawnJee @guoyuqing
+/docs/dev-guide/source_en/Appendix/tokenkind_type.md @kkkkkkkbbbbbbb @Timi3 @guoyuqing
+/docs/dev-guide/source_en/basic_data_type/ @kkkkkkkbbbbbbb @Timi3 @guoyuqing
+/docs/dev-guide/source_en/Basic_IO/ @chongweizhi @chaosjohn @guoyuqing
+/docs/dev-guide/source_en/basic_programming_concepts/ @kkkkkkkbbbbbbb @Timi3 @guoyuqing
+/docs/dev-guide/source_en/class_and_interface/ @Mr_Kang_Yi @Timi3 @guoyuqing
+/docs/dev-guide/source_en/collections/ @EMROF @chaosjohn @guoyuqing
+/docs/dev-guide/source_en/compile_and_build/cjc_usage.md @neilliuistaken @ozzy_young @guoyuqing
+/docs/dev-guide/source_en/compile_and_build/cjpm_usage.md @zjdd @zxudong @guoyuqing
+/docs/dev-guide/source_en/compile_and_build/conditional_compilation.md @xiaoxuheng @mini-tang @guoyuqing
+/docs/dev-guide/source_en/compile_and_build/cross_compilation.md @neilliuistaken @ozzy_young @guoyuqing
+/docs/dev-guide/source_en/concurrency/ @cocoix @chaosjohn @guoyuqing
+/docs/dev-guide/source_en/deploy_and_run/ @lrb @DawnJee @guoyuqing
+/docs/dev-guide/source_en/enum_and_pattern_match/ @Tadddy @Timi3 @guoyuqing
+/docs/dev-guide/source_en/error_handle/ @Tadddy @Timi3 @guoyuqing
+/docs/dev-guide/source_en/extension/ @Augus_Jan @Timi3 @guoyuqing
+/docs/dev-guide/source_en/FFI/ @gaoxiang999 @xuanjz @guoyuqing
+/docs/dev-guide/source_en/first_understanding/ @kkkkkkkbbbbbbb @Timi3 @guoyuqing
+/docs/dev-guide/source_en/function/ @Cangjie-hljyaozhen @Timi3 @guoyuqing
+/docs/dev-guide/source_en/generic/ @Mr_Kang_Yi @Timi3 @guoyuqing
+/docs/dev-guide/source_en/Macro/ @xiaxue0215 @mini-tang @guoyuqing
+/docs/dev-guide/source_en/multiplatform/ @jiadiliu @HsError @guoyuqing 
+/docs/dev-guide/source_en/Net/ @cocoix @chaosjohn @guoyuqing
+/docs/dev-guide/source_en/package/ @Augus_Jan @Timi3 @guoyuqing
+/docs/dev-guide/source_en/reflect_and_annotation/ @cocoix @chaosjohn @guoyuqing
+/docs/dev-guide/source_en/struct/ @Cangjie-hljyaozhen @Timi3 @guoyuqing
 
 # 指定docs/tools目录下文件的Code Owner
-
 /docs/tools/ @chopupu @zjdd @zxudong @Ant2024
-
-# 指定docs/dev-guide/source_en/multiplatform/ 下互操作相关文件的Code Owner
-/docs/dev-guide/source_en/multiplatform/cangjie-ios-objc.md @wuying21 @jiadiliu @HsError
-/docs/dev-guide/source_en/multiplatform/cangjie-android-Java.md @wuying21 @jiadiliu @HsError
-
-# 指定docs/dev-guide/source_zh_cn/multiplatform/ 下互操作相关文件的Code Owner
-/docs/dev-guide/source_zh_cn/multiplatform/cangjie-ios-objc.md @wuying21 @JasmineZhu @HsError
-/docs/dev-guide/source_zh_cn/multiplatform/cangjie-android-Java.md @wuying21 @JasmineZhu @HsError

@@ -1435,3 +1435,7 @@ main() {
     println("${Platform()}")
 }
 ```
+
+## 约束
+
+当前不支持 @Frozen 修饰 common/platform 声明，行为存在异常。

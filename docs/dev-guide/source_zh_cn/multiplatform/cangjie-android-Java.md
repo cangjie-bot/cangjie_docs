@@ -1677,3 +1677,10 @@ public class User {
 - 接口扩展不支持 @JavaMirror 属性相关接口
 - 直接扩展不支持操作符重载
 - 直接扩展和接口扩展均不支持泛型
+
+## 版本约束限制
+
+当前版本的 Java 互操作方案存在如下约束限制：
+  - 不支持 Java Mirror 和 Impl 类的实例逃逸出线程范围，即不能作为全局变量、静态变量，或作为这些变量的字段成员
+  - Java Mirror 和 Impl 类的实例不能作为其他 Java Mirror 或 Impl 对象的字段成员
+  - Java Mirror 和 Impl 类的实例不能被 Lambda 表达式块或 spawn 线程捕获

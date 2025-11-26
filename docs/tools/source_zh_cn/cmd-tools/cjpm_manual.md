@@ -150,6 +150,8 @@ Error: can not find the following dependencies
 
 `update` 用于将 `cjpm.toml` 里的内容更新到 `cjpm.lock`。当 `cjpm.lock` 不存在时，将会生成该文件。`cjpm.lock` 文件记录着 `git` 依赖和中心仓依赖的版本号等元信息，用于下次构建使用。
 
+如果配置了项目管理配置文件 `cangjie-repo.toml`，`cjpm update` 还将尝试更新本地的所有中心仓索引文件。
+
 `update` 有以下可配置项：
 
 - `--skip-script` 配置后，将会跳过构建脚本的编译运行
@@ -899,6 +901,8 @@ cjpm install org::boo-2.0.0         # 从中心仓安装 org 组织下名为 boo
   script-dir = "" # 指定构建脚本产物存放路径，非必需
 
 [dependencies] # 源码依赖配置项，非必需
+  aoo = "1.0.0" # 导入中心仓依赖
+  boo = { version = "2.0.0" } # 导入中心仓依赖
   coo = { git = "xxx"，branch = "dev" } # 导入 `git` 依赖
   doo = { path = "./pro1" } # 导入源码依赖
 
@@ -1080,12 +1084,12 @@ link-option = "-z noexecstack -z relro -z now --strip-all"
 
 编译输出产物的类型，包含可执行程序和库两种形式，相关的输入如下表格所示。如果想生成 `cjpm.toml` 时该字段自动填充为 `static`，可使用命令 `cjpm init --type=static --name=modName`，不指定类型时默认生成为 `executable`。只有主模块的该字段可以为 `executable`。
 
-|     输入     |                 说明 |
-| :----------: | :------------------: |
-| "executable" |           可执行程序 |
-|   "static"   | 静态库 |
-|  "dynamic"   | 动态库 |
-|     其它     |                 报错 |
+| 输入 | 说明 |
+| --- | --- |
+| "executable" | 可执行程序 |
+| "static" | 静态库 |
+| "dynamic" | 动态库 |
+| 其它 |  报错 |
 
 ### "src-dir"
 
@@ -1200,7 +1204,7 @@ src
 
 - 无关配置，默认会被打包的文件：项目根目录下的 `cjpm.toml`, `README.md` 和 `README_zh.md`
 - 无关配置，默认不会被打包的文件：
-    - 项目根目录下的 `cjpm.lock` 和 `cjpm-config.toml`
+    - 项目根目录下的 `cjpm.lock` 和 `cangjie-repo.toml`
     - 编译产物目录和构建脚本产物目录
     - 所有二进制文件
 - 除了上述文件范围，其他的文件遵循以下规则：
@@ -1277,6 +1281,38 @@ demo
 ### "category"
 
 该字段用于为源码模块指定制品分类，上限 5 个。
+
+指定的制品分类需要在仓颉中心仓提供的制品分类范围内。仓颉中心仓制品分类列表如下：
+
+| 分类名 | category |
+| --- | --- |
+| 网络 | Network |
+| 数据库驱动 | Database Driver |
+| 数据封装传递 | Data Encapsulation and Transfer |
+| 数据解析 | Data Analysis |
+| 数据库框架 | Database Framework |
+| 对象存储 | Object Storage |
+| 分布式 | Distributed |
+| 任务调度 | Task Scheduling |
+| 安全类 | Security |
+| 工具类 | Utility |
+| 日志类 | Logging |
+| 算法类 | Algorithm |
+| 音视频 | Audio and Video |
+| 字符编码 | Character Encoding |
+| 图像处理 | Image Processing |
+| 开发者工具 | Developer Tools |
+| 动画类 | Animation |
+| 基础设施 | Infrastructure |
+| 地理信息 | Geographic Information |
+| UI 类 | UI |
+| 科学计算 | Scientific Computing |
+| 编程框架 | Programming Framework |
+| 数据监控 | Data Monitoring |
+| 熔断降级 | Circuit Breaker and Downgrading |
+| 消息队列 | Message Queue |
+
+配置 `category` 字段时，配置的值大小写不敏感，但是在最后生成的元数据当中会被转化为上述的标准格式。
 
 ### "license"
 
@@ -1388,7 +1424,17 @@ abc = { path = "libs" }
 [dependencies]
   aoo = { version = "1.0.0" }         # 导入模块名为 aoo，版本号为 1.0.0 的中心仓模块
   "org::boo" = { version = "2.0.0" }  # 导入 org 组织下名为 boo，版本号为 2.0.0 的中心仓模块
+  coo = { version = "[1.0.0, )" }     # 导入模块名为 coo，版本号不小于 1.0.0 的中心仓模块
 ```
+
+`version` 字段可选的取值如下：
+
+1. 单一版本号，表示依赖特定版本号对应的模块，格式详见 [`cjc-version`](#cjc-version)；
+2. 版本号范围，表示依赖范围内任一版本对应的模块；
+    - 格式为区间形式，左右开闭不限，例如 "[1.0.0, 2.0.0)" 或 "(3.0.0, 4.0.0]"；
+    - 版本号大小关系基于三段版本号进行对比，靠左的数字优先级更高，例如 1.0.0 < 2.0.0, 2.1.0 > 1.123.0。
+3. 无限版本号范围，表示一个无上界/下界的版本号范围，形式为缺省对应上下界的版本号，并且缺省处固定为开区间，例如 [1.0.0, ), (, 2.0.0) 或 (,)；
+4. 由任意 1-3 格式组合的并集，用逗号分隔，例如 "(, 1.0.0), [2.0.0, 3.0.0), 4.0.0" 表示匹配小于 1.0.0 的任意版本，或形如 2.x.x 的任意版本，或是 4.0.0 版本。
 
 同时，`cjpm.toml` 提供了简化的中心仓依赖配置方式，下面的配置方式等价于上述配置：
 
@@ -1396,11 +1442,13 @@ abc = { path = "libs" }
 [dependencies]
   aoo = "1.0.0"
   "org::boo" = "2.0.0"
+  coo = "[1.0.0, )"
 ```
 
 > **注意：**
 >
-> 要想使中心仓依赖生效，需要正确进行中心仓配置，参考[项目管理配置文件说明](#项目管理配置文件说明)。
+> - 要想使中心仓依赖生效，需要正确进行中心仓配置，参考[项目管理配置文件说明](#项目管理配置文件说明)；
+> - 若配置的依赖版本为版本范围或多个版本范围的组合，且均为空集，`cjpm` 将会报错。
 
 `dependencies` 字段可以通过 `output-type` 属性指定编译产物类型，指定的类型可以与源码依赖自身的编译产物类型不一致，且仅能为 `static` 或者 `dynamic`， 如下所示：
 
@@ -1411,6 +1459,10 @@ abc = { path = "libs" }
 ```
 
 进行如上配置后，将会忽略 `pro0` 和 `pro1` 的 `cjpm.toml` 中的 `output-type` 配置，将这两个模块的产物分别编译成 `static` 和 `dynamic` 类型。
+
+> **注意：**
+>
+> 当发生潜在的依赖冲突时，`cjpm` 会基于特定策略决定最终用于编译的源码模块，参考 [`cjpm` 依赖解析策略](#cjpm-依赖解析策略)。
 
 ### "test-dependencies"
 
@@ -1453,7 +1505,8 @@ abc = { path = "libs" }
 
 > **注意：**
 >
-> 仅入口模块的 `replace` 字段会在编译时生效。
+> - 仅入口模块的 `replace` 字段会在编译时生效；
+> - 配置的依赖项为中心仓依赖时，`version` 字段必须为单一版本号。
 
 ### "ffi.c"
 
@@ -1913,21 +1966,21 @@ aoo = { path = "${DEPENDENCY_PATH}/aoo" }
 
 ## 项目管理配置文件说明
 
-项目管理配置文件 `cjpm-config.toml` 用来配置中心仓地址、本地仓路径等内容，`cjpm` 主要通过此文件对接中心仓，管理从中心仓下载的依赖模块。
+项目管理配置文件 `cangjie-repo.toml` 用来配置中心仓地址、本地仓路径等内容，`cjpm` 主要通过此文件对接中心仓，管理从中心仓下载的依赖模块。
 
-`cjpm-config.toml` 可配置在三个位置，执行 `cjpm` 命令时，会按照从上到下的优先级读取：
+`cangjie-repo.toml` 可配置在三个位置，执行 `cjpm` 命令时，会按照从上到下的优先级读取：
 
-- 执行命令的当前 `cjpm` 模块目录下，与 `cjpm.toml` 同级的 `cjpm-config.toml`；
-- 用户空间目录下 `.cjpm` 目录内的 `cjpm-config.toml`，`Linux/macOS` 中为 `$HOME/.cjpm`，`Windows` 中为 `%USERPROFILE%/.cjpm`；
-- 仓颉 sdk 目录下的 `tools/config/cjpm-config.toml`。
+- 执行命令的当前 `cjpm` 模块目录下，与 `cjpm.toml` 同级的 `cangjie-repo.toml`；
+- 用户空间目录下 `.cjpm` 目录内的 `cangjie-repo.toml`，`Linux/macOS` 中为 `$HOME/.cjpm`，`Windows` 中为 `%USERPROFILE%/.cjpm`；
+- 仓颉 sdk 目录下的 `tools/config/cangjie-repo.toml`。
 
-读取到一个有效的 `cjpm-config.toml` 后，`cjpm` 会使用该文件作为本次命令执行的配置，并忽略更低优先级的配置文件。
+读取到一个有效的 `cangjie-repo.toml` 后，`cjpm` 会使用该文件作为本次命令执行的配置，并忽略更低优先级的配置文件。
 
 配置文件格式如下所示：
 
 ```toml
-[repository.local]
-  path = "/path/to/local/repository"
+[repository.cache]
+  path = "/path/to/repository/cache"
 
 [repository.home]
   registry = "central/repo/url"
@@ -1937,7 +1990,7 @@ aoo = { path = "${DEPENDENCY_PATH}/aoo" }
 配置内容说明如下：
 
 - `repository.home` 用于配置中心仓 url 和用户的个人 token，`cjpm` 会与 `registry` 字段中的中心仓地址进行交互，交互请求中会附带用户 token 信息。
-- `repository.local` 用于配置存放从中心仓和 git 下载的源码模块的本地路径，不配置时默认为用户空间目录下的 `.cjpm` 目录。确定本地路径后，git 源码模块会下载到该路径的 `git` 目录下，中心仓源码模块会下载到 `repository/source` 目录下。
+- `repository.cache` 用于配置存放从中心仓和 git 下载的源码模块的本地路径，不配置时默认为用户空间目录下的 `.cjpm` 目录。确定本地路径后，git 源码模块会下载到该路径的 `git` 目录下，中心仓源码模块会下载到 `repository/source` 目录下。
 
 ## 配置和缓存文件夹
 
@@ -1945,8 +1998,8 @@ aoo = { path = "${DEPENDENCY_PATH}/aoo" }
 
 > **注意：**
 >
-> - 该配置功能等同于 `cjpm-config.toml` 中的 `repository.local`。该配置仅在无有效 `cjpm-config.toml` 配置或是有效配置为仓颉 `sdk` 中的 `tools/config/cjpm-config.toml` 时才会生效。
-> - 该配置会在未来被废弃，请使用 `cjpm-config.toml` 代替。
+> - 该配置功能等同于 `cangjie-repo.toml` 中的 `repository.cache`。该配置仅在无有效 `cangjie-repo.toml` 配置或是有效配置为仓颉 `sdk` 中的 `tools/config/cangjie-repo.toml` 时才会生效。
+> - 该配置会在未来被废弃，请使用 `cangjie-repo.toml` 代替。
 
 ## 仓颉包管理规格说明
 
@@ -2627,3 +2680,159 @@ mapping = [ "user.linuxgui.x11" ]
   # ...
   always-enabled-features = [ "user.linuxgui.nightly" ]
 ```
+
+### 仓颉中心仓使用说明
+
+`cjpm` 支持对接仓颉中心仓，上传制品源码至中心仓，或是下载制品源码到本地并用于编译构建。
+
+#### 中心仓配置文件
+
+使用中心仓功能之前，需要正确配置相关的配置文件，参考[项目管理配置文件说明](#项目管理配置文件说明)。
+
+#### 依赖中心仓模块
+
+开发者可在本地开发的模块内配置中心仓依赖项，以依赖中心仓上的源码模块，参考 [`dependencies` 字段](#dependencies)。
+
+以下面仓颉项目的目录结构为例：
+
+```text
+cj_project
+├── src
+│    └── main.cj
+└── cjpm.toml
+```
+
+其中，模块配置文件 `cjpm.toml` 内容如下：
+
+```toml
+# cj_project/cjpm.toml
+[package]
+cjc-version = "1.0.0"
+description = "test module"
+version = "1.0.0"
+name = "test"
+output-type = "executable"
+
+[dependencies]
+  # path/git/version 有且仅有一个
+  aaa = { path = "path/to/aaa" }    # 本地依赖
+  bbb = { git = "git@bbb"}          # git 依赖
+  ccc = "1.0.0"                     # 中心仓依赖的简写方式
+  ddd = { version = "1.0.0" }       # 中心仓依赖，依赖一个特定版本
+  "org::ddd" = { version = "2.0.0"} # 带有组织名的中心仓依赖
+  eee = "[1.0.0, 2.0.0)"            # 中心仓依赖，依赖范围内的任意版本
+```
+
+则在模块 `test` 的源码中可以导入依赖模块内的包：
+
+
+```cangjie
+// cj_project/src/main.cj
+package test
+
+import aaa.*
+import bbb.*
+import ccc.*
+import ddd.*
+import org::ddd.*
+import eee.*
+```
+
+#### 本地模块打包
+
+开发者若想将本地开发的模块打包成合法的中心仓制品包，可以使用 [`bundle`](#bundle) 命令。
+
+#### 上传中心仓模块
+
+开发者若想将本地开发的模块上传到中心仓，可以使用 [`publish`](#publish) 命令。此时，若本地没有合法的中心仓制品包，`cjpm` 将执行默认 `bundle` 流程。
+
+### cjpm 依赖解析策略
+
+开发者在本地编译的模块中引入源码依赖项后，由于依赖项对应的模块也可能有其自己的依赖项，因此最终可能会使用到远超开发者引入个数的源码模块。在此过程中，`cjpm` 会基于特定策略，分析模块之间的依赖关系和可能会发生的冲突关系，最终决定实际用于编译的模块。
+
+#### 依赖项收集
+
+`cjpm` 将从当前模块开始，逐层分析并收集依赖模块。例如下面的用户模块 `demo`：
+
+```toml
+[package]
+  name = "demo"
+
+[dependencies]
+  aoo = { ... }
+  boo = { ... }
+```
+
+模块 `aoo` 和 `boo` 的配置如下：
+
+```toml
+# aoo/cjpm.toml
+[package]
+  name = "aoo"
+
+[dependencies]
+  coo = { ... }
+
+# boo/cjpm.toml
+[package]
+  name = "boo"
+
+[dependencies]
+  doo = { ... }
+```
+
+则最终收集到的用于编译的模块集合为 `[demo, aoo, boo, coo, doo]`。
+
+#### 同名依赖冲突分析
+
+上例中，若 `aoo` 和 `boo` 改为如下配置：
+
+```toml
+# aoo/cjpm.toml
+[package]
+  name = "aoo"
+
+[dependencies]
+  coo = { ... }
+
+# boo/cjpm.toml
+[package]
+  name = "boo"
+
+[dependencies]
+  coo = { ... }
+```
+
+此时，二者同时依赖了模块 `coo`，因此需要 `aoo` 和 `boo` 对 `coo` 的依赖关系不存在冲突，`cjpm` 才能使用唯一的 `coo` 模块进行最终的编译。对于两个模块的同名依赖项，冲突规则定义如下：
+
+- 若二者均为本地依赖项，且 `path` 字段对应的路径一致，则不冲突；
+- 若二者均为 `git` 依赖项，且 `git` 字段对应的 url 一致，且满足以下条件，则不冲突：
+    - 二者配置的 `branch`、`tag` 和 `commitId` 均一致；
+    - 二者之一配置了 `branch`、`tag` 或 `commitId` 字段，另一个均为配置，此时最终采用配置 `branch`、`tag` 或 `commitId` 字段的依赖项对应的依赖模块；
+- 若一个依赖项为中心仓依赖项，另一个为本地或 `git` 依赖项，则不冲突，最终采用本地或 `git` 依赖项对应的依赖模块；
+- 若二者均为中心仓依赖项，且中心仓上存在至少一个该模块的版本能同时满足二者指定的依赖范围，则不冲突；
+- 其余情况下，发生不可避免的依赖冲突，`cjpm` 将会报错。
+
+#### 中心仓依赖项分析策略
+
+在满足依赖范围的条件下，`cjpm` 会使用最高版本的模块。上例中，若 `aoo` 和 `boo` 改为如下配置：
+
+```toml
+# aoo/cjpm.toml
+[package]
+  name = "aoo"
+
+[dependencies]
+  coo = "[1.0.0, 2.0.0)"
+
+# boo/cjpm.toml
+[package]
+  name = "boo"
+
+[dependencies]
+  coo = "(1.3.0, 2.2.0)"
+```
+
+此时，模块 `coo` 要想同时满足 `aoo` 和 `boo` 的依赖，需要从 `(1.3.0, 2.0.0)` 中获取最高版本。假设此时中心仓上的 `coo` 有版本 `[1.0.0, 1.3.0, 1.4.0, 1.5.0, 1.8.0, 2.0.0, 2.1.0]`，则最终使用的版本为 `1.8.0`。
+
+上例中，`coo` 也可能会有其自己的依赖项。当尝试使用 `coo-1.8.0` 时，若因此引入了其他模块的冲突，`cjpm` 会再依次尝试使用 `coo-1.5.0` 和 `coo-1.4.0`，直到找到一个不发生冲突的版本。若所有版本均会造成某些模块的不可避免的冲突，`cjpm` 将会报错。

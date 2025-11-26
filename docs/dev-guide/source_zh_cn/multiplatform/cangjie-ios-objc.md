@@ -1006,7 +1006,248 @@ public struct X {
 }
 ```
 
-## 约束限制
+## ObjC 使用 Cangjie 规格
+
+### 新增实验编译选项 `--experimental --enable-interop-cjmapping=<Target Languages>`
+
+该选项启用前端（FE）对非 C 语言的 Cangjie 互操作支持。目前支持的值为 Java 和 ObjC。
+
+### ObjC 使用 Cangjie 接口
+
+为实现 Cangjie 与 Objective-C 的互操作，需将 Cangjie 的接口类型映射为 ObjC 的协议（@protocol）。映射后，用户可：
+
+- 将 Cangjie 接口映射为 ObjC 协议
+- 在 ObjC 函数中使用该协议作为参数类型
+- 在 ObjC 类中采纳该协议，并将其实例作为函数参数传递
+
+#### 示例
+
+Cangjie 源码：
+
+<!-- compile -->
+
+```cangjie
+// cangjie code
+package UNNAMED
+
+public interface A {
+    public func foo() : Unit
+    public func goo(a: Int32, b:Int32) : Unit
+    public func koo() : Int32
+    public func hoo(a: Int32) : Int32
+}
+```
+
+生成的 ObjC 头文件（A.h）：
+
+```ObjC
+// A.h
+#import <Foundation/Foundation.h>
+#import <stddef.h>
+@protocol A
+- (void)foo;
+- (void)goo:(int32_t)a :(int32_t)b;
+- (int32_t)koo;
+- (int32_t)hoo:(int32_t)a;
+@end
+
+```
+
+#### 规格约束
+
+由于与其他语言特性的集成仍在开发中，以下场景暂不支持：
+
+- Cangjie 接口不得继承其他接口
+- 接口成员函数不得使用泛型
+- 成员函数不得为 static
+- 成员函数不得包含默认实现
+- 不支持函数重载
+- 仅允许使用基础数据类型（如 Int32、Unit 等）
+- 不支持通过 extend 对接口进行扩展
+- 不支持 Option 类型
+
+### ObjC 使用 Cangjie 枚举
+
+为实现 Cangjie 与 Objective-C 的互操作，需将 Cangjie 的枚举类型映射为 ObjC 的类。映射后，用户可：
+
+- 调用枚举类型的构造函数以创建对应的枚举对象
+- 在 Cangjie 与 ObjC 之间无缝传递枚举对象
+- 调用枚举中定义的静态方法和实例方法
+- 支持枚举属性的访问
+
+#### 示例：
+
+<!-- compile -->
+
+Cangjie 源码：
+
+```cangjie
+// Cangjie
+// =============================================
+// Enum Definition: Basic Enum (TimeUnit)
+// =============================================
+public enum TimeUnit {
+    | Year(Int64)
+    | Month(Int64)
+    | Year
+    | Month
+
+    // The public method to Calculate how many months.
+    public func CalcMonth(): Unit {
+        let s = match (this) {
+            case Year(n) => "x has ${n * 12} months"
+            case Year => "x has 12 months"
+            case TimeUnit.Month(n) => "x has ${n} months"
+            case Month => "x has 1 month"
+        }
+        println(s)
+    }
+
+    // The static method to return ten years.
+    public static func TenYear(): TimeUnit {
+        Year(10)
+    }
+}
+```
+
+生成的 ObjC 头文件与源文件：
+
+```ObjC
+// TimeUnit.h
+#import <Foundation/Foundation.h>
+#import <stddef.h>
+__attribute__((objc_subclassing_restricted))
+@interface TimeUnit : NSObject
+- (id)initWithRegistryId:(int64_t)registryId;
++ (TimeUnit*)Year:(int64_t)p1;
++ (TimeUnit*)Month:(int64_t)p1;
++ (TimeUnit*)Year;
++ (TimeUnit*)Month;
++ (void)initialize;
+@property (readwrite) int64_t $registryId;
+- (void)CalcMonth;
++ (TimeUnit*)TenYear;
+- (void)deleteCJObject;
+- (void)dealloc;
+@end
+
+// TimeUnit.m
+#import "TimeUnit.h"
+#import "Cangjie.h"
+#import <dlfcn.h>
+#import <stdlib.h>
+static int64_t (*CJImpl_ObjC_default_TimeUnit_Year_l)(int64_t) = NULL;
+static int64_t (*CJImpl_ObjC_default_TimeUnit_Month_l)(int64_t) = NULL;
+static int64_t (*CJImpl_ObjC_TimeUnit_Year)() = NULL;
+static int64_t (*CJImpl_ObjC_TimeUnit_Month)() = NULL;
+static void (*CJImpl_ObjC_default_TimeUnit_deleteCJObject)(int64_t) = NULL;
+static void (*CJImpl_ObjC_default_TimeUnit_CalcMonth)(int64_t) = NULL;
+static int64_t (*CJImpl_ObjC_default_TimeUnit_TenYear)() = NULL;
+static void* CJWorldDLHandle = NULL;
+static struct RuntimeParam defaultCJRuntimeParams = {0};
+@implementation TimeUnit
+- (id)initWithRegistryId:(int64_t)registryId {
+    if (self = [super init]) {
+        self.$registryId = registryId;
+    }
+    return self;
+}
++ (TimeUnit*)Year:(int64_t)p1 {
+    int64_t regId = CJImpl_ObjC_default_TimeUnit_Year_l(p1);
+    return [[TimeUnit alloc]initWithRegistryId: regId];
+}
++ (TimeUnit*)Month:(int64_t)p1 {
+    int64_t regId = CJImpl_ObjC_default_TimeUnit_Month_l(p1);
+    return [[TimeUnit alloc]initWithRegistryId: regId];
+}
++ (TimeUnit*)Year {
+    int64_t regId = CJImpl_ObjC_TimeUnit_Year();
+    return [[TimeUnit alloc]initWithRegistryId: regId];
+}
++ (TimeUnit*)Month {
+    int64_t regId = CJImpl_ObjC_TimeUnit_Month();
+    return [[TimeUnit alloc]initWithRegistryId: regId];
+}
++ (void)initialize {
+    if (self == [TimeUnit class]) {
+        defaultCJRuntimeParams.logParam.logLevel = RTLOG_ERROR;
+        if (InitCJRuntime(&defaultCJRuntimeParams) != E_OK) {
+            NSLog(@"ERROR: Failed to initialize Cangjie runtime");
+            exit(1);
+        }
+        if (LoadCJLibraryWithInit("libdefault.dylib") != E_OK) {
+            NSLog(@"ERROR: Failed to init cjworld library ");
+            exit(1);
+        }
+        if ((CJWorldDLHandle = dlopen("libdefault.dylib", RTLD_LAZY)) == NULL) {
+            NSLog(@"ERROR: Failed to open cjworld library ");
+            NSLog(@"%s", dlerror());
+            exit(1);
+        }
+        if ((CJImpl_ObjC_default_TimeUnit_Year_l =
+                dlsym(CJWorldDLHandle, "CJImpl_ObjC_default_TimeUnit_Year_l")) == NULL) {
+            NSLog(@"ERROR: Failed to find CJImpl_ObjC_default_TimeUnit_Year_l symbol in cjworld");
+            exit(1);
+        }
+        if ((CJImpl_ObjC_default_TimeUnit_Month_l =
+                dlsym(CJWorldDLHandle, "CJImpl_ObjC_default_TimeUnit_Month_l")) == NULL) {
+            NSLog(@"ERROR: Failed to find CJImpl_ObjC_default_TimeUnit_Month_l symbol in cjworld");
+            exit(1);
+        }
+        if ((CJImpl_ObjC_TimeUnit_Year = dlsym(CJWorldDLHandle, "CJImpl_ObjC_TimeUnit_Year")) == NULL) {
+            NSLog(@"ERROR: Failed to find CJImpl_ObjC_TimeUnit_Year symbol in cjworld");
+            exit(1);
+        }
+        if ((CJImpl_ObjC_TimeUnit_Month = dlsym(CJWorldDLHandle, "CJImpl_ObjC_TimeUnit_Month")) == NULL) {
+            NSLog(@"ERROR: Failed to find CJImpl_ObjC_TimeUnit_Month symbol in cjworld");
+            exit(1);
+        }
+        if ((CJImpl_ObjC_default_TimeUnit_deleteCJObject =
+                dlsym(CJWorldDLHandle, "CJImpl_ObjC_default_TimeUnit_deleteCJObject")) == NULL) {
+            NSLog(@"ERROR: Failed to find CJImpl_ObjC_default_TimeUnit_deleteCJObject symbol in cjworld");
+            exit(1);
+        }
+        if ((CJImpl_ObjC_default_TimeUnit_CalcMonth =
+                dlsym(CJWorldDLHandle, "CJImpl_ObjC_default_TimeUnit_CalcMonth")) == NULL) {
+            NSLog(@"ERROR: Failed to find CJImpl_ObjC_default_TimeUnit_CalcMonth symbol in cjworld");
+            exit(1);
+        }
+        if ((CJImpl_ObjC_default_TimeUnit_TenYear =
+                dlsym(CJWorldDLHandle, "CJImpl_ObjC_default_TimeUnit_TenYear")) == NULL) {
+            NSLog(@"ERROR: Failed to find CJImpl_ObjC_default_TimeUnit_TenYear symbol in cjworld");
+            exit(1);
+        }
+    }
+}
+- (void)CalcMonth {
+     CJImpl_ObjC_default_TimeUnit_CalcMonth(self.$registryId);
+}
++ (TimeUnit*)TenYear {
+    return [[TimeUnit alloc]initWithRegistryId: CJImpl_ObjC_default_TimeUnit_TenYear()];
+}
+- (void)deleteCJObject {
+     CJImpl_ObjC_default_TimeUnit_deleteCJObject(self.$registryId);
+}
+- (void)dealloc {
+    [self deleteCJObject];
+}
+@end
+
+```
+
+#### 规格约束
+
+由于与其他语言特性的集成仍在开发中，以下场景暂不支持：
+
+- Cangjie enum不得实现其他接口
+- 接口成员函数不得使用泛型
+- 成员函数中不使用Lambda
+- 不支持操作符重载
+- 仅允许使用基础数据类型（如 Int32、Unit 等）
+- 不支持通过 extend 对 enum 进行扩展
+- 不支持 Option 类型
+
+## 版本约束限制
 
 1. 当前版本的 ObjCInteropGen 功能存在如下约束限制：
 
@@ -1016,4 +1257,9 @@ public struct X {
     - 不支持同时转换多个 .h 头文件
     - 不支持 Bit fields 转换
 
-2. 版本使用过程中需额外下载依赖文件 `Cangjie.h` (下载地址： <https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/runtime/src/Cangjie.h>),并集成至项目中。
+2.  当前版本的 ObjC 互操作方案存在如下约束限制：
+    - 不支持 ObjC Mirror 和 Impl 类的实例逃逸出线程范围，即不能作为全局变量、静态变量，或作为这些变量的字段成员
+    - ObjC Mirror 和 Impl 类的实例不能作为其他 ObjC Mirror 或 Impl 对象的字段成员
+    - ObjC Mirror 和 Impl 类的实例不能被 Lambda 表达式块或 spawn 线程捕获
+
+3. 版本使用过程中需额外下载依赖文件 `Cangjie.h` (下载地址： <https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/runtime/src/Cangjie.h>),并集成至项目中。
