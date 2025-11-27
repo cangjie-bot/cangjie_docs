@@ -34,7 +34,7 @@ When data needs to be obtained from the standard input stream, the `ConsoleReade
 
 Example of reading from the standard input stream:
 
-<!-- run -->
+<!-- compile -->
 
 ```cangjie
 import std.env.getStdIn

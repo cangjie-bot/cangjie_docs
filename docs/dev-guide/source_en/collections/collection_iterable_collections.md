@@ -6,18 +6,22 @@ Range, Array, and ArrayList all support the for-in syntax through Iterable.
 
 Iterable is a built-in interface with the following form (only core code is shown):
 
+<!-- code_no_check -->
+
 ```cangjie
-interface Iterable<T> {
+public interface Iterable<T> {
     func iterator(): Iterator<T>
     ...
 }
 ```
 
-The iterator function requires the returned Iterator type to be another built-in interface with the following form (only core code is shown):
+The iterator function requires the returned Iterator type to be a built-in abstract class with the following form (only core code is shown):
+
+<!-- code_no_check -->
 
 ```cangjie
-interface Iterator<T> <: Iterable<T> {
-    mut func next(): Option<T>
+public abstract class Iterator<T> <: Iterable<T> {
+    public func next(): Option<T>
     ...
 }
 ```

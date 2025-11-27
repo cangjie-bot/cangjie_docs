@@ -12,6 +12,8 @@ You can use the HashSet type to construct a Collection that contains only unique
 
 Cangjie uses `HashSet<T>` to represent the HashSet type, where T denotes the element type of the HashSet. T must be a type that implements both the Hashable and `Equatable<T>` interfaces, such as numeric values or String.
 
+<!-- code_no_check -->
+
 ```cangjie
 var a: HashSet<Int64> = ... // HashSet whose element type is Int64
 var b: HashSet<String> = ... // HashSet whose element type is String
@@ -20,6 +22,8 @@ var b: HashSet<String> = ... // HashSet whose element type is String
 HashSets with different element types are distinct types, so they cannot be assigned to each other.
 
 Therefore, the following example is invalid:
+
+<!-- code_no_check -->
 
 ```cangjie
 b = a // Type mismatch

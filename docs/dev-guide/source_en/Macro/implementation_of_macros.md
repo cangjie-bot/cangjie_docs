@@ -323,11 +323,9 @@ Regarding attribute macros, the following points should be noted:
 
 The Cangjie language does not support nested macro definitions but conditionally supports nested macro invocations within macro definitions and macro invocations.
 
-### Nested Macro Invocations in Macro DefinitionsHere is the professional translation of the provided Markdown content from Chinese to English, maintaining all structural and formatting elements:
+### Nested Macro Invocations in Macro Definitions
 
-Below is an example of macro definitions containing nested macro calls.
-
-### Macro Definitions with Nested Calls
+Below is an example of a macro definition containing other macro calls.
 
 The `getIdent` macro is defined in macro package `pkg1`:
 
@@ -349,7 +347,7 @@ public macro getIdent(attr:Tokens, input:Tokens):Tokens {
 }
 ```
 
-The `Prop` macro in package `pkg2` contains a nested call to `getIdent`:
+The `Prop` macro is defined in macro package `pkg2`, which contains a nested call to the `getIdent` macro:
 
 <!-- compile -macro8 -->
 <!-- cfg="--compile-macro" -->
@@ -374,7 +372,7 @@ public macro Prop(input:Tokens):Tokens {
 }
 ```
 
-Macro usage in package `pkg3` calling the `Prop` macro:
+The `Prop` macro is called in macro invocation package `pkg3`:
 
 <!-- compile -macro8 -->
 
@@ -393,7 +391,7 @@ main() {
 }
 ```
 
-Note: Due to the constraint that macro definitions must be compiled before their call sites, the compilation order must be: pkg1 → pkg2 → pkg3. The `Prop` macro definition in pkg2:
+Note: According to the constraint that macro definitions must be compiled before their invocation points, the compilation order of the above three files must be: pkg1 -> pkg2 -> pkg3. The `Prop` macro definition in pkg2:
 
 <!-- code_check_manual -->
 
@@ -412,7 +410,7 @@ public macro Prop(input:Tokens):Tokens {
 }
 ```
 
-Will first be expanded into the following code before compilation:
+will first be expanded into the following code before compilation:
 
 <!-- code_check_manual -->
 
@@ -436,11 +434,11 @@ public macro Prop(input: Tokens): Tokens {
 }
 ```
 
-### Nested Macro Calls
+### Nested Macro Invocations in Macro Calls
 
-A common scenario for nested macros occurs when macro-decorated code blocks contain other macro calls. A concrete example:
+A common scenario for nested macros is when a macro call appears within the code block modified by a macro. A specific example is as follows:
 
-Macros `Foo` and `Bar` defined in package `pkg1`:
+Macros `Foo` and `Bar` are defined in package `pkg1`:
 
 <!-- run -macro9 -->
 <!-- cfg="--compile-macro" -->
@@ -459,7 +457,7 @@ public macro Bar(input: Tokens): Tokens {
 }
 ```
 
-The `addToMul` macro defined in package `pkg2`:
+The `addToMul` macro is defined in package `pkg2`:
 
 <!-- run -macro9 -->
 <!-- cfg="--compile-macro" -->
@@ -480,7 +478,7 @@ public macro addToMul(inputTokens: Tokens): Tokens {
 }
 ```
 
-Usage of these three macros in package `pkg3`:
+The three macros defined above are used in package `pkg3`:
 
 <!-- run -macro9 -->
 
@@ -513,9 +511,9 @@ main(): Int64 {
 }
 ```
 
-As shown above, macro `Foo` decorates `struct Data`, while macro calls `addToMul` and `Bar` appear inside the struct. The transformation rule for such nested scenarios is: expand the innermost macros (`addToMul` and `Bar`) first, then expand the outer macro (`Foo`). Multi-level nesting is allowed, with expansion always proceeding from innermost to outermost.
+As shown in the code above, the macro `Foo` modifies `struct Data`, and within `struct Data`, macro calls `addToMul` and `Bar` appear. In this nested scenario, the code transformation rule is: expand the innermost macros (`addToMul` and `Bar`) first, then expand the outer macro (`Foo`). Multi-level macro nesting is allowed, and the code transformation rule always expands macros from the innermost to the outermost.
 
-Nested macros can appear in both parenthesized and unparenthesized macro calls. These can be combined, but developers must ensure unambiguous expansion order:
+Nested macros can appear in both parenthesized and non-parenthesized macro calls, and they can be combined. However, developers must ensure there is no ambiguity and clearly define the macro expansion order:
 
 <!-- code_check_manual -->
 
@@ -534,15 +532,20 @@ struct Data{
 
 ### Message Passing Between Nested Macros
 
-This refers to nested macro calls.
+This refers to the nesting of macro calls.
 
-Inner macros can use the library function `assertParentContext` to ensure they are only called within specific outer macro contexts. If this condition isn't met, the function throws an error. The `InsideParentContext` function similarly checks nesting relationships, returning a boolean. Example:
+Inner macros can call the library function `assertParentContext` to ensure that the inner macro call is always nested within a specific outer macro call. If the inner macro calls this function without being nested in the specified outer macro call, the function will throw an error. The library function `InsideParentContext` is also used to check if the inner macro call is nested within a specific outer macro call, and it returns a boolean value. Below is a simple example.
 
-Macro definitions:
+Macro definitions are as follows:
 
-<!-- code_check_manual -->
+<!-- compile.error -macro92 -->
+<!-- cfg="--compile-macro" -->
 
 ```cangjie
+macro package define
+
+import std.ast.*
+
 public macro Outer(input: Tokens): Tokens {
     return input
 }
@@ -553,22 +556,25 @@ public macro Inner(input: Tokens): Tokens {
 }
 ```
 
-Macro calls:
+Macro invocations are as follows:
 
-<!-- code_check_manual -->
+<!-- compile.error -macro92 -->
 
 ```cangjie
-@Outer var a = 0
-@Inner var b = 0 // Error: The macro call 'Inner' should be nested within an 'Outer' context.
+import define.*
+
+@Outer
+var a = 0
+
+@Inner
+var b = 0 // Error, The macro call 'Inner' should with the surround code contains a call 'Outer'.
 ```
 
-Here, `Inner` uses `assertParentContext` to verify it's called within an `Outer` macro. Since this nesting doesn't exist in the example, the compiler reports an error.
+As shown in the code above, the `Inner` macro uses the `assertParentContext` function in its definition to check if it is located within the `Outer` macro during the invocation phase. In the macro invocation scenario of the code example, since there is no such nested relationship between `Outer` and `Inner` during invocation, the compiler will report an error.
 
-Inner macros can also communicate with outer macros via key/value pairs. During execution:
-1. Inner macros send messages via `setItem`
-2. Outer macros receive these messages via `getChildMessages` (a collection of key/value mappings)
+Inner macros can also communicate with outer macros by sending key/value pairs. When the inner macro executes, it sends information to the outer macro by calling the standard library function `setItem`; subsequently, when the outer macro executes, it receives the information sent by each inner macro (a set of key/value pair mappings) by calling the standard library function `getChildMessages`. Below is a simple example.
 
-Example macro definitions:
+Macro definitions are as follows:
 
 <!-- run -macro10 -->
 <!-- cfg="--compile-macro" -->
@@ -585,7 +591,7 @@ public macro Outer(input: Tokens): Tokens {
                        )
     for (m in messages) {
         let identName = m.getString("identifierName")
-        // let value = m.getString("key")            // Receive multiple messages
+        // let value = m.getString("key")            // Receive multiple sets of messages
         getTotalFunc.append(Token(TokenKind.IDENTIFIER, identName))
         getTotalFunc.append(quote(+))
     }
@@ -603,15 +609,15 @@ public macro Inner(input: Tokens): Tokens {
     assertParentContext("Outer")
     let decl = parseDecl(input)
     setItem("identifierName", decl.identifier.value)
-    // setItem("key", "value")                      // Multiple messages via different keys
+    // setItem("key", "value")                      // Multiple sets of messages can be passed via different keys
     return input
 }
 ```
 
-Macro calls:
+Macro invocations are as follows:
 
-<!-- run -macro11 -->
-<!-- cfg="--compile-macro" -->
+<!-- run -macro10 -->
+<!-- cfg="--debug-macro" -->
 
 ```cangjie
 import define.*
@@ -629,7 +635,7 @@ main(): Int64 {
 }
 ```
 
-In this code, `Outer` receives variable names from two `Inner` macros and automatically adds to the class:
+In the above code, `Outer` receives the variable names sent by the two `Inner` macros and automatically adds the following content to the class:
 
 <!-- code_no_check -->
 
@@ -639,11 +645,5 @@ public func getCnt() {
 }
 ```
 
-Workflow:
-1. Inner macros send messages via `setItem`
-2. Outer macro receives messages via `getChildMessages` (multiple `Inner` calls possible)
-3. Values are retrieved via the message object's `getString` method
+The specific process is as follows: the inner macro `Inner` sends information to the outer macro via `setItem`; the `Outer` macro receives a set of information objects sent by `Inner` through the `getChildMessages` function (multiple calls to `Inner` are allowed in `Outer`); finally, the corresponding values are received through the `getString` function of the information object.
 
---- 
-
-The translation strictly maintains all Markdown formatting, code blocks, and structural elements while providing accurate technical terminology and natural English flow.

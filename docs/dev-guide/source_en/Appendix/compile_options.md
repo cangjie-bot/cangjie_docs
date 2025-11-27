@@ -1,39 +1,42 @@
 # `cjc` Compilation Options
 
-This chapter introduces commonly used `cjc` compilation options. If an option is also applicable to `cjc-frontend`, it will be marked with a <sup>[frontend]</sup> superscript; if the behavior differs between `cjc-frontend` and `cjc`, additional explanations will be provided.
+This chapter introduces the commonly used `cjc` compilation options. If an option also applies to `cjc-frontend`, it will be marked with the <sup>[frontend]</sup> superscript; if the behavior of an option differs between `cjc-frontend` and `cjc`, additional explanations will be provided.
 
-- Options starting with two hyphens are long options, e.g., `--xxxx`.
-  If a long option has an optional parameter, the option and parameter must be connected with an equals sign, e.g., `--xxxx=<value>`.
-  If a long option has a mandatory parameter, the option and parameter can be separated by either a space or an equals sign, e.g., `--xxxx <value>` and `--xxxx=<value>` are equivalent.
+- Options starting with two hyphens are long options, such as `--xxxx`.
+  If a long option has an optional parameter, the option and the parameter must be connected with an equals sign, e.g., `--xxxx=<value>`.
+  If a long option has a mandatory parameter, the option and the parameter can be separated by a space or connected with an equals sign, e.g., `--xxxx <value>` is equivalent to `--xxxx=<value>`.
 
-- Options starting with a single hyphen are short options, e.g., `-x`.
-  For short options, if they are followed by a parameter, the option and parameter can be separated by a space or not, e.g., `-x <value>` and `-x<value>` are equivalent.
+- Options starting with one hyphen are short options, such as `-x`.
+  For short options that require a parameter, the option and the parameter can be separated by a space or concatenated directly, e.g., `-x <value>` is equivalent to `-x<value>`.
 
 ## Basic Options
 
 ### `--output-type=[exe|staticlib|dylib]` <sup>[frontend]</sup>
 
-Specifies the type of output file. In `exe` mode, an executable file is generated; in `staticlib` mode, a static library file (`.a` file) is generated; in `dylib` mode, a dynamic library file is generated (`.so` on Linux, `.dll` on Windows, and `.dylib` on macOS).
+Specifies the type of output file. In `exe` mode, an executable file is generated; in `staticlib` mode, a static library file (`.a` file) is generated; in `dylib` mode, a dynamic library file is generated (`.so` file on Linux, `.dll` file on Windows, `.dylib` file on macOS).
 
-`cjc` defaults to `exe` mode.
+The default mode for `cjc` is `exe`.
 
-In addition to compiling `.cj` files into executable files, they can also be compiled into static or dynamic libraries. For example:
+In addition to compiling `.cj` files into an executable, you can also compile them into a static or dynamic link library. For example:
 
 ```shell
 $ cjc tool.cj --output-type=dylib
 ```
 
-This compiles `tool.cj` into a dynamic library. On Linux, `cjc` generates a dynamic library file named `libtool.so`.
+This command compiles `tool.cj` into a dynamic link library. On Linux, `cjc` generates a dynamic link library file named `libtool.so`.
 
-**Note:** If an executable program links to a Cangjie dynamic library file, both `--dy-std` and `--dy-libs` options must be specified. For details, see the [`--dy-std` option description](#--dy-std).
+**Note:** When linking against Cangjie's dynamic library files to compile an executable program, you must specify the `--dy-std` option. For details, see the [`--dy-std` option description](#--dy-std).
 
-<sup>[frontend]</sup> In `cjc-frontend`, the compilation process stops at `LLVM IR`, so the output is always a `.bc` file. However, different `--output-type` values still affect the frontend compilation strategy.
+<sup>[frontend]</sup> In `cjc-frontend`, the compilation process only proceeds to `LLVM IR`, so the output is always a `.bc` file. However, different `--output-type` values still affect the frontend compilation strategy.
 
 ### `--package`, `-p` <sup>[frontend]</sup>
 
-Compiles a package. This option requires specifying a directory as input, where all source files must belong to the same package.
+Compiles a package. When using this option, you need to specify a directory as input, and the source files in the directory must belong to the same package.
 
-Given the file `log/printer.cj`:
+Assume there is a file `log/printer.cj`:
+
+<!-- compile -p -->
+<!-- cfg="-p log --output-type=staticlib" -->
 
 ```cangjie
 package log
@@ -43,7 +46,10 @@ public func printLog(message: String) {
 }
 ```
 
-And the file `main.cj`:
+And a file `main.cj`:
+
+<!-- compile -p -->
+<!-- cfg="liblog.a" -->
 
 ```cangjie
 import log.*
@@ -53,7 +59,7 @@ main() {
 }
 ```
 
-You can compile the `log` package using:
+You can use the following command to compile the `log` package:
 
 ```shell
 $ cjc -p log --output-type=staticlib
@@ -61,59 +67,25 @@ $ cjc -p log --output-type=staticlib
 
 `cjc` generates a `liblog.a` file in the current directory.
 
-You can then use `liblog.a` to compile `main.cj`:
+You can then use the `liblog.a` file to compile `main.cj` with the following command:
 
 ```shell
 $ cjc main.cj liblog.a
 ```
 
-`cjc` compiles `main.cj` and `liblog.a` into an executable file named `main`.
+`cjc` compiles `main.cj` together with `liblog.a` into an executable file named `main`.
 
 ### `--module-name <value>` <sup>[frontend]</sup>
 
-Specifies the name of the module to be compiled.
-
-Given the file `my_module/src/log/printer.cj`:
-
-```cangjie
-package log
-
-public func printLog(message: String) {
-    println("[Log]: ${message}")
-}
-```
-
-And the file `main.cj`:
-
-```cangjie
-import my_module.log.*
-
-main() {
-    printLog("Everything is great")
-}
-```
-
-You can compile the `log` package and specify its module name as `my_module`:
-
-```shell
-$ cjc -p my_module/src/log --module-name my_module --output-type=staticlib -o my_module/liblog.a
-```
-
-`cjc` generates a `my_module/liblog.a` file in the `my_module` directory.
-
-You can then use `liblog.a` to compile `main.cj`:
-
-```shell
-$ cjc main.cj my_module/liblog.a
-```
-
-`cjc` compiles `main.cj` and `liblog.a` into an executable file named `main`.
+> **Note:**
+>
+> This option is deprecated and will be removed in a future version. Using this option has no functional effect in the current version.
 
 ### `--output <value>`, `-o <value>`, `-o<value>` <sup>[frontend]</sup>
 
-Specifies the output file path. The compiler's output will be written to the specified file.
+Specifies the path of the output file. The compiler's output is written to the specified file.
 
-For example, the following command names the output executable file `a.out`:
+For example, the following command specifies the name of the output executable file as `a.out`:
 
 ```shell
 cjc main.cj -o a.out
@@ -121,21 +93,21 @@ cjc main.cj -o a.out
 
 ### `--library <value>`, `-l <value>`, `-l<value>`
 
-Specifies the library file to link.
+Specifies the library files to link against.
 
-The given library file is passed directly to the linker. This option is typically used with `--library-path <value>`.
+The given library files are passed directly to the linker. This compilation option generally needs to be used together with `--library-path <value>`.
 
-The filename format should be `lib[arg].[extension]`. To link library `a`, use the option `-l a`. The linker searches for `liba.a`, `liba.so` (or `liba.dll` on Windows) in the library search directories and links them as needed.
+The filename format should be `lib[arg].[extension]`. When you need to link against library `a`, you can use the option `-l a`. The linker searches for files such as `liba.a` and `liba.so` (or `liba.dll` when linking for Windows targets) in the library file search directories and links them to the final output as needed.
 
 ### `--library-path <value>`, `-L <value>`, `-L<value>`
 
-Specifies the directory containing the library files to link.
+Specifies the directory where the library files to be linked are located.
 
-When using `--library <value>`, this option is typically needed to specify the library file directory.
+When using the `--library <value>` option, you usually need to use this option to specify the directory containing the library files to be linked.
 
-Paths specified by `--library-path <value>` are added to the linker's library search path. Additionally, paths in the `LIBRARY_PATH` environment variable are also included, but paths specified by `--library-path` take precedence.
+The paths specified by `--library-path <value>` are added to the linker's library file search path. Additionally, paths specified in the `LIBRARY_PATH` environment variable are also added to the linker's library file search path. Paths specified via `--library-path` have higher priority than those in `LIBRARY_PATH`.
 
-Given a dynamic library file `libcProg.so` compiled from the following C source:
+Assume there is a dynamic library file `libcProg.so` compiled from the following C source file using a C compiler:
 
 ```c
 #include <stdio.h>
@@ -145,7 +117,9 @@ void printHello() {
 }
 ```
 
-And the Cangjie file `main.cj`:
+And a Cangjie file `main.cj`:
+
+<!-- code_check_manual -->
 
 ```cangjie
 foreign func printHello(): Unit
@@ -158,105 +132,109 @@ main(): Int64 {
 }
 ```
 
-You can compile `main.cj` and link the `cProg` library:
+You can use the following command to compile `main.cj` and specify the `cProg` library to link against:
 
 ```shell
 cjc main.cj -L . -l cProg
 ```
 
-`cjc` outputs an executable file named `main`.
+`cjc` outputs an executable file `main`.
 
-Running `main` produces:
+Executing `main` produces the following output:
 
 ```shell
 $ LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH ./main
 Hello World
 ```
 
-**Note:** Since a dynamic library is used, the library directory must be added to `$LD_LIBRARY_PATH` to ensure dynamic linking at runtime.
+**Note:** Since a dynamic library file is used, you need to add the directory containing the library file to `$LD_LIBRARY_PATH` to ensure that `main` can be dynamically linked at runtime.
 
 ### `-g` <sup>[frontend]</sup>
 
-Generates executable or library files with debug information.
+Generates an executable file or library file with debug information.
 
 > **Note:**
 >
-> `-g` can only be used with `-O0`. Higher optimization levels may cause debugging issues.
+> `-g` can only be used with `-O0`. Using a higher optimization level may cause debugging functionality to behave abnormally.
 
 ### `--trimpath <value>` <sup>[frontend]</sup>
 
-Removes the specified prefix from source file paths in debug information.
+Removes the prefix of the source file path information from the debug information.
 
-When compiling Cangjie code, `cjc` saves absolute paths of source files (`.cj` files) for debugging and exception handling.
+When compiling Cangjie code, `cjc` saves the absolute path information of the source files (`.cj` files) to provide debugging and exception information at runtime.
 
-This option removes the specified prefix from source file paths in the output. Multiple prefixes can be specified with multiple `--trimpath` options; for each source file path, the first matching prefix is removed.
+Using this option allows you to remove the specified path prefix from the source file path information. The source file path information in the output files generated by `cjc` will not include the user-specified part.
+
+You can use `--trimpath` multiple times to specify multiple different path prefixes. For each source file path, the compiler removes the first matching prefix from the path.
 
 ### `--coverage` <sup>[frontend]</sup>
 
-Generates executables with code coverage support. The compiler generates a `.gcno` file for each compilation unit. After execution, a `.gcda` file is generated for each unit. Using these files with the `cjcov` tool generates a code coverage report.
+Generates an executable program that supports code coverage statistics. The compiler generates a code information file with the suffix `.gcno` for each compilation unit. After executing the program, an execution statistics file with the suffix `.gcda` is generated for each compilation unit. Using these two files together with the `cjcov` tool, you can generate a code coverage report for the current execution.
 
 > **Note:**
 >
-> `--coverage` can only be used with `-O0`. Higher optimization levels trigger a warning and force `-O0`. This option is for executables; using it for static or dynamic libraries may cause linking errors.
+> `--coverage` can only be used with `-O0`. If a higher optimization level is used, the compiler will issue a warning and force the use of `-O0`. `--coverage` is used to compile and generate executable programs. If used to generate static or dynamic libraries, link errors may occur when the library is ultimately used.
 
 ### `--int-overflow=[throwing|wrapping|saturating]` <sup>[frontend]</sup>
 
-Specifies the overflow strategy for fixed-precision integer operations. Defaults to `throwing`.
+Specifies the overflow strategy for fixed-precision integer operations. The default is `throwing`.
 
-- `throwing`: Throws an exception on overflow.
-- `wrapping`: Wraps around to the other end of the integer range.
-- `saturating`: Clamps to the minimum or maximum value on overflow.
+- In `throwing` strategy, an exception is thrown when an integer operation overflows.
+- In `wrapping` strategy, when an integer operation overflows, it wraps around to the other end of the corresponding fixed-precision integer.
+- In `saturating` strategy, when an integer operation overflows, the extreme value of the corresponding fixed precision is chosen as the result.
 
 ### `--diagnostic-format=[default|noColor|json]` <sup>[frontend]</sup>
 
 > **Note:**
 >
-> Windows versions do not support colored error messages.
+> The Windows version does not support outputting error messages with color rendering.
 
-Specifies the error message output format. Defaults to `default`.
+Specifies the output format of error messages. The default is `default`.
 
-- `default`: Colored output.
-- `noColor`: Uncolored output.
-- `json`: JSON-formatted output.
+- `default`: Output error messages in the default format (with color).
+- `noColor`: Output error messages in the default format (without color).
+- `json`: Output error messages in JSON format.
 
 ### `--verbose`, `-V` <sup>[frontend]</sup>
 
-Prints compiler version, toolchain dependencies, and commands executed during compilation.
+`cjc` prints compiler version information, toolchain dependency information, and the commands executed during the compilation process.
 
 ### `--help`, `-h` <sup>[frontend]</sup>
 
-Prints available compilation options.
+Prints the available compilation options.
 
-When used, the compiler only prints option information and does not compile any files.
+When using this option, the compiler only prints information about the compilation options and does not compile any input files.
 
 ### `--version`, `-v` <sup>[frontend]</sup>
 
-Prints compiler version information.
+Prints the compiler version information.
 
-When used, the compiler only prints version information and does not compile any files.
+When using this option, the compiler only prints version information and does not compile any input files.
 
 ### `--save-temps <value>`
 
-Saves intermediate files generated during compilation to the specified path.
+Retains the intermediate files generated during the compilation process and saves them to the `<value>` path.
 
-The compiler retains intermediate files like `.bc` and `.o`.
+The compiler retains intermediate files such as `.bc` and `.o` generated during the compilation process.
 
 ### `--import-path <value>` <sup>[frontend]</sup>
 
-Specifies the search path for imported module AST files.
+Specifies the search path for AST files of imported modules.
 
-Given the following directory structure, where `libs/myModule` contains the `myModule` library and AST export files for the `log` package:
+Assume the following directory structure exists, where the `libs/myModule` directory contains the library files of the `myModule` module and the AST export files of the `log` package:
 
 ```text
 .
 ├── libs
 |   └── myModule
-|       ├── log.cjo
-|       └── libmyModule.a
+|       ├── myModule.log.cjo
+|       └── libmyModule.log.a
 └── main.cj
 ```
 
-And the `main.cj` file:
+And there is the following `main.cj` file:
+
+<!-- code_check_manual -->
 
 ```cangjie
 import myModule.log.printLog
@@ -266,13 +244,15 @@ main() {
 }
 ```
 
-Use `--import-path ./libs` to add `./libs` to the AST file search path. `cjc` uses `./libs/myModule/log.cjo` for semantic checking and compilation.
+You can add `./libs` to the search path for AST files of imported modules by using `--import-path ./libs`. `cjc` uses the `./libs/myModule/myModule.log.cjo` file to perform semantic checks and compilation on the `main.cj` file.
 
-`--import-path` provides the same functionality as the `CANGJIE_PATH` environment variable, but `--import-path` paths have higher priority.
+`--import-path` provides the same functionality as the `CANGJIE_PATH` environment variable, but paths set via `--import-path` have higher priority.
 
 ### `--scan-dependency` <sup>[frontend]</sup>
 
-The `--scan-dependency` command outputs direct dependencies and other information for a package's source code or `.cjo` file in JSON format.
+The `--scan-dependency` command can be used to obtain the direct dependencies of other packages and other information for the specified package source code or a package's `cjo` file, output in JSON format.
+
+<!-- code_check_manual -->
 
 ```cangjie
 // this file is placed under directory pkgA
@@ -286,7 +266,7 @@ import pkgB.subB.*
 cjc --scan-dependency --package pkgA
 ```
 
-Or:
+Or
 
 ```shell
 cjc --scan-dependency pkgA.cjo
@@ -354,121 +334,115 @@ cjc --scan-dependency pkgA.cjo
 
 ### `--no-sub-pkg` <sup>[frontend]</sup>
 
-Indicates that the current package has no sub-packages.
+Indicates that the currently compiled package has no sub-packages.
 
-Enabling this option allows the compiler to further reduce code size.
+After enabling this option, the compiler can further reduce the code size.
 
 ### `--warn-off`, `-Woff <value>` <sup>[frontend]</sup>
 
-Disables all or specific warning groups during compilation.
+Turns off all or part of the warnings generated during compilation.
 
-`<value>` can be `all` or a predefined warning group. When `all` is specified, no warnings are printed; when a specific group is specified, warnings from that group are suppressed.
+`<value>` can be `all` or a predefined warning group. When the parameter is `all`, the compiler does not print any warnings generated during the compilation process. When the parameter is another predefined group, the compiler does not print warnings of that group generated during the compilation process.
 
-Each warning includes a `#note` indicating its group and how to disable it. Use `--help` to list all available warning groups.
+When each warning is printed, there is a `#note` line indicating which group the warning belongs to and how to turn it off. You can print all available compilation option parameters via `--help` to check the specific group names.
 
 ### `--warn-on`, `-Won <value>` <sup>[frontend]</sup>
 
-Enables all or specific warning groups during compilation.
+Turns on all or part of the warnings generated during compilation.
 
-`<value>` follows the same rules as `--warn-off`. `--warn-on` is typically combined with `--warn-off`; e.g., `-Woff all -Won <value>` enables only the specified warning group.
+The `<value>` for `--warn-on` has the same range as that for `--warn-off`. `--warn-on` is usually used in combination with `--warn-off`. For example, you can set `-Woff all -Won <value>` to allow only warnings of group `<value>` to be printed.
 
-**Note:** The order of `--warn-on` and `--warn-off` matters. For the same group, the latter option overrides the former. For example, `-Won <value> -Woff all` disables all warnings.
+**Important Note:** `--warn-on` and `--warn-off` are order-sensitive in use. For the same group, the later option overrides the earlier setting. For example, swapping the positions of the two compilation options in the previous example to `-Won <value> -Woff all` results in all warnings being turned off.
 
 ### `--error-count-limit <value>` <sup>[frontend]</sup>
 
 Limits the maximum number of errors printed by the compiler.
 
-`<value>` can be `all` or a non-negative integer. When `all`, all errors are printed; when `N`, at most `N` errors are printed. Defaults to 8.
+The parameter `<value>` can be `all` or a non-negative integer. When the parameter is `all`, the compiler prints all errors generated during the compilation process. When the parameter is a non-negative integer `N`, the compiler prints at most `N` errors. The default value of this option is 8.
 
 ### `--output-dir <value>` <sup>[frontend]</sup>
 
-Specifies the directory for intermediate and final output files.
+Controls the directory where intermediate files and final files generated by the compiler are saved.
 
-Controls where intermediate files (e.g., `.cjo`) are saved. If both `--output-dir <path1>` and `--output <path2>` are specified, intermediate files go to `<path1>`, and final output goes to `<path1>/<path2>`.
+Controls the directory where intermediate files generated by the compiler are saved, such as `.cjo` files. When `--output-dir <path1>` and `--output <path2>` are both specified, intermediate files are saved to `<path1>`, and the final output is saved to `<path1>/<path2>`.
 
 > **Note:**
 >
-> When used with `--output`, the `--output` path must be relative.
+> When this option and the `--output` option are specified together, the parameter of the `--output` option must be a relative path.
 
 ### `--static`
 
-Statically links Cangjie libraries.
+Links against the Cangjie library statically.
 
-This option only applies when compiling executables.
+This option only takes effect when compiling executable files.
 
 **Note:**
 
-`--static` is only effective on Linux and has no effect on other platforms.### `--static-std`
+The `--static` option is only applicable to the Linux platform and has no effect on other platforms.
 
-Statically link the std module of the Cangjie library.
+### `--static-std`
 
-This option only takes effect when compiling dynamic libraries or executable files.
+Links against the `std` module of the Cangjie library statically.
 
-When compiling executable programs (i.e., when `--output-type=exe` is specified), `cjc` statically links the std module of the Cangjie library by default.
+This option only takes effect when compiling dynamic link libraries or executable files.
+
+When compiling an executable program (i.e., when `--output-type=exe` is specified), `cjc` links against the `std` module of the Cangjie library statically by default.
 
 ### <span id="--dy-std">`--dy-std`
 
-Dynamically link the std module of the Cangjie library.
+Links against the `std` module of the Cangjie library dynamically.
 
-This option only takes effect when compiling dynamic libraries or executable files.
+This option only takes effect when compiling dynamic link libraries or executable files.
 
-When compiling dynamic libraries (i.e., when `--output-type=dylib` is specified), `cjc` dynamically links the std module of the Cangjie library by default.
+When compiling a dynamic library (i.e., when `--output-type=dylib` is specified), `cjc` links against the `std` module of the Cangjie library dynamically by default.
 
-**Important Notes:**
+**Note:**
 
-1. When both `--static-std` and `--dy-std` options are used, only the last option takes effect.
-2. The `--dy-std` option cannot be used together with the `--static-libs` option; otherwise, an error will occur.
-3. When compiling an executable program that links to a Cangjie dynamic library (i.e., a product compiled with the `--output-type=dylib` option), the `--dy-std` option must be explicitly specified to dynamically link the standard library. Otherwise, multiple copies of the standard library may appear in the program, potentially leading to runtime issues.
+1. If the `--static-std` and `--dy-std` options are used together, only the last option takes effect.
+2. When compiling an executable program that links against Cangjie dynamic libraries (i.e., products compiled via the `--output-type=dylib` option), you must explicitly specify the `--dy-std` option to link against the standard library dynamically. Otherwise, multiple copies of the standard library may appear in the program assembly, which may eventually lead to runtime issues.
 
 ### `--static-libs`
 
-Statically link modules in the Cangjie library other than the std and runtime modules.
-
-This option only takes effect when compiling dynamic libraries or executable files. `cjc` statically links modules in the Cangjie library other than the std and runtime modules by default.
+> **Note:**
+>
+> This option is deprecated and will be removed in a future version. Using this option has no functional effect in the current version.
 
 ### `--dy-libs`
 
-Dynamically link non-std modules in the Cangjie library.
-
-This option only takes effect when compiling dynamic libraries or executable files.
-
-**Important Notes:**
-
-1. When both `--static-libs` and `--dy-libs` options are used, only the last option takes effect.
-2. The `--static-std` option cannot be used together with the `--dy-libs` option; otherwise, an error will occur.
-3. When `--dy-std` is used alone, the `--dy-libs` option will be enabled by default, and a warning message will be displayed.
-4. When `--dy-libs` is used alone, the `--dy-std` option will be enabled by default, and a warning message will be displayed.
+> **Note:**
+>
+> This option is deprecated and will be removed in a future version. Using this option has no functional effect in the current version.
 
 ### `--stack-trace-format=[default|simple|all]`
 
-Specify the exception stack trace printing format to control the display of stack frame information when an exception is thrown. The default format is `default`.
+Specifies the format for printing exception call stacks, which controls the display of stack frame information when exceptions are thrown. The default is `default`.
 
-The stack trace formats are described as follows:
+The formats for exception call stacks are described as follows:
 
 - `default` format: `Function name with generic parameters omitted (filename:line number)`
 - `simple` format: `filename:line number`
-- `all` format: `Full function name (filename:line number)`
+- `all` format: `Complete function name (filename:line number)`
 
 ### `--lto=[full|thin]`
 
-Enable and specify the `LTO` (`Link Time Optimization`) compilation mode.
+Enables and specifies the `LTO` (Link Time Optimization) optimization compilation mode.
 
-**Important Notes:**
+**Note:**
 
-1. This feature is not supported on `Windows` and `macOS` platforms.
-2. When `LTO` is enabled, the following optimization compilation options cannot be used simultaneously: `-Os`, `-Oz`.
+1. This feature is not supported on Windows and macOS platforms.
+2. When enabling and specifying the `LTO` (Link Time Optimization) optimization compilation mode, the following optimization compilation options are not allowed to be used simultaneously: `-Os`, `-Oz`.
 
-`LTO` supports two compilation modes:
+`LTO` optimization supports two compilation modes:
 
-- `--lto=full`: `full LTO` merges all compilation modules together and performs global optimization. This mode offers the highest optimization potential but requires longer compilation time.
-- `--lto=thin`: Compared to `full LTO`, `thin LTO` uses parallel optimization across multiple modules and supports incremental linking by default. It has shorter compilation time than `full LTO` but less optimization potential due to reduced global information.
+- `--lto=full`: `full LTO` merges all compilation modules together and performs optimizations globally. This method can achieve maximum optimization potential but also requires longer compilation time.
+- `--lto=thin`: Compared to `full LTO`, `thin LTO` uses parallel optimization on multiple modules and supports incremental compilation during linking by default. The compilation time is shorter than that of `full LTO`. However, due to the loss of more global information, the optimization effect is not as good as that of `full LTO`.
 
-    - Typical optimization effectiveness comparison: `full LTO` **>** `thin LTO` **>** conventional static linking compilation.
-    - Typical compilation time comparison: `full LTO` **>** `thin LTO` **>** conventional static linking compilation.
+    - Generally, the optimization effect comparison: `full LTO` **>** `thin LTO` **>** conventional static linking compilation.
+    - Generally, the compilation time comparison: `full LTO` **>** `thin LTO` **>** conventional static linking compilation.
 
-`LTO` usage scenarios:
+Usage scenarios for `LTO` optimization:
 
-1. Compile an executable file using the following commands:
+1. Compile an executable file using the following command:
 
     ```shell
     $ cjc test.cj --lto=full
@@ -476,110 +450,110 @@ Enable and specify the `LTO` (`Link Time Optimization`) compilation mode.
     $ cjc test.cj --lto=thin
     ```
 
-2. Compile a static library (`.bc` file) required for `LTO` mode and use it for executable file compilation:
+2. Compile a static library (`.bc` file) required for `LTO` mode using the following command, and use this library file to participate in executable file compilation:
 
     ```shell
     # Generate a static library as a .bc file
     $ cjc pkg.cj --lto=full --output-type=staticlib -o libpkg.bc
-    # Input the .bc file along with the source file to the Cangjie compiler for executable compilation
+    # Input the .bc file together with the source file to the Cangjie compiler to compile the executable file
     $ cjc test.cj libpkg.bc --lto=full
     ```
 
     > **Note:**
     >
-    > In `LTO` mode, the path to the static library (`.bc` file) must be provided to the Cangjie compiler.
+    > When inputting a static library (`.bc` file) in `LTO` mode, you need to input the path of the file to the Cangjie compiler.
 
-3. In `LTO` mode, when statically linking the standard library (`--static-std` & `--static-libs`), the standard library code will participate in `LTO` optimization and be statically linked into the executable. When dynamically linking the standard library (`--dy-std` & `--dy-libs`), the dynamic library from the standard library will still be used for linking in `LTO` mode.
+3. In `LTO` mode, when statically linking the standard library (`--static-std`), the code of the standard library also participates in `LTO` optimization and is statically linked to the executable file. When dynamically linking the standard library (`--dy-std`), the dynamic library in the standard library is still used for linking in `LTO` mode.
 
     ```shell
-    # Static linking: standard library code participates in LTO optimization
+    # Static linking, the standard library code also participates in LTO optimization
     $ cjc test.cj --lto=full --static-std
-    # Dynamic linking: dynamic library is used for linking; standard library code does not participate in LTO optimization
+    # Dynamic linking, still uses dynamic libraries for linking, and the standard library code does not participate in LTO optimization
     $ cjc test.cj --lto=full --dy-std
     ```
 
 ### `--pgo-instr-gen`
 
-Enable instrumentation compilation to generate an executable program with instrumentation information.
+Enables instrumentation compilation to generate an executable program carrying instrumentation information.
 
 This feature is not supported when compiling for macOS and Windows targets.
 
-`PGO` (`Profile-Guided Optimization`) is a common compilation optimization technique that uses runtime profiling information to further improve program performance. `Instrumentation-based PGO` is a `PGO` optimization method that uses instrumentation information. It typically involves three steps:
+`PGO` (全称 `Profile-Guided Optimization`) is a commonly used compilation optimization technique that further improves program performance by using runtime profiling information. `Instrumentation-based PGO` is a `PGO` optimization method that uses instrumentation information. It usually includes three steps:
 
-1. The compiler performs instrumentation compilation on the source code to generate an instrumented executable program.
-2. Run the instrumented executable program to generate a profile.
-3. The compiler uses the profile to recompile the source code.
+1. The compiler instruments and compiles the source code to generate an instrumented executable program.
+2. Run the instrumented executable program to generate a profile file.
+3. The compiler uses the profile file to compile the source code again.
 
 ```shell
-# Generate an executable program `test` with source code execution statistics (instrumentation information)
+# Generate an executable program test that supports source code execution information statistics (carrying instrumentation information)
 $ cjc test.cj --pgo-instr-gen -o test
-# Run the executable program `test` to generate the `default.profraw` profile
+# After running the executable program test, a default.profraw profile file is generated
 $ ./test
 ```
 
 ### `--pgo-instr-use=<.profdata>`
 
-Use the specified `profdata` profile to guide compilation and generate an optimized executable program.
+Uses the specified `profdata` profile file to guide compilation and generate an optimized executable program.
 
 This feature is not supported when compiling for macOS targets.
 
 > **Note:**
 >
-> The `--pgo-instr-use` compilation option only supports profiles in `profdata` format. The `llvm-profdata` tool can be used to convert `profraw` profiles to `profdata` profiles.
+> The `--pgo-instr-use` compilation option only supports profile files in `profdata` format. You can use the `llvm-profdata` tool to convert `profraw` profile files to `profdata` profile files.
 
 ```shell
-# Convert `profraw` file to `profdata` file
+# Convert the `profraw` file to a `profdata` file.
 $ LD_LIBRARY_PATH=$CANGJIE_HOME/third_party/llvm/lib:$LD_LIBRARY_PATH $CANGJIE_HOME/third_party/llvm/bin/llvm-profdata merge default.profraw -o default.profdata
-# Use the specified `default.profdata` profile to guide compilation and generate the optimized executable program `testOptimized`
+# Use the specified `default.profdata` profile file to guide compilation and generate an optimized executable program `testOptimized`
 $ cjc test.cj --pgo-instr-use=default.profdata -o testOptimized
 ```
 
 ### `--target <value>` <sup>[frontend]</sup>
 
-Specify the target platform triple for compilation.
+Specifies the triple of the target platform for compilation.
 
-The parameter `<value>` is generally a string in the following format: `<arch>(-<vendor>)-<os>(-<env>)`. Here:
+The parameter `<value>` is generally a string in the following format: `<arch>(-<vendor>)-<os>(-<env>)`. Among them:
 
-- `<arch>` represents the system architecture of the target platform, e.g., `aarch64`, `x86_64`, etc.
-- `<vendor>` represents the vendor of the target platform, commonly `apple`, etc. If the vendor is unspecified or unimportant, it is often written as `unknown` or omitted.
-- `<os>` represents the operating system of the target platform, e.g., `Linux`, `Win32`, etc.
-- `<env>` represents the ABI or standard specification of the target platform, used to distinguish different runtime environments of the same OS. Examples include `gnu`, `musl`, etc. If the OS does not require finer distinction based on `<env>`, this field can also be omitted.
+- `<arch>` represents the system architecture of the target platform, such as `aarch64`, `x86_64`, etc.
+- `<vendor>` represents the manufacturer developing the target platform, such as `apple` for common ones. When there is no clear platform manufacturer or the manufacturer is not important, it is often written as `unknown` or omitted directly.
+- `<os>` represents the operating system of the target platform, such as `Linux`, `Win32`, etc.
+- `<env>` represents the ABI or standard specification of the target platform, used to distinguish different runtime environments of the same operating system in more detail, such as `gnu`, `musl`, etc. This item can also be omitted when the operating system does not need to be distinguished in more detail based on `<env>`.
 
-Currently, `cjc` supports the following host and target platforms for cross-compilation:
+Currently, the local platforms and target platforms supported by `cjc` for cross-compilation are as shown in the following table:
 
-| Host Platform       | Target Platform         |
-| ------------------- | ----------------------- |
-| x86_64-linux-gnu    | x86_64-windows-gnu      |
-| aarch64-linux-gnu   | x86_64-windows-gnu      |
+| 本地平台 (host)    | 目标平台 (target)   |
+| ------------------ | ------------------ |
+| x86_64-linux-gnu   | x86_64-windows-gnu     |
+| aarch64-linux-gnu   | x86_64-windows-gnu     |
 
-Before using `--target` to specify a target platform for cross-compilation, ensure that the corresponding cross-compilation toolchain and a Cangjie SDK version compatible with the target platform are prepared on the host platform.
+Before using `--target` to specify a target platform for cross-compilation, please prepare the cross-compilation toolchain for the corresponding target platform and the corresponding Cangjie SDK version that can be compiled for that target platform and run on the local platform.
 
 ### `--target-cpu <value>`
 
 > **Note:**
 >
-> This option is experimental. Binaries generated using this option may have potential runtime issues. Use this option with caution. This option must be used with the `--experimental` option.
+> This option is an experimental feature. Binaries generated using this feature may have potential runtime issues. Please be aware of the risks of using this option. This option must be used together with the `--experimental` option.
 
-Specify the CPU type of the compilation target.
+Specifies the CPU type of the compilation target.
 
-When specifying the CPU type, the compiler will attempt to use instruction sets specific to that CPU type and apply optimizations tailored for it. Binaries generated for a specific CPU type may lose portability and might not run on other CPUs (even those with the same architecture instruction set).
+When specifying the CPU type of the compilation target, the compiler attempts to use the unique extended instruction set of that CPU type and apply optimizations applicable to that CPU type when generating binaries. Binaries generated for a specific CPU type usually lose portability and may not run on other CPUs (with the same architecture instruction set).
 
 This option supports the following tested CPU types:
 
-**x86-64 Architecture:**
+**x86-64 architecture:**
 
 - generic
 
-**aarch64 Architecture:**
+**aarch64 architecture:**
 
 - generic
 - tsv110
 
-`generic` is the universal CPU type. When `generic` is specified, the compiler generates universal instructions for the architecture. Binaries generated this way can run on various CPUs of the same architecture, provided the OS and dynamic dependencies are consistent. The default value for `--target-cpu` is `generic`.
+`generic` is a general-purpose CPU type. When `generic` is specified, the compiler generates general-purpose instructions applicable to that architecture. Thus, the generated binaries can run on various CPUs based on that architecture, regardless of the specific CPU type, provided that the operating system and the dynamic dependencies of the binaries themselves are consistent. The default value of the `--target-cpu` option is `generic`.
 
-This option also supports the following CPU types, but they have not been tested. Binaries generated for these CPU types may have runtime issues.
+This option also supports the following CPU types, but these CPU types have not been tested and verified. Please be aware that binaries generated using the following CPU types may have runtime issues.
 
-**x86-64 Architecture:**
+**x86-64 architecture:**
 
 - alderlake
 - amdfam10
@@ -667,7 +641,7 @@ This option also supports the following CPU types, but they have not been tested
 - znver2
 - znver3
 
-**aarch64 Architecture:**
+**aarch64 architecture:**
 
 - a64fx
 - ampere1
@@ -724,23 +698,23 @@ This option also supports the following CPU types, but they have not been tested
 - thunderxt83
 - thunderxt88
 
-In addition to the above CPU types, this option also supports `native` as the current CPU type. The compiler will attempt to identify the current machine's CPU type and generate binaries tailored for it.
+In addition to the above optional CPU types, this option can also use `native` as the current CPU type. The compiler attempts to identify the CPU type of the current machine and uses that CPU type as the target type to generate binaries.
 
 ### `--toolchain <value>`, `-B <value>`, `-B<value>`
 
-Specify the path to the binary files in the compilation toolchain.
+Specifies the path where the binary files in the compilation toolchain are located.
 
-These binary files include the compiler, linker, and C runtime object files (e.g., `crt0.o`, `crti.o`, etc.) provided by the toolchain.
+These binary files include the compiler, linker, and C runtime object files provided by the toolchain (such as `crt0.o`, `crti.o`, etc.).
 
-After preparing the compilation toolchain, you can place it in a custom path and pass this path to the compiler using `--toolchain <value>`. This allows the compiler to invoke the binaries in that path for cross-compilation.
+After preparing the compilation toolchain, you can store it in a custom path and then pass that path to the compiler via `--toolchain <value>`, allowing the compiler to call the binary files in that path for cross-compilation.
 
 ### `--sysroot <value>`
 
-Specify the root directory path of the compilation toolchain.
+Specifies the root directory path of the compilation toolchain.
 
-For cross-compilation toolchains with fixed directory structures, if there is no need to specify paths for binaries and dynamic/static library files outside this directory, you can directly use `--sysroot <value>` to pass the toolchain's root directory path to the compiler. The compiler will analyze the corresponding directory structure based on the target platform and automatically search for the required binary and library files. Using this option eliminates the need to specify `--toolchain` and `--library-path` parameters.
+For cross-compilation toolchains with a fixed directory structure, if there is no need to specify paths to binary, dynamic library, or static library files outside this directory, you can directly pass the root directory path of the toolchain to the compiler using `--sysroot <value>`. The compiler analyzes the corresponding directory structure according to the target platform type and automatically searches for the required binary files, dynamic library files, and static library files. After using this option, there is no need to specify the `--toolchain` and `--library-path` parameters.
 
-For example, when cross-compiling for a platform with the `triple` `arch-os-env`, if the cross-compilation toolchain has the following directory structure:
+If cross-compiling to a platform with a `triple` of `arch-os-env` and the cross-compilation toolchain has the following directory structure:
 
 ```text
 /usr/sdk/arch-os-env
@@ -758,19 +732,19 @@ For example, when cross-compiling for a platform with the `triple` `arch-os-env`
 └── ...
 ```
 
-For the Cangjie source file `hello.cj`, you can use the following command to cross-compile `hello.cj` for the `arch-os-env` platform:
+For the Cangjie source file `hello.cj`, you can use the following command to cross-compile `hello.cj` to the `arch-os-env` platform:
 
 ```shell
 cjc --target=arch-os-env --toolchain /usr/sdk/arch-os-env/bin --toolchain /usr/sdk/arch-os-env/lib --library-path /usr/sdk/arch-os-env/lib hello.cj -o hello
 ```
 
-Alternatively, you can use the abbreviated parameters:
+You can also use abbreviated parameters:
 
 ```shell
 cjc --target=arch-os-env -B/usr/sdk/arch-os-env/bin -B/usr/sdk/arch-os-env/lib -L/usr/sdk/arch-os-env/lib hello.cj -o hello
 ```
 
-If the toolchain's directory follows conventional structures, you can omit the `--toolchain` and `--library-path` parameters and use the following command directly:
+If the directory of the toolchain conforms to the conventional directory structure, you can directly use the following command without using the `--toolchain` and `--library-path` parameters:
 
 ```shell
 cjc --target=arch-os-env --sysroot /usr/sdk/arch-os-env hello.cj -o hello
@@ -778,53 +752,58 @@ cjc --target=arch-os-env --sysroot /usr/sdk/arch-os-env hello.cj -o hello
 
 ### `--strip-all`, `-s`
 
-When compiling executable files or dynamic libraries, specify this option to remove the symbol table from the output file.
+When compiling an executable file or dynamic library, specifies this option to remove the symbol table from the output file.
 
 ### `--discard-eh-frame`
 
-When compiling executable files or dynamic libraries, specify this option to remove the `eh_frame` section and part of the `eh_frame_hdr` section (information related to `crt` will not be processed). This reduces the size of the executable or dynamic library but may affect debugging information.
+When compiling an executable file or dynamic library, specifies this option to remove part of the information in the eh_frame section and eh_frame_hdr section (information related to crt is not processed), reducing the size of the executable file or dynamic library, but affecting debugging information.
 
 This feature is not supported when compiling for macOS targets.
 
 ### `--set-runtime-rpath`
 
-Write the absolute path of the Cangjie runtime library directory into the RPATH/RUNPATH section of the binary. Using this option eliminates the need to set the `LD_LIBRARY_PATH` (for Linux) or `DYLD_LIBRARY_PATH` (for macOS) environment variables to specify the Cangjie runtime library directory when running the program in the build environment.
+Writes the absolute path of the directory where the Cangjie runtime library is located into the RPATH/RUNPATH section of the binary. After using this option, there is no need to set the Cangjie runtime library directory using LD_LIBRARY_PATH (applicable to Linux platforms) or DYLD_LIBRARY_PATH (applicable to macOS platforms) when running the Cangjie program in the build environment.
 
 This feature is not supported when compiling for Windows targets.
 
 ### `--link-option <value>`<sup>1</sup>
 
-Specify linker options.
+Specifies linker options.
 
-`cjc` will pass the value of this option as a parameter to the linker. Available parameters vary depending on the linker (system or specified). Multiple linker options can be specified by using `--link-option` multiple times.
+`cjc` passes the value of this option as a parameter directly to the linker. The available parameters vary depending on the (system or specified) linker. You can use `--link-option` multiple times to specify multiple linker options.
 
 ### `--link-options <value>`<sup>1</sup>
 
-Specify linker options.
+Specifies linker options.
 
-`cjc` will pass multiple parameters of this option to the linker, separated by spaces. Available parameters vary depending on the linker (system or specified). Multiple linker options can be specified by using `--link-options` multiple times.
+`cjc` passes multiple parameters of this option to the linker, separated by spaces. The available parameters vary depending on the (system or specified) linker. You can use `--link-options` multiple times to specify multiple linker options.
 
-<sup>1</sup> Superscript indicates that linker passthrough options may vary depending on the linker. Refer to the linker documentation for supported options.
+<sup>1</sup> The superscript indicates that linker passthrough options may vary depending on the linker. For specific supported options, refer to the linker documentation.
 
 ### `--disable-reflection`
 
-Disable reflection, i.e., do not generate reflection information during compilation.
+Disables the reflection option, i.e., does not generate relevant reflection information during compilation.
 
 > **Note:**
 >
-> When cross-compiling for the `aarch64-linux-ohos` target, reflection information is disabled by default, and this option has no effect.
+> When cross-compiling to the aarch64-linux-ohos target, reflection information is disabled by default, and this option has no effect.
 
 ### `--profile-compile-time` <sup>[frontend]</sup>
 
-Print time consumption data for each compilation phase.
+Outputs the time consumption data of each compilation phase to a file with the suffix `.time.prof`, which is saved in the directory specified by `output`. If `output` specifies a file, `.time.prof` is in the same directory as that file.
 
-### `--profile-compile## Unit Test Options
+### `--profile-compile-memory` <sup>[frontend]</sup>
+
+Outputs the memory consumption data of each compilation phase to a file with the suffix `.mem.prof`, which is saved in the directory specified by `output`. If `output` specifies a file, `.mem.prof` is in the same directory as that file.
+
+## Unit Test Options
 
 ### `--test` <sup>[frontend]</sup>
 
-An entry point provided by the `unittest` testing framework, automatically generated by macros. When compiling with the `cjc --test` option, the program entry is no longer `main` but `test_entry`. For usage of the unittest testing framework, refer to the *Cangjie Programming Language Standard Library API* documentation.
+The entry point provided by the `unittest` testing framework, automatically generated by macros. When compiling with the `cjc --test` option, the program entry point is no longer `main` but `test_entry`. For usage of the `unittest` testing framework, refer to the *Cangjie Programming Language Standard Library API* documentation.
 
 For the Cangjie file `a.cj` in the `pkgc` directory:
+
 <!-- run -->
 
 ```cangjie
@@ -846,13 +825,13 @@ You can use the following command in the `pkgc` directory:
 cjc a.cj --test
 ```
 
-to compile `a.cj`. Executing `main` will produce the following output:
+To compile `a.cj`. Executing `main` produces the following output:
 
 > **Note:**
 >
-> The execution time of test cases is not guaranteed to be consistent across runs.
+> The execution time of test cases is not guaranteed to be the same each time.
 
-```cangjie
+```text
 case1
 --------------------------------------------------------------------------------------------------
 TP: default, time elapsed: 29710 ns, Result:
@@ -878,14 +857,16 @@ application
 You can use the `-p` compilation option in the `application` directory to compile the entire package:
 
 ```shell
-cjc pkgc --test -p
+cjc --test -p pkgc
 ```
 
-This will compile all test cases (`a1.cj` and `a2.cj`) under the `pkgc` package.
+To compile the test cases `a1.cj` and `a2.cj` under the entire `pkgc` package.
+
+<!-- code_check_manual -->
 
 ```cangjie
 /*a1.cj*/
-package a
+package pkgc
 
 import std.unittest.*
 import std.unittest.testmacro.*
@@ -899,9 +880,11 @@ public class TestA {
 }
 ```
 
+<!-- code_check_manual -->
+
 ```cangjie
 /*a2.cj*/
-package a
+package pkgc
 
 import std.unittest.*
 import std.unittest.testmacro.*
@@ -915,9 +898,9 @@ public class TestB {
 }
 ```
 
-Executing `main` will produce the following output (**output is for reference only**):
+Executing `main` produces the following output (**output information is for reference only**):
 
-```cangjie
+```text
 case1
 --------------------------------------------------------------------------------------------------
 TP: a, time elapsed: 367800 ns, Result:
@@ -946,15 +929,17 @@ Summary: TOTAL: 2
 
 ### `--test-only` <sup>[frontend]</sup>
 
-The `--test-only` option is used to compile only the test portion of a package.
+The `--test-only` option is used to compile only the test part of a package.
 
-When this option is enabled, the compiler will only compile test files (those ending with `_test.cj`) in the package.
+If this option is enabled, the compiler compiles only the test files in the package (ending with `_test.cj`).
 
 > **Note:**
 >
-> When using this option, the same package should first be compiled in regular mode, and then dependencies should be added via the `-L`/`-l` linking options or by including the `.bc` files when using the `LTO` option. Otherwise, the compiler will report missing dependency symbols.
+> When using this option, you should compile the same package in normal mode separately, then add dependencies via the `-L`/`-l` link options, or add the dependent `.bc` files when using the `LTO` option. Otherwise, the compiler will report an error of missing dependent symbols.
 
 Example:
+
+<!-- code_check_manual -->
 
 ```cangjie
 /*main.cj*/
@@ -964,11 +949,13 @@ func concatM(s1: String, s2: String): String {
     return s1 + s2
 }
 
-main() {
+main(): Int64 {
     println(concatM("a", "b"))
     0
 }
 ```
+
+<!-- code_check_manual -->
 
 ```cangjie
 /*main_test.cj*/
@@ -983,75 +970,75 @@ class Tests {
 }
 ```
 
-The compilation commands are as follows:
+The commands for compiling with the compiler are as follows:
 
 ```shell
-# Compile the production part of the package first, only `main.cj` file would be compiled here
-cjc -p my_pkg --output-type=static -o=output/libmain.a
-# Compile the test part of the package, Only `main_test.cj` file would be compiled here
-cjc -p my_pkg --test-only -L output -lmain
+# Compile the production part of the package first, only the `main.cj` file is compiled here
+cjc -p my_pkg --output-type=staticlib -o=output/libmain.a
+# Compile the test part of the package, Only the `main_test.cj` file is compiled here
+cjc -p my_pkg --test-only -L output -lmain --import-path output
 ```
 
 ### `--mock <on|off|runtime-error>` <sup>[frontend]</sup>
 
-If `on` is passed, the package will enable mock compilation, allowing classes in the package to be mocked in test cases. `off` is an explicit way to disable mocking.
+If `on` is passed, the package enables mock compilation. This option allows mocking classes in the package in test cases. `off` is an explicit way to disable mock.
 
 > **Note:**
 >
-> Mock support is automatically enabled in test mode (when `--test` is enabled), and there is no need to explicitly pass the `--mock` option.
+> In test mode (when `--test` is enabled), mock support for this package is automatically enabled, and there is no need to explicitly pass the `--mock` option.
 
-`runtime-error` is only available in test mode (when `--test` is enabled). It allows compiling packages with mock code but does not perform any mock-related processing in the compiler (which may introduce overhead and affect test runtime performance). This can be useful for benchmarking test cases with mock code. When using this compilation option, avoid compiling and running test cases with mock code, as this will throw a runtime exception.
+`runtime-error` is only available in test mode (when `--test` is enabled). It allows compiling packages with mock code but does not perform any mock-related processing in the compiler (these processes may cause some overhead and affect the runtime performance of tests). This may be useful for benchmarking test cases with mock code. When using this compilation option, avoid compiling and running tests with mock code, otherwise, runtime exceptions will be thrown.
 
 ## Macro Options
 
-`cjc` supports the following macro options. For more details about macros, refer to the ["Introduction to Macros"](../Macro/macro_introduction.md) chapter.
+`cjc` supports the following macro options. For more information about macros, refer to the ["Introduction to Macros"](../Macro/macro_introduction.md) chapter.
 
 ### `--compile-macro` <sup>[frontend]</sup>
 
-Compile macro definition files to generate the default macro definition dynamic library file.
+Compiles macro definition files and generates default macro definition dynamic library files.
 
 ### `--debug-macro` <sup>[frontend]</sup>
 
-Generate Cangjie code files after macro expansion. This option can be used to debug macro expansion functionality.
+Generates Cangjie code files after macro expansion. This option can be used to debug macro expansion functionality.
 
 ### `--parallel-macro-expansion` <sup>[frontend]</sup>
 
-Enable parallel macro expansion. This option can be used to reduce macro expansion compilation time.
+Enables parallel macro expansion. This option can be used to shorten the macro expansion compilation time.
 
 ## Conditional Compilation Options
 
-`cjc` supports the following conditional compilation options. For more details about conditional compilation, refer to the ["Conditional Compilation"](../compile_and_build/conditional_compilation.md) chapter.
+`cjc` supports the following conditional compilation options. For more information about conditional compilation, refer to ["Conditional Compilation"](../compile_and_build/conditional_compilation.md).
 
 ### `--cfg <value>` <sup>[frontend]</sup>
 
-Specify custom compilation conditions.
+Specifies custom compilation conditions.
 
 ## Parallel Compilation Options
 
-`cjc` supports the following parallel compilation options for higher compilation efficiency.
+`cjc` supports the following parallel compilation options to achieve higher compilation efficiency.
 
 ### `--jobs <value>`, `-j <value>` <sup>[frontend]</sup>
 
-Set the maximum number of parallel jobs allowed during parallel compilation. Here, `value` must be a reasonable non-negative integer. If `value` exceeds the hardware's maximum parallel capability, the compiler will use the hardware's maximum parallel capability.
+Sets the maximum number of parallel tasks allowed during parallel compilation. `<value>` must be a reasonable non-negative integer. When `<value>` is greater than the maximum parallel capability supported by the hardware, the compiler performs parallel compilation with the maximum parallel capability supported by the hardware.
 
-If this compilation option is not set, the compiler will automatically calculate the maximum number of parallel jobs based on hardware capabilities.
+If this compilation option is not set, the compiler automatically calculates the maximum number of parallel tasks based on hardware capabilities.
 
 > **Note:**
 >
-> `--jobs 1` means compilation will be performed entirely in serial mode.
+> `--jobs 1` means compiling in fully serial mode.
 
 ### `--aggressive-parallel-compile`, `--apc`, `--aggressive-parallel-compile=<value>`, `--apc=<value>` <sup>[frontend]</sup>
 
-When this option is enabled, the compiler will adopt a more aggressive strategy (which may impact optimization and reduce program runtime performance) to achieve higher compilation efficiency. Here, `value` is an optional parameter indicating the maximum number of parallel jobs allowed for aggressive parallel compilation:
+After enabling this option, the compiler adopts a more aggressive strategy (which may affect optimizations and thus cause a decrease in program runtime performance) to perform aggressive parallel compilation to achieve higher compilation efficiency. `<value>` is an optional parameter indicating the maximum number of parallel tasks allowed for the aggressive parallel compilation part:
 
-- If `value` is used, it must be a reasonable non-negative integer. If `value` exceeds the hardware's maximum parallel capability, the compiler will automatically calculate the maximum number of parallel jobs based on hardware capabilities. It is recommended to set `value` to a non-negative integer less than the number of physical CPU cores.
-- If `value` is not used, aggressive parallel compilation is enabled by default, and the number of parallel jobs will match `--jobs`.
+- If `<value>` is used, it must be a reasonable non-negative integer. When `<value>` is greater than the maximum parallel capability supported by the hardware, the compiler automatically calculates the maximum number of parallel tasks based on hardware capabilities. It is recommended to set `<value>` to a non-negative integer less than the number of physical cores of the hardware.
+- If `<value>` is not used, aggressive parallel compilation is enabled by default, and the number of parallel tasks for the aggressive parallel compilation part is the same as that for `--jobs`.
 
-Additionally, if the `value` of this option differs between two compilations of the same code, or if the option's enabled/disabled state differs, the compiler does not guarantee binary consistency between the outputs of these two compilations.
+In addition, if the `value` of this option is different or the switch state of this option is different when compiling the same code twice, the compiler does not guarantee the binary consistency of the products compiled twice.
 
-Rules for enabling or disabling aggressive parallel compilation:
+The rules for enabling or disabling aggressive parallel compilation are as follows:
 
-- In the following scenarios, aggressive parallel compilation will be forcibly disabled by the compiler and cannot be enabled:
+- In the following scenarios, aggressive parallel compilation is forcibly disabled by the compiler and cannot be enabled:
 
     - `--fobf-string`
     - `--fobf-const`
@@ -1063,135 +1050,135 @@ Rules for enabling or disabling aggressive parallel compilation:
     - Compiling for Windows targets
     - Compiling for macOS targets
 
-- If `--aggressive-parallel-compile=<value>` or `--apc=<value>` is used, the enabled/disabled state of aggressive parallel compilation is controlled by `value`:
+- If `--aggressive-parallel-compile=<value>` or `--apc=<value>` is used, the switch of aggressive parallel compilation is controlled by `value`:
 
-    - `value <= 1`: Disable aggressive parallel compilation.
-    - `value > 1`: Enable aggressive parallel compilation, and the number of parallel jobs depends on `value`.
+    - `value <= 1`: Disables aggressive parallel compilation.
+    - `value > 1`: Enables aggressive parallel compilation, and the number of parallel tasks for aggressive parallel compilation depends on `value`.
 
-- If `--aggressive-parallel-compile` or `--apc` is used, aggressive parallel compilation is enabled by default, and the number of parallel jobs matches `--jobs`.
+- If `--aggressive-parallel-compile` or `--apc` is used, aggressive parallel compilation is enabled by default, and the number of parallel tasks for aggressive parallel compilation is the same as that for `--jobs`.
 
-- If this compilation option is not set, the compiler will enable or disable aggressive parallel compilation by default based on the scenario:
+- If this compilation option is not set, the compiler enables or disables aggressive parallel compilation by default according to the scenario:
 
-    - `-O0` or `-g`: Aggressive parallel compilation is enabled by default, and the number of parallel jobs matches `--jobs`. It can be disabled by using `--aggressive-parallel-compile=<value>` or `--apc=<value>` with `value <= 1`.
-    - Non-`-O0` and non-`-g`: Aggressive parallel compilation is disabled by default. It can be enabled by using `--aggressive-parallel-compile=<value>` or `--apc=<value>` with `value > 1`.
+    - `-O0` or `-g`: Aggressive parallel compilation is enabled by default by the compiler, and the number of parallel tasks for aggressive parallel compilation is the same as that for `--jobs`. Aggressive parallel compilation can be disabled by using `--aggressive-parallel-compile=<value>` or `--apc=<value>` with `value <= 1`.
+    - Non `-O0` and non `-g`: Aggressive parallel compilation is disabled by default by the compiler. Aggressive parallel compilation can be enabled by using `--aggressive-parallel-compile=<value>` or `--apc=<value>` with `value > 1`.
 
 ## Optimization Options
 
 ### `--fchir-constant-propagation` <sup>[frontend]</sup>
 
-Enable CHIR constant propagation optimization.
+Enables CHIR constant propagation optimization.
 
 ### `--fno-chir-constant-propagation` <sup>[frontend]</sup>
 
-Disable CHIR constant propagation optimization.
+Disables CHIR constant propagation optimization.
 
 ### `--fchir-function-inlining` <sup>[frontend]</sup>
 
-Enable CHIR function inlining optimization.
+Enables CHIR function inlining optimization.
 
 ### `--fno-chir-function-inlining` <sup>[frontend]</sup>
 
-Disable CHIR function inlining optimization.
+Disables CHIR function inlining optimization.
 
 ### `--fchir-devirtualization` <sup>[frontend]</sup>
 
-Enable CHIR devirtualization optimization.
+Enables CHIR devirtualization optimization.
 
 ### `--fno-chir-devirtualization` <sup>[frontend]</sup>
 
-Disable CHIR devirtualization optimization.
+Disables CHIR devirtualization optimization.
 
 ### `--fast-math` <sup>[frontend]</sup>
 
-When this option is enabled, the compiler will make aggressive (and potentially precision-losing) assumptions about floating-point operations to optimize floating-point calculations.
+After enabling this option, the compiler makes some aggressive assumptions about floating-point numbers that may lose precision to optimize floating-point operations.
 
 ### `-O<N>` <sup>[frontend]</sup>
 
-Use the specified code optimization level.
+Uses the code optimization level specified by the parameter.
 
-Higher optimization levels result in more aggressive code optimizations to generate more efficient programs, but may also require longer compilation times.
+A higher optimization level means the compiler performs more code optimizations to generate more efficient programs, but may also require longer compilation time.
 
-`cjc` uses O0-level optimization by default. Currently, `cjc` supports the following optimization levels: O0, O1, O2, Os, Oz.
+`cjc` uses O0 level code optimization by default. Currently, `cjc` supports the following optimization levels: O0, O1, O2, Os, Oz.
 
-When the optimization level is 2, `cjc` performs the corresponding optimizations and also enables the following options:
+When the optimization level is 2, `cjc` also enables the following options in addition to performing corresponding optimizations:
 
 - `--fchir-constant-propagation`
 - `--fchir-function-inlining`
 - `--fchir-devirtualization`
 
-When the optimization level is s, `cjc` performs O2-level optimizations and additionally optimizes for code size.
+When the optimization level is `s`, `cjc` optimizes for code size in addition to performing O2 level optimizations.
 
-When the optimization level is z, `cjc` performs Os-level optimizations and further reduces code size.
+When the optimization level is `z`, `cjc` further reduces the code size in addition to performing Os level optimizations.
 
 > **Note:**
 >
-> When the optimization level is s or z, the link-time optimization option `--lto=[full|thin]` cannot be used simultaneously.
+> When the optimization level is `s` or `z`, the link-time optimization compilation option `--lto=[full|thin]` is not allowed to be used simultaneously.
 
 ### `-O` <sup>[frontend]</sup>
 
-Use O1-level optimization, equivalent to `-O1`.
+Uses O1 level code optimization, equivalent to `-O1`.
 
 ## Code Obfuscation Options
 
-`cjc` supports code obfuscation to provide additional security protection for code. This feature is disabled by default.
+`cjc` supports code obfuscation functionality to provide additional security protection for code, which is disabled by default.
 
 `cjc` supports the following code obfuscation options:
 
 ### `--fobf-string`
 
-Enable string obfuscation.
+Enables string obfuscation.
 
-Obfuscate string constants in the code, making it impossible for attackers to statically read string data directly from the binary.
+Obfuscates string constants appearing in the code, so that attackers cannot directly read the string data in the binary program statically.
 
 ### `--fno-obf-string`
 
-Disable string obfuscation.
+Disables string obfuscation.
 
 ### `--fobf-const`
 
-Enable constant obfuscation.
+Enables constant obfuscation.
 
-Obfuscate numerical constants used in the code by replacing numerical operation instructions with equivalent but more complex sequences of numerical operations.
+Obfuscates numerical constants used in the code, replacing numerical operation instructions with equivalent and more complex sequences of numerical operation instructions.
 
 ### `--fno-obf-const`
 
-Disable constant obfuscation.
+Disables constant obfuscation.
 
 ### `--fobf-layout`
 
-Enable layout obfuscation.
+Enables layout obfuscation.
 
-Layout obfuscation obfuscates symbols (including function names and global variable names), path names, line numbers, and function arrangement order in the code. When this compilation option is used, `cjc` generates a symbol mapping output file `*.obf.map` in the current directory. If the `--obf-sym-output-mapping` option is configured, its parameter value will be used as the filename for the symbol mapping output file. The symbol mapping output file contains the mapping relationships between symbols before and after obfuscation, which can be used to deobfuscate obfuscated symbols.
+The layout obfuscation function obfuscates symbols (including function names and global variable names), path names, code line numbers, and function arrangement order in the code. After using this compilation option, `cjc` generates a symbol mapping output file `*.obf.map` in the current directory. If the `--obf-sym-output-mapping` option is configured, the parameter value of `--obf-sym-output-mapping` is used as the name of the symbol mapping output file generated by `cjc`. The symbol mapping output file contains the mapping relationship between symbols before and after obfuscation. The symbol mapping output file can be used to deobfuscate obfuscated symbols.
 
 > **Note:**
 >
-> Layout obfuscation and parallel compilation are mutually exclusive. Do not enable them simultaneously. If both are enabled, parallel compilation will be disabled.
+> The layout obfuscation function conflicts with the parallel compilation function. Do not enable them simultaneously. If enabled simultaneously with parallel compilation, parallel compilation will be invalidated.
 
 ### `--fno-obf-layout`
 
-Disable layout obfuscation.
+Disables layout obfuscation.
 
 ### `--obf-sym-prefix <string>`
 
-Specify the prefix string added to symbols during layout obfuscation.
+Specifies the prefix string added when obfuscating symbols by the layout obfuscation function.
 
-When this option is set, all obfuscated symbols will have this prefix added. This can be used to avoid symbol conflicts when obfuscating multiple Cangjie packages by assigning different prefixes to different packages.
+After setting this option, all obfuscated symbols are prefixed with this string. Symbol conflicts may occur when compiling and obfuscating multiple Cangjie packages. This option can be used to specify different prefixes for different packages to avoid symbol conflicts.
 
 ### `--obf-sym-output-mapping <file>`
 
-Specify the symbol mapping output file for layout obfuscation.
+Specifies the symbol mapping output file for layout obfuscation.
 
-The symbol mapping output file records the original names, obfuscated names, and file paths of symbols. This file can be used to deobfuscate obfuscated symbols.
+The symbol mapping output file records the original name of the symbol, the obfuscated name, and the path of the file to which it belongs. The symbol mapping output file can be used to deobfuscate obfuscated symbols.
 
 ### `--obf-sym-input-mapping <file,...>`
 
-Specify the symbol mapping input file(s) for layout obfuscation.
+Specifies the symbol mapping input file for layout obfuscation.
 
-The layout obfuscation feature will use the mapping relationships in these files to obfuscate symbols. Therefore, when compiling Cangjie packages with dependencies, use the symbol mapping output file of the dependent package as the parameter for the `--obf-sym-input-mapping` option of the calling package to ensure consistent obfuscation results for the same symbol across both packages.
+The layout obfuscation function obfuscates symbols using the mapping relationships in these files. Therefore, when compiling Cangjie packages with calling relationships, please use the symbol mapping output file of the called package as the parameter of the `--obf-sym-input-mapping` option during the obfuscation of the calling package to ensure that the same symbol is obfuscated consistently in both the calling package and the called package.
 
 ### `--obf-apply-mapping-file <file>`
 
-Provide a custom symbol mapping file for layout obfuscation. The layout obfuscation feature will obfuscate symbols according to the mappings in this file.
+Provides a custom symbol mapping relationship file for layout obfuscation. The layout obfuscation function obfuscates symbols according to the mapping relationships in the file.
 
 The file format is as follows:
 
@@ -1199,93 +1186,251 @@ The file format is as follows:
 <original_symbol_name> <new_symbol_name>
 ```
 
-Here, `original_symbol_name` is the name before obfuscation, and `new_symbol_name` is the name after obfuscation. `original_symbol_name` consists of multiple `field`s. A `field` represents a field name, which can be a module name, package name, class name, struct name, enum name, function name, or variable name. `field`s are separated by the delimiter `'.'`. If a `field` is a function name, the function's parameter types must be appended in parentheses `'()'`. For parameterless functions, the parentheses are empty. If a `field` has generic parameters, the specific generic parameters must also be appended in angle brackets `'<>'`.
+Among them, `original_symbol_name` is the name before obfuscation, and `new_symbol_name` is the name after obfuscation. `original_symbol_name` consists of multiple `fields`. A `field` represents a field name, which can be a module name, package name, class name, struct name, enum name, function name, or variable name. `fields` are separated by the separator `'.'`. If a `field` is a function name, the parameter types of the function need to be modified with parentheses `'()'` and appended to the function name. For functions without parameters, the content inside the parentheses is empty. If a `field` has generic parameters, the specific generic parameters need to be appended to the `field` with parentheses `'<>'`.
 
-The layout obfuscation feature will replace `original_symbol_name` in the Cangjie application with `new_symbol_name`. For symbols not in this file, the feature will use random names for replacement. If the mappings in this file conflict with those in `--obf-sym-input-mapping`, the compiler will throw an exception and stop compilation.
+The layout obfuscation function replaces `original_symbol_name` with `new_symbol_name` in the Cangjie application. For symbols not in this file, the layout obfuscation function normally replaces them with random names. If the mapping relationships specified in this file conflict with those in `--obf-sym-input-mapping`, the compiler throws an exception and stops compiling.
 
 ### `--fobf-export-symbols`
 
-Allow layout obfuscation to obfuscate exported symbols. This option is enabled by default when layout obfuscation is enabled.
+Allows the layout obfuscation function to obfuscate exported symbols. This option is enabled by default when the layout obfuscation function is enabled.
 
-When this option is enabled, layout obfuscation will obfuscate exported symbols.
+After enabling this option, the layout obfuscation function obfuscates exported symbols.
 
 ### `--fno-obf-export-symbols`
 
-Disallow layout obfuscation from obfuscating exported symbols.
+Prohibits the layout obfuscation function from obfuscating exported symbols.
 
 ### `--fobf-source-path`
 
-Allow layout obfuscation to obfuscate path information in symbols. This option is enabled by default when layout obfuscation is enabled.
+Allows the layout obfuscation function to obfuscate path information in symbols. This option is enabled by default when the layout obfuscation function is enabled.
 
-When this option is enabled, layout obfuscation will obfuscate path names in exception stack traces, replacing them with the string `"SOURCE"`.
+After enabling this option, the layout obfuscation function obfuscates the path information in the exception stack information, replacing the path name with the string `"SOURCE"`.
 
 ### `--fno-obf-source-path`
 
-Disallow layout obfuscation from obfuscating path information in stack traces.
+Prohibits the layout obfuscation function from obfuscating path information in stack information.
 
 ### `--fobf-line-number`
 
-Allow layout obfuscation to obfuscate line number information in stack traces.
+Allows the layout obfuscation function to obfuscate line number information in stack information.
 
-When this option is enabled, layout obfuscation will obf## Secure Compilation Options
+After enabling this option, the layout obfuscation function obfuscates the line number information in the exception stack information, replacing the line number with `0`.
 
-`cjc` generates position-independent code by default, and produces position-independent executables when compiling executable files.
+### `--fno-obf-line-number`
 
-When building Release versions, it is recommended to enable/disable compilation options according to the following rules to enhance security.
+Prohibits the layout obfuscation function from obfuscating line number information in stack information.
+
+### `--fobf-cf-flatten`
+
+Enables control flow flattening obfuscation.
+
+Obfuscates the existing control flow in the code, making its transfer logic more complex.
+
+### `--fno-obf-cf-flatten`
+
+Disables control flow flattening obfuscation.
+
+### `--fobf-cf-bogus`
+
+Enables bogus control flow obfuscation.
+
+Inserts bogus control flow into the code to make the code logic more complex.
+
+### `--fno-obf-cf-bogus`
+
+Disables bogus control flow obfuscation.
+
+### `--fobf-all`
+
+Enables all obfuscation functions.
+
+Specifying this option is equivalent to specifying the following options simultaneously:
+
+- `--fobf-string`
+- `--fobf-const`
+- `--fobf-layout`
+- `--fobf-cf-flatten`
+- `--fobf-cf-bogus`
+
+### `--obf-config <file>`
+
+Specifies the path of the code obfuscation configuration file.
+
+In the configuration file, you can prohibit the obfuscation tool from obfuscating certain functions or symbols.
+
+The specific format of the configuration file is as follows:
+
+```text
+obf_func1 name1
+obf_func2 name2
+...
+```
+
+The first parameter `obf_func` is a specific obfuscation function:
+
+- `obf-cf-bogus`: Bogus control flow obfuscation
+- `obf-cf-flatten`: Control flow flattening obfuscation
+- `obf-const`: Constant obfuscation
+- `obf-layout`: Layout obfuscation
+
+The second parameter `name` is the object to be retained, consisting of multiple `fields`. A `field` represents a field name, which can be a package name, class name, struct name, enum name, function name, or variable name.
+
+`fields` are separated by the separator `'.'`. If a `field` is a function name, the parameter types of the function need to be modified with parentheses `'()'` and appended to the function name. For functions without parameters, the content inside the parentheses is empty.
+
+For example, assume the following code exists in the package `packA`:
+
+<!-- compile -->
+
+```cangjie
+package packA
+class MyClassA {
+    func funcA(a: String, b: Int64): String {
+        return a
+    }
+}
+```
+
+To prohibit the control flow flattening function from obfuscating `funcA`, the user can write the following rule:
+
+```text
+obf-cf-flatten packA.MyClassA.funcA(std.core.String, Int64)
+```
+
+Users can also use wildcards to write more flexible rules to retain multiple objects with one rule. Currently supported wildcards include the following three types:
+
+Obfuscation function wildcards:
+
+| 混淆功能通配符 | 说明                     |
+| :-------------- | :----------------------- |
+| `?`            | Matches a single character in the name     |
+| `*`            | Matches any number of characters in the name |
+
+Field name wildcards:
+
+| 字段名通配符 | 说明                                                         |
+| :------------ | :------------------------------------------------------------ |
+| `?`          | Matches a single character that is not the separator `'.'` in the field name                        |
+| `*`          | Matches any number of characters in the field name that do not include the separator `'.'` and parameters        |
+| `**`         | Matches any number of characters in the field name, including the separator `'.'` between fields and parameters. `'**'` only takes effect when used as a single `field`; otherwise, it is treated as `'*'` |
+
+Function parameter type wildcards:
+
+| 参数类型通配符 | 说明                   |
+| :-------------- | :---------------------- |
+| `...`          | Matches any number of parameters     |
+| `***`          | Matches one parameter of any type |
+
+> **Note:**
+>
+> Parameter types are also composed of field names, so field name wildcards can also be used to match a single parameter type.
+
+The following are examples of wildcard usage:
+
+Example 1:
+
+```text
+obf-cf-flatten pro?.myfunc()
+```
+
+This rule prohibits the `obf-cf-flatten` function from obfuscating the function `pro?.myfunc()`. `pro?.myfunc()` can match `pro0.myfunc()` but cannot match `pro00.myfunc()`.
+
+Example 2:
+
+```text
+* pro0.**
+```
+
+This rule prohibits any obfuscation function from obfuscating any functions and variables under the package `pro0`.
+
+Example 3:
+
+```text
+* pro*.myfunc(...)
+```
+
+This rule prohibits any obfuscation function from obfuscating the function `pro*.myfunc(...)`. `pro*.myfunc(...)` can match the `myfunc` function in any single-layer package starting with `pro` and with any parameters.
+
+To match multi-layer package names, such as `pro0.mypack.myfunc()`, use `pro*.**.myfunc(...)`. Note that `'**'` only takes effect when used as a field name. Therefore, `pro**.myfunc(...)` is equivalent to `pro*.myfunc(...)` and cannot match multi-layer package names. To match all `myfunc` functions (including `myfunc` functions in classes) under all packages starting with `pro`, use `pro*.**.myfunc(...)`.
+
+Example 4:
+
+```text
+obf-cf-* pro0.MyClassA.myfunc(**.MyClassB, ***, ...)
+```
+
+This rule prohibits the `obf-cf-*` function from obfuscating the function `pro0.MyClassA.myfunc(**.MyClassB, ***, ...)`. Among them, `obf-cf-*` matches two obfuscation functions: `obf-cf-bogus` and `obf-cf-flatten`. `pro0.MyClassA.myfunc(**.MyClassB, ***, ...)` matches the function `pro0.MyClassA.myfunc`, and the first parameter of the function can be the `MyClassB` type under any package, the second parameter can be any type, and zero or more arbitrary parameters can be followed.
+
+### `--obf-level <value>`
+
+Specifies the strength level of the obfuscation function.
+
+The strength level can be specified as 1-9. The default strength level is 5. A higher level number indicates higher strength. This option affects the size of the output file and execution overhead.
+
+### `--obf-seed <value>`
+
+Specifies the random number seed for the obfuscation algorithm.
+
+By specifying the random number seed of the obfuscation algorithm, the same Cangjie code can have different obfuscation results in different builds. By default, for the same Cangjie code, the same obfuscation result is obtained after each obfuscation.
+
+## Security Compilation Options
+
+`cjc` generates position-independent code by default and generates position-independent executable files by default when compiling executable files.
+
+When building a Release version, it is recommended to enable/disable compilation options according to the following rules to improve security.
 
 ### Enable `--trimpath <value>` <sup>[frontend]</sup>
 
-Removes specified absolute path prefixes from debugging and exception information. Using this option prevents build path information from being written into the binary.
+Removes the specified absolute path prefix from debugging and exception information. Using this option can prevent build path information from being written into the binary program.
 
-After enabling this option, source path information in the binary is typically no longer complete, which may affect debugging experience. It is recommended to disable this option when building debug versions.
+After using this option, the source code path information in the binary is usually no longer complete, which may affect the debugging experience. It is recommended to disable this option when building a debugging version.
 
 ### Enable `--strip-all`, `-s`
 
-Removes the symbol table from the binary. This option deletes symbol-related information not required during runtime.
+Removes the symbol table from the binary. Using this option can delete symbol-related information that is not needed at runtime.
 
-After enabling this option, the binary cannot be debugged. Please disable it when building debug versions.
+After using this option, the binary cannot be debugged. Please disable this option when building a debugging version.
 
 ### Disable `--set-runtime-rpath`
 
-If the executable will be distributed to run in different environments, or if other regular users have write permissions to the current Cangjie runtime library directory being used, enabling this option may pose security risks. Therefore, it should be disabled.
+If the executable program is to be distributed to different environments for running, or other ordinary users have write permissions to the directory of the currently used Cangjie runtime library, using this option may cause security risks. Therefore, disable this option.
 
-This option is not applicable when compiling Windows targets.
+This option is not involved when compiling for Windows targets.
 
 ### Enable `--link-options "-z noexecstack"`<sup>1</sup>
 
-Makes the thread stack non-executable.
+Sets the thread stack to be non-executable.
 
-Only available when compiling Linux targets.
+Only available when compiling for Linux targets.
 
 ### Enable `--link-options "-z relro"`<sup>1</sup>
 
-Makes the GOT table relocation read-only.
+Sets the GOT table relocation to be read-only.
 
-Only available when compiling Linux targets.
+Only available when compiling for Linux targets.
 
 ### Enable `--link-options "-z now"`<sup>1</sup>
 
-Enables immediate binding.
+Sets immediate binding.
 
-Only available when compiling Linux targets.
+Only available when compiling for Linux targets.
 
 ## Code Coverage Instrumentation Options
 
 > **Note:**
 >
-> Windows and macOS versions currently do not support code coverage instrumentation options.
+> The Windows and macOS versions do not currently support code coverage instrumentation options.
 
-Cangjie supports code coverage instrumentation (SanitizerCoverage, hereafter referred to as SanCov), providing interfaces consistent with LLVM's SanitizerCoverage. The compiler inserts coverage feedback functions at the function level or BasicBlock level. Users only need to implement the agreed callback functions to perceive program runtime status.
+Cangjie supports code coverage instrumentation (SanitizerCoverage, hereinafter referred to as SanCov), providing an interface consistent with LLVM's SanitizerCoverage. The compiler inserts coverage feedback functions at the function level or BasicBlock level. Users only need to implement the agreed callback functions to perceive the program's runtime status during execution.
 
-Cangjie's SanCov functionality operates at the package level, meaning an entire package is either fully instrumented or not instrumented at all.
+The SanCov functionality provided by Cangjie is on a per-package basis, meaning that an entire package is either fully instrumented or not instrumented at all.
 
 ### `--sanitizer-coverage-level=0/1/2`
 
 Instrumentation level:
 
 - 0: No instrumentation.
-- 1: Function-level instrumentation, inserting callback functions only at function entry points.
-- 2: BasicBlock-level instrumentation, inserting callback functions at various BasicBlocks.
+- 1: Function-level instrumentation, inserting callback functions only at function entrances.
+- 2: BasicBlock-level instrumentation, inserting callback functions at each BasicBlock.
 
 If not specified, the default value is 2.
 
@@ -1293,13 +1438,13 @@ This compilation option only affects the instrumentation level of `--sanitizer-c
 
 ### `--sanitizer-coverage-trace-pc-guard`
 
-Enabling this option inserts a function call `__sanitizer_cov_trace_pc_guard(uint32_t *guard_variable)` at each Edge, influenced by `sanitizer-coverage-level`.
+Enabling this option inserts a function call `__sanitizer_cov_trace_pc_guard(uint32_t *guard_variable)` at each Edge, affected by `sanitizer-coverage-level`.
 
-**Notably**, this feature differs from gcc/llvm implementations: it does not insert `void __sanitizer_cov_trace_pc_guard_init(uint32_t *start, uint32_t *stop)` in the constructor. Instead, it inserts a function call `uint32_t *__cj_sancov_pc_guard_ctor(uint64_t edgeCount)` during package initialization.
+**Note:** There is an inconsistency between this feature and the gcc/llvm implementation: `void __sanitizer_cov_trace_pc_guard_init(uint32_t *start, uint32_t *stop)` is not inserted in the constructor. Instead, the function call `uint32_t *__cj_sancov_pc_guard_ctor(uint64_t edgeCount)` is inserted during package initialization.
 
-The `__cj_sancov_pc_guard_ctor` callback function must be implemented by the developer. Packages with SanCov enabled will call this callback as early as possible. The input parameter is the number of Edges in the Package, and the return value is typically a memory region created by calloc.
+The `__cj_sancov_pc_guard_ctor` callback function needs to be implemented by the developer. The package with SanCov enabled calls this callback function as early as possible. The input parameter is the number of Edges of the Package, and the return value is usually a memory area created by `calloc`.
 
-If `__sanitizer_cov_trace_pc_guard_init` needs to be called, it is recommended to call it within `__cj_sancov_pc_guard_ctor`, using dynamically created buffers to compute the function's input parameters and return value.
+If you need to call `__sanitizer_cov_trace_pc_guard_init`, it is recommended to call it in `__cj_sancov_pc_guard_ctor`, using the dynamically created buffer to calculate the input parameters and return value of the function.
 
 A standard reference implementation of `__cj_sancov_pc_guard_ctor` is as follows:
 
@@ -1313,13 +1458,13 @@ uint32_t *__cj_sancov_pc_guard_ctor(uint64_t edgeCount) {
 
 ### `--sanitizer-coverage-inline-8bit-counters`
 
-Enabling this option inserts an accumulator at each Edge, which increments by one each time it is traversed, influenced by `sanitizer-coverage-level`.
+After enabling this option, an accumulator is inserted at each Edge. Each time it is passed through, the accumulator is incremented by 1, affected by `sanitizer-coverage-level`.
 
-**Notably**, this feature differs from gcc/llvm implementations: it does not insert `void __sanitizer_cov_8bit_counters_init(char *start, char *stop)` in the constructor. Instead, it inserts a function call `uint8_t *__cj_sancov_8bit_counters_ctor(uint64_t edgeCount)` during package initialization.
+**Note:** There is an inconsistency between this feature and the gcc/llvm implementation: `void __sanitizer_cov_8bit_counters_init(char *start, char *stop)` is not inserted in the constructor. Instead, the function call `uint8_t *__cj_sancov_8bit_counters_ctor(uint64_t edgeCount)` is inserted during package initialization.
 
-The `__cj_sancov_pc_guard_ctor` callback function must be implemented by the developer. Packages with SanCov enabled will call this callback as early as possible. The input parameter is the number of Edges in the Package, and the return value is typically a memory region created by calloc.
+The `__cj_sancov_pc_guard_ctor` callback function needs to be implemented by the developer. The package with SanCov enabled calls this callback function as early as possible. The input parameter is the number of Edges of the Package, and the return value is usually a memory area created by `calloc`.
 
-If `__sanitizer_cov_8bit_counters_init` needs to be called, it is recommended to call it within `__cj_sancov_8bit_counters_ctor`, using dynamically created buffers to compute the function's input parameters and return value.
+If you need to call `__sanitizer_cov_8bit_counters_init`, it is recommended to call it in `__cj_sancov_8bit_counters_ctor`, using the dynamically created buffer to calculate the input parameters and return value of the function.
 
 A standard reference implementation of `__cj_sancov_8bit_counters_ctor` is as follows:
 
@@ -1333,13 +1478,13 @@ uint8_t *__cj_sancov_8bit_counters_ctor(uint64_t edgeCount) {
 
 ### `--sanitizer-coverage-inline-bool-flag`
 
-Enabling this option inserts a boolean value at each Edge. The boolean value corresponding to a traversed Edge will be set to True, influenced by `sanitizer-coverage-level`.
+After enabling this option, a boolean value is inserted at each Edge. The boolean value corresponding to the passed Edge is set to True, affected by `sanitizer-coverage-level`.
 
-**Notably**, this feature differs from gcc/llvm implementations: it does not insert `void __sanitizer_cov_bool_flag_init(bool *start, bool *stop)` in the constructor. Instead, it inserts a function call `bool *__cj_sancov_bool_flag_ctor(uint64_t edgeCount)` during package initialization.
+**Note:** There is an inconsistency between this feature and the gcc/llvm implementation: `void __sanitizer_cov_bool_flag_init(bool *start, bool *stop)` is not inserted in the constructor. Instead, the function call `bool *__cj_sancov_bool_flag_ctor(uint64_t edgeCount)` is inserted during package initialization.
 
-The `__cj_sancov_bool_flag_ctor` callback function must be implemented by the developer. Packages with SanCov enabled will call this callback as early as possible. The input parameter is the number of Edges in the Package, and the return value is typically a memory region created by calloc.
+The `__cj_sancov_bool_flag_ctor` callback function needs to be implemented by the developer. The package with SanCov enabled calls this callback function as early as possible. The input parameter is the number of Edges of the Package, and the return value is usually a memory area created by `calloc`.
 
-If `__sanitizer_cov_bool_flag_init` needs to be called, it is recommended to call it within `__cj_sancov_bool_flag_ctor`, using dynamically created buffers to compute the function's input parameters and return value.
+If you need to call `__sanitizer_cov_bool_flag_init`, it is recommended to invoke it within `__cj_sancov_bool_flag_ctor`, using a dynamically created buffer to calculate the function's input parameters and return value.
 
 A standard reference implementation of `__cj_sancov_bool_flag_ctor` is as follows:
 
@@ -1353,23 +1498,26 @@ bool *__cj_sancov_bool_flag_ctor(uint64_t edgeCount) {
 
 ### `--sanitizer-coverage-pc-table`
 
-This compilation option provides the correspondence between instrumentation points and source code, currently only offering function-level correspondence. It must be used in conjunction with `--sanitizer-coverage-trace-pc-guard`, `--sanitizer-coverage-inline-8bit-counters`, or `--sanitizer-coverage-inline-bool-flag`. At least one of these must be enabled, and multiple can be enabled simultaneously.
+This compilation option provides the correspondence between instrumentation points and source code, currently only supporting function-level precision. It must be used together with at least one of `--sanitizer-coverage-trace-pc-guard`, `--sanitizer-coverage-inline-8bit-counters`, or `--sanitizer-coverage-inline-bool-flag` (multiple can be enabled simultaneously).
 
-**Notably**, this feature differs from gcc/llvm implementations: it does not insert `void __sanitizer_cov_pcs_init(const uintptr_t *pcs_beg, const uintptr_t *pcs_end);` in the constructor. Instead, it inserts a function call `void __cj_sancov_pcs_init(int8_t *packageName, uint64_t n, int8_t **funcNameTable, int8_t **fileNameTable, uint64_t *lineNumberTable)` during package initialization. The parameters are as follows:
+**Notable Inconsistency**: Unlike gcc/llvm implementations, this feature does **not** insert `void __sanitizer_cov_pcs_init(const uintptr_t *pcs_beg, const uintptr_t *pcs_end);` in constructors. Instead, it inserts the following function call during package initialization:
+```cangjie
+void __cj_sancov_pcs_init(int8_t *packageName, uint64_t n, int8_t **funcNameTable, int8_t **fileNameTable, uint64_t *lineNumberTable)
+```
+The meanings of each parameter are as follows:
+- `int8_t *packageName`: A string representing the package name (C-style int8 arrays are used as input parameters to represent strings in instrumentation; the same applies below).
+- `uint64_t n`: The total number of instrumented functions.
+- `int8_t **funcNameTable`: An array of strings of length `n`, where `funcNameTable[i]` is the function name corresponding to the `i`-th instrumentation point.
+- `int8_t **fileNameTable`: An array of strings of length `n`, where `fileNameTable[i]` is the file name corresponding to the `i`-th instrumentation point.
+- `uint64_t *lineNumberTable`: An array of `uint64` of length `n`, where `lineNumberTable[i]` is the line number corresponding to the `i`-th instrumentation point.
 
-- `int8_t *packageName`: A string representing the package name (instrumentation uses C-style int8 arrays as parameters to represent strings, same below).
-- `uint64_t n`: There are n functions instrumented.
-- `int8_t **funcNameTable`: A string array of length n, where the i-th instrumentation point corresponds to the function name funcNameTable[i].
-- `int8_t **fileNameTable`: A string array of length n, where the i-th instrumentation point corresponds to the file name fileNameTable[i].
-- `uint64_t *lineNumberTable`: A uint64 array of length n, where the i-th instrumentation point corresponds to the line number lineNumberTable[i].
-
-If `__sanitizer_cov_pcs_init` needs to be called, you must manually convert Cangjie's pc-table to C language pc-table.
+If you need to call `__sanitizer_cov_pcs_init`, you must manually convert the Cangjie pc-table to a C-language pc-table.
 
 ### `--sanitizer-coverage-stack-depth`
 
-Enabling this compilation option inserts a call to `__updateSancovStackDepth` at each function entry point, as Cangjie cannot obtain the SP pointer value. Implementing this function on the C side allows obtaining the SP pointer.
+When this compilation option is enabled, since Cangjie cannot obtain the value of the SP (Stack Pointer), it can only insert a call to `__updateSancovStackDepth` at each function entry. Implementing this function on the C side allows you to obtain the SP pointer.
 
-A standard `updateSancovStackDepth` implementation is as follows:
+A standard implementation of `__updateSancovStackDepth` is as follows:
 
 ```cpp
 thread_local void* __sancov_lowest_stack;
@@ -1385,7 +1533,7 @@ void __updateSancovStackDepth()
 
 ### `--sanitizer-coverage-trace-compares`
 
-Enabling this option inserts callback functions before all compare and match instructions. The specific list is as follows, consistent with LLVM's API functionality. Refer to Tracing data flow.
+When this option is enabled, function callbacks are inserted before all `compare` and `match` instruction calls. The specific list is as follows, with functionality consistent with LLVM-based APIs. Refer to [Tracing data flow](https://clang.llvm.org/docs/SanitizerCoverage.html#tracing-data-flow).
 
 ```cpp
 void __sanitizer_cov_trace_cmp1(uint8_t Arg1, uint8_t Arg2);
@@ -1401,7 +1549,7 @@ void __sanitizer_cov_trace_switch(uint64_t Val, uint64_t *Cases);
 
 ### `--sanitizer-coverage-trace-memcmp`
 
-This compilation option provides prefix comparison feedback for String, Array, and other comparisons. Enabling this option inserts callback functions before String and Array comparison functions. Specifically, the following APIs for String and Array will insert corresponding stub functions:
+This compilation option is used to feed back prefix comparison information in comparisons of `String`, `Array`, and other types. When enabled, function callbacks are inserted before the comparison functions of `String` and `Array`. Specifically, the corresponding stub functions are inserted for each of the following `String` and `Array` APIs:
 
 - String==: __sanitizer_weak_hook_memcmp
 - String.startsWith: __sanitizer_weak_hook_memcmp
@@ -1421,15 +1569,18 @@ This compilation option provides prefix comparison feedback for String, Array, a
 
 ### `--enable-eh` <sup>[frontend]</sup>
 
-Enabling this option allows Cangjie to support Effect Handlers, an advanced control flow mechanism for implementing modular, resumable side-effect handling.
+When this option is enabled, Cangjie will support **Effect Handlers**—an advanced control flow mechanism for implementing modular, recoverable side effect handling.
 
-Effect Handlers enable programmers to decouple side-effect operations from their handling logic, resulting in cleaner, more composable code. This mechanism enhances abstraction levels, particularly for handling operations like logging, I/O, and state changes, preventing main flow contamination by side-effect logic.
+Effect Handlers allow programmers to decouple side effect operations from their handling logic, enabling clearer, more composable code. This mechanism elevates abstraction levels and is particularly suitable for operations like logging, input/output, and state changes, preventing the main flow from being cluttered with side effect logic.
 
-Effects work similarly to exception handling but use `perform` and `handle` instead of `throw` and `catch`. Each effect must be defined by inheriting from the `stdx.effect.Command` class.
+The working mechanism of effects is similar to exception handling but does not use `throw` or `catch`. Instead, effects are executed via `perform` and caught/handled via `handle`. Each effect must be defined by inheriting the `stdx.effect.Command` class.
 
-Unlike traditional exception mechanisms, Effect Handlers can choose to `resume` execution after handling an effect, injecting a value back into the original call site and continuing execution. This "resume" capability allows finer control over program flow, making it ideal for building simulators, interpreters, or cooperative multitasking systems requiring high control.
+Unlike traditional exception mechanisms, Effect Handlers can choose to **resume execution** after handling an effect—injecting a value into the original call site and continuing execution. This "resumption" capability enables fine-grained control over the control flow, making it ideal for scenarios requiring high control (e.g., simulators, interpreters, or cooperative multitasking systems).
 
 Example:
+
+<!-- verify -->
+<!-- cfg="--enable-eh --experimental" -->
 
 ```cangjie
 import stdx.effect.Command
@@ -1441,31 +1592,36 @@ main() {
     try {
         println("About to perform")
 
-        // Perform the GetNumber effect
+        // Execute the GetNumber effect
         let a = perform GetNumber()
 
-        // Execution resumes here after handler
+        // Execution resumes here after the handler processes the effect
         println("It is resumed, a = ${a}")
     } handle(e: GetNumber) {
         // Handle the GetNumber effect
         println("It is performed")
 
-        // Resume execution, injecting value 9
+        // Resume execution and inject the value 9
         resume with 9
     }
     0
 }
 ```
 
-In this example, a new `Command` subclass `GetNumber` is defined.
-
-- In the `main` function, the `try-handle` structure handles the effect.
-- The `try` block first prints a message (`"About to perform"`), then performs the effect with `perform GetNumber()`. The return value of `perform` is assigned to variable `a`. Performing an effect jumps execution to the `handle` block capturing this effect.
-- The `handle` block captures and handles the `GetNumber` effect, printing a message (`"It is performed"`) and using `resume with 9` to inject the constant `9` back into the original call site, resuming execution after `perform` to print (`"It is resumed, a = 9"`).
+In the above example:
+1. A new subclass `GetNumber` of `Command` is defined.
+2. In the `main` function, a `try-handle` structure is used to handle the effect.
+3. In the `try` block:
+   - A prompt message ("About to perform") is printed first.
+   - The effect is executed via `perform GetNumber()`, and the return value of the `perform` expression is assigned to variable `a`.
+   - Executing an effect jumps the control flow to the `handle` block that catches it.
+4. In the `handle` block:
+   - The `GetNumber` effect is caught and processed, and a message ("It is performed") is printed.
+   - The `resume with 9` statement injects the constant `9` back into the original call site and resumes execution after `perform`, printing ("It is resumed, a = 9").
 
 Output:
 
-```shell
+```text
 About to perform
 It is performed
 It is resumed, a = 9
@@ -1473,60 +1629,65 @@ It is resumed, a = 9
 
 > **Note:**
 >
-> - Effect Handlers are currently experimental. This option may change in future versions; use with caution.
+> - Effect Handlers are currently an experimental feature and may change in future versions. Use with caution.
 > - Using Effect Handlers requires importing the `stdx.effect` library.
 
 ### `--experimental` <sup>[frontend]</sup>
 
-Enables experimental features, allowing the use of other experimental feature options on the command line.
+Enables experimental features, allowing other experimental options to be used on the command line.
 
 > **Note:**
 >
-> Binaries generated with experimental features may have potential runtime issues. Use this option at your own risk.
+> Binaries generated with experimental features may have potential runtime issues. Please be aware of the risks when using this option.
 
-## Compiler Plugin Options
+## Compilation Plugin Option
 
 ### `--plugin <value>` <sup>[frontend]</sup>
 
-Provides compiler plugin capability. As an experimental feature, it is currently only for internal validation and does not support custom plugin development. Using this option may cause errors.
+Provides compiler plugin capabilities but is **experimental** and intended only for internal validation. Custom plugins by developers are not supported (may cause errors).
 
 ## Other Features
 
-### Compiler Error Message Colors
+### Colored Compiler Error Messages
 
-For the Windows version of the Cangjie compiler, colored error messages are only displayed when running on Windows 10 version 1511 (Build 10586) or later. Otherwise, colors are not displayed.
+For the Windows version of the Cangjie compiler, colored error messages are only displayed when running on Windows 10 version 1511 (Build 10586) or later. No colors are displayed on older Windows versions.
 
-### Setting build-id
+### Setting `build-id`
 
-Use `--link-options "--build-id=<arg>"`<sup>1</sup> to pass linker options for setting build-id.
+Linker options can be passed through using `--link-options "--build-id=<arg>"`<sup>1</sup> to set a `build-id`.
 
-This feature is not supported when compiling Windows targets.
+This feature is not supported when compiling for Windows targets.
 
-### Setting rpath
+### Setting `rpath`
 
-Use `--link-options "-rpath=<arg>"`<sup>1</sup> to pass linker options for setting rpath.
+Linker options can be passed through using `--link-options "-rpath=<arg>"`<sup>1</sup> to set an `rpath`.
 
-This feature is not supported when compiling Windows targets.
+This feature is not supported when compiling for Windows targets.
 
 ### Incremental Compilation
 
-Enable incremental compilation with `--incremental-compile`<sup>[frontend]</sup>. When enabled, `cjc` uses cache files from previous compilations to speed up the current compilation.
+Incremental compilation is enabled via `--incremental-compile`<sup>[frontend]</sup>. After enabling, `cjc` speeds up the current compilation by leveraging cached files from the previous build.
 
 > **Note:**
 >
-> This is an experimental feature. Binaries generated with this option may have potential runtime issues; use with caution. This option must be used with `--experimental`. Specifying this option saves incremental compilation cache and logs to the `.cached` directory under the output file path.
+> - This is an experimental feature. Binaries generated with it may have potential runtime issues. Use with caution.
+> - Must be used together with the `--experimental` option.
+> - When enabled, incremental compilation caches and logs are saved to the `.cached` directory under the output path.
 
-### Output CHIR
+### Outputting CHIR
 
-Use `--emit-chir=[raw|opt]`<sup>[frontend]</sup> to specify output of serialized CHIR compilation phase products. `raw` outputs CHIR before compiler optimization, `opt` outputs CHIR after optimization. Using `--emit-chir` defaults to outputting optimized CHIR.
+The serialized output of the CHIR (Cangjie Intermediate Representation) compilation phase is specified via `--emit-chir=[raw|opt]`<sup>[frontend]</sup>:
+- `raw`: Outputs unoptimized CHIR (before compiler optimizations).
+- `opt`: Outputs optimized CHIR (after compiler optimizations).
+- Using `--emit-chir` without arguments defaults to `opt`.
 
 ### `--no-prelude` <sup>[frontend]</sup>
 
-Disables automatic import of the standard library core package.
+Disables the automatic import of the standard library's `core` package.
 
 > **Note:**
 >
-> This option can only be used when compiling the Cangjie standard library core package, not for other Cangjie code compilation scenarios.
+> This option can only be used to compile the Cangjie standard library's `core` package. It is not intended for compiling other Cangjie code.
 
 ## Environment Variables Used by `cjc`
 
@@ -1534,9 +1695,15 @@ Here are some environment variables that the Cangjie compiler may use during cod
 
 ### `TMPDIR` or `TMP`
 
-The Cangjie compiler places temporary files generated during compilation in a temporary directory. By default, `Linux` and `macOS` place these in `/tmp`, while `Windows` places them in `C:\Windows\Temp`. The Cangjie compiler also supports custom temporary file directories. On `Linux` and `macOS`, set the `TMPDIR` environment variable to change the temporary directory. On `Windows`, set the `TMP` environment variable.
+The Cangjie compiler stores temporary files generated during compilation in a temporary directory:
+- By default:
+  - Linux/macOS: `/tmp`
+  - Windows: `C:\Windows\Temp`
+- Customization:
+  - On Linux/macOS: Set the `TMPDIR` environment variable.
+  - On Windows: Set the `TMP` environment variable.
 
-Example:
+Examples:
 In Linux shell:
 
 ```shell

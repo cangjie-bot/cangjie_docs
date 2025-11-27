@@ -10,6 +10,8 @@ Cangjie threads are fundamentally lightweight user-mode threads. Each Cangjie th
 
 In most cases, developers only need to focus on writing concurrent code for Cangjie threads without considering these details. However, during cross-language programming, developers must exercise caution when calling potentially blocking foreign functions, such as operating system calls related to I/O. For example, in the following code snippet, a new thread calls the foreign function `socket_read`. During program execution, a native thread will schedule and execute this Cangjie thread. Upon entering the foreign function, the system call will directly block the current native thread until the function completes. During this blocking period, the native thread cannot schedule other Cangjie threads for execution, which reduces the program's throughput.
 
+<!-- code_no_check -->
+
 ```cangjie
 foreign socket_read(sock: Int64): CPointer<Int8>
 

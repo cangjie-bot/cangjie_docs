@@ -4,6 +4,8 @@
 
 In the Cangjie programming language, you can import a top-level declaration or definition from another package using the syntax `import fullPackageName.itemName`, where `fullPackageName` is the fully qualified package name and `itemName` is the name of the declaration. The import statements must be placed after the package declaration and before any other declarations or definitions in the source file. For example:
 
+<!-- code_check_manual -->
+
 ```cangjie
 package a
 import std.math.*
@@ -13,11 +15,15 @@ import {package1.foo, package2.bar}
 
 If multiple `itemName`s belong to the same `fullPackageName`, you can use the syntax `import fullPackageName.{itemName[, itemName]*}`. For example:
 
+<!-- code_check_manual -->
+
 ```cangjie
 import package1.{foo, bar, fuzz}
 ```
 
 This is equivalent to:
+
+<!-- code_check_manual -->
 
 ```cangjie
 import package1.foo
@@ -26,6 +32,8 @@ import package1.fuzz
 ```
 
 In addition to importing a specific top-level declaration or definition using `import fullPackagename.itemName`, you can also use `import packageName.*` to import all visible top-level declarations or definitions from the `packageName` package. For example:
+
+<!-- code_check_manual -->
 
 ```cangjie
 import package1.*
@@ -41,6 +49,8 @@ Note the following:
 - Circular dependency imports between packages are prohibited. If circular dependencies exist between packages, the compiler will report an error.
 
 Example:
+
+<!-- code_check_manual -->
 
 ```cangjie
 // pkga/a.cj
@@ -59,13 +69,15 @@ import pkga.*
 package pkgc
 
 import pkga.C // Error, 'C' is not accessible in package 'pkga'.
-import pkga.R // OK, R is an external top-level declaration of package pkga.
 import pkgc.f1 // Error, package 'pkgc' should not import itself.
 
 public func f1() {}
 
 // pkgc/c2.cj
 package pkgc
+
+import pkga.R // OK, R is an external top-level declaration of package pkga.
+import pkga
 
 func f2() {
     /* OK, the imported declaration is visible to all source files of the same package
@@ -78,13 +90,13 @@ func f2() {
 
     // OK, the declaration of current package can be accessed directly.
     f1()
-
-    // OK, accessing declaration of current package by fully qualified name is supported.
-    pkgc.f1()
 }
 ```
 
 In the Cangjie programming language, if an imported declaration or definition has the same name as a top-level declaration or definition in the current package and does not constitute function overloading, the imported declaration or definition will be shadowed. If they do constitute function overloading, function resolution will follow the rules of function overloading during function calls.
+
+<!-- compile -over_res -->
+<!-- cfg="-p pkga --output-type=staticlib"-->
 
 ```cangjie
 // pkga/a.cj
@@ -93,9 +105,15 @@ package pkga
 public struct R {}            // R1
 public func f(a: Int32) {}    // f1
 public func f(a: Bool) {} // f2
+```
 
+<!-- compile -over_res -->
+<!-- cfg="-p pkgb libpkga.a --output-type=staticlib"-->
+
+```cangjie
 // pkgb/b.cj
 package pkgb
+
 import pkga.*
 
 func f(a: Int32) {}         // f3
@@ -104,7 +122,7 @@ struct R {}                 // R2
 func bar() {
     R()     // OK, R2 shadows R1.
     f(1)    // OK, invoke f3 in current package.
-    f(true) // OK, invoke f2 in the imported package
+    f(true) // OK, invoke f2 in the pkga
 }
 ```
 
@@ -180,15 +198,27 @@ Different packages have separate namespaces, so top-level declarations with the 
 
 - If conflicting imported names are not renamed, no error is reported at the `import` statement. However, an error will occur at the usage site due to the inability to import a unique name. This can be resolved by defining aliases with `import as` or importing the package as a namespace using `import fullPackageName`.
 
+    <!-- compile -import1 -->
+    <!-- cfg="-p p1 --output-type=staticlib" -->
+
     ```cangjie
     // a.cj
     package p1
     public class C {}
+    ```
 
+    <!-- compile -import1 -->
+    <!-- cfg="-p p2 --output-type=staticlib" -->
+
+    ```cangjie
     // b.cj
     package p2
     public class C {}
+    ```
 
+    <!-- code_check_manual -->
+
+    ```cangjie
     // main1.cj
     package pkga
     import p1.C
@@ -197,7 +227,12 @@ Different packages have separate namespaces, so top-level declarations with the 
     main() {
         let _ = C() // Error
     }
+    ```
 
+    <!-- compile -import1 -->
+    <!-- cfg="-p pkgb libp1.a libp2.a" -->
+
+    ```cangjie
     // main2.cj
     package pkgb
     import p1.C as C1
@@ -207,7 +242,12 @@ Different packages have separate namespaces, so top-level declarations with the 
         let _ = C1() // OK
         let _ = C2() // OK
     }
+    ```
 
+    <!-- compile -import1 -->
+    <!-- cfg="-p pkgc libp1.a libp2.a" -->
+
+    ```cangjie
     // main3.cj
     package pkgc
     import p1
@@ -232,6 +272,18 @@ In the Cangjie programming language, `import` can be modified with the access mo
 
 In the following example, `b` is a subpackage of `a`, and `a` re-exports the function `f` defined in `b` using `public import`.
 
+<!-- compile -reimport1 -->
+<!-- cfg="-p a/b --output-type=staticlib" -->
+
+```cangjie
+internal package a.b
+
+public func f() { 0 }
+```
+
+<!-- compile -reimport1 -->
+<!-- cfg="-p a --output-type=staticlib" -->
+
 ```cangjie
 package a
 public import a.b.f
@@ -239,11 +291,8 @@ public import a.b.f
 public let x = 0
 ```
 
-```cangjie
-internal package a.b
-
-public func f() { 0 }
-```
+<!-- compile -reimport1 -->
+<!-- cfg="liba.a liba.b.a" -->
 
 ```cangjie
 import a.f  // OK

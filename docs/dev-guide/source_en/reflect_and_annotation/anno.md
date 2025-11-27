@@ -194,7 +194,8 @@ Constraints for using `@EnsurePreparedToMock`:
 - Can only be applied to lambdas with a suitable last expression.
 - The lambda's last expression must be a call, member access, or reference expression involving:
     - Top-level functions or variables;
-    - Static functions, properties, or fields;
+    - Static functions in extensions;
+    - Static functions, properties, or fields in classes;
     - Foreign declarations;
     - Not local functions or variables;
     - Non-private declarations;
@@ -206,6 +207,8 @@ Constraints for using `@EnsurePreparedToMock`:
 Custom annotations allow reflection (see [Reflection Chapter](dynamic_feature.md)) to retrieve additional metadata beyond type information, enabling more complex logic.
 
 Developers can create custom annotations by marking a `class` with `@Annotation`. The `class` must not be `abstract`, `open`, or `sealed`, and must provide at least one `const init` function; otherwise, the compiler will report an error.
+
+Developers can also create custom annotations using the `@!Annotation` syntax. This syntax is reserved for future features and is equivalent to `@Annotation` in the current version.
 
 The following example defines a custom annotation `@Version` and applies it to classes `A`, `B`, and `C`. In `main`, reflection is used to retrieve and print the `@Version` annotation information.
 
@@ -287,16 +290,7 @@ A is Marked
 B is Marked
 ```
 
-The same annotation class cannot be applied multiple times to the same target (i.e., no duplicate annotations).
-
-<!-- verify.error -->
-<!-- cfg="--Marked" -->
-
-```cangjie
-@Marked
-@Marked // Error
-class A {}
-````Annotation` is not inherited, therefore a type's annotation metadata only comes from the annotations declared during its definition. If annotation metadata from a parent type is needed, developers must manually query it using reflection interfaces.
+`Annotation` is not inherited, therefore a type's annotation metadata only comes from the annotations declared during its definition. If annotation metadata from a parent type is needed, developers must manually query it using reflection interfaces.
 
 In the following example, `A` is annotated with `@Marked`, `B` inherits from `A`, but `B` does not inherit `A`'s annotation.
 
@@ -333,7 +327,7 @@ When compiling and executing the above code, the output is:
 A is Marked
 ```
 
-Custom annotations can be applied to type declarations (`class`, `struct`, `enum`, `interface`), parameters in member functions/constructors, constructor declarations, member function declarations, member variable declarations, and member property declarations. They can also restrict their applicable locations to prevent misuse by developers. Such annotations need to specify the `target` parameter when declaring `@Annotation`, with the parameter type being `Array<AnnotationKind>`. Here, `AnnotationKind` is an `enum` defined in the standard library. When no target is specified, the custom annotation can be used in all the aforementioned locations. When targets are specified, it can only be used in the declared list.
+Custom annotations can be applied to type declarations (`class`, `struct`, `enum`, `interface`), function parameters (including those in top-level functions, member functions, and constructors), constructor declarations, member function declarations, member variable declarations, member property declarations, enum constructors, top-level functions, top-level variables, and extension declarations. They can also restrict their applicable locations to reduce misuse by developers. Such annotations need to specify the `target` parameter when declaring `@Annotation`, with the parameter type being `Array<AnnotationKind>`. Here, `AnnotationKind` is an `enum` defined in the standard library. When no target is specified, the custom annotation can be used in all the aforementioned locations. When targets are specified, it can only be used in the declared list.
 
 <!-- compile -->
 
@@ -345,12 +339,17 @@ public enum AnnotationKind {
     | MemberProperty
     | MemberFunction
     | MemberVariable
+    | EnumConstructor
+    | GlobalFunction
+    | GlobalVariable
+    | Extension
+    | ...
 }
 ```
 
 In the following example, a custom annotation is restricted via `target` to only be applicable to member functions. Using it in other locations will cause a compilation error.
 
-<!--compile.error -->
+<!-- compile.error -->
 
 ```cangjie
 @Annotation[target: [MemberFunction]]

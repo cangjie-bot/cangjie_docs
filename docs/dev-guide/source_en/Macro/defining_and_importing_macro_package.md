@@ -2,10 +2,6 @@
 
 In the Cangjie language, macro definitions must be placed within a package declared by `macro package`. A package scoped by `macro package` only allows macro definitions to be externally visible, while other declarations remain package-private.
 
-> **Note:**
->
-> Re-exported declarations are also permitted to be externally visible. For concepts related to package management and re-exporting, refer to the [Package Import](../package/import.md) chapter.
-
 <!-- compile.error -macro4 -->
 <!-- cfg="--compile-macro" -->
 
@@ -21,9 +17,13 @@ public macro M(input: Tokens): Tokens { // Macro M is externally visible
 }
 ```
 
-It is important to note that within a macro package, declarations from other macro packages and non-macro packages can be re-exported. In non-macro packages, only declarations from non-macro packages are allowed to be re-exported.
+> **Note:**
+>
+> - Re-exported declarations are also permitted to be externally visible. For concepts related to package management and re-exporting, refer to the [Package Import](../package/import.md) chapter.
+> - Within a macro package, declarations from other macro packages and non-macro packages can be re-exported. In non-macro packages, only declarations from non-macro packages are allowed to be re-exported.
+> - When using a macro, you need to import the packages dependent on the macro (if the macro definition re-exports the dependent parts, you may not import the dependent packages) and link the dependent packages with the `-l` option when compiling with `cjc`. Otherwise, an error (failed to find relevant dependencies) will occur during code compilation.
 
-Refer to the following examples:
+Examples of re-exporting macro packages and non-macro packages in a macro package are as follows:
 
 - Define macro `M1` in macro package A
 
@@ -59,7 +59,7 @@ Refer to the following examples:
   }
   ```
 
-  The compilation command is as follows. Here, the `--output-type` option is used to compile package B into a dynamic library. For details about cjc compilation options, refer to the "Appendix > cjc Compilation Options" chapter.
+  The compilation command is as follows. Here, the `--output-type` option is used to compile package B into a dynamic library:
 
   ```shell
   cjc B.cj --output-type=dylib -o libB.so
@@ -72,8 +72,8 @@ Refer to the following examples:
 
   ```cangjie
   macro package C
-  public import A.* // Correct: Macro packages allow re-exporting within a macro package.
-  public import B.* // Correct: Non-macro packages are also allowed to be re-exported in a macro package.
+  public import A.* // Correct: Macro packages allow re-exporting other macro packages.
+  public import B.* // Correct: Macro packages also allow re-exporting non-macro packages.
   import std.ast.*
 
   public macro M2(input: Tokens): Tokens {
@@ -83,14 +83,14 @@ Refer to the following examples:
 
   The compilation command is as follows. Note that explicit linking of package B's dynamic library is required:
 
-  ```cangjie
+  ```bash
   cjc C.cj --compile-macro -L. -lB
   ```
 
 - Use macro `M2` in `main.cj`
 
   <!-- compile -macro5 -->
-  <!-- cfg="--compile-macro -L. -lB" -->
+  <!-- cfg="-L. -lB" -->
 
   ```cangjie
   import C.*
@@ -102,11 +102,13 @@ Refer to the following examples:
 
   The compilation command is as follows:
 
-  ```cangjie
+  ```shell
   cjc main.cj -o main -L. -lB
   ```
 
   The expanded result of macro `M2` in `main.cj` is as follows:
+
+  <!-- code_no_check -->
 
   ```cangjie
   import C.*
@@ -117,4 +119,4 @@ Refer to the following examples:
   }
   ```
 
-As seen in `main.cj`, the symbol `f1` from package B appears. Macro authors can re-export symbols from package B within package C, allowing macro users to correctly compile macro-expanded code by simply importing the macro package. If `main.cj` only imports the macro symbol using `import C.M2`, an `undeclared identifier 'f1'` error will occur.
+As seen in `main.cj`, the symbol `f1` from package B appears. Macro authors can re-export symbols from package B within package C, allowing macro users to correctly compile the macro-expanded code by simply importing the macro package. If `main.cj` only imports the macro symbol using `import C.M2`, an `undeclared identifier 'f1'` error will occur.

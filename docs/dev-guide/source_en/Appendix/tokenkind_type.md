@@ -1,5 +1,7 @@
 # TokenKind Type
 
+<!-- code_no_check -->
+
 ```cangjie
 public enum TokenKind <: ToString {
     DOT|                      /*  "."           */

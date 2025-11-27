@@ -65,10 +65,12 @@ The Cangjie programming language supports character byte literals to facilitate 
 <!-- compile -->
 
 ```cangjie
-var a = b'x'                    // a is 120 with type UInt8
-var b = b'\n'                   // b is 10 with type UInt8
-var c = b'\u{78}'               // c is 120 with type UInt8
-c = b'\u{90}' - b'\u{66}' + c   // c is 162 with type UInt8
+main(): Unit {
+    var a = b'x'                    // a is 120 with type UInt8
+    var b = b'\n'                   // b is 10 with type UInt8
+    var c = b'\u{78}'               // c is 120 with type UInt8
+    c = b'\u{90}' - b'\u{66}' + c   // c is 162 with type UInt8
+}
 ```
 
 `b'x'` represents a literal value of type `UInt8` with a value of 120. Additionally, the escape form `b'\u{78}'` can be used to represent a literal value of type `UInt8` with a hexadecimal value of 0x78 or a decimal value of 120. Note that the `\u` escape sequence can contain at most two hexadecimal digits, and the value must be less than 256 (in decimal).

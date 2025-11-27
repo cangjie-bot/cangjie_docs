@@ -16,6 +16,9 @@ Constraints are broadly divided into interface constraints and class type constr
 
 In Cangjie, the `println` function can accept parameters of type string. If you need to print a generic type variable as a string on the command line, you can constrain this generic type parameter with the `ToString` interface defined in `core`, which is clearly an interface constraint:
 
+<!-- code_no_check -->
+
+
 ```cangjie
 package std.core // `ToString` is defined in core.
 

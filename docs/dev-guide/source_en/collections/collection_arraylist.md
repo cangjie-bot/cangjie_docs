@@ -1,6 +1,6 @@
 # ArrayList
 
-To use the ArrayList type, you need to import the collection package:
+We need to import the collection package to use the ArrayList type:
 
 <!-- run -->
 
@@ -8,42 +8,46 @@ To use the ArrayList type, you need to import the collection package:
 import std.collection.*
 ```
 
-In Cangjie, `ArrayList<T>` represents the ArrayList type, where T denotes the element type of the ArrayList, which can be any type.
+In Cangjie, the `ArrayList<T>` type represents an ArrayList, where `T` denotes the element type of the ArrayList and can be any type.
 
-ArrayList has excellent expansion capabilities, making it suitable for scenarios requiring frequent addition and deletion of elements.
+ArrayList has excellent expansion capabilities, making it suitable for scenarios that require frequent addition and deletion of elements.
 
 Compared to Array, ArrayList allows both in-place modification of elements and in-place addition/deletion of elements.
 
-The mutability of ArrayList is a highly useful feature, enabling all references to the same ArrayList instance to share the same elements and apply unified modifications.
+The mutability of ArrayList is a very useful feature: all references to the same ArrayList instance share the same elements, and modifications can be made uniformly to them.
+
+<!-- code_no_check -->
 
 ```cangjie
 var a: ArrayList<Int64> = ... // ArrayList whose element type is Int64
 var b: ArrayList<String> = ... // ArrayList whose element type is String
 ```
 
-ArrayLists with different element types are distinct types and therefore cannot be assigned to each other.
+ArrayLists with different element types are distinct types, so they cannot be assigned to each other.
 
-Thus, the following example is invalid:
+Therefore, the following example is invalid:
+
+<!-- code_no_check -->
 
 ```cangjie
 b = a // Type mismatch
 ```
 
-In Cangjie, you can construct a specific ArrayList using constructors.
+In Cangjie, you can construct a specified ArrayList using a constructor:
 
 <!-- run -->
 
 ```cangjie
 let a = ArrayList<String>() // Created an empty ArrayList whose element type is String
-let b = ArrayList<String>(100) // Created an ArrayList whose element type is String, and allocate a space of 100
+let b = ArrayList<String>(100) // Created an ArrayList whose element type is String, and allocated space for 100 elements
 let c = ArrayList<Int64>([0, 1, 2]) // Created an ArrayList whose element type is Int64, containing elements 0, 1, 2
-let d = ArrayList<Int64>(c) // Use another Collection to initialize an ArrayList
-let e = ArrayList<String>(2, {x: Int64 => x.toString()}) // Created an ArrayList whose element type is String and size is 2. All elements are initialized by specified rule function
+let d = ArrayList<Int64>(c) // Initialized an ArrayList using another Collection
+let e = ArrayList<String>(2, {x: Int64 => x.toString()}) // Created an ArrayList whose element type is String and size is 2. All elements are initialized by the specified rule function
 ```
 
 ## Accessing ArrayList Members
 
-When you need to access all elements of an ArrayList, you can use a for-in loop to iterate through them.
+To access all elements of an ArrayList, you can traverse them using a for-in loop:
 
 <!-- verify -->
 
@@ -66,7 +70,7 @@ The element is 1
 The element is 2
 ```
 
-To determine the number of elements in an ArrayList, you can use the `size` property.
+To get the number of elements contained in an ArrayList, you can use the `size` property:
 
 <!-- verify -->
 
@@ -89,19 +93,21 @@ Compiling and executing the above code will output:
 The size of arraylist is 3
 ```
 
-To access a single element at a specified position, you can use subscript syntax (the subscript must be of type Int64). The first element of a non-empty ArrayList always starts at position 0. You can access any element from 0 up to the last position (ArrayList's size - 1). Using a negative index or an index greater than or equal to the size will trigger a runtime exception.
+To access a single element at a specified position, you can use the subscript syntax (the index type must be `Int64`). The first element of a non-empty ArrayList always starts at position 0. You can access any element of the ArrayList starting from 0 up to the last position ( `ArrayList.size - 1` ). Using a negative index or an index greater than or equal to the size will trigger a runtime exception.
+
+<!-- code_no_check -->
 
 ```cangjie
 let a = list[0] // a == 0
 let b = list[1] // b == 1
-let c = list[-1] // Runtime exceptions
+let c = list[-1] // Runtime exception
 ```
 
-ArrayList also supports Range syntax in subscripts. For details, refer to the [Array](../basic_data_type/array.md#array) chapter.
+ArrayList also supports the syntax of using Range in subscripts, see the [Array](../basic_data_type/array.md#array) chapter for details.
 
 ## Modifying ArrayList
 
-You can use subscript syntax to modify elements at specific positions.
+You can modify an element at a specific position using the subscript syntax:
 
 <!-- run -->
 
@@ -110,9 +116,9 @@ let list = ArrayList<Int64>([0, 1, 2])
 list[0] = 3
 ```
 
-ArrayList is a reference type. When used as an expression, ArrayList does not create a copy; all references to the same ArrayList instance share the same data.
+ArrayList is a reference type, and no copy is made when an ArrayList is used as an expression. All references to the same ArrayList instance share the same data.
 
-Thus, modifications to ArrayList elements affect all references to that instance.
+Therefore, modifications to the elements of an ArrayList will affect all references to that instance:
 
 <!-- run -->
 
@@ -124,7 +130,7 @@ list2[0] = 3
 // list2 contains elements 3, 1, 2
 ```
 
-To add a single element to the end of an ArrayList, use the `add` function. To add multiple elements simultaneously, use the `add(all!: Collection<T>)` function, which accepts other Collection types with the same element type, such as Array. For details on Collection types, refer to [Basic Collection Type Overview](collection_overview.md).
+To add a single element to the end of an ArrayList, use the `add` function. To add multiple elements to the end at once, use the `add(all!: Collection<T>)` function, which can accept other Collection types with the same element type (such as Array). For details on the Collection type, see [Overview of Basic Collection Types](collection_overview.md).
 
 <!-- run -->
 
@@ -140,7 +146,7 @@ main() {
 }
 ```
 
-You can use the `add(T, at!: Int64)` and `add(all!: Collection<T>, at!: Int64)` functions to insert a single element or a Collection of the same element type at a specified index. The element at that index and subsequent elements will be shifted to make space.
+You can insert a specified single element or a Collection value of the same element type at a specified index position using the `add(T, at!: Int64)` and `add(all!: Collection<T>, at!: Int64)` functions. The element at that index and subsequent elements will be shifted backward to make space.
 
 <!-- run -->
 
@@ -149,20 +155,20 @@ let list = ArrayList<Int64>([0, 1, 2]) // list contains elements 0, 1, 2
 list.add(4, at: 1) // list contains elements 0, 4, 1, 2
 ```
 
-To remove an element from an ArrayList, use the `remove` function, specifying the index to remove. Subsequent elements will be shifted forward to fill the gap.
+To delete an element from an ArrayList, use the `remove` function and specify the index of the element to delete. Elements after that index will be shifted forward to fill the space.
 
 <!-- run -->
 
 ```cangjie
 let list = ArrayList<String>(["a", "b", "c", "d"]) // list contains the elements "a", "b", "c", "d"
-list.remove(at: 1) // Delete the element at subscript 1, now the list contains elements "a", "c", "d"
+list.remove(at: 1) // Delete the element at subscript 1; now the list contains elements "a", "c", "d"
 ```
 
-## Increasing ArrayList Size
+## Increasing the Size of ArrayList
 
-Each ArrayList requires a specific amount of memory to store its contents. When adding elements to an ArrayList causes it to exceed its reserved capacity, the ArrayList allocates a larger memory region and copies all elements to the new memory. This growth strategy means that add operations triggering reallocation incur performance costs, but as the ArrayList's reserved memory grows larger, these operations occur less frequently.
+Each ArrayList requires a specific amount of memory to store its contents. When elements are added to an ArrayList and it starts to exceed its reserved capacity, the ArrayList will allocate a larger memory area and copy all its elements to the new memory. This growth strategy means that add operations that trigger memory reallocation have a performance cost, but they occur less frequently as the ArrayList's reserved memory increases.
 
-If you know approximately how many elements you'll be adding, you can pre-allocate sufficient memory before adding to avoid intermediate reallocations, thereby improving performance.
+If you know approximately how many elements will be added, you can reserve sufficient memory in advance to avoid intermediate reallocations, which can improve performance.
 
 <!-- run -->
 

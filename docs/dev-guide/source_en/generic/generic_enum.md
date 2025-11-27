@@ -2,6 +2,8 @@
 
 In the design of generic enum types in the Cangjie programming language, the `Option` type serves as a classic example. For a detailed description of `Option`, please refer to the [Option Type](../enum_and_pattern_match/option_type.md) chapter. The `Option` type is used to represent a value that may be empty for a certain type. Thus, `Option` can indicate computational failure for a particular type. Since the specific type of failure is indeterminate, it's evident that `Option` is a generic type requiring the declaration of type parameters.
 
+<!-- code_no_check -->
+
 ```cangjie
 package std.core // `Option` is defined in std.core.
 

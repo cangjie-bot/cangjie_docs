@@ -1,9 +1,16 @@
 # Package Declaration
 
-In the Cangjie programming language, package declarations begin with the keyword `package`, followed by the package names from the root package to the current package, separated by `.`. Package names must be valid ordinary identifiers (excluding raw identifiers). For example:
+In the Cangjie programming language, a package declaration starts with the keyword `package`, followed by the package names from the root package to the current package, separated by `.`. Package names must be valid ordinary identifiers (excluding raw identifiers). For example:
+
+<!-- compile -->
 
 ```cangjie
 package pkg1      // root package pkg1
+```
+
+<!-- compile -->
+
+```cangjie
 package pkg1.sub1 // sub-package sub1 under root package pkg1
 ```
 
@@ -51,12 +58,16 @@ src
 
 The package declarations in `a.cj`, `b.cj`, `c.cj`, and `main.cj` can be:
 
+<!-- compile -->
+
 ```cangjie
 // a.cj
 // in file a.cj, the declared package name must correspond to relative path directory_0/directory_1.
 
 package default.directory_0.directory_1
 ```
+
+<!-- compile -->
 
 ```cangjie
 // b.cj
@@ -65,12 +76,16 @@ package default.directory_0.directory_1
 package default.directory_0.directory_1
 ```
 
+<!-- compile -->
+
 ```cangjie
 // c.cj
 // in file c.cj, the declared package name must correspond to relative path directory_0.
 
 package default.directory_0
 ```
+
+<!-- compile -->
 
 ```cangjie
 // main.cj
@@ -84,6 +99,9 @@ main(): Int64 {
 Additionally, package declarations must not cause naming conflicts: sub-packages cannot share names with top-level declarations in the current package.
 
 Here are some error examples:
+
+<!-- compile -->
+<!-- cfg="-p a --output-type=staticlib" -->
 
 ```cangjie
 // a.cj

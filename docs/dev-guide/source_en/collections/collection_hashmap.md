@@ -14,6 +14,8 @@ HashMap is a hash table that provides fast access to its contained elements. Eac
 
 Cangjie uses `HashMap<K, V>` to represent the HashMap type, where K denotes the key type of the HashMap. K must be a type that implements both the Hashable and `Equatable<K>` interfaces, such as numeric types or String. V denotes the value type of the HashMap, which can be any type.
 
+<!-- code_no_check -->
+
 ```cangjie
 var a: HashMap<Int64, Int64> = ... // HashMap whose key type is Int64 and value type is Int64
 var b: HashMap<String, Int64> = ... // HashMap whose key type is String and value type is Int64
@@ -22,6 +24,8 @@ var b: HashMap<String, Int64> = ... // HashMap whose key type is String and valu
 HashMaps with different element types are considered distinct types, so they cannot be assigned to each other.
 
 Therefore, the following example is invalid:
+
+<!-- code_no_check -->
 
 ```cangjie
 b = a // Type mismatch

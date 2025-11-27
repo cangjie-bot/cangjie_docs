@@ -2,6 +2,8 @@
 
 The `sleep` function blocks the currently running thread, causing it to voluntarily sleep for a specified duration before resuming execution. Its parameter type is `Duration`. The function prototype is:
 
+<!-- code_no_check -->
+
 ```cangjie
 func sleep(dur: Duration): Unit // Sleep for at least `dur`.
 ```

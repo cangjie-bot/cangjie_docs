@@ -313,47 +313,4 @@ In debug mode, a temporary file `demo.cj.macrocall` will be generated, containin
 /* ===== End of the Emit ===== */
 ```
 
-If the expanded macro code contains semantic errors, the compiler's error messages will trace back to the specific line and column numbers in the expanded code. The _debug_ mode of Cangjie macros has the following considerations:
-
-- The _debug_ mode of macros will rearrange the source code's line and column information and is not suitable for certain special line-breaking scenarios. For example:
-
-  <!-- code_no_check -->
-
-  ```cangjie
-  // before expansion
-  @M{} - 2 // macro M returns 2
-
-  // after expansion
-  // ===== Emitted by Macro M at line 1 ===
-  2
-  // ===== End of the Emit =====
-  - 2
-  ```
-
-  These cases where line breaks alter the semantics should not use _debug_ mode.
-
-- Debugging macro calls within macro definitions is not supported and will result in compilation errors.
-
-  <!-- compile.error -->
-
-  ```cangjie
-  public macro M(input: Tokens) {
-      let a = @M2(1+2) // M2 is inside macro M, not suitable for debug mode.
-      return input + quote($a)
-  }
-  ```
-
-- Debugging macros with parentheses is not supported.
-
-  <!-- compile.error -->
-
-  ```cangjie
-  // main.cj
-
-  main() {
-      // For macros with parentheses, newlines introduced by debug mode will change the semantics
-      // of the expression, so it is not suitable for debug mode.
-      let t = @M(1+2)
-  }
-  ```
-```
+If the expanded macro code contains semantic errors, the compiler's error messages will trace back to the specific line and column numbers in the expanded code. 

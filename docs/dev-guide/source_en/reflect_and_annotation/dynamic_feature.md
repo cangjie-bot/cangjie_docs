@@ -1,6 +1,6 @@
 # Dynamic Features
 
-This chapter introduces the dynamic features of Cangjie, which enable developers to implement certain functionalities more elegantly. The dynamic features of Cangjie primarily include reflection.
+This chapter introduces the dynamic features of Cangjie, which enable developers to implement certain functionalities more elegantly. Cangjie's dynamic features primarily include reflection.
 
 ## Basic Introduction to Cangjie Reflection
 
@@ -20,6 +20,7 @@ For Cangjie's reflection feature, it is essential to understand the `TypeInfo` t
 
 Three static `of` methods can be used to generate `TypeInfo` information classes.
 
+<!-- code_no_check -->
 ```cangjie
 public class TypeInfo {
     public static func of(a: Any): TypeInfo
@@ -31,6 +32,8 @@ public class TypeInfo {
 When the `of` function with parameters of type `Any` or `Object` is used, the output is the runtime type information of the instance. The `of` function with a generic parameter returns the static type information of the passed parameter. Both methods produce identical information, but there is no guarantee that they will correspond to the same object.
 
 For example, reflection can be used to obtain type information for a custom type.
+
+<!-- verify -->
 
 ```cangjie
 import std.reflect.*
@@ -55,6 +58,7 @@ default.Foo
 
 Additionally, `TypeInfo` provides a static function `get`, which retrieves `TypeInfo` by passing in a type name.
 
+<!-- code_no_check -->
 ```cangjie
 public class TypeInfo {
     public static func get(qualifiedName: String): TypeInfo
@@ -63,31 +67,15 @@ public class TypeInfo {
 
 Note that the input parameter must conform to the fully qualified pattern rule of `module.package.type`. For compiler-preloaded types, including those in the `core` package and built-in compiler types such as `primitive type`, `Option`, `Iterable`, etc., the search string should directly use the type name without the package or module prefix. If the runtime cannot find an instance of the corresponding type, an `InfoNotFoundException` will be thrown.
 
-```cangjie
-let t1: TypeInfo = TypeInfo.get("Int64")
-let t1: TypeInfo = TypeInfo.get("default.Foo")
-let t2: TypeInfo = TypeInfo.get("std.socket.TcpSocket")
-let t3: TypeInfo = TypeInfo.get("net.http.ServerBuilder")
-```
+Example: (will throw an error when running)
 
-This method cannot be used to obtain an uninstantiated generic type.
+<!-- run.error -->
 
 ```cangjie
-import std.collection.*
 import std.reflect.*
 
-class A<T> {
-    A(public let t: T) {}
-}
-
-class B<T> {
-    B(public let t: T) {}
-}
-
 main() {
-    let aInfo: TypeInfo = TypeInfo.get("default.A<Int64>")// Error,`default.A<Int64>` is not instantiated，will throw InfoNotFoundException
-    let b: B<Int64> = B<Int64>(1)
-    let bInfo: TypeInfo = TypeInfo.get("default.B<Int64>")// OK `default.B<Int64>` has been instantiated.
+    let t1: TypeInfo = TypeInfo.get("default.Foo")
 }
 ```
 
@@ -97,6 +85,8 @@ Once the corresponding type information class, i.e., `TypeInfo`, is obtained, it
 
 For example, to retrieve and modify an instance member variable of a class at runtime:
 
+<!-- verify -->
+
 ```cangjie
 import std.reflect.*
 
@@ -105,7 +95,7 @@ public class Foo {
     public var param2 = 10
 }
 
-main(): Unit{
+main(): Unit {
     let obj = Foo()
     let info = TypeInfo.of(obj)
     let staticVarInfo = info.getStaticVariable("param1")
@@ -139,6 +129,8 @@ Instance member variable param2: Int64 of obj = 25
 
 Similarly, properties can be inspected and modified via reflection.
 
+<!-- verify -->
+
 ```cangjie
 import std.reflect.*
 
@@ -154,7 +146,7 @@ public class Foo {
     }
 }
 
-main(): Unit{
+main(): Unit {
     let obj = Foo()
     let info = TypeInfo.of(obj)
     let instanceProps = info.instanceProperties.toArray()
@@ -187,6 +179,8 @@ Instance member properties of obj include [prop p1: Int64, mut prop p2: Int64]
 ```
 
 Function calls can also be made via the reflection mechanism.
+
+<!-- verify -->
 
 ```cangjie
 import std.reflect.*
