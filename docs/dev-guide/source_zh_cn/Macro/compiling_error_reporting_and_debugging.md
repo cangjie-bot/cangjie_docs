@@ -290,7 +290,7 @@ cjc --debug-macro demo.cj --import-path ./target
 
 > **注意：**
 >
-> 如果使用仓颉的 `CJPM` 包管理工具进行编译，可在配置文件 `cjpm.toml` 中添加 `--debug-macro` 的编译选项来使用宏的 _debug_ 模式。
+> 如果使用仓颉的 `CJPM` 项目管理工具进行编译，可在配置文件 `cjpm.toml` 中添加 `--debug-macro` 的编译选项来使用宏的 _debug_ 模式。
 >
 > ```text
 > compile-option = "--debug-macro"

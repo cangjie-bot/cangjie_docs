@@ -17,7 +17,7 @@ demo
 └── cjpm.toml
 ```
 
-`cjpm.toml` is the configuration file for the workspace where the current module resides. It defines basic information, dependencies, compilation options, and other settings. This file is parsed and executed by Cangjie's official package management tool `cjpm`.
+`cjpm.toml` is the configuration file for the workspace where the current module resides. It defines basic information, dependencies, compilation options, and other settings. This file is parsed and executed by Cangjie's official project management tool `cjpm`.
 
 > **Note:**
 >
