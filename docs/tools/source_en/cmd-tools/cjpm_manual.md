@@ -1570,7 +1570,7 @@ The configuration file format is as follows:
 The configuration content is described as follows:
 
 - `repository.home` is used to configure the central repository URL and the user's personal token. The `cjpm` tool interacts with the central repository address specified in the `registry` field, and all interaction requests will include the user's token information for authentication.
-- `repository.cache` is used to configure the local path for storing source code modules downloaded from the central repository or Git. If not configured, it defaults to the `.cjpm` directory in the user's home directory. Once the local path is determined, Git source code modules are downloaded to the `git` subdirectory under this path. Central repository source code modules are downloaded to the `repository/source` subdirectory under this path.
+- `repository.cache` is used to configure the local path for storing source code modules downloaded from the central repository or Git. Environment variables can be used to configure field values, Refer to[Environment Variable Configuration](#Environment-Variable-Configuration), If not configured, it defaults to the `.cjpm` directory in the user's home directory. Once the local path is determined, Git source code modules are downloaded to the `git` subdirectory under this path. Central repository source code modules are downloaded to the `repository/source` subdirectory under this path.
 
 ## Configuration and Cache Directories
 
