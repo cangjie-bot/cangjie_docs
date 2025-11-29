@@ -1,8 +1,6 @@
 ---
 title: "xxx: xxx"
-assignees: 'xuanjz'
 ---
-
 # 仓颉Docs仓文档PR信息
 
 ## 文档变更内容 **（必填）**
