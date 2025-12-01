@@ -962,6 +962,21 @@ public struct ObjCFunc<F> {
 
 `ObjCFunc` 方法的实现均在编译器中。
 
+#### Usage
+
+```cangjie
+let f: ObjCFunc<(Int64) -> Int64> = ... // must be instantiated from ObjC and passed to the Cangjie world via mirror method return, param, etc.
+f.call(123)
+let ff = f.call // error: can only be directly called
+```
+
+#### Limitations
+
+1. `F` must be a valid Cangjie function type.
+2. `F` params and return type must be Objective-C compatible.
+3. `call` prop are allowed to be called, other usages (passing to function, storing to variable, etc.) are forbidden.
+4. Instantiation of `ObjCFunc<F>` from Cangjie is not supported.
+
 ### ObjCId
 
 `ObjCId` 类型定义在 `objc.lang` 包中，用作所有 Mirror 类型的父类型。它是 ObjC 在仓颉世界中的 `id` 类型代表。其签名如下：
