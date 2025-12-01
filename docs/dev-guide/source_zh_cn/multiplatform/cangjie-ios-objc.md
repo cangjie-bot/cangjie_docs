@@ -474,6 +474,7 @@ class A <: M {
 - 不支持 private/const 成员。
 - 支持 static/open 修饰。
 - 暂不支持映射 assign/readonly 等 attribute，仓颉侧映射均按照 readwrite 处理，在 objc 侧处理上述 attribute 的属性时，以 objc 规格为准。
+- 若属性被 Impl 子类重载，则不允许在 ObjC 侧的构造函数中调用该属性，将出现运行时崩溃。
 
 ### 成员变量
 
@@ -962,6 +963,22 @@ public struct ObjCFunc<F> {
 
 `ObjCFunc` 方法的实现均在编译器中。
 
+示例如下：
+
+<!-- code_no_check -->
+```cangjie
+let f: ObjCFunc<(Int64) -> Int64> = mirrorFuncCreator() // 对象必须从 ObjC 侧创建，通过 Mirror 类型的返回值或参数传递到仓颉侧。
+f.call(123)
+let ff = f.call // 报错：不允许值类型赋值。
+```
+
+具体规格如下：
+
+- ObjCFunc<F> 中的 F 必须为合法的仓颉函数类型。
+- F 的返回值和参数必须为 ObjC 兼容类型。
+- ObjCFunc 中的 call 属性仅允许被直接调用，禁止用于其他场景（如赋值给变量、作为函数参数等）。
+- 不允许在仓颉侧构造 ObjCFunc<F> 类型对象。
+
 ### ObjCId
 
 `ObjCId` 类型定义在 `objc.lang` 包中，用作所有 Mirror 类型的父类型。它是 ObjC 在仓颉世界中的 `id` 类型代表。其签名如下：
@@ -1350,3 +1367,5 @@ static struct RuntimeParam defaultCJRuntimeParams = {0};
     - ObjC Mirror 和 Impl 类的实例不能被 Lambda 表达式块或 spawn 线程捕获
 
 3. 版本使用过程中需额外下载依赖文件 `Cangjie.h` (下载地址： <https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/runtime/src/Cangjie.h>),并集成至项目中。
+4. 在仓颉中依赖了 Foundation 中的类型时，例如 NSObject 等，由于 Foundation 实际已被导入，但是 NSObject.h 头文件未被显式指定，因此当前可通过创建同名空头文件，保证编译正常。
+5. 当前 ObjCImpl 的构造函数实现使用 `[self doesNotRecognizeSelecor:_cmd];` 特性，每次均抛出异常，无返回值，因此需关闭 -Werror=return-type的编译期检查能力，保证编译正常。
