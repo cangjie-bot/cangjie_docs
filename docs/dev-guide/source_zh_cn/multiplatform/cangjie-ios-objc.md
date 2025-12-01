@@ -185,38 +185,38 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
     ```
 
     生成的镜像文件 `Base.cj` 如下：
+    ``
+    <!-- compile -->
+    ```cangjie
+    // Base.cj
+    package example
 
-<!-- compile -->
-```cangjie
-// Base.cj
-package example
+    import objc.lang.*
 
-import objc.lang.*
-
-@ObjCMirror
-open class Base {
-    public init()
-    public open func f(): Unit
-}
-```
+    @ObjCMirror
+    open class Base {
+        public init()
+        public open func f(): Unit
+    }
+    ```
 
     如果需要基于 `Base` 对部分函数进行重写，示例如下：
 
-<!-- compile -->
-```cangjie
-// Interop.cj
-package example
+    <!-- compile -->
+    ```cangjie
+    // Interop.cj
+    package example
 
-import objc.lang.*
+    import objc.lang.*
 
-@ObjCImpl
-public class Interop <: Base {
-    override public func f(): Unit {
-        println("Hello from overridden Cangjie Interop.f()")
-        Base().f()
+    @ObjCImpl
+    public class Interop <: Base {
+        override public func f(): Unit {
+            println("Hello from overridden Cangjie Interop.f()")
+            Base().f()
+        }
     }
-}
-```
+    ```
 
 3. 开发互操作代码，使用步骤 2 中生成的 Mirror Type 创建 ObjC 对象、调用 ObjC 方法。
 
@@ -224,20 +224,20 @@ public class Interop <: Base {
 
     例如如下示例，可通过 ObjCImpl 类型继承 Mirror Type 调用 ObjC 类型构造函数：
 
-<!-- compile -->
-```cangjie
-// A.cj
-package cjworld
+    <!-- compile -->
+    ```cangjie
+    // A.cj
+    package cjworld
 
-import objc.lang.*
+    import objc.lang.*
 
-@ObjCImpl
-public class A <: M {
-    override public func goo(): Unit {
-        println("Hello from overridden A goo()")
+    @ObjCImpl
+    public class A <: M {
+        override public func goo(): Unit {
+            println("Hello from overridden A goo()")
+        }
     }
-}
-```
+    ```
 
 4. 使用 cjc 编译互操作代码和 'Mirror Type.cj' 类型。cjc 将生成：
 
@@ -474,6 +474,7 @@ class A <: M {
 - 不支持 private/const 成员。
 - 支持 static/open 修饰。
 - 暂不支持映射 assign/readonly 等 attribute，仓颉侧映射均按照 readwrite 处理，在 objc 侧处理上述 attribute 的属性时，以 objc 规格为准。
+- 若属性被 Impl 子类重载，则不允许在 ObjC 侧的构造函数中调用该属性，将出现运行时崩溃。
 
 ### 成员变量
 
@@ -962,6 +963,22 @@ public struct ObjCFunc<F> {
 
 `ObjCFunc` 方法的实现均在编译器中。
 
+示例如下：
+
+<!-- code_no_check -->
+```cangjie
+let f: ObjCFunc<(Int64) -> Int64> = mirrorFuncCreator() // 对象必须从 ObjC 侧创建，通过 Mirror 类型的返回值或参数传递到仓颉侧。
+f.call(123)
+let ff = f.call // 报错：不允许值类型赋值。
+```
+
+具体规格如下：
+
+- ObjCFunc<F> 中的 F 必须为合法的仓颉函数类型。
+- F 的返回值和参数必须为 ObjC 兼容类型。
+- ObjCFunc 中的 call 属性仅允许被直接调用，禁止用于其他场景（如赋值给变量、作为函数参数等）。
+- 不允许在仓颉侧构造 ObjCFunc<F> 类型对象。
+
 ### ObjCId
 
 `ObjCId` 类型定义在 `objc.lang` 包中，用作所有 Mirror 类型的父类型。它是 ObjC 在仓颉世界中的 `id` 类型代表。其签名如下：
@@ -1048,7 +1065,7 @@ try {
 ## @property 属性
 
 支持通过 `@ForeignGetterName` 和 `@ForeignSetterName` 映射 ObjC 的 @property 语法。
-在 Mirror类中，具有 `@ForeignGetterName` 和 `@ForeignSetterName` 注解的属性将改变从 Cangjie 端访问属性时使用的方法。默认生成的选择器（来自属性名或 `@ForeignName` 注解）会被指定的选择器覆盖。在下面的示例中，Objective-C 端重新定义了属性的 getter 和 setter 名称：
+在 Mirror 类中，具有 `@ForeignGetterName` 和 `@ForeignSetterName` 注解的属性将改变从 Cangjie 端访问属性时使用的方法。默认生成的选择器（来自属性名或 `@ForeignName` 注解）会被指定的选择器覆盖。在下面的示例中，Objective-C 端重新定义了属性的 getter 和 setter 名称：
 
 ```objc
 @interface Component
@@ -1162,11 +1179,9 @@ public interface A {
 - 调用枚举中定义的静态方法和实例方法
 - 支持枚举属性的访问
 
-#### 示例：
+#### 示例
 
 <!-- compile -->
-
-Cangjie 源码：
 
 ```cangjie
 // Cangjie
@@ -1326,9 +1341,9 @@ static struct RuntimeParam defaultCJRuntimeParams = {0};
 
 由于与其他语言特性的集成仍在开发中，以下场景暂不支持：
 
-- Cangjie enum不得实现其他接口
+- Cangjie enum 不得实现其他接口
 - 接口成员函数不得使用泛型
-- 成员函数中不使用Lambda
+- 成员函数中不使用 Lambda
 - 不支持操作符重载
 - 仅允许使用基础数据类型（如 Int32、Unit 等）
 - 不支持通过 extend 对 enum 进行扩展
@@ -1344,9 +1359,11 @@ static struct RuntimeParam defaultCJRuntimeParams = {0};
     - 不支持同时转换多个 .h 头文件
     - 不支持 Bit fields 转换
 
-2.  当前版本的 ObjC 互操作方案存在如下约束限制：
+2. 当前版本的 ObjC 互操作方案存在如下约束限制：
     - 不支持 ObjC Mirror 和 Impl 类的实例逃逸出线程范围，即不能作为全局变量、静态变量，或作为这些变量的字段成员
     - ObjC Mirror 和 Impl 类的实例不能作为其他 ObjC Mirror 或 Impl 对象的字段成员
     - ObjC Mirror 和 Impl 类的实例不能被 Lambda 表达式块或 spawn 线程捕获
 
 3. 版本使用过程中需额外下载依赖文件 `Cangjie.h` (下载地址： <https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/runtime/src/Cangjie.h>),并集成至项目中。
+4. 在仓颉中依赖了 Foundation 中的类型时，例如 NSObject 等，由于 Foundation 实际已被导入，但是 NSObject.h 头文件未被显式指定，因此当前可通过创建同名空头文件，保证编译正常。
+5. 当前 ObjCImpl 的构造函数实现使用 `[self doesNotRecognizeSelecor:_cmd];` 特性，每次均抛出异常，无返回值，因此需关闭 `-Werror=return-type` 的编译期检查能力，保证编译正常。

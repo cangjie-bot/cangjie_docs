@@ -131,3 +131,4 @@
     - [操作符函数](source_zh_cn/Appendix/operator_function.md)
     - [TokenKind 类型](source_zh_cn/Appendix/tokenkind_type.md)
     - [仓颉包兼容性检查](source_zh_cn/Appendix/cangjie_package_compatibility.md)
+    - [cjo 产物说明](source_zh_cn/Appendix/cjo_artifacts.md/)

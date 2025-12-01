@@ -131,3 +131,4 @@
     - [Operator Functions](source_en/Appendix/operator_function.md)
     - [TokenKind Type](source_en/Appendix/tokenkind_type.md)
     - [Cangjie Package Compatibility Check](source_en/Appendix/cangjie_package_compatibility.md)
+    - [cjo Artifacts](source_en/Appendix/cjo_artifacts.md/)
