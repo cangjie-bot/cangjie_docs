@@ -1,5 +1,5 @@
 - [初识仓颉语言]()
-    - [初识仓颉语言](source_zh_cn/first_understanding/basic.md)
+    - [初识仓颉语言](source_zh_c/first_understanding/basic.md)
     - [安装仓颉工具链](source_zh_cn/first_understanding/install.md)
     - [运行第一个仓颉程序](source_zh_cn/first_understanding/hello_world.md)
 - [基本概念]()
