@@ -9,7 +9,7 @@
 举个例子，假设要调用 C 的 `rand` 和 `printf` 函数，它的函数签名如下：
 
 ```c
-// stdlib.h
+# stdlib.h
 int rand();
 
 // stdio.h
@@ -48,8 +48,6 @@ main() {
 7. 仓颉（CJNative 后端）虽然提供了栈扩容能力，但是由于 C 侧函数实际使用栈大小仓颉无法感知，所以 ffi 调用进入 C 函数后，仍然存在栈溢出的风险（可能导致程序运行时崩溃或者产生不可预期的行为），需要开发者根据实际情况，修改 `cjStackSize` 的配置。
 
 一些不合法的 `foreign` 声明的示例代码如下：
-
-<!-- compile.error -->
 
 ```cangjie
 foreign func rand(): Int32 { // compiler error

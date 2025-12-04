@@ -1,6 +1,6 @@
 # cjo 产物说明
 
-本章介绍仓颉编程语言编译过程中生成的 cjo（Cangjie Object）产物的作用和相关信息。
+本章介绍仓颉编程语言编译过程中生成的cjo（Cangjie Object）产物的作用和相关信息。
 
 ## 什么是 cjo 产物
 
@@ -38,7 +38,7 @@ $ cjc -p mypackage --output-type=staticlib
 
 ### 指定输出目录
 
-可以使用 [`--output-dir`](compile_options.md#--output-dir-value-frontend) 选项指定 cjo 文件的输出目录：
+可以使用 [`--output-dir`](compile_option.md#--output-dir-value-frontend) 选项指定 cjo 文件的输出目录：
 
 ```shell
 $ cjc -p mypackage --output-type=staticlib --output-dir ./build
