@@ -1093,6 +1093,49 @@ class ComponentChild <: Component {
 - 不支持修饰重载的属性。
 - `@ForeignSetterName` 不支持修饰可变类型。
 
+## @ObjCInit annotation
+Consider the example:
+```objc
+@interface M
+- (id) initWithA: (int) a andB: (float) b;
+- (id) initWithC: (int) c andD: (float) d;
+@end
+```
+For the Objective-C language things are dead simple: two different init selectors, no conflicts.
+But how to express them in Cangjie's ObjCMirror?
+
+```cangjie
+@ObjCMirror
+class M {
+	@ForeignName["initWithA:andB:"]
+	public init(a: Int32, b: Float32)
+    @ForeignName["initWithC:andD:"]
+    public init(c: Int32, b: Float32) // cjc error, duplicated init type signature
+}
+```
+
+The Cangjie compiler has no opportunity to determine which constructor would you like to use when `M(42, 123.321)` is called, even though their `@ForeignName` (Objective-C selectors) are different. 
+
+Here the `@ObjCInit` annotation comes to rescue! The ObjCInteropGen finds such ambiguos init selectors and, instead of a regular Cangjie `init`, emits a static method marked with `@ObjCInit` annotation.
+
+```cangjie
+@ObjCMirror
+class M {
+	@ObjCInit["initWithA:andB:"]
+	public static func initWithAandB(a: Int32, b: Float32): M // M.initWithAandB(...)
+    @ObjCInit["initWithC:andD:"]
+    public static func initWithCandD(c: Int32, b: Float32): M // M.initWithCandD(...)
+}
+```
+
+### Specification
+1. Only `@ObjCMirror` class static methods are supported.
+2. `@ObjCInit` can accept zero or one string literal as an attribute (same as `@ForeignName` anno).
+3. `@ObjCInit` follows `@ForeignName` rules about inheritance.
+4. `@ObjCInit` static methods of class `T` MUST have a return type `T`.
+5.  Use as `super(...)` call target is not supported.
+6. `@ObjCInit` static methods follow `@ObjCMirror` static methods rules.
+
 ## ObjC 使用 Cangjie 规格
 
 ### 新增实验编译选项 `--experimental --enable-interop-cjmapping=<Target Languages>`
