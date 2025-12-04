@@ -61,18 +61,18 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 |    `UInt16`                               |        `unsigned short`       |
 |    `UInt32`                               |        `unsigned int`         |
 |    `UInt64`                               |   `unsigned long/NSUInteger`  |
-|    `UInt64`                               |   `unsugned long long`        |
+|    `UInt64`                               |   `unsigned long long`        |
 |    `Float32`                              |        `float`                |
 |   `Float64`                               |        `double`               |
 |  `Bool`                                   |        `bool/BOOL`            |
-| `A` where `A` is `class`                  | `A*`                          |
-| `ObjCPointer<A>` where `A` is `class`     | `A**`                         |
-| `ObjCPointer<A>` where `A` is not `class` | `A*`                          |
+| `?A` where `A` is ObjCMirror `class`      | `A*`                          |
+| `ObjCPointer<?A>` where `A` is ObjCMirror `class`    | `A**`                         |
+| `ObjCPointer<A>` where `A` is not ObjCMirror `class` | `A*`                          |
 | `struct A`                                | `@C struct A`                 |
 | `ObjCBlock`                               | `Block`                       |
 | `ObjCFunc`                                | `function type`               |
 | `ObjCId`                                  | `id`                          |
-| `A` where `A` is `interface`              | `id<A>`                       |
+| `?A` where `A` is ObjCMirror `interface`  | `id<A>`                       |
 
 注意：
 
@@ -81,6 +81,7 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 3. 匿名 `C enumeration` 的类型不做映射转化
 4. `C unions` 的类型不做映射转化
 5. `const` `volatile` `restrict`  的类型不做映射转化
+6. 如果OC侧方法签名中，返回类型或形参类型被nonnull修饰，则生成的仓颉侧对应类型不进行Option封装。
 
 以仓颉调用 ObjC 为例，整体开发过程描述如下：
 
@@ -624,6 +625,49 @@ int main(int argc, char** argv) {
 > 注意：
 >
 > 支持在 Impl 类或普通仓颉类中调用 Mirror 类成员，规格一致。
+
+## ObjCMirror 全局函数
+
+支持映射 Objc 中的全局函数，具体示例如下：
+
+```objc
+// G.h
+// OC侧声明全局函数
+int add(int a, int b);
+
+// G.m
+// OC侧实现全局函数
+int add(int a, int b) {
+    return a + b;
+}
+
+// G.cj
+// 仓颉侧人工书写@ObjCMirror全局函数，目前暂不支持由ObjCMirrorGen生成
+@ObjCMirror
+public func add(a: Int32, b: Int32): Int32
+
+// A.cj
+// 在仓颉侧ObjCImpl中通过@ObjCMirror使用OC侧定义的全局函数
+@ObjCImpl
+public class A <: NSObject {
+    public init() {}
+    public func foo(a: Int32, b: Int32): Unit {
+        let result = add(a, b)
+        println("result = ${result}")
+    }
+}
+```
+
+具体规格如下:
+
+- 该函数不能包含函数体
+- 该函数不能标记为 foreign 函数
+- 该函数不能使用泛型
+- 该函数不能标记为 const 函数
+- 函数的返回类型必须显示指定
+- 函数可以拥有任意个数的形参
+- 支持命名形参和形参默认值，当形参拥有默认值时，仓颉侧调用该@ObjCMirror全局函数时可以不提供该实参，OC侧实际调用其全局函数时采用该默认值。
+
 
 ## ObjCMirror 接口
 

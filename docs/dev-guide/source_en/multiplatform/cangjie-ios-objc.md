@@ -66,14 +66,15 @@ To automatically generate glue code, cjc requires symbol information about the O
 |    `Float32`                              |        `float`                |
 |   `Float64`                               |        `double`               |
 |  `Bool`                                   |        `bool/BOOL`            |
-| `A` where `A` is `class`                  | `A*`                          |
-| `ObjCPointer<A>` where `A` is `class`     | `A**`                         |
+| `?A` where `A` is ObjCMirror `class`      | `A*`                          |
+| `ObjCPointer<?A>` where `A` is ObjCMirror `class`    | `A**`                         |
 | `ObjCPointer<A>` where `A` is not `class` | `A*`                          |
 | `struct A`                                | `@C struct A`                 |
 | `ObjCBlock`                               | `Block`                       |
 | `ObjCFunc`                                | `function type`               |
 | `ObjCId`                                  | `id`                          |
-| `A` where `A` is `interface`              | `id<A>`                       |
+| `?A` where `A` is ObjCMirror `interface`  | `id<A>`                       |
+
 
 Notes:
 
@@ -82,6 +83,7 @@ Notes:
 3. Anonymous `C enumeration` types are not mapped.
 4. `C unions` types are not mapped.
 5. Types with `const`, `volatile`, or `restrict` qualifiers are not mapped.
+6. If the return type or parameter type in the method signature on the OC side is annotated with `nonnull`, the corresponding type on the Cangjie side will not be wrapped in an Option.
 
 Taking Cangjie calling ObjC as an example, the overall development process is described as follows:
 
@@ -624,6 +626,49 @@ int main(int argc, char** argv) {
 > Note:
 >
 > Calling Mirror class members from Impl classes or regular Cangjie classes is supported, with consistent specifications.
+
+
+## ObjCMirror top-level functions
+
+Support top-level functions as a target of interop with Objective-C.
+
+```objc
+// G.h
+// top-level declaration
+int add(int a, int b);
+
+// G.m
+// top-level declaration implementation
+int add(int a, int b) {
+    return a + b;
+}
+
+// G.cj
+// manual writing @ObjCMirror top-level function, currently not supported by ObjCMirrorGen.
+@ObjCMirror
+public func add(a: Int32, b: Int32): Int32
+
+// A.cj
+// Using the global functions defined on the Objective-C side through @ObjCMirror in ObjCImpl.
+@ObjCImpl
+public class A <: NSObject {
+    public init() {}
+    public func foo(a: Int32, b: Int32): Unit {
+        let result = add(a, b)
+        println("result = ${result}")
+    }
+}
+```
+
+Specification for the @ObjCMirror top-level functions feature:
+
+- It cannot have a body
+- It cannot be marked foreign
+- It cannot have generics
+- It cannot be marked const
+- The result type of the function must be always explicitly provided
+- Any number of parameters is supported
+- Supports named parameters and default parameter values. When a parameter has a default value, the Cangjie side can call the @ObjCMirror global function without providing this actual parameter; instead, the default value will be used when the Objective-C side actually calls its global function.
 
 ## ObjCMirror interface
 
