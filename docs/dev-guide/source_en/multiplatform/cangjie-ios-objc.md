@@ -68,7 +68,7 @@ To automatically generate glue code, cjc requires symbol information about the O
 |  `Bool`                                   |        `bool/BOOL`            |
 | `?A` where `A` is ObjCMirror `class`      | `A*`                          |
 | `ObjCPointer<?A>` where `A` is ObjCMirror `class`    | `A**`                         |
-| `ObjCPointer<A>` where `A` is not `class` | `A*`                          |
+| `ObjCPointer<A>` where `A` is not ObjCMirror `class` | `A*`                          |
 | `struct A`                                | `@C struct A`                 |
 | `ObjCBlock`                               | `Block`                       |
 | `ObjCFunc`                                | `function type`               |
