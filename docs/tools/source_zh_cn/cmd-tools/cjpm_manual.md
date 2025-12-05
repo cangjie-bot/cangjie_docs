@@ -1090,7 +1090,7 @@ abc = { path = "libs" }
   bbb = { path = "new/path/to/bbb" }
 ```
 
-配置后，编译 `demo` 模块时实际使用的间接依赖 `bbb` 即为`new/path/to/bbb` 下的 `bbb` 模块，`aaa` 中配置的 `path/to/bbb` 下的 `bbb` 模块不会被编译。
+配置后，编译 `demo` 模块时实际使用的间接依赖 `bbb` 模块将来自 `new/path/to/bbb` 路径，而 `aaa` 中配置的 `path/to/bbb` 路径下的 `bbb` 模块不会被编译。
 
 > **注意：**
 >
