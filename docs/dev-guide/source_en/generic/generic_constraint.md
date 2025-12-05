@@ -1,4 +1,4 @@
-# Generic Constraints
+# 1Generic Constraints
 
 The purpose of generic constraints is to specify the operations and capabilities that generic type parameters must possess when declaring functions, classes, interfaces, structs, or enums. Only by declaring these constraints can corresponding member functions be called. In many scenarios, generic type parameters need to be constrained. Take the `id` function as an example:
 

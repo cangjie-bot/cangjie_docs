@@ -1,4 +1,4 @@
-# Cross-Platform
+# 1Cross-Platform
 
 Cangjie provides cross-platform development capabilities that address code reuse issues in cross-end development scenarios. Users can differentiate between common code and platform-specific code to share code across different platforms, reducing the time spent on developing and maintaining identical code for different platforms.
 

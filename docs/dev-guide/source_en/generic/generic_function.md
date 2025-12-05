@@ -1,4 +1,4 @@
-# Generic Functions
+# 1Generic Functions
 
 A function is called a generic function if it declares one or more type parameters. Syntactically, type parameters are placed immediately after the function name, enclosed in `<>`, and separated by `,` if there are multiple type parameters.
 

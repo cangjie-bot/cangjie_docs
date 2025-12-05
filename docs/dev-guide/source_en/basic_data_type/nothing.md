@@ -1,4 +1,4 @@
-# The Nothing Type
+# 1The Nothing Type
 
 `Nothing` is a special type that contains no values, and the `Nothing` type is a subtype of all types (including the [`Unit` type](unit.md)).
 

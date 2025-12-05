@@ -1,4 +1,4 @@
-# Nested Functions
+# 1Nested Functions
 
 Functions defined at the top level of a source file are called global functions. Functions defined within the body of another function are called nested functions.
 

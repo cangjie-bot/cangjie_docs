@@ -1,4 +1,4 @@
-# Cangjie Release Notes
+# 1Cangjie Release Notes
 
 ## 版本介绍
 

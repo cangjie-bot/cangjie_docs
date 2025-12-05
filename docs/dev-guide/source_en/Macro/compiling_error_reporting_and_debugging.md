@@ -1,4 +1,4 @@
-# Compilation, Errors, and Debugging
+# 1Compilation, Errors, and Debugging
 
 ## Macro Compilation and Usage
 
@@ -60,13 +60,13 @@ main() {
 When the compiled output of the macro definition file and the file using the macros are not in the same directory, the `--import-path` compilation option must be added to specify the path to the compiled output of the macro definition file. Below are the compilation commands for Linux (specific compilation options may evolve with cjc updates; refer to the latest cjc documentation for current options):
 
 ```shell
-# First compile the macro definition file to generate the default dynamic library in the specified directory (the path can be specified, but not the library name)
+# 1First compile the macro definition file to generate the default dynamic library in the specified directory (the path can be specified, but not the library name)
 cjc macros/m.cj --compile-macro --output-dir ./target
 
-# Compile the file using macros, perform macro substitution, and generate the executable
+# 1Compile the file using macros, perform macro substitution, and generate the executable
 cjc src/demo.cj -o demo --import-path ./target --output-dir ./target
 
-# Run the executable
+# 1Run the executable
 ./target/demo
 ```
 
@@ -75,12 +75,12 @@ On Linux, this will generate `macro_define.cjo` for package management and the a
 For Windows:
 
 ```shell
-# Current directory: src
+# 1Current directory: src
 
-# First compile the macro definition file to generate the default dynamic library in the specified directory (the path can be specified, but not the library name)
+# 1First compile the macro definition file to generate the default dynamic library in the specified directory (the path can be specified, but not the library name)
 cjc macros/m.cj --compile-macro --output-dir ./target
 
-# Compile the file using macros, perform macro substitution, and generate the executable
+# 1Compile the file using macros, perform macro substitution, and generate the executable
 cjc src/demo.cj -o demo.exe --import-path ./target --output-dir ./target
 ```
 

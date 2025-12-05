@@ -1,4 +1,4 @@
-# Thread Sleep for Specified Duration
+# 1Thread Sleep for Specified Duration
 
 The `sleep` function blocks the currently running thread, causing it to voluntarily sleep for a specified duration before resuming execution. Its parameter type is `Duration`. The function prototype is:
 

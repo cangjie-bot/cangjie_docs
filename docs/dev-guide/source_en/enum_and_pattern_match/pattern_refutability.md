@@ -1,4 +1,4 @@
-# Pattern Refutability
+# 1Pattern Refutability
 
 Patterns can be divided into two categories: `refutable` patterns and `irrefutable` patterns. Under the premise of type matching, when a pattern may fail to match the value being matched, it is called a `refutable` pattern; conversely, when a pattern can always match the value being matched, it is called an `irrefutable` pattern.
 

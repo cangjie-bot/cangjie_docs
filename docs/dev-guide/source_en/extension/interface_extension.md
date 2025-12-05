@@ -1,4 +1,4 @@
-# Interface Extension
+# 1Interface Extension
 
 For example, in the following case, the type `Array` does not inherently implement the interface `PrintSizeable`. However, we can use extension to add an additional member function `printSize` to `Array` and implement `PrintSizeable`.
 

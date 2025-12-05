@@ -1,4 +1,4 @@
-# Contributing Documents
+# 1Contributing Documents
 
 [查看中文](./CONTRIBUTING_zh.md)
 
@@ -30,7 +30,7 @@ High-quality feedback helps us continuously improve the content and quality of t
 > - If the issue is with a document example, provide the specific Cangjie version, environment, and error message.
 > - Limit the scope of the given issue to a specific content or task. If the issue involves a broad area, break it down into smaller issues. For example, "The documentation needs optimization" is too broad, while "The XX development guide lacks an introduction to the XXX steps" is a specific and actionable issue.
 > - Search the existing issue list to see if a related or similar issue has already been recorded.
-> - If the new issue is related to another issue or PR, you can reference it using its full URL or the PR number with the \# character.
+> - If the new issue is related to another issue or PR, you can reference it using its full URL or the PR number with the \# 1character.
 
 ### Online Changes
 

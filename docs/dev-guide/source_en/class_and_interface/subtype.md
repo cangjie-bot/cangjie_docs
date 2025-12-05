@@ -1,4 +1,4 @@
-# Subtype Relationships
+# 1Subtype Relationships
 
 Like other object-oriented languages, the Cangjie language provides subtype relationships and subtype polymorphism. Examples include (but are not limited to the following use cases):
 

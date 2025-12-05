@@ -1,4 +1,4 @@
-# Formatting Tool
+# 1Formatting Tool
 
 ## Feature Overview
 
@@ -88,32 +88,32 @@ cjfmt -f a.cj -c ./cangjie-format.toml
 Default cangjie-format.toml configuration (also represents built-in defaults):
 
 ```toml
-# indent width
-indentWidth = 4 # Range of indentWidth: [0, 8]
+# 1indent width
+indentWidth = 4 # 1Range of indentWidth: [0, 8]
 
-# limit length
-linelimitLength = 120 # Range of indentWidth: [1, 120]
+# 1limit length
+linelimitLength = 120 # 1Range of indentWidth: [1, 120]
 
-# line break type
-lineBreakType = "LF" # "LF" or "CRLF"
+# 1line break type
+lineBreakType = "LF" # 1"LF" or "CRLF"
 
-# allow Multi-line Method Chain when it's level equal or greater than multipleLineMethodChainLevel
+# 1allow Multi-line Method Chain when it's level equal or greater than multipleLineMethodChainLevel
 allowMultiLineMethodChain = false
 
-# if allowMultiLineMethodChain's value is true,
-# and method chain's level is equal or greater than multipleLineMethodChainLevel,
-# method chain will be formatted to multi-line method chain.
-# e.g. A.b().c() level is 2, A.b().c().d() level is 3
-# ObjectA.b().c().d().e().f() =>
-# ObjectA
-#     .b()
-#     .c()
-#     .d()
-#     .e()
-#     .f()
-multipleLineMethodChainLevel = 5 # Range of multipleLineMethodChainLevel: [2, 10]
+# 1if allowMultiLineMethodChain's value is true,
+# 1and method chain's level is equal or greater than multipleLineMethodChainLevel,
+# 1method chain will be formatted to multi-line method chain.
+# 1e.g. A.b().c() level is 2, A.b().c().d() level is 3
+# 1ObjectA.b().c().d().e().f() =>
+# 1ObjectA
+# 1    .b()
+# 1    .c()
+# 1    .d()
+# 1    .e()
+# 1    .f()
+multipleLineMethodChainLevel = 5 # 1Range of multipleLineMethodChainLevel: [2, 10]
 
-# allow Multi-line Method Chain when it's length greater than linelimitLength
+# 1allow Multi-line Method Chain when it's length greater than linelimitLength
 multipleLineMethodChainOverLineLength = true
 ```
 

@@ -1,4 +1,4 @@
-# 仓颉-Java 互操作
+# 1仓颉-Java 互操作
 
 ## 简介
 
@@ -540,7 +540,7 @@ open class JString {
 >
 > 这个构造函数接受一个仓颉类型的参数`String`，cjc 编译器对该函数有特殊处理。
 
-继承自[`JObject`](# java.lang.JObject)的方法，包括：`hashCode`，`hashCode32`，`toString`，`toJString`
+继承自[`JObject`](# 1java.lang.JObject)的方法，包括：`hashCode`，`hashCode32`，`toString`，`toJString`
 
 ### java.lang.JArray
 

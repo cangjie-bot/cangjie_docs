@@ -1,4 +1,4 @@
-# Function Invocation
+# 1Function Invocation
 
 A function is invoked in the form `f(arg1, arg2, ..., argn)`, where `f` is the name of the function to be called, and `arg1` through `argn` are the `n` arguments (called actual parameters) passed during invocation. Each actual parameter's type must be a subtype of the corresponding parameter's type. The number of actual parameters can range from zero to multiple. When there are zero parameters, the invocation takes the form `f()`.
 

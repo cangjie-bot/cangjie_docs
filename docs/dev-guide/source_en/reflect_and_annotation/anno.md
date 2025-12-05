@@ -1,4 +1,4 @@
-# Annotations
+# 1Annotations
 
 Cangjie provides several built-in compilation markers to support special case handling.
 

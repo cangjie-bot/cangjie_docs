@@ -1,4 +1,4 @@
-# `cjc` Usage
+# 1`cjc` Usage
 
 `cjc` is the compilation command for the Cangjie programming language, providing extensive functionality and corresponding compilation options. This chapter introduces its basic usage.
 

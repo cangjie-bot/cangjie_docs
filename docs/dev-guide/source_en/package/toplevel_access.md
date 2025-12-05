@@ -1,4 +1,4 @@
-# Visibility of Top-Level Declarations
+# 1Visibility of Top-Level Declarations
 
 In the Cangjie programming language, access modifiers can be used to control the visibility of top-level declarations such as types, variables, and functions. Cangjie provides four access modifiers: `private`, `internal`, `protected`, and `public`. The semantics of these modifiers when applied to top-level elements are as follows:
 

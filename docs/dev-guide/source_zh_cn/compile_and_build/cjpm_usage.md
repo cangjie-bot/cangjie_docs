@@ -1,4 +1,4 @@
-# cjpm 介绍
+# 1cjpm 介绍
 
 `CJPM（Cangjie Project Manager）` 是仓颉语言的官方项目管理工具，用来管理、维护仓颉项目的模块系统，并且提供更简易统一的编译入口，支持自定义编译命令。通过自动依赖管理，实现对引入的多版本三方依赖软件进行分析合并，无需开发者担心多版本依赖冲突问题，大大减轻开发者的负担。同时提供基于仓颉语言原生的自定义构建机制，允许开发者在构建的不同阶段增加预处理和后处理流程，实现构建流程可灵活定制，能够满足开发者不同业务场景下的编译构建需求。
 
@@ -63,59 +63,59 @@ cjpm build success
 配置文件代码如下所示：
 
 ```text
-[package] # 单模块配置字段，与 workspace 字段不能同时存在
-  cjc-version = "1.0.0" # 所需 `cjc` 的最低版本要求，必需
-  name = "demo" # 模块名及模块 root 包名，必需
-  description = "nothing here" # 描述信息，非必需
-  version = "1.0.0" # 模块版本信息，必需
-  compile-option = "" # 额外编译命令选项，非必需
-  override-compile-option = "" # 额外全局编译命令选项，非必需
-  link-option = "" # 链接器透传选项，可透传安全编译命令，非必需
-  output-type = "executable" # 编译输出产物类型，必需
-  src-dir = "" # 指定源码存放路径，非必需
-  target-dir = "" # 指定产物存放路径，非必需
-  package-configuration = {} # 单包配置选项，非必需
+[package] # 1单模块配置字段，与 workspace 字段不能同时存在
+  cjc-version = "1.0.0" # 1所需 `cjc` 的最低版本要求，必需
+  name = "demo" # 1模块名及模块 root 包名，必需
+  description = "nothing here" # 1描述信息，非必需
+  version = "1.0.0" # 1模块版本信息，必需
+  compile-option = "" # 1额外编译命令选项，非必需
+  override-compile-option = "" # 1额外全局编译命令选项，非必需
+  link-option = "" # 1链接器透传选项，可透传安全编译命令，非必需
+  output-type = "executable" # 1编译输出产物类型，必需
+  src-dir = "" # 1指定源码存放路径，非必需
+  target-dir = "" # 1指定产物存放路径，非必需
+  package-configuration = {} # 1单包配置选项，非必需
 
-[workspace] # 工作空间管理字段，与 package 字段不能同时存在
-  members = [] # 工作空间成员模块列表，必需
-  build-members = [] # 工作空间编译模块列表，需要是成员模块列表的子集，非必需
-  test-members = [] # 工作空间测试模块列表，需要是编译模块列表的子集，非必需
-  compile-option = "" # 应用于所有工作空间成员模块的额外编译命令选项，非必需
-  override-compile-option = "" # 应用于所有工作空间成员模块的额外全局编译命令选项，非必需
-  link-option = "" # 应用于所有工作空间成员模块的链接器透传选项，非必需
-  target-dir = "" # 指定产物存放路径，非必需
+[workspace] # 1工作空间管理字段，与 package 字段不能同时存在
+  members = [] # 1工作空间成员模块列表，必需
+  build-members = [] # 1工作空间编译模块列表，需要是成员模块列表的子集，非必需
+  test-members = [] # 1工作空间测试模块列表，需要是编译模块列表的子集，非必需
+  compile-option = "" # 1应用于所有工作空间成员模块的额外编译命令选项，非必需
+  override-compile-option = "" # 1应用于所有工作空间成员模块的额外全局编译命令选项，非必需
+  link-option = "" # 1应用于所有工作空间成员模块的链接器透传选项，非必需
+  target-dir = "" # 1指定产物存放路径，非必需
 
-[dependencies] # 源码依赖配置项，非必需
-  coo = { git = "xxx", branch = "dev" } # 导入 `git` 依赖
-  doo = { path = "./pro1" } # 导入源码依赖
+[dependencies] # 1源码依赖配置项，非必需
+  coo = { git = "xxx", branch = "dev" } # 1导入 `git` 依赖
+  doo = { path = "./pro1" } # 1导入源码依赖
 
-[test-dependencies] # 测试阶段的依赖配置项，格式和 dependencies 相同，非必需
+[test-dependencies] # 1测试阶段的依赖配置项，格式和 dependencies 相同，非必需
 
-[script-dependencies] # 构建脚本的依赖配置项，格式和 dependencies 相同，非必需
+[script-dependencies] # 1构建脚本的依赖配置项，格式和 dependencies 相同，非必需
 
-[replace] # 依赖替换配置项，格式和 dependencies 相同，非必需
+[replace] # 1依赖替换配置项，格式和 dependencies 相同，非必需
 
-[ffi.c] # 导入 C 语言的库依赖，非必需
+[ffi.c] # 1导入 C 语言的库依赖，非必需
   clib1.path = "xxx"
 
-[profile] # 命令剖面配置项，非必需
-  build = {} # build 命令配置项
-  test = {} # test 命令配置项
-  bench = {} # bench 命令配置项
-  customized-option = {} # 自定义透传选项
+[profile] # 1命令剖面配置项，非必需
+  build = {} # 1build 命令配置项
+  test = {} # 1test 命令配置项
+  bench = {} # 1bench 命令配置项
+  customized-option = {} # 1自定义透传选项
 
-[target.x86_64-unknown-linux-gnu] # 后端和平台隔离配置项，非必需
-  compile-option = "value1" # 额外编译命令选项，适用于特定 target 的编译流程和指定该 target 作为交叉编译目标平台的编译流程，非必需
-  override-compile-option = "value2" # 额外全局编译命令选项，适用于特定 target 的编译流程和指定该 target 作为交叉编译目标平台的编译流程，非必需
-  link-option = "value3" # 链接器透传选项，适用于特定 target 的编译流程和指定该 target 作为交叉编译目标平台的编译流程，非必需
+[target.x86_64-unknown-linux-gnu] # 1后端和平台隔离配置项，非必需
+  compile-option = "value1" # 1额外编译命令选项，适用于特定 target 的编译流程和指定该 target 作为交叉编译目标平台的编译流程，非必需
+  override-compile-option = "value2" # 1额外全局编译命令选项，适用于特定 target 的编译流程和指定该 target 作为交叉编译目标平台的编译流程，非必需
+  link-option = "value3" # 1链接器透传选项，适用于特定 target 的编译流程和指定该 target 作为交叉编译目标平台的编译流程，非必需
 
-[target.x86_64-w64-mingw32.dependencies] # 适用于对应 target 的源码依赖配置项，非必需
+[target.x86_64-w64-mingw32.dependencies] # 1适用于对应 target 的源码依赖配置项，非必需
 
-[target.x86_64-w64-mingw32.test-dependencies] # 适用于对应 target 的测试阶段依赖配置项，非必需
+[target.x86_64-w64-mingw32.test-dependencies] # 1适用于对应 target 的测试阶段依赖配置项，非必需
 
-[target.x86_64-unknown-linux-gnu.bin-dependencies] # 仓颉二进制库依赖，适用于特定 target 的编译流程和指定该 target 作为交叉编译目标平台的编译流程，非必需
-  path-option = ["./test/pro0", "./test/pro1"] # 以文件目录形式配置二进制库依赖
-[target.x86_64-unknown-linux-gnu.bin-dependencies.package-option] # 以单文件形式配置二进制库依赖
+[target.x86_64-unknown-linux-gnu.bin-dependencies] # 1仓颉二进制库依赖，适用于特定 target 的编译流程和指定该 target 作为交叉编译目标平台的编译流程，非必需
+  path-option = ["./test/pro0", "./test/pro1"] # 1以文件目录形式配置二进制库依赖
+[target.x86_64-unknown-linux-gnu.bin-dependencies.package-option] # 1以单文件形式配置二进制库依赖
   "pro0.xoo" = "./test/pro0/pro0.xoo.cjo"
   "pro0.yoo" = "./test/pro0/pro0.yoo.cjo"
   "pro1.zoo" = "./test/pro1/pro1.zoo.cjo"

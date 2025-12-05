@@ -1,4 +1,4 @@
-# Range Type
+# 1Range Type
 
 The range type is used to represent sequences with a fixed step size. It is a [generic](../generic/generic_overview.md) type denoted as `Range<T>`. When `T` is instantiated with different types, the type must support relational operators and be capable of addition with values of type `Int64`, resulting in different range types. For example, the most commonly used `Range<Int64>` represents integer ranges.
 

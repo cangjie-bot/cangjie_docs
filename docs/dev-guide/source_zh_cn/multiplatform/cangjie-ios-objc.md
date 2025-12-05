@@ -1,4 +1,4 @@
-# 仓颉-ObjC 互操作
+# 1仓颉-ObjC 互操作
 
 ## 简介
 
@@ -115,25 +115,25 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
     并创建配置文件，以`example.toml`为例：
 
     ```toml
-    # Place mirrors of the Foundation framework classes in the 'objc.foundation' package:
+    # 1Place mirrors of the Foundation framework classes in the 'objc.foundation' package:
     [[packages]]
     filters = { include = ["NS.+"] }
     package-name = "objc.foundation"
 
-    # Place the mirror of the class Base in the 'example' package:
+    # 1Place the mirror of the class Base in the 'example' package:
     [[packages]]
     filters = { include = "Base" }
     package-name = "example"
 
-    # Write the output files with mirror type definitions to the './mirrors' directory:
+    # 1Write the output files with mirror type definitions to the './mirrors' directory:
     [output-roots.default]
     path = "mirrors"
 
-    # Specify the pathnames of input files
+    # 1Specify the pathnames of input files
     [sources.all]
     paths = ["original-objc/Base.h"]
 
-    # Extra settings for testing with GNUstep
+    # 1Extra settings for testing with GNUstep
     [sources-mixins.default]
     sources = [".*"]
     arguments-append = [
@@ -147,19 +147,19 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
     配置文件格式如下:
 
     ```toml
-    # 可选，import其他的toml配置文件，值为字符串数组，每行表示相对于当前工作目录的toml文件路径
+    # 1可选，import其他的toml配置文件，值为字符串数组，每行表示相对于当前工作目录的toml文件路径
     imports = [
         "../path_to_file.toml"
     ]
 
-    # 生成的Mirror Type文件存放路径,当目标文件夹不存在时会自动创建
+    # 1生成的Mirror Type文件存放路径,当目标文件夹不存在时会自动创建
     [output-roots]
     path = "path_to_mirrors"
 
-    # Mirror Type的输入文件列表，与Clang编译选项
+    # 1Mirror Type的输入文件列表，与Clang编译选项
     [sources]
     path = "path_to_ObjC_header_file"
-    # 编译选项
+    # 1编译选项
     arguments-append = [
         "-F", "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks",
         "-isystem", "/Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include",
@@ -167,13 +167,13 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
         "-DTARGET_OS_IPHONE"
     ]
 
-    # 多个sources属性的集合
+    # 1多个sources属性的集合
     [sources-mixins]
     sources = [".*"]
 
-    # 指定包名
+    # 1指定包名
      [[packages]]
-    # 如果转换的代码隐式的使用到某些符号，如Uint32/Bool等，需要将该符号一并添加到filters中（如未添加运行 ObjCInteropGen 时会出现Entity Uint32/Bool from `xx.h` is ambiguous between x packages报错信息)
+    # 1如果转换的代码隐式的使用到某些符号，如Uint32/Bool等，需要将该符号一并添加到filters中（如未添加运行 ObjCInteropGen 时会出现Entity Uint32/Bool from `xx.h` is ambiguous between x packages报错信息)
     filters = { include = "Base" }
     package-name = "example"
     ```

@@ -1,4 +1,4 @@
-# Package Management Tool
+# 1Package Management Tool
 
 ## Overview
 
@@ -699,8 +699,8 @@ Notes on `install`:
 Examples:
 
 ```text
-cjpm install --path path/to/project # Installs from a local path
-cjpm install --git url              # Installs from a Git URL
+cjpm install --path path/to/project # 1Installs from a local path
+cjpm install --git url              # 1Installs from a Git URL
 ```
 
 ### uninstall
@@ -720,59 +720,59 @@ The `cjpm.toml` file configures basic information, dependencies, compilation opt
 Example configuration:
 
 ```text
-[package] # Single-module configuration (cannot coexist with workspace)
-  cjc-version = "1.0.0" # Minimum required `cjc` version (required)
-  name = "demo" # Module name and root package name (required)
-  description = "nothing here" # Description (optional)
-  version = "1.0.0" # Module version (required)
-  compile-option = "" # Additional compilation options (optional)
-  override-compile-option = "" # Additional global compilation options (optional)
-  link-option = "" # Linker passthrough options (optional)
-  output-type = "executable" # Output type (required)
-  src-dir = "" # Source directory (optional)
-  target-dir = "" # Output directory (optional)
-  package-configuration = {} # Per-package configuration (optional)
+[package] # 1Single-module configuration (cannot coexist with workspace)
+  cjc-version = "1.0.0" # 1Minimum required `cjc` version (required)
+  name = "demo" # 1Module name and root package name (required)
+  description = "nothing here" # 1Description (optional)
+  version = "1.0.0" # 1Module version (required)
+  compile-option = "" # 1Additional compilation options (optional)
+  override-compile-option = "" # 1Additional global compilation options (optional)
+  link-option = "" # 1Linker passthrough options (optional)
+  output-type = "executable" # 1Output type (required)
+  src-dir = "" # 1Source directory (optional)
+  target-dir = "" # 1Output directory (optional)
+  package-configuration = {} # 1Per-package configuration (optional)
 
-[workspace] # Workspace configuration (cannot coexist with package)
-  members = [] # Workspace member modules (required)
-  build-members = [] # Modules to build (subset of members, optional)
-  test-members = [] # Modules to test (subset of build-members, optional)
-  compile-option = "" # Workspace-wide compilation options (optional)
-  override-compile-option = "" # Workspace-wide global compilation options (optional)
-  link-option = "" # Workspace-wide linker options (optional)
-  target-dir = "" # Output directory (optional)
+[workspace] # 1Workspace configuration (cannot coexist with package)
+  members = [] # 1Workspace member modules (required)
+  build-members = [] # 1Modules to build (subset of members, optional)
+  test-members = [] # 1Modules to test (subset of build-members, optional)
+  compile-option = "" # 1Workspace-wide compilation options (optional)
+  override-compile-option = "" # 1Workspace-wide global compilation options (optional)
+  link-option = "" # 1Workspace-wide linker options (optional)
+  target-dir = "" # 1Output directory (optional)
 
-[dependencies] # Source dependencies (optional)
-  coo = { git = "xxx", branch = "dev" } # Git dependency
-  doo = { path = "./pro1" } # Local source dependency
+[dependencies] # 1Source dependencies (optional)
+  coo = { git = "xxx", branch = "dev" } # 1Git dependency
+  doo = { path = "./pro1" } # 1Local source dependency
 
-[test-dependencies] # Test-phase dependencies (same format as dependencies, optional)
+[test-dependencies] # 1Test-phase dependencies (same format as dependencies, optional)
 
-[script-dependencies] # Build script dependencies (same format as dependencies, optional)
+[script-dependencies] # 1Build script dependencies (same format as dependencies, optional)
 
-[replace] # Dependency replacement (same format as dependencies, optional)
+[replace] # 1Dependency replacement (same format as dependencies, optional)
 
-[ffi.c] # C library dependencies (optional)
+[ffi.c] # 1C library dependencies (optional)
   clib1.path = "xxx"
 
-[profile] # Command profile configuration (optional)
-  build = {} # Build command options
-  test = {} # Test command options
-  bench = {} # Bench command options
-  customized-option = {} # Custom passthrough options
+[profile] # 1Command profile configuration (optional)
+  build = {} # 1Build command options
+  test = {} # 1Test command options
+  bench = {} # 1Bench command options
+  customized-option = {} # 1Custom passthrough options
 
-[target.x86_64-unknown-linux-gnu] # Platform-specific configuration (optional)
-  compile-option = "value1" # Compilation options for specific targets
-  override-compile-option = "value2" # Global compilation options for specific targets
-  link-option = "value3" # Linker options for specific targets
+[target.x86_64-unknown-linux-gnu] # 1Platform-specific configuration (optional)
+  compile-option = "value1" # 1Compilation options for specific targets
+  override-compile-option = "value2" # 1Global compilation options for specific targets
+  link-option = "value3" # 1Linker options for specific targets
 
-[target.x86_64-w64-mingw32.dependencies] # Platform-specific source dependencies (optional)
+[target.x86_64-w64-mingw32.dependencies] # 1Platform-specific source dependencies (optional)
 
-[target.x86_64-w64-mingw32.test-dependencies] # Platform-specific test dependencies (optional)
+[target.x86_64-w64-mingw32.test-dependencies] # 1Platform-specific test dependencies (optional)
 
-[target.x86_64-unknown-linux-gnu.bin-dependencies] # Binary library dependencies for specific targets (optional)
-  path-option = ["./test/pro0", "./test/pro1"] # Directory-based binary dependencies
-[target.x86_64-unknown-linux-gnu.bin-dependencies.package-option] # File-based binary dependencies
+[target.x86_64-unknown-linux-gnu.bin-dependencies] # 1Binary library dependencies for specific targets (optional)
+  path-option = ["./test/pro0", "./test/pro1"] # 1Directory-based binary dependencies
+[target.x86_64-unknown-linux-gnu.bin-dependencies.package-option] # 1File-based binary dependencies
   "pro0.xoo" = "./test/pro0/pro0.xoo.cjo"
   "pro0.yoo" = "./test/pro0/pro0.yoo.cjo"
   "pro1.zoo" = "./test/pro1/pro1.zoo.cjo"
@@ -892,7 +892,7 @@ If mutually compatible compilation options are configured in different fields, t
 [package.package-configuration.demo]
   compile-option = "-O2"
 
-# The profile field will be introduced later
+# 1The profile field will be introduced later
 [profile.customized-option]
   cfg1 = "-O0"
 
@@ -1120,11 +1120,11 @@ To specify `C` library configurations for different platforms, refer to [target]
 
 ```text
 [profile.build]
-lto = "full"  # Whether to enable `LTO` (Link Time Optimization) compilation mode. This feature is only supported on `Linux` platforms.
-performance_analysis = true # Enable compilation performance analysis.
-incremental = true # Whether to enable incremental compilation by default.
+lto = "full"  # 1Whether to enable `LTO` (Link Time Optimization) compilation mode. This feature is only supported on `Linux` platforms.
+performance_analysis = true # 1Enable compilation performance analysis.
+incremental = true # 1Whether to enable incremental compilation by default.
 [profile.build.combined]
-demo = "dynamic" # Compile the module into a single dynamic library file. The key is the module name.
+demo = "dynamic" # 1Compile the module into a single dynamic library file. The key is the module name.
 ```
 
 Compilation process control items. All fields are optional and will not take effect if not configured. Only the `profile.build` settings of the top-level module take effect.
@@ -1206,7 +1206,7 @@ If `combined` is enabled, cyclic dependencies not identifiable via imports may o
 #### "profile.test"
 
 ```text
-[profile.test] # Example usage
+[profile.test] # 1Example usage
 parallel=true
 filter=*.*
 no-color = true
@@ -1264,7 +1264,7 @@ Configures temporary environment variables when running executables during the `
 #### "profile.bench"
 
 ```text
-[profile.bench] # Example usage
+[profile.bench] # 1Example usage
 no-color = true
 random-seed = 10
 report-path = "bench_report"
@@ -1316,25 +1316,25 @@ Custom options passed through to `cjc`. Enabled via `--cfg1 --cfg3`. The `custom
 Multi-backend, multi-platform isolation options for configuring different settings across various backends and platforms. Taking the `Linux` system as an example, the `target` configuration is as follows:
 
 ```text
-[target.x86_64-unknown-linux-gnu] # Configuration items for Linux systems
-  compile-option = "value1" # Additional compilation command options
-  override-compile-option = "value2" # Additional global compilation command options
-  link-option = "value3" # Linker passthrough options
-  [target.x86_64-unknown-linux-gnu.dependencies] # Source dependency configuration
-  [target.x86_64-unknown-linux-gnu.test-dependencies] # Test-phase dependency configuration
-  [target.x86_64-unknown-linux-gnu.bin-dependencies] # Cangjie binary library dependencies
+[target.x86_64-unknown-linux-gnu] # 1Configuration items for Linux systems
+  compile-option = "value1" # 1Additional compilation command options
+  override-compile-option = "value2" # 1Additional global compilation command options
+  link-option = "value3" # 1Linker passthrough options
+  [target.x86_64-unknown-linux-gnu.dependencies] # 1Source dependency configuration
+  [target.x86_64-unknown-linux-gnu.test-dependencies] # 1Test-phase dependency configuration
+  [target.x86_64-unknown-linux-gnu.bin-dependencies] # 1Cangjie binary library dependencies
     path-option = ["./test/pro0", "./test/pro1"]
   [target.x86_64-unknown-linux-gnu.bin-dependencies.package-option]
     "pro0.xoo" = "./test/pro0/pro0.xoo.cjo"
     "pro0.yoo" = "./test/pro0/pro0.yoo.cjo"
     "pro1.zoo" = "./test/pro1/pro1.zoo.cjo"
-  [target.x86_64-unknown-linux-gnu.ffi.c] # C language binary library dependencies
+  [target.x86_64-unknown-linux-gnu.ffi.c] # 1C language binary library dependencies
     "ctest" = "./test/c"
 
-[target.x86_64-unknown-linux-gnu.debug] # Debug configuration for Linux systems
+[target.x86_64-unknown-linux-gnu.debug] # 1Debug configuration for Linux systems
   [target.x86_64-unknown-linux-gnu.debug.test-dependencies]
 
-[target.x86_64-unknown-linux-gnu.release] # Release configuration for Linux systems
+[target.x86_64-unknown-linux-gnu.release] # 1Release configuration for Linux systems
   [target.x86_64-unknown-linux-gnu.release.bin-dependencies]
 ```
 
@@ -1434,14 +1434,14 @@ Method 2: During cross-compilation, outputs for both the local and target platfo
 
 ```text
 [target.target-platform]
-  compile-macros-for-target = "all" # The configuration item is a string, and the optional value must be "all"
+  compile-macros-for-target = "all" # 1The configuration item is a string, and the optional value must be "all"
 ```
 
 Method 3: Specifies that certain macro packages within the module should compile outputs for both the local and target platforms during cross-compilation, while other unspecified macro packages follow the default mode of Method 1.
 
 ```text
 [target.target-platform]
-  compile-macros-for-target = ["pkg1", "pkg2"] # The configuration item is a string array, and the optional values are macro package names
+  compile-macros-for-target = ["pkg1", "pkg2"] # 1The configuration item is a string array, and the optional values are macro package names
 ```
 
 #### Merging Rules for "target" Related Fields
@@ -1998,7 +1998,7 @@ public class TestZ{
 ```
 
 ```toml
-# cj_project/cjpm.toml
+# 1cj_project/cjpm.toml
 [package]
 cjc-version = "1.0.0"
 description = "nothing here"
@@ -2011,7 +2011,7 @@ pro0 = { path = "pro0" }
 ```
 
 ```toml
-# cj_project/pro0/cjpm.toml
+# 1cj_project/pro0/cjpm.toml
 [package]
 cjc-version = "1.0.0"
 description = "nothing here"
@@ -2049,8 +2049,8 @@ output-type = "static"
 4. Use the following commands to compile and build or test the code:
 
     ```shell
-    cjpm build --target=arch-sys-abi# Cross-compile artifacts for the target platform
-    cjpm test --target=arch-sys-abi # Cross-compile executable test files for the target platform
+    cjpm build --target=arch-sys-abi# 1Cross-compile artifacts for the target platform
+    cjpm test --target=arch-sys-abi # 1Cross-compile executable test files for the target platform
     ```
 
 5. Import the binary artifacts into the target platform for normal execution.
@@ -2074,22 +2074,22 @@ feature.os.epoll
 feature.os.kqueue
 feature.os.windows
 feature.os.linux
-# OS is harmony
+# 1OS is harmony
 feature.os.hm
 feature.os.darwin
-# The CPU architecture is `big-endian`
+# 1The CPU architecture is `big-endian`
 feature.arch.big
-# The CPU architecture is `little-endian`
+# 1The CPU architecture is `little-endian`
 feature.arch.little
 feature.arch.x64
 feature.arch.aarch64
-# The CPU uses `sse` instruction set
+# 1The CPU uses `sse` instruction set
 feature.arch.sse1
 feature.arch.sse2
 feature.arch.sse3
 feature.arch.sse4.1
 feature.arch.sse4.2
-# The CPU uses `avx` instruction set
+# 1The CPU uses `avx` instruction set
 feature.arch.avx1
 feature.arch.avx2
 feature.arch.avx512
@@ -2100,7 +2100,7 @@ feature.env.mingw32
 feature.env.hos
 feature.env.android
 feature.cj.cjnative
-feature.cj.v0_54_3 # Anything after `v` is interpreted as `cjc` version
+feature.cj.v0_54_3 # 1Anything after `v` is interpreted as `cjc` version
 ```
 
 These values are not validated in any way. It is the developer's responsibility to ensure that the code compiled with these `features` executes correctly.
@@ -2137,9 +2137,9 @@ feature.cj.v0_54_3
 If developing a multi-platform project on a `GNU/Linux` machine, the source code can be compiled and run using the following commands:
 
 ```bash
-# Short command
+# 1Short command
 cjpm run
-# Full command
+# 1Full command
 cjpm run --enable-features=feature.os.linux,feature.env.gnu
 ```
 
@@ -2148,21 +2148,21 @@ For cross-compilation scenarios, specify `--target`.
 For example:
 
 ```bash
-# Short command
+# 1Short command
 cjpm build --target=aarch64-linux-android
-# Full command
+# 1Full command
 cjpm build --target=aarch64-linux-android --enable-features=feature.arch.aarch64,feature.os.linux,feature.env.android
 ```
 
 If `cjpm` deduces multiple source directories (resulting in a compilation error), use the `--no-feature-deduce` option to disable deduction and explicitly specify `features` with `--enable-features`:
 
 ```bash
-# Will display the error message "No source set was selected"
+# 1Will display the error message "No source set was selected"
 cjpm build --target=aarch64-linux-android --no-feature-deduce
-# Specify appropriate feature values:
-# 1. [..., "feature.os.linux", "feature.env.android"]
-# 2. [..., "feature.os.linux"]
-# 3. [..., "feature.env.android"]
+# 1Specify appropriate feature values:
+# 11. [..., "feature.os.linux", "feature.env.android"]
+# 12. [..., "feature.os.linux"]
+# 13. [..., "feature.env.android"]
 
 cjpm build --no-feature-deduce --target=aarch64-linux-android --enable-features=feature.os.linux,feature.env.android
 ```
@@ -2184,16 +2184,16 @@ The default `cjpm.toml` is as follows:
     version = "1.0.0"
     package-configuration = {}
 
-# New field indicating a multi-platform project
-# [source-set]
+# 1New field indicating a multi-platform project
+# 1[source-set]
 ```
 
 For the `source-set` field configuration, an example is provided below:
 
 ```toml
-# Example syntax:
+# 1Example syntax:
 
-# Source file directory for Cangjie code
+# 1Source file directory for Cangjie code
 [source-set.epoll]
     src-dir = "src/net/select/epoll"
     condition = [ "feature.os.epoll" ]
@@ -2214,14 +2214,14 @@ The `source-set` identifier is the unique "path" of the source set. This "path" 
 Specifies the location to search for the package's source code when this source set is enabled.
 
 ```toml
-# Possible syntax
+# 1Possible syntax
 
-# 1. Single directory
+# 11. Single directory
 [source-set.${source set fully qualified name}]
     src-dir = "./src/linux/common"
 
-# 2. Multiple directories
-# All specified directories will be compiled as a single compilation unit, similar to compiling a single directory.
+# 12. Multiple directories
+# 1All specified directories will be compiled as a single compilation unit, similar to compiling a single directory.
 
     [source-set.${source set fully qualified name}]
         src-dir = ["./src/linux/dirA", "./src/linux/dirB"]
@@ -2232,19 +2232,19 @@ Specifies the location to search for the package's source code when this source 
 The `condition` specifies one or more `features` that must be enabled to compile the corresponding code.
 
 ```toml
-# If the source set declaration does not include a `condition` field, no constraints are set.
-# Possible syntax:
-# 1. Multiple features must be satisfied simultaneously.
+# 1If the source set declaration does not include a `condition` field, no constraints are set.
+# 1Possible syntax:
+# 11. Multiple features must be satisfied simultaneously.
 
  [source-set.${source set fully qualified name}]
     condition = ["feature.arch.aarch64", "feature.env.ohos", "feature.os.linux"]
 
-# 2. Any one of multiple features must be satisfied.
+# 12. Any one of multiple features must be satisfied.
 
 [source-set.${source set fully qualified name}]
     condition.1 = ["feature.arch.little"]
     condiiton.alpha = ["feature.env.ohos"]
-    condiiton.beta= ["feature.os.linux", "feature.os.posix"]# Both features must be satisfied.
+    condiiton.beta= ["feature.os.linux", "feature.os.posix"]# 1Both features must be satisfied.
 ```
 
 #### Special Source Sets and Their Configuration
@@ -2296,9 +2296,9 @@ If the configuration file contains only single-level source sets and `cjpm` cann
 
 [source-set.socketSelection.weird]
     src-dir = "./socketSelection/weird"
-    condition = [ "feature.os.linux", "feature.os.windows" ] # Practically impossible condition to meet
+    condition = [ "feature.os.linux", "feature.os.windows" ] # 1Practically impossible condition to meet
 
-# This source set will be selected as fallback
+# 1This source set will be selected as fallback
 [source-set.socketSelection.other]
     src-dir = "./socketSelection/other"
 ```

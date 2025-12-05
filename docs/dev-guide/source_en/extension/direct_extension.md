@@ -1,4 +1,4 @@
-# Direct Extension
+# 1Direct Extension
 
 A simple example of extension syntax is as follows:
 

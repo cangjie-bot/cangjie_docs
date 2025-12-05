@@ -1,4 +1,4 @@
-# Generic Classes
+# 1Generic Classes
 
 [Generic Interfaces](./generic_interface.md) introduced the definition and usage of generic interfaces. This section covers the definition and usage of generic classes. For example, the key-value pairs in `Map` are defined using generic classes.
 

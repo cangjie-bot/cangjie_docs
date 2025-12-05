@@ -1,4 +1,4 @@
-# throw and Exception Handling
+# 1throw and Exception Handling
 
 The previous section discussed how to define custom exceptions. Now let's learn how to throw and handle exceptions.
 

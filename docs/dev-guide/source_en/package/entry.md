@@ -1,4 +1,4 @@
-# Program Entry Point
+# 1Program Entry Point
 
 The entry point of a Cangjie program is `main`. At the top level of the package in the root directory of the source files, there can be at most one `main` function.
 

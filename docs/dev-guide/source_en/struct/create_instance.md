@@ -1,4 +1,4 @@
-# Creating struct Instances
+# 1Creating struct Instances
 
 After defining a `struct` type, you can create `struct` instances by calling the `struct`'s constructor. Outside the `struct` definition, you create an instance of the type by calling the constructor with the `struct` type name, and you can access instance member variables and instance member functions that satisfy visibility modifiers (such as `public`) through the instance. For example, in the following code, a variable `r` of type `Rectangle` is defined. You can access the values of `width` and `height` in `r` through `r.width` and `r.height`, respectively, and call the member function `area` of `r` through `r.area()`.
 

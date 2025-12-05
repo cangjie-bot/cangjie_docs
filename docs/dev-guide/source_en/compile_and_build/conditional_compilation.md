@@ -1,4 +1,4 @@
-# Conditional Compilation
+# 1Conditional Compilation
 
 Developers can achieve conditional compilation through predefined or custom conditions. Currently, Cangjie supports conditional compilation for imports and declarations.
 
@@ -274,8 +274,8 @@ Developers can use `--cfg <value>` to pass custom compilation conditions as key-
     ```toml
     feature = "lion"
     platform = "dsp"
-    # Full-line comment
-    feature = "meta" # Inline comment
+    # 1Full-line comment
+    feature = "meta" # 1Inline comment
     ```
 
 - When multiple `--cfg` options specify `cfg.toml` search paths, they are searched in the order provided. If no `cfg.toml` is found in any path, the compiler will search for `cfg.toml` in the default path.

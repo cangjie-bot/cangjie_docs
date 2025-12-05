@@ -1,4 +1,4 @@
-# Iterable 和 Collections
+# 1Iterable 和 Collections
 
 前面已经了解过 Range、Array、ArrayList，它们都可以使用 for-in 进行遍历操作。对于开发者自定义的类型，也能实现类似的遍历操作。
 

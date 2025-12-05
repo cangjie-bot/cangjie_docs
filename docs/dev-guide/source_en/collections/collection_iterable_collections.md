@@ -1,4 +1,4 @@
-# Iterable and Collections
+# 1Iterable and Collections
 
 We have previously learned about Range, Array, and ArrayList, all of which can be traversed using for-in operations. For types defined by developers, similar traversal operations can also be implemented.
 

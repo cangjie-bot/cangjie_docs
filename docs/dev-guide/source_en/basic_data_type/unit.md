@@ -1,4 +1,4 @@
-# The Unit Type
+# 1The Unit Type
 
 For expressions that only concern side effects without caring about values, their type is `Unit`. For example, the `print` function, assignment expressions, compound assignment expressions, increment and decrement expressions, and loop expressions all have the `Unit` type.
 

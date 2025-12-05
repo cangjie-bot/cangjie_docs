@@ -1,4 +1,4 @@
-# HashMap
+# 1HashMap
 
 使用 HashMap 类型需要导入 collection 包：
 

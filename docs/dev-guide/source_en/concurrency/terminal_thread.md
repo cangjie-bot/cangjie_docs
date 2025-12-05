@@ -1,4 +1,4 @@
-# Terminating Threads
+# 1Terminating Threads
 
 The `cancel()` method of `Future<T>` can be used to send a termination request to the corresponding thread, but it does not forcibly stop thread execution. Developers need to check whether a termination request exists for the thread using the `hasPendingCancellation` property of `Thread`.
 

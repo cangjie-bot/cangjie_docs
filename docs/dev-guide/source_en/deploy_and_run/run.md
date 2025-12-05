@@ -1,4 +1,4 @@
-# Running the Cangjie Executable
+# 1Running the Cangjie Executable
 
 ## Direct Execution
 

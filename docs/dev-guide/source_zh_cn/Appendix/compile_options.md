@@ -1,4 +1,4 @@
-# `cjc` 编译选项
+# 1`cjc` 编译选项
 
 本章介绍常用的 `cjc` 编译选项。若某一选项同时适用于 `cjc-frontend`，则该选项会有 <sup>[frontend]</sup> 上标；若该选项在 `cjc-frontend` 下行为与 `cjc` 不同，选项会有额外说明。
 
@@ -478,9 +478,9 @@ cjc --scan-dependency pkgA.cjo
 2. 使用以下命令编译 `LTO` 模式下需要的静态库（`.bc` 文件），并且使用该库文件参与可执行文件编译。
 
     ```shell
-    # 生成的静态库为 .bc 文件
+    # 1生成的静态库为 .bc 文件
     $ cjc pkg.cj --lto=full --output-type=staticlib -o libpkg.bc
-    # .bc 文件和源文件一起输入给仓颉编译器编译可执行文件
+    # 1.bc 文件和源文件一起输入给仓颉编译器编译可执行文件
     $ cjc test.cj libpkg.bc --lto=full
     ```
 
@@ -491,9 +491,9 @@ cjc --scan-dependency pkgA.cjo
 3. 在 `LTO` 模式下，静态链接标准库（`--static-std`）时，标准库的代码也会参与 `LTO` 优化，并静态链接到可执行文件；动态链接标准库（`--dy-std`）时，在 `LTO` 模式下依旧使用标准库中的动态库参与链接。
 
     ```shell
-    # 静态链接，标准库代码也参与 LTO 优化
+    # 1静态链接，标准库代码也参与 LTO 优化
     $ cjc test.cj --lto=full --static-std
-    # 动态链接，依旧使用动态库参与链接，标准库代码不会参与 LTO 优化
+    # 1动态链接，依旧使用动态库参与链接，标准库代码不会参与 LTO 优化
     $ cjc test.cj --lto=full --dy-std
     ```
 
@@ -502,9 +502,9 @@ cjc --scan-dependency pkgA.cjo
 该选项使能会隐藏 LTO 模式下加载的 bc 文件符号可见性，仅保留 package init 符号可见性。在此基础上，LLVM 原生优化会在此基础上执行激进的无用符号删除。该选项仅在 `--lto` 开启下有效。
 
 ```shell
-# 编译通过
+# 1编译通过
 $ cjc test.cj --lto=[full|thin] --compile-as-exe
-# 编译报错
+# 1编译报错
 $ cjc test.cj --compile-as-exe
 ```
 
@@ -521,9 +521,9 @@ $ cjc test.cj --compile-as-exe
 3. 编译器使用配置文件，再次对源码进行编译。
 
 ```shell
-# 生成支持源码执行信息统计（携带插桩信息）的可执行程序 test
+# 1生成支持源码执行信息统计（携带插桩信息）的可执行程序 test
 $ cjc test.cj --pgo-instr-gen -o test
-# 运行可执行程序 test 结束后，生成 default.profraw 配置文件
+# 1运行可执行程序 test 结束后，生成 default.profraw 配置文件
 $ ./test
 ```
 
@@ -538,9 +538,9 @@ $ ./test
 > `--pgo-instr-use` 编译选项仅支持格式为 `profdata` 的配置文件。可使用 `llvm-profdata` 工具可将 `profraw` 配置文件转换为 `profdata` 配置文件。
 
 ```shell
-# 将 `profraw` 文件转换为 `profdata` 文件。
+# 1将 `profraw` 文件转换为 `profdata` 文件。
 $ LD_LIBRARY_PATH=$CANGJIE_HOME/third_party/llvm/lib:$LD_LIBRARY_PATH $CANGJIE_HOME/third_party/llvm/bin/llvm-profdata merge default.profraw -o default.profdata
-# 使用指定 `default.profdata` 配置文件指导编译并生成优化后的可执行程序 `testOptimized`
+# 1使用指定 `default.profdata` 配置文件指导编译并生成优化后的可执行程序 `testOptimized`
 $ cjc test.cj --pgo-instr-use=default.profdata -o testOptimized
 ```
 
@@ -1014,9 +1014,9 @@ class Tests {
 使用编译器编译的命令如下：
 
 ```shell
-# Compile the production part of the package first, only `main.cj` file would be compiled here
+# 1Compile the production part of the package first, only `main.cj` file would be compiled here
 cjc -p my_pkg --output-type=staticlib -o=output/libmain.a
-# Compile the test part of the package, Only `main_test.cj` file would be compiled here
+# 1Compile the test part of the package, Only `main_test.cj` file would be compiled here
 cjc -p my_pkg --test-only -L output -lmain --import-path output
 ```
 
@@ -1098,9 +1098,9 @@ class TestBar {
 当需要分开编译同一包中的源码和测试代码时，我们可以使用以下命令：
 
 ```shell
-# Compile the production part of the package first (`foo.cj` and `bar.cj` files)
+# 1Compile the production part of the package first (`foo.cj` and `bar.cj` files)
 cjc -p my_pkg --output-type=staticlib --export-for-test -o=output/libmain.a
-# Compile the test part of the package (`foo_test.cj` and `bar_test.cj` files)
+# 1Compile the test part of the package (`foo_test.cj` and `bar_test.cj` files)
 cjc -p my_pkg --test-only -L output -lmain --import-path output
 ```
 

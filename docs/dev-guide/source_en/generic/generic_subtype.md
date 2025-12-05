@@ -1,4 +1,4 @@
-# Subtyping Relationships of Generic Types
+# 1Subtyping Relationships of Generic Types
 
 Instantiated generic types also have subtyping relationships. For example:
 

@@ -1,4 +1,4 @@
-# 使用 Option
+# 1使用 Option
 
 在 [Option 类型](../enum_and_pattern_match/option_type.md)中介绍了 Option 类型的定义，因为 Option 类型可以同时表示有值和无值两种状态，而无值在某些情况下也可以理解为一种错误，所以 Option 类型也可以用作错误处理。
 

@@ -1,4 +1,4 @@
-# HashSet
+# 1HashSet
 
 使用 HashSet 类型需要导入 collection 包：
 

@@ -1,4 +1,4 @@
-# Concurrency Overview
+# 1Concurrency Overview
 
 Concurrency programming is an indispensable feature in modern programming languages. The Cangjie programming language provides a *preemptive thread model* as its concurrency mechanism. Threads can be categorized into two distinct concepts: **language threads** and **native threads**.
 

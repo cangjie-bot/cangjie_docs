@@ -1,4 +1,4 @@
-# Generic Structs
+# 1Generic Structs
 
 Generic struct types are similar to classes. Below is an example of using a struct to define a binary tuple-like type:
 

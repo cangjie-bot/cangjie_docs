@@ -1,4 +1,4 @@
-# Debugging Tool
+# 1Debugging Tool
 
 CJDB is a command-line debugging tool for Cangjie programs developed based on `lldb`. The current `cjdb` tool is adapted and evolved from the [llvm15.0.4](https://github.com/llvm/llvm-project/releases/tag/llvmorg-15.0.4) foundation, providing Cangjie developers with program debugging capabilities.
 

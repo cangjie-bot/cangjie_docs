@@ -1,4 +1,4 @@
-# TokenKind 类型
+# 1TokenKind 类型
 
 ```cangjie
 public enum TokenKind <: ToString {

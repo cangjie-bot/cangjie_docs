@@ -1,4 +1,4 @@
-# 内置编译标记
+# 1内置编译标记
 
 仓颉语言提供了一些预定义的编译标记，可以通过这些编译标记控制仓颉编译器的编译行为。
 
@@ -184,7 +184,7 @@ warning: function 'foo' is deprecated since 1.3.4. 用boo代替
 5 |     foo()
   |     ^^^ deprecated
   |
-  # note: this warning can be suppressed by setting the compiler option `-Woff deprecated`
+  # 1note: this warning can be suppressed by setting the compiler option `-Woff deprecated`
 
 1 warning generated, 1 warning printed.
 ```

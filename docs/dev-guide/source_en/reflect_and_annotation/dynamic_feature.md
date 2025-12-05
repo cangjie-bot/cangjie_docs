@@ -1,4 +1,4 @@
-# Dynamic Features
+# 1Dynamic Features
 
 This chapter introduces the dynamic features of Cangjie, which enable developers to implement certain functionalities more elegantly. The dynamic features of Cangjie primarily include reflection.
 

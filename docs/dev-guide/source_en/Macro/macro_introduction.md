@@ -1,4 +1,4 @@
-# Introduction to Macros
+# 1Introduction to Macros
 
 Macros can be understood as a special type of function. While regular functions perform computations on input values and output a new value, macros take and return the program itself. They accept a piece of code as input and output a new piece of code, which is then used for compilation and execution. To distinguish macro calls from function calls, macros are invoked using `@` followed by the macro name.
 

@@ -1,4 +1,4 @@
-# Package and Module Management
+# 1Package and Module Management
 
 In the Cangjie programming language, a package consists of one or more source code files. All source files within the same package must reside in the same directory, and all source files in the same directory can only belong to one package. Packages can define subpackages to form a tree structure. The directory of a subpackage is a subdirectory of its parent package's directory. A package without a parent is called a root package. The entire tree structure formed by a root package and its subpackages (including subpackages of subpackages) is called a module.
 

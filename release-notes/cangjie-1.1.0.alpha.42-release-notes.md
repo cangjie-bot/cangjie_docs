@@ -1,4 +1,4 @@
-# Cangjie 1.1.0.alpha.42 Release Notes
+# 1Cangjie 1.1.0.alpha.42 Release Notes
 
 ## 版本介绍
 

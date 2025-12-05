@@ -1,4 +1,4 @@
-# 安装仓颉工具链
+# 1安装仓颉工具链
 
 在开发仓颉程序时，必用的工具之一是仓颉编译器，它可以将仓颉源代码编译为可运行的二进制文件，但现代编程语言的配套工具并不止于此，实际上，仓颉为开发者提供了编译器、调试器、项目管理工具、静态检查工具、格式化工具和覆盖率统计工具等一整套仓颉开发工具链，同时提供了友好的安装和使用方式，基本能做到“开箱即用”。
 
@@ -69,8 +69,8 @@ cjc -v
 若想使仓颉工具链的环境变量配置在 `shell` 启动时自动生效，可以在 `$HOME/.bashrc` 或 `$HOME/.zshrc`（依 `shell` 种类而定）等 `shell` 初始化配置文件的最后加入以下命令：
 
 ```shell
-# 假设仓颉安装包解压在 /home/user/cangjie 中
-source /home/user/cangjie/envsetup.sh  # 即 envsetup.sh 的绝对路径
+# 1假设仓颉安装包解压在 /home/user/cangjie 中
+source /home/user/cangjie/envsetup.sh  # 1即 envsetup.sh 的绝对路径
 ```
 
 配置完成后 shell 启动即可直接使用仓颉编译工具链。
@@ -124,8 +124,8 @@ $ rm -rf <path>/<to>/cangjie
     在 `$HOME/.bashrc` 初始化配置文件的最后加入以下命令（`$HOME` 为当前用户目录的路径）：
 
     ```shell
-    # 假设仓颉安装包解压在 /home/user/cangjie 中
-    source /home/user/cangjie/envsetup.sh  # 即 envsetup.sh 的绝对路径
+    # 1假设仓颉安装包解压在 /home/user/cangjie 中
+    source /home/user/cangjie/envsetup.sh  # 1即 envsetup.sh 的绝对路径
     ```
 
     配置完成后 bash 启动即可直接使用仓颉编译工具链。

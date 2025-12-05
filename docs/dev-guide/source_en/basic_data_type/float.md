@@ -1,4 +1,4 @@
-# Floating-Point Types
+# 1Floating-Point Types
 
 Floating-point types include `Float16`, `Float32`, and `Float64`, which are used to represent floating-point numbers (numbers with fractional parts, such as 3.14159, 8.24, and 0.1) with encoding lengths of `16-bit`, `32-bit`, and `64-bit`, respectively. `Float16`, `Float32`, and `Float64` correspond to the half-precision format (binary16), single-precision format (binary32), and double-precision format (binary64) in IEEE 754.
 

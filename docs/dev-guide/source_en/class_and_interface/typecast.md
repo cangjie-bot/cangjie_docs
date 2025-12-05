@@ -1,4 +1,4 @@
-# Type Conversion
+# 1Type Conversion
 
 Cangjie does not support implicit conversion between different types (subtypes are inherently parent types, so conversion from a subtype to a parent type is not implicit type conversion). Type conversion must be performed explicitly. The following sections will introduce conversions between numeric types, conversions from `Rune` to `UInt32` and from integer types to `Rune`, as well as the `is` and `as` operators.
 

@@ -1,4 +1,4 @@
-# Generics Overview
+# 1Generics Overview
 
 In the Cangjie programming language, generics refer to parameterized types, where a parameterized type is one that is unknown at declaration time and must be specified upon usage. Both type declarations and function declarations can be generic. The most common examples are container types such as `Array<T>` and `Set<T>`.
 

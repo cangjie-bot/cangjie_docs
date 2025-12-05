@@ -1,4 +1,4 @@
-# String Type
+# 1String Type
 
 The string type is denoted by `String` and is used to represent textual data, composed of a sequence of Unicode characters.
 

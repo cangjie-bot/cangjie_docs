@@ -1,4 +1,4 @@
-# Closures
+# 1Closures
 
 A function or lambda that captures variables from its static scope is referred to as a closure. The combination of the function/lambda and the captured variables forms a closure, enabling it to operate correctly even when outside the scope where it was defined.
 

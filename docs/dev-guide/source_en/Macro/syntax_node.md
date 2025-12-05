@@ -1,4 +1,4 @@
-# Syntax Nodes
+# 1Syntax Nodes
 
 In the compilation process of the Cangjie language, the code is first converted into `Tokens` through lexical analysis, followed by syntactic parsing of the `Tokens` to generate a syntax tree. Each node in the syntax tree may represent an expression, declaration, type, pattern, etc. The Cangjie standard library `std.ast` package provides corresponding classes for each type of node, with appropriate inheritance relationships. The main abstract classes are as follows:
 

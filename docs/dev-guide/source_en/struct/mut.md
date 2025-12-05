@@ -1,4 +1,4 @@
-# mut Functions
+# 1mut Functions
 
 The struct type is a value type, and its instance member functions cannot modify the instance itself. For example, in the following case, the member function `g` cannot modify the value of member variable `i`.
 

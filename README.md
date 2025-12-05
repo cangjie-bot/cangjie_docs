@@ -1,4 +1,4 @@
-# Cangjie Programming Language Documentation
+# 1Cangjie Programming Language Documentation
 
 [查看中文](./README_zh.md)
 
@@ -22,8 +22,8 @@ The directory structure of this repository is as follows:
 ```text
 .
 └── docs
-    ├── cmd-tools    # This directory stores the Cangjie programming language command-line tool usage guide
-    └── dev-guide    # This directory stores the Cangjie programming language development guide
+    ├── cmd-tools    # 1This directory stores the Cangjie programming language command-line tool usage guide
+    └── dev-guide    # 1This directory stores the Cangjie programming language development guide
 ```
 
 ## License

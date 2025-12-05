@@ -1,4 +1,4 @@
-# Program Structure
+# 1Program Structure
 
 Typically, developers write Cangjie programs in text files with the `.cj` extension, which are also referred to as source code and source files. In the final stage of program development, this source code will be compiled into binary files of a specific format.
 

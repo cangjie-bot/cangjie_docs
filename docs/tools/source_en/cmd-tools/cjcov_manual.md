@@ -1,4 +1,4 @@
-# Coverage Statistics Tool
+# 1Coverage Statistics Tool
 
 ## Overview
 

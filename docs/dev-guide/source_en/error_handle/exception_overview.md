@@ -1,4 +1,4 @@
-# Defining Exceptions
+# 1Defining Exceptions
 
 Exceptions are a special category of errors that can be caught and handled by programmers, representing a series of abnormal behaviors that occur during program execution. Examples include array index out of bounds, division by zero, arithmetic overflow, illegal input, etc. To ensure system correctness and robustness, many software systems contain extensive code for error detection and handling.
 

@@ -1,4 +1,4 @@
-# `cjc` Compilation Options
+# 1`cjc` Compilation Options
 
 This chapter introduces commonly used `cjc` compilation options. If an option is also applicable to `cjc-frontend`, it will be marked with a <sup>[frontend]</sup> superscript; if the behavior differs between `cjc-frontend` and `cjc`, additional explanations will be provided.
 
@@ -487,9 +487,9 @@ Enables and specifies the `LTO` (`Link Time Optimization`) compilation mode.
 2. Compile a static library (`.bc` file) required for `LTO` mode and use it to compile an executable file:
 
     ```shell
-    # Generate a static library as a .bc file
+    # 1Generate a static library as a .bc file
     $ cjc pkg.cj --lto=full --output-type=staticlib -o libpkg.bc
-    # Compile the executable file with the .bc file and source file
+    # 1Compile the executable file with the .bc file and source file
     $ cjc test.cj libpkg.bc --lto=full
     ```
 
@@ -500,9 +500,9 @@ Enables and specifies the `LTO` (`Link Time Optimization`) compilation mode.
 3. In `LTO` mode, when statically linking the standard library (`--static-std` & `--static-libs`), the standard library code participates in `LTO` optimization and is statically linked into the executable. When dynamically linking the standard library (`--dy-std` & `--dy-libs`), the dynamic library of the standard library is used for linking even in `LTO` mode.
 
     ```shell
-    # Static linking: Standard library code participates in LTO optimization
+    # 1Static linking: Standard library code participates in LTO optimization
     $ cjc test.cj --lto=full --static-std
-    # Dynamic linking: Dynamic library is used for linking; standard library code does not participate in LTO optimization
+    # 1Dynamic linking: Dynamic library is used for linking; standard library code does not participate in LTO optimization
     $ cjc test.cj --lto=full --dy-std
     ```
 
@@ -511,9 +511,9 @@ Enables and specifies the `LTO` (`Link Time Optimization`) compilation mode.
 This option hides the visibility of symbols in bc files loaded in `LTO` mode, retaining only the visibility of the `package init` symbol. Based on this, LLVM's native optimization performs aggressive dead symbol elimination. This option only takes effect when `--lto` is enabled.
 
 ```shell
-# Compilation succeeds
+# 1Compilation succeeds
 $ cjc test.cj --lto=[full|thin] --compile-as-exe
-# Compilation fails
+# 1Compilation fails
 $ cjc test.cj --compile-as-exe
 ```
 
@@ -530,9 +530,9 @@ This feature is temporarily unsupported when compiling for macOS or Windows targ
 3. The compiler uses the profile to recompile the source code.
 
 ```shell
-# Generate an executable program `test` with instrumentation information
+# 1Generate an executable program `test` with instrumentation information
 $ cjc test.cj --pgo-instr-gen -o test
-# Run the executable program `test` to generate the `default.profraw` profile
+# 1Run the executable program `test` to generate the `default.profraw` profile
 $ ./test
 ```
 
@@ -547,9 +547,9 @@ This feature is temporarily unsupported when compiling for macOS targets.
 > The `--pgo-instr-use` compilation option only supports profiles in `profdata` format. The `llvm-profdata` tool can be used to convert `profraw` profiles to `profdata` profiles.
 
 ```shell
-# Convert `profraw` file to `profdata` file
+# 1Convert `profraw` file to `profdata` file
 $ LD_LIBRARY_PATH=$CANGJIE_HOME/third_party/llvm/lib:$LD_LIBRARY_PATH $CANGJIE_HOME/third_party/llvm/bin/llvm-profdata merge default.profraw -o default.profdata
-# Use the specified `default.profdata` profile to guide compilation and generate the optimized executable program `testOptimized`
+# 1Use the specified `default.profdata` profile to guide compilation and generate the optimized executable program `testOptimized`
 $ cjc test.cj --pgo-instr-use=default.profdata -o testOptimized
 ```
 
@@ -1013,9 +1013,9 @@ class Tests {
 The compilation commands are as follows:
 
 ```shell
-# Compile the production part of the package first, only `main.cj` file would be compiled here
+# 1Compile the production part of the package first, only `main.cj` file would be compiled here
 cjc -p my_pkg --output-type=static -o=output/libmain.a
-# Compile the test part of the package, Only `main_test.cj` file would be compiled here
+# 1Compile the test part of the package, Only `main_test.cj` file would be compiled here
 cjc -p my_pkg --test-only -L output -lmain
 ```
 

@@ -1,4 +1,4 @@
-# Deploying the Cangjie Runtime
+# 1Deploying the Cangjie Runtime
 
 To ensure the Cangjie executable can run properly across different operating system environments, the Cangjie language provides a runtime environment. This runtime environment grants Cangjie executables access to memory and other system resources, such as the dynamic libraries required during execution.
 

@@ -1,4 +1,4 @@
-# Package Declaration
+# 1Package Declaration
 
 In the Cangjie programming language, a package declaration starts with the keyword `package`, followed by an optional organization name and the organization name separator '::', then the package names from the root package to the current package separated by '.' on the path. Both organization names and package names must be valid ordinary identifiers (excluding raw identifiers). For example:
 

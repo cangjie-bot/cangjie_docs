@@ -1,4 +1,4 @@
-# cjo Artifacts
+# 1cjo Artifacts
 
 This chapter introduces the cjo (Cangjie Object) artifacts generated during the Cangjie programming language compilation process and their related information.
 

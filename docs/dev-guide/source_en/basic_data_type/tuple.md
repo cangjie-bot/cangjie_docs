@@ -1,4 +1,4 @@
-# Tuple Type
+# 1Tuple Type
 
 A tuple (Tuple) can combine multiple different types into a new type. The tuple type is denoted as `(T1, T2, ..., TN)`, where `T1` to `TN` can be any type, and different types are connected by commas (`,`). A tuple must be at least binary. For example, `(Int64, Float64)` represents a binary tuple type, and `(Int64, Float64, String)` represents a ternary tuple type.
 

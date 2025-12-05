@@ -1,4 +1,4 @@
-# 创建 struct 实例
+# 1创建 struct 实例
 
 定义了 `struct` 类型后，即可通过调用 `struct` 的构造函数来创建 `struct` 实例。在 `struct` 定义之外，通过 `struct` 类型名调用构造函数创建该类型实例，并可以通过实例访问满足可见性修饰符（如`public`）的实例成员变量和实例成员函数。例如，下例中定义了一个 `Rectangle` 类型的变量 `r`，通过 `r.width` 和 `r.height` 可分别访问 `r` 中 `width` 和 `height` 的值，通过 `r.area()` 可以调用 `r` 的成员函数 `area`。
 

@@ -1,4 +1,4 @@
-# 终止线程
+# 1终止线程
 
 可以通过 `Future<T>` 的 `cancel()` 方法向对应的线程发送终止请求，该方法不会停止线程执行。开发者需要使用 `Thread` 的 `hasPendingCancellation` 属性来检查线程是否存在终止请求。
 

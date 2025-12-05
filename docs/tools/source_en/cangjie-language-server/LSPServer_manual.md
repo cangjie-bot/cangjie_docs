@@ -1,4 +1,4 @@
-# Cangjie Language Server User Guide
+# 1Cangjie Language Server User Guide
 
 ## Overview
 

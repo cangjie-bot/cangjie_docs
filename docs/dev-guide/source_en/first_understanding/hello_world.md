@@ -1,4 +1,4 @@
-# Running Your First Cangjie Program
+# 1Running Your First Cangjie Program
 
 Everything is ready—let's start writing and running your first Cangjie program!
 

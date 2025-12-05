@@ -1,4 +1,4 @@
-# Cangjie-ObjC Interoperability
+# 1Cangjie-ObjC Interoperability
 
 ## Introduction
 
@@ -116,25 +116,25 @@ Taking Cangjie calling ObjC as an example, the overall development process is de
     Create a configuration file, such as `example.toml`:
 
     ```toml
-    # Place mirrors of the Foundation framework classes in the 'objc.foundation' package:
+    # 1Place mirrors of the Foundation framework classes in the 'objc.foundation' package:
     [[packages]]
     filters = { include = ["NS.+"] }
     package-name = "objc.foundation"
 
-    # Place the mirror of the class Base in the 'example' package:
+    # 1Place the mirror of the class Base in the 'example' package:
     [[packages]]
     filters = { include = "Base" }
     package-name = "example"
 
-    # Write the output files with mirror type definitions to the './mirrors' directory:
+    # 1Write the output files with mirror type definitions to the './mirrors' directory:
     [output-roots.default]
     path = "mirrors"
 
-    # Specify the pathnames of input files
+    # 1Specify the pathnames of input files
     [sources.all]
     paths = ["original-objc/Base.h"]
 
-    # Extra settings for testing with GNUstep
+    # 1Extra settings for testing with GNUstep
     [sources-mixins.default]
     sources = [".*"]
     arguments-append = [
@@ -148,19 +148,19 @@ Taking Cangjie calling ObjC as an example, the overall development process is de
     Configuration file format:
 
     ```toml
-    # Optional: Import other toml configuration files. Value is a string array, each line representing a toml file path relative to the current working directory.
+    # 1Optional: Import other toml configuration files. Value is a string array, each line representing a toml file path relative to the current working directory.
     imports = [
         "../path_to_file.toml"
     ]
 
-    # Path for storing generated Mirror Type files. The target directory will be created if it does not exist.
+    # 1Path for storing generated Mirror Type files. The target directory will be created if it does not exist.
     [output-roots]
     path = "path_to_mirrors"
 
-    # Input file list for Mirror Types, along with Clang compilation options.
+    # 1Input file list for Mirror Types, along with Clang compilation options.
     [sources]
     path = "path_to_ObjC_header_file"
-    # Compilation options
+    # 1Compilation options
     arguments-append = [
         "-F", "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks",
         "-isystem", "/Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include",
@@ -168,13 +168,13 @@ Taking Cangjie calling ObjC as an example, the overall development process is de
         "-DTARGET_OS_IPHONE"
     ]
 
-    # Collection of multiple sources properties.
+    # 1Collection of multiple sources properties.
     [sources-mixins]
     sources = [".*"]
 
-    # Specify package names
+    # 1Specify package names
      [[packages]]
-    # If the converted code implicitly uses certain symbols (e.g., Uint32/Bool), these symbols must be added to the filters (otherwise, running ObjCInteropGen may result in errors like "Entity Uint32/Bool from `xx.h` is ambiguous between x packages").
+    # 1If the converted code implicitly uses certain symbols (e.g., Uint32/Bool), these symbols must be added to the filters (otherwise, running ObjCInteropGen may result in errors like "Entity Uint32/Bool from `xx.h` is ambiguous between x packages").
     filters = { include = "Base" }
     package-name = "example"
     ```

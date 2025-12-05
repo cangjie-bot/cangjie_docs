@@ -1,4 +1,4 @@
-# Interface
+# 1Interface
 
 An interface is used to define an abstract type that contains no data but can specify the behavior of a type. A type is said to implement an interface if it declares to implement that interface and provides implementations for all its members.
 

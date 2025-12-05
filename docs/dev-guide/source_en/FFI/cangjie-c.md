@@ -1,4 +1,4 @@
-# Cangjie-C Interoperability
+# 1Cangjie-C Interoperability
 
 To ensure compatibility with existing ecosystems, Cangjie supports calling C functions and also allows C to call Cangjie functions.
 

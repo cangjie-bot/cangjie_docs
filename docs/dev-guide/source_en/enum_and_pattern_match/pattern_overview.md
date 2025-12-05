@@ -1,4 +1,4 @@
-# Pattern Overview
+# 1Pattern Overview
 
 For `match` expressions containing matching values, the patterns supported after `case` determine the expressive power of the `match` expression. This section introduces the patterns supported by Cangjie in sequence, including: constant patterns, wildcard patterns, binding patterns, tuple patterns, type patterns, and enum patterns.
 

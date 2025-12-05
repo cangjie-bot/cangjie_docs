@@ -1,4 +1,4 @@
-# Cross-Compilation
+# 1Cross-Compilation
 
 Developers can cross-compile their Cangjie programs to run on different architecture platforms. Cangjie supports the following cross-compilation scenarios:
 

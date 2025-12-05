@@ -1,4 +1,4 @@
-# Function Types
+# 1Function Types
 
 In the Cangjie programming language, functions are first-class citizens, meaning they can be passed as arguments to other functions, returned as values from functions, or assigned to variables. Therefore, functions themselves have types, referred to as function types.
 

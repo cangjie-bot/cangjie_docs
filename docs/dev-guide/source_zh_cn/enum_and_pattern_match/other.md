@@ -1,4 +1,4 @@
-# 其他使用模式的地方
+# 1其他使用模式的地方
 
 模式除了可以在 `match` 表达式中使用外，还可以使用在变量定义和 `for in` 表达式中，例如，等号左侧是个模式，`for` 关键字和 `in` 关键字之间是个模式。同时， `if` 表达式和 `while` 表达式中的条件也可以使用模式，具体详见 [“let pattern” 的“条件”示例](../basic_programming_concepts/expression.md#涉及-let-pattern-的条件示例)。
 

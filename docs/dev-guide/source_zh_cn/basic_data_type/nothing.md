@@ -1,4 +1,4 @@
-# Nothing 类型
+# 1Nothing 类型
 
 `Nothing` 是一种特殊的类型，它不包含任何值，并且 `Nothing` 类型是所有类型的子类型（这当中也包括 [`Unit` 类型](unit.md)）。
 

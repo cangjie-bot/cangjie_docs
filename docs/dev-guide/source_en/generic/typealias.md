@@ -1,4 +1,4 @@
-# Type Aliases
+# 1Type Aliases
 
 When a type name is overly complex or not intuitive in a specific context, you can use a type alias to assign an alternative name to that type.
 

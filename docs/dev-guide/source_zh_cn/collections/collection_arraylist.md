@@ -1,4 +1,4 @@
-# ArrayList
+# 1ArrayList
 
 使用 ArrayList 类型需要导入 collection 包：
 

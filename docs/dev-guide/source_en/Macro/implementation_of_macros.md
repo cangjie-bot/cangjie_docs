@@ -1,4 +1,4 @@
-# Macro Implementation
+# 1Macro Implementation
 
 This chapter introduces the definition and usage of Cangjie macros, which can be categorized into [Non-Attribute Macros](./implementation_of_macros.md#non-attribute-macros) and [Attribute Macros](./implementation_of_macros.md#attribute-macros). Additionally, this chapter will cover the behavior when macros are nested.
 

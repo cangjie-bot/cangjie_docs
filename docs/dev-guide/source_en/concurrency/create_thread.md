@@ -1,4 +1,4 @@
-# Creating Threads
+# 1Creating Threads
 
 When developers wish to execute a segment of code concurrently, they simply need to create a Cangjie thread. To create a new Cangjie thread, use the keyword `spawn` followed by a parameterless `lambda` expression, which represents the code to be executed in the new thread.
 

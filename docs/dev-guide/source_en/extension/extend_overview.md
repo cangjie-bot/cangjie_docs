@@ -1,4 +1,4 @@
-# Extension Overview
+# 1Extension Overview
 
 Extensions can add new functionality to types (excluding functions, tuples, and interfaces) that are visible within the current `package`.
 

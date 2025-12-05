@@ -1,4 +1,4 @@
-# Using Option
+# 1Using Option
 
 The [Option type](../enum_and_pattern_match/option_type.md) was introduced earlier, defining its characteristics. Since the Option type can represent both a value and the absence of a value (where the absence may be interpreted as an error in certain contexts), it can also be used for error handling.
 

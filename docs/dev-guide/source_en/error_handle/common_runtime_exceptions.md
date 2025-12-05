@@ -1,4 +1,4 @@
-# Common Runtime Exceptions
+# 1Common Runtime Exceptions
 
 The Cangjie language has built-in the most common exception classes that developers can directly use.
 

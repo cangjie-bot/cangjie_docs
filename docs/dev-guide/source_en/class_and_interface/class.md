@@ -1,4 +1,4 @@
-# Classes
+# 1Classes
 
 The `class` type is a classic concept in object-oriented programming. Cangjie also supports using `class` to implement object-oriented programming. The main differences between `class` and `struct` are: `class` is a reference type while `struct` is a value type, and they behave differently during assignment or parameter passing; `class` types can inherit from each other, but `struct` types cannot.
 

@@ -1,4 +1,4 @@
-# 编译、报错与调试
+# 1编译、报错与调试
 
 ## 宏的编译和使用
 
@@ -60,13 +60,13 @@ main() {
 当宏定义文件的编译产物和使用宏的文件不在同一目录下时，需要通过添加 `--import-path` 编译选项来指定宏定义文件编译产物的路径。以下为 Linux 平台的编译命令（具体编译选项会随着 cjc 更新而演进，以最新 cjc 的编译选项为准）：
 
 ```shell
-# 先编译宏定义文件在指定目录产生默认的动态库文件（允许指定动态库的路径，但不能指定动态库的名字）
+# 1先编译宏定义文件在指定目录产生默认的动态库文件（允许指定动态库的路径，但不能指定动态库的名字）
 cjc macros/m.cj --compile-macro --output-dir ./target
 
-# 编译使用宏的文件，宏替换完成，产生可执行文件
+# 1编译使用宏的文件，宏替换完成，产生可执行文件
 cjc src/demo.cj -o demo --import-path ./target --output-dir ./target
 
-# 运行可执行文件
+# 1运行可执行文件
 ./target/demo
 ```
 
@@ -75,12 +75,12 @@ cjc src/demo.cj -o demo --import-path ./target --output-dir ./target
 若在 Windows 平台：
 
 ```shell
-# 当前目录: src
+# 1当前目录: src
 
-# 先编译宏定义文件在指定目录产生默认的动态库文件（允许指定动态库的路径，但不能指定动态库的名字）
+# 1先编译宏定义文件在指定目录产生默认的动态库文件（允许指定动态库的路径，但不能指定动态库的名字）
 cjc macros/m.cj --compile-macro --output-dir ./target
 
-# 编译使用宏的文件，宏替换完成，产生可执行文件
+# 1编译使用宏的文件，宏替换完成，产生可执行文件
 cjc src/demo.cj -o demo.exe --import-path ./target --output-dir ./target
 ```
 

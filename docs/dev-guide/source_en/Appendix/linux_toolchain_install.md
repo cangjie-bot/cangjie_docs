@@ -1,4 +1,4 @@
-# Linux Distribution Support and Installation for the Toolchain
+# 1Linux Distribution Support and Installation for the Toolchain
 
 The Cangjie toolchain has undergone comprehensive functional testing on the following Linux distributions:
 

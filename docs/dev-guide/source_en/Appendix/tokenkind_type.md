@@ -1,4 +1,4 @@
-# TokenKind Type
+# 1TokenKind Type
 
 ```cangjie
 public enum TokenKind <: ToString {

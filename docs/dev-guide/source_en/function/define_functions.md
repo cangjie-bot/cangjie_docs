@@ -1,4 +1,4 @@
-# Defining Functions
+# 1Defining Functions
 
 In Cangjie, the keyword `func` is used to denote the start of a function definition. Following `func` are the function name, parameter list, optional return type, and function body in sequence. The function name can be any valid identifier. The parameter list is enclosed in parentheses (with multiple parameters separated by commas), a colon separates the parameter list from the return type (if present), and the function body is enclosed in curly braces.
 

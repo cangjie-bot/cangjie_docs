@@ -1,4 +1,4 @@
-# Rules for Converting C Language to Cangjie Glue Code
+# 1Rules for Converting C Language to Cangjie Glue Code
 
 HLE automatically generates glue code from C to Cangjie, supporting the translation of functions, structures, enums, and global variables. Type support includes: basic types, structure types, pointers, arrays, and strings.
 

@@ -1,4 +1,4 @@
-# Enum Types
+# 1Enum Types
 
 This section introduces the `enum` type in Cangjie. The `enum` type provides a way to define a type by enumerating all its possible values.
 

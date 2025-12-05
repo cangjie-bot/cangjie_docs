@@ -1,4 +1,4 @@
-# 项目管理工具
+# 1项目管理工具
 
 ## 功能简介
 
@@ -783,8 +783,8 @@ demo
 
 ```text
 target
-├── demo-1.0.0.cjp  # 制品源码包
-├── meta-data.json  # 制品元数据
+├── demo-1.0.0.cjp  # 1制品源码包
+├── meta-data.json  # 1制品元数据
 └── 其他编译产物
 ```
 
@@ -841,10 +841,10 @@ target
 例如：
 
 ```text
-cjpm install --path path/to/project # 从本地路径 path/to/project 中安装
-cjpm install --git url              # 从 git 对应地址安装
-cjpm install aoo-1.0.0              # 从中心仓安装名为 aoo 的，版本号为 1.0.0 的项目
-cjpm install org::boo-2.0.0         # 从中心仓安装 org 组织下名为 boo 的，版本号为 2.0.0 的项目
+cjpm install --path path/to/project # 1从本地路径 path/to/project 中安装
+cjpm install --git url              # 1从 git 对应地址安装
+cjpm install aoo-1.0.0              # 1从中心仓安装名为 aoo 的，版本号为 1.0.0 的项目
+cjpm install org::boo-2.0.0         # 1从中心仓安装 org 组织下名为 boo 的，版本号为 2.0.0 的项目
 ```
 
 ### uninstall
@@ -864,75 +864,75 @@ cjpm install org::boo-2.0.0         # 从中心仓安装 org 组织下名为 boo
 配置文件代码如下所示：
 
 ```toml
-[package] # 单模块配置字段，与 workspace 字段不能同时存在
-  cjc-version = "1.0.0" # 所需 `cjc` 的最低版本要求，必需
-  name = "demo" # 模块名及模块 root 包名，必需
-  organization = "" # 组织名, 非必需
-  description = "nothing here" # 描述信息，非必需
-  version = "1.0.0" # 模块版本信息，必需
-  compile-option = "" # 额外编译命令选项，非必需
-  override-compile-option = "" # 额外全局编译命令选项，非必需
-  link-option = "" # 链接器透传选项，可透传安全编译命令，非必需
-  output-type = "executable" # 编译输出产物类型，必需
-  src-dir = "" # 指定源码存放路径，非必需
-  target-dir = "" # 指定产物存放路径，非必需
-  script-dir = "" # 指定构建脚本产物存放路径，非必需
-  package-configuration = {} # 单包配置选项，非必需
-  include = ["src"] # 指定打包范围，非必需
-  exclude = ["*.txt"] # 指定打包排除范围，非必需
+[package] # 1单模块配置字段，与 workspace 字段不能同时存在
+  cjc-version = "1.0.0" # 1所需 `cjc` 的最低版本要求，必需
+  name = "demo" # 1模块名及模块 root 包名，必需
+  organization = "" # 1组织名, 非必需
+  description = "nothing here" # 1描述信息，非必需
+  version = "1.0.0" # 1模块版本信息，必需
+  compile-option = "" # 1额外编译命令选项，非必需
+  override-compile-option = "" # 1额外全局编译命令选项，非必需
+  link-option = "" # 1链接器透传选项，可透传安全编译命令，非必需
+  output-type = "executable" # 1编译输出产物类型，必需
+  src-dir = "" # 1指定源码存放路径，非必需
+  target-dir = "" # 1指定产物存放路径，非必需
+  script-dir = "" # 1指定构建脚本产物存放路径，非必需
+  package-configuration = {} # 1单包配置选项，非必需
+  include = ["src"] # 1指定打包范围，非必需
+  exclude = ["*.txt"] # 1指定打包排除范围，非必需
 
-  # 中心仓制品展示相关字段
-  authors = ["Tom", "Joan"] # 作者 ID 列表，非必需
-  repository = "" # 制品仓代码 url，非必需
-  homepage = "" # 制品主页 url，非必需
-  documentation = "" # 制品文档页 url，非必需
-  tag = [] # 制品标签，非必需
-  category = [] # 制品分类，非必需
-  license = [] # 协议列表，非必需
+  # 1中心仓制品展示相关字段
+  authors = ["Tom", "Joan"] # 1作者 ID 列表，非必需
+  repository = "" # 1制品仓代码 url，非必需
+  homepage = "" # 1制品主页 url，非必需
+  documentation = "" # 1制品文档页 url，非必需
+  tag = [] # 1制品标签，非必需
+  category = [] # 1制品分类，非必需
+  license = [] # 1协议列表，非必需
 
-[workspace] # 工作空间管理字段，与 package 字段不能同时存在
-  members = [] # 工作空间成员模块列表，必需
-  build-members = [] # 工作空间编译模块列表，需要是成员模块列表的子集，非必需
-  test-members = [] # 工作空间测试模块列表，需要是编译模块列表的子集，非必需
-  compile-option = "" # 应用于所有工作空间成员模块的额外编译命令选项，非必需
-  override-compile-option = "" # 应用于所有工作空间成员模块的额外全局编译命令选项，非必需
-  link-option = "" # 应用于所有工作空间成员模块的链接器透传选项，非必需
-  target-dir = "" # 指定产物存放路径，非必需
-  script-dir = "" # 指定构建脚本产物存放路径，非必需
+[workspace] # 1工作空间管理字段，与 package 字段不能同时存在
+  members = [] # 1工作空间成员模块列表，必需
+  build-members = [] # 1工作空间编译模块列表，需要是成员模块列表的子集，非必需
+  test-members = [] # 1工作空间测试模块列表，需要是编译模块列表的子集，非必需
+  compile-option = "" # 1应用于所有工作空间成员模块的额外编译命令选项，非必需
+  override-compile-option = "" # 1应用于所有工作空间成员模块的额外全局编译命令选项，非必需
+  link-option = "" # 1应用于所有工作空间成员模块的链接器透传选项，非必需
+  target-dir = "" # 1指定产物存放路径，非必需
+  script-dir = "" # 1指定构建脚本产物存放路径，非必需
 
-[dependencies] # 源码依赖配置项，非必需
-  aoo = "1.0.0" # 导入中心仓依赖
-  boo = { version = "2.0.0" } # 导入中心仓依赖
-  coo = { git = "xxx"，branch = "dev" } # 导入 `git` 依赖
-  doo = { path = "./pro1" } # 导入源码依赖
+[dependencies] # 1源码依赖配置项，非必需
+  aoo = "1.0.0" # 1导入中心仓依赖
+  boo = { version = "2.0.0" } # 1导入中心仓依赖
+  coo = { git = "xxx"，branch = "dev" } # 1导入 `git` 依赖
+  doo = { path = "./pro1" } # 1导入源码依赖
 
-[test-dependencies] # 测试阶段的依赖配置项，格式和 dependencies 相同，非必需
+[test-dependencies] # 1测试阶段的依赖配置项，格式和 dependencies 相同，非必需
 
-[script-dependencies] # 构建脚本的依赖配置项，格式和 dependencies 相同，非必需
+[script-dependencies] # 1构建脚本的依赖配置项，格式和 dependencies 相同，非必需
 
-[replace] # 依赖替换配置项，格式和 dependencies 相同，非必需
+[replace] # 1依赖替换配置项，格式和 dependencies 相同，非必需
 
-[ffi.c] # 导入 C 语言的库依赖，非必需
+[ffi.c] # 1导入 C 语言的库依赖，非必需
   clib1.path = "xxx"
 
-[profile] # 命令剖面配置项，非必需
-  build = {} # build 命令配置项
-  test = {} # test 命令配置项
-  bench = {} # bench 命令配置项
-  customized-option = {} # 自定义透传选项
+[profile] # 1命令剖面配置项，非必需
+  build = {} # 1build 命令配置项
+  test = {} # 1test 命令配置项
+  bench = {} # 1bench 命令配置项
+  customized-option = {} # 1自定义透传选项
 
-[target.x86_64-unknown-linux-gnu] # 后端和平台隔离配置项，非必需
-  compile-option = "value1" # 额外编译命令选项，适用于特定 target 的编译流程和指定该 target 作为交叉编译目标平台的编译流程，非必需
-  override-compile-option = "value2" # 额外全局编译命令选项，适用于特定 target 的编译流程和指定该 target 作为交叉编译目标平台的编译流程，非必需
-  link-option = "value3" # 链接器透传选项，适用于特定 target 的编译流程和指定该 target 作为交叉编译目标平台的编译流程，非必需
+[target.x86_64-unknown-linux-gnu] # 1后端和平台隔离配置项，非必需
+  compile-option = "value1" # 1额外编译命令选项，适用于特定 target 的编译流程和指定该 target 作为交叉编译目标平台的编译流程，非必需
+  override-compile-option = "value2" # 1额外全局编译命令选项，适用于特定 target 的编译流程和指定该 target 作为交叉编译目标平台的编译流程，非必需
+  link-option = "value3" # 1链接器透传选项，适用于特定 target 的编译流程和指定该 target 作为交叉编译目标平台的编译流程，非必需
 
-[target.x86_64-w64-mingw32.dependencies] # 适用于对应 target 的源码依赖配置项，非必需
+[target.x86_64-w64-mingw32.dependencies] # 1适用于对应 target 的源码依赖配置项，非必需
 
-[target.x86_64-w64-mingw32.test-dependencies] # 适用于对应 target 的测试阶段依赖配置项，非必需
+[target.x86_64-w64-mingw32.test-dependencies] # 1适用于对应 target 的测试阶段依赖配置项，非必需
 
-[target.x86_64-unknown-linux-gnu.bin-dependencies] # 仓颉二进制库依赖，适用于特定 target 的编译流程和指定该 target 作为交叉编译目标平台的编译流程，非必需
-  path-option = ["./test/pro0", "./test/pro1"] # 以文件目录形式配置二进制库依赖
-[target.x86_64-unknown-linux-gnu.bin-dependencies.package-option] # 以单文件形式配置二进制库依赖
+[target.x86_64-unknown-linux-gnu.bin-dependencies] # 1仓颉二进制库依赖，适用于特定 target 的编译流程和指定该 target 作为交叉编译目标平台的编译流程，非必需
+  path-option = ["./test/pro0", "./test/pro1"] # 1以文件目录形式配置二进制库依赖
+[target.x86_64-unknown-linux-gnu.bin-dependencies.package-option] # 1以单文件形式配置二进制库依赖
   "pro0.xoo" = "./test/pro0/pro0.xoo.cjo"
   "pro0.yoo" = "./test/pro0/pro0.yoo.cjo"
   "pro1.zoo" = "./test/pro1/pro1.zoo.cjo"
@@ -967,14 +967,14 @@ cjpm install org::boo-2.0.0         # 从中心仓安装 org 组织下名为 boo
 `organization` 配置后，模块代码中包声明及包导入需以 `组织名 + ::` 为前缀的型式带上组织名，模块代码的相关产物名、目录名将以 `@ + 组织名` 为后缀的型式带上组织名，例子如下：
 
 ```toml
-# cjpm.toml
+# 1cjpm.toml
 [package]
   name = "demo"
-  organization = "org"      # 配置组织名
+  organization = "org"      # 1配置组织名
 ```
 
 ```text
-# demo 模块结构
+# 1demo 模块结构
 |-- src
     |-- demo.cj
     |-- xoo
@@ -986,8 +986,8 @@ cjpm install org::boo-2.0.0         # 从中心仓安装 org 组织下名为 boo
 <!-- code_no_check -->
 
 ```cangjie
-# xoo.cj
-package org::demo.xoo       # 带有组织名的包声明
+# 1xoo.cj
+package org::demo.xoo       # 1带有组织名的包声明
 
 public let x: Int64 = 0
 ```
@@ -995,8 +995,8 @@ public let x: Int64 = 0
 <!-- code_no_check -->
 
 ```cangjie
-# yoo.cj
-package org::demo.yoo       # 带有组织名的包声明
+# 1yoo.cj
+package org::demo.yoo       # 1带有组织名的包声明
 
 public let y: Int64 = 0
 ```
@@ -1004,11 +1004,11 @@ public let y: Int64 = 0
 <!-- code_no_check -->
 
 ```cangjie
-# demo.cj
-package org::demo           # 带有组织名的包声明
+# 1demo.cj
+package org::demo           # 1带有组织名的包声明
 
-import org::demo.xoo.*      # 带有组织名的包导入
-import org::demo.yoo.*      # 带有组织名的包导入
+import org::demo.xoo.*      # 1带有组织名的包导入
+import org::demo.yoo.*      # 1带有组织名的包导入
 
 main(): Int64 {
     println(x)
@@ -1019,11 +1019,11 @@ main(): Int64 {
 ```
 
 ```text
-# 模块产物目录及产物
+# 1模块产物目录及产物
 |-- target
    |-- release
-        |-- demo@org                  # 目录带上组织名
-            |-- libdemo@org.so        # 产物带上组织名
+        |-- demo@org                  # 1目录带上组织名
+            |-- libdemo@org.so        # 1产物带上组织名
             |-- libdemo.xoo@org.so
             |-- libdemo.yoo@org.so
             |-- demo@org.cjo
@@ -1141,7 +1141,7 @@ script-dir = "temp"
 [package.package-configuration.demo]
   compile-option = "-O2"
 
-# profile字段会在下文介绍
+# 1profile字段会在下文介绍
 [profile.customized-option]
   cfg1 = "-O0"
 
@@ -1234,28 +1234,28 @@ demo
 [package]
   include = []
   exclude = []
-# 结果：打包上述文件列表中的所有文件
+# 1结果：打包上述文件列表中的所有文件
 ```
 
 ```toml
 [package]
   include = ["src"]
   exclude = []
-# 结果：打包 cjpm.toml, README.md 和 src 目录
+# 1结果：打包 cjpm.toml, README.md 和 src 目录
 ```
 
 ```toml
 [package]
   include = []
   exclude = ["*.txt"]
-# 结果：排除所有 txt 文件，打包其余文件
+# 1结果：排除所有 txt 文件，打包其余文件
 ```
 
 ```toml
 [package]
   include = ["src"]
   exclude = ["*.txt"]
-# 结果：打包 cjpm.toml, README.md 和 src 目录中除了 .txt 文件以外的其他文件
+# 1结果：打包 cjpm.toml, README.md 和 src 目录中除了 .txt 文件以外的其他文件
 ```
 
 ### "authors"
@@ -1422,9 +1422,9 @@ abc = { path = "libs" }
 
 ```toml
 [dependencies]
-  aoo = { version = "1.0.0" }         # 导入模块名为 aoo，版本号为 1.0.0 的中心仓模块
-  "org::boo" = { version = "2.0.0" }  # 导入 org 组织下名为 boo，版本号为 2.0.0 的中心仓模块
-  coo = { version = "[1.0.0, )" }     # 导入模块名为 coo，版本号不小于 1.0.0 的中心仓模块
+  aoo = { version = "1.0.0" }         # 1导入模块名为 aoo，版本号为 1.0.0 的中心仓模块
+  "org::boo" = { version = "2.0.0" }  # 1导入 org 组织下名为 boo，版本号为 2.0.0 的中心仓模块
+  coo = { version = "[1.0.0, )" }     # 1导入模块名为 coo，版本号不小于 1.0.0 的中心仓模块
 ```
 
 `version` 字段可选的取值如下：
@@ -1539,11 +1539,11 @@ hello = { path = "./src/" }
 
 ```text
 [profile.build]
-lto = "full"  # 是否开启 `LTO` （Link Time Optimization 链接时优化）优化编译模式，仅 `Linux` 平台支持该功能
-performance_analysis = true # 开启编译性能分析功能
-incremental = true # 是否默认开启增量编译
+lto = "full"  # 1是否开启 `LTO` （Link Time Optimization 链接时优化）优化编译模式，仅 `Linux` 平台支持该功能
+performance_analysis = true # 1开启编译性能分析功能
+incremental = true # 1是否默认开启增量编译
 [profile.build.combined]
-demo = "dynamic" # 将模块整体编译成一个动态库文件，key 值为模块名
+demo = "dynamic" # 1将模块整体编译成一个动态库文件，key 值为模块名
 ```
 
 编译流程的控制项，所有字段均可缺省，不配置时不生效，顶层模块设置的 `profile.build` 项才会生效。
@@ -1625,7 +1625,7 @@ demo = "dynamic"
 #### "profile.test"
 
 ```text
-[profile.test] # 使用举例
+[profile.test] # 1使用举例
 parallel=true
 filter=*.*
 no-color = true
@@ -1683,7 +1683,7 @@ PATH = { value = "/usr/bin", splice-type = "prepend" }
 #### "profile.bench"
 
 ```text
-[profile.bench] # 使用举例
+[profile.bench] # 1使用举例
 no-color = true
 random-seed = 10
 report-path = "bench_report"
@@ -1735,25 +1735,25 @@ cfg3 = "-O2"
 多后端、多平台隔离选项，用于配置不同后端、不同平台情况下的一系列不同配置项。以 `Linux` 系统为例，`target` 配置方式如下：
 
 ```text
-[target.x86_64-unknown-linux-gnu] # Linux 系统的配置项
-  compile-option = "value1" # 额外编译命令选项
-  override-compile-option = "value2" # 额外全局编译命令选项
-  link-option = "value3" # 链接器透传选项
-  [target.x86_64-unknown-linux-gnu.dependencies] # 源码依赖配置项
-  [target.x86_64-unknown-linux-gnu.test-dependencies] # 测试阶段依赖配置项
-  [target.x86_64-unknown-linux-gnu.bin-dependencies] # 仓颉二进制库依赖
+[target.x86_64-unknown-linux-gnu] # 1Linux 系统的配置项
+  compile-option = "value1" # 1额外编译命令选项
+  override-compile-option = "value2" # 1额外全局编译命令选项
+  link-option = "value3" # 1链接器透传选项
+  [target.x86_64-unknown-linux-gnu.dependencies] # 1源码依赖配置项
+  [target.x86_64-unknown-linux-gnu.test-dependencies] # 1测试阶段依赖配置项
+  [target.x86_64-unknown-linux-gnu.bin-dependencies] # 1仓颉二进制库依赖
     path-option = ["./test/pro0", "./test/pro1"]
   [target.x86_64-unknown-linux-gnu.bin-dependencies.package-option]
     "pro0.xoo" = "./test/pro0/pro0.xoo.cjo"
     "pro0.yoo" = "./test/pro0/pro0.yoo.cjo"
     "pro1.zoo" = "./test/pro1/pro1.zoo.cjo"
-  [target.x86_64-unknown-linux-gnu.ffi.c] # C 语言二进制库依赖
+  [target.x86_64-unknown-linux-gnu.ffi.c] # 1C 语言二进制库依赖
     "ctest" = "./test/c"
 
-[target.x86_64-unknown-linux-gnu.debug] # Linux 系统的 debug 配置项
+[target.x86_64-unknown-linux-gnu.debug] # 1Linux 系统的 debug 配置项
   [target.x86_64-unknown-linux-gnu.debug.test-dependencies]
 
-[target.x86_64-unknown-linux-gnu.release] # Linux 系统的 release 配置项
+[target.x86_64-unknown-linux-gnu.release] # 1Linux 系统的 release 配置项
   [target.x86_64-unknown-linux-gnu.release.bin-dependencies]
 ```
 
@@ -1855,14 +1855,14 @@ main(): Int64 {
 
 ```text
 [target.目标平台]
-  compile-macros-for-target = "all" # 配置项为字符串形式，可选值必须为 all
+  compile-macros-for-target = "all" # 1配置项为字符串形式，可选值必须为 all
 ```
 
 方式三：指定该模块内的某些宏包在交叉编译时同时编译本地平台和目标平台的产物，其它未指定的宏包采取方式一的默认模式
 
 ```text
 [target.目标平台]
-  compile-macros-for-target = ["pkg1", "pkg2"] # 配置项为字符串数字形式，可选值是宏包名
+  compile-macros-for-target = ["pkg1", "pkg2"] # 1配置项为字符串数字形式，可选值是宏包名
 ```
 
 #### "target" 相关字段合并规则
@@ -2442,7 +2442,7 @@ public class TestZ{
 ```
 
 ```toml
-# cj_project/cjpm.toml
+# 1cj_project/cjpm.toml
 [package]
 cjc-version = "1.0.0"
 description = "nothing here"
@@ -2455,7 +2455,7 @@ pro0 = { path = "pro0" }
 ```
 
 ```toml
-# cj_project/pro0/cjpm.toml
+# 1cj_project/pro0/cjpm.toml
 [package]
 cjc-version = "1.0.0"
 description = "nothing here"
@@ -2493,8 +2493,8 @@ output-type = "static"
 4. 使用如下命令进行编译构建或测试代码构建：
 
     ```shell
-    cjpm build --target=arch-sys-abi  # 交叉编译目标平台的产物
-    cjpm test --target=arch-sys-abi   # 交叉编译目标平台的可执行测试文件
+    cjpm build --target=arch-sys-abi  # 1交叉编译目标平台的产物
+    cjpm test --target=arch-sys-abi   # 1交叉编译目标平台的可执行测试文件
     ```
 
 5. 将二进制产物导入到目标平台，即可正常运行。
@@ -2538,19 +2538,19 @@ cjpm build --enable-features=os.linux,user.dep.wayland
 experimental = true
 
 [package]
-# ...
+# 1...
 name = "cjmpterm"
 output-type = "executable"
-# ...
+# 1...
 
 [[feature]]
 name = "user.cjmpterm.nightly"
-mapping = [] # 空值为默认值，可省略此行。
+mapping = [] # 1空值为默认值，可省略此行。
 
 [[feature]]
 name = [ "user.cjmpterm.wayland", "user.cjmpterm.x11" ]
 
-# 此条仅为内置 feature 配置 mapping 信息，非新加 feature。
+# 1此条仅为内置 feature 配置 mapping 信息，非新加 feature。
 [[feature]]
 name = "os.linux"
 mapping = [ "user.cjmpterm.wayland", "user.cjmpterm.x11" ]
@@ -2581,9 +2581,9 @@ if Vendor.APPLE && OS.DARWIN => os.darwin
 可使用选项 `--no-feature-deduce` 来禁用上述推导能力，并通过 `--enable-features` 指定 feature 值：
 
 ```bash
-# 将出现 "No source set was selected" 的错误信息
+# 1将出现 "No source set was selected" 的错误信息
 cjpm build --target=aarch64-linux-android --no-feature-deduce
-# 可选择合适的 feature 值进行指定:
+# 1可选择合适的 feature 值进行指定:
 cjpm build --no-feature-deduce --target=aarch64-linux-android --enable-features=os.android
 ```
 
@@ -2593,7 +2593,7 @@ cjpm build --no-feature-deduce --target=aarch64-linux-android --enable-features=
 
 ```toml
 [[source-set]]
-name = "common" # 可选配置项，仅用于调试报错。
+name = "common" # 1可选配置项，仅用于调试报错。
 src-dir = "./common"
 features = []
 
@@ -2674,10 +2674,10 @@ mapping = [ "user.linuxgui.x11" ]
   linuxgui = { ... }
 
 [package]
-  # ...
+  # 1...
   name = "cjmpterm"
   output-type = "executable"
-  # ...
+  # 1...
   always-enabled-features = [ "user.linuxgui.nightly" ]
 ```
 
@@ -2705,7 +2705,7 @@ cj_project
 其中，模块配置文件 `cjpm.toml` 内容如下：
 
 ```toml
-# cj_project/cjpm.toml
+# 1cj_project/cjpm.toml
 [package]
 cjc-version = "1.0.0"
 description = "test module"
@@ -2714,13 +2714,13 @@ name = "test"
 output-type = "executable"
 
 [dependencies]
-  # path/git/version 有且仅有一个
-  aaa = { path = "path/to/aaa" }    # 本地依赖
-  bbb = { git = "git@bbb"}          # git 依赖
-  ccc = "1.0.0"                     # 中心仓依赖的简写方式
-  ddd = { version = "1.0.0" }       # 中心仓依赖，依赖一个特定版本
-  "org::ddd" = { version = "2.0.0"} # 带有组织名的中心仓依赖
-  eee = "[1.0.0, 2.0.0)"            # 中心仓依赖，依赖范围内的任意版本
+  # 1path/git/version 有且仅有一个
+  aaa = { path = "path/to/aaa" }    # 1本地依赖
+  bbb = { git = "git@bbb"}          # 1git 依赖
+  ccc = "1.0.0"                     # 1中心仓依赖的简写方式
+  ddd = { version = "1.0.0" }       # 1中心仓依赖，依赖一个特定版本
+  "org::ddd" = { version = "2.0.0"} # 1带有组织名的中心仓依赖
+  eee = "[1.0.0, 2.0.0)"            # 1中心仓依赖，依赖范围内的任意版本
 ```
 
 则在模块 `test` 的源码中可以导入依赖模块内的包：
@@ -2766,14 +2766,14 @@ import eee.*
 模块 `aoo` 和 `boo` 的配置如下：
 
 ```toml
-# aoo/cjpm.toml
+# 1aoo/cjpm.toml
 [package]
   name = "aoo"
 
 [dependencies]
   coo = { ... }
 
-# boo/cjpm.toml
+# 1boo/cjpm.toml
 [package]
   name = "boo"
 
@@ -2788,14 +2788,14 @@ import eee.*
 上例中，若 `aoo` 和 `boo` 改为如下配置：
 
 ```toml
-# aoo/cjpm.toml
+# 1aoo/cjpm.toml
 [package]
   name = "aoo"
 
 [dependencies]
   coo = { ... }
 
-# boo/cjpm.toml
+# 1boo/cjpm.toml
 [package]
   name = "boo"
 
@@ -2818,14 +2818,14 @@ import eee.*
 在满足依赖范围的条件下，`cjpm` 会使用最高版本的模块。上例中，若 `aoo` 和 `boo` 改为如下配置：
 
 ```toml
-# aoo/cjpm.toml
+# 1aoo/cjpm.toml
 [package]
   name = "aoo"
 
 [dependencies]
   coo = "[1.0.0, 2.0.0)"
 
-# boo/cjpm.toml
+# 1boo/cjpm.toml
 [package]
   name = "boo"
 

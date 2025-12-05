@@ -1,4 +1,4 @@
-# Function Call Syntactic Sugar
+# 1Function Call Syntactic Sugar
 
 ## Trailing Lambda
 

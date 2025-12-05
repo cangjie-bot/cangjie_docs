@@ -1,4 +1,4 @@
-# HashSet
+# 1HashSet
 
 To use the HashSet type, you need to import the collection package:
 

@@ -1,4 +1,4 @@
-# 基础 Collection 类型概述
+# 1基础 Collection 类型概述
 
 本章介绍仓颉语言中常用的几种基础 Collection 类型，包括 Array、ArrayList、HashSet 和 HashMap。
 

@@ -1,4 +1,4 @@
-# const Functions and Constant Evaluation
+# 1const Functions and Constant Evaluation
 
 Constant evaluation allows certain forms of expressions to be evaluated at compile time, reducing the computational load required during program execution. This chapter primarily introduces the usage methods and rules of constant evaluation.
 

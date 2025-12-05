@@ -1,4 +1,4 @@
-# Boolean Type
+# 1Boolean Type
 
 The Boolean type is denoted by `Bool` and is used to represent logical true and false values.
 

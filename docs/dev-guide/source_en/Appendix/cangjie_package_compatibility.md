@@ -1,4 +1,4 @@
-# Cangjie Package Compatibility Check
+# 1Cangjie Package Compatibility Check
 
 This chapter introduces the new feature **Cangjie Package Compatibility Check** introduced starting from version 0.59.4. During the process of loading Cangjie packages by the Cangjie runtime, binary compatibility checks are performed to help developers identify compatibility issues, though it cannot intercept all binary compatibility problems.
 

@@ -1,4 +1,4 @@
-# Integer Types
+# 1Integer Types
 
 Integer types are divided into signed integer types and unsigned integer types.
 

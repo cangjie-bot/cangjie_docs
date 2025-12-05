@@ -1,4 +1,4 @@
-# Introduction to Cangjie Language
+# 1Introduction to Cangjie Language
 
 Cangjie is a general-purpose programming language designed for full-scenario application development, balancing development efficiency with runtime performance while providing an excellent programming experience. Its key features include:
 

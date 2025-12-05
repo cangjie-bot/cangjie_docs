@@ -1,4 +1,4 @@
-# Properties
+# 1Properties
 
 Properties provide a getter and an optional setter to indirectly retrieve and modify values.
 

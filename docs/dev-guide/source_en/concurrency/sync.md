@@ -1,4 +1,4 @@
-# Synchronization Mechanisms
+# 1Synchronization Mechanisms
 
 In concurrent programming, without proper synchronization mechanisms to protect variables shared among multiple threads, data race issues can easily occur.
 

@@ -1,4 +1,4 @@
-# HashMap
+# 1HashMap
 
 To use the HashMap type, you need to import the collection package:
 

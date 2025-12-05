@@ -1,4 +1,4 @@
-# 接口扩展
+# 1接口扩展
 
 例如下面的例子，类型 `Array` 本身没有实现接口 `PrintSizeable`，但可以通过扩展的方式为 `Array` 增加额外的成员函数 `printSize`，并实现 `PrintSizeable`。
 

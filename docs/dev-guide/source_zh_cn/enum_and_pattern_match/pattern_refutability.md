@@ -1,4 +1,4 @@
-# 模式的 Refutability
+# 1模式的 Refutability
 
 模式可以分为两类：`refutable` 模式和 `irrefutable` 模式。在类型匹配的前提下，当一个模式有可能和待匹配值不匹配时，称此模式为 `refutable` 模式；反之，当一个模式总是可以和待匹配值匹配时，称此模式为 `irrefutable` 模式。
 

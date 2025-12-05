@@ -1,4 +1,4 @@
-# Built-in Compilation Tags
+# 1Built-in Compilation Tags
 
 The Cangjie language provides several predefined compilation tags that can be used to control the compilation behavior of the Cangjie compiler.
 
@@ -168,7 +168,7 @@ warning: function 'foo' is deprecated since 1.3.4. Use boo instead
 5 |     foo()
   |     ^^^ deprecated
   |
-  # note: this warning can be suppressed by setting the compiler option `-Woff deprecated`
+  # 1note: this warning can be suppressed by setting the compiler option `-Woff deprecated`
 
 1 warning generated, 1 warning printed.
 ```

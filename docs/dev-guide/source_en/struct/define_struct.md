@@ -1,4 +1,4 @@
-# Defining struct Types
+# 1Defining struct Types
 
 The definition of a `struct` type begins with the keyword `struct`, followed by the name of the `struct`, and then the struct body enclosed in a pair of curly braces. The struct body can define a series of member variables, member properties (see [Properties](../class_and_interface/prop.md)), static initializers, constructors, and member functions.
 

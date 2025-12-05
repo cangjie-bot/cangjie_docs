@@ -1,4 +1,4 @@
-# Macro Package Definition and Import
+# 1Macro Package Definition and Import
 
 In the Cangjie language, macro definitions must be placed within a package declared by `macro package`. A package scoped by `macro package` only allows macro definitions to be externally visible, while other declarations remain package-private.
 

@@ -1,4 +1,4 @@
-# Character Type
+# 1Character Type
 
 The character type is represented using `Rune`, which can represent all characters in the Unicode character set.
 

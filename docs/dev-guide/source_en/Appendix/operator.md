@@ -1,4 +1,4 @@
-# Operators
+# 1Operators
 
 The following table lists all operators supported by Cangjie, along with their precedence and associativity. In the precedence column, a smaller numerical value indicates higher operator precedence.
 

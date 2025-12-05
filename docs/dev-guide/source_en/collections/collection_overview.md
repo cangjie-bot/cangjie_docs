@@ -1,4 +1,4 @@
-# Overview of Basic Collection Types
+# 1Overview of Basic Collection Types
 
 This chapter introduces several fundamental Collection types commonly used in the Cangjie language, including Array, ArrayList, HashSet, and HashMap.
 

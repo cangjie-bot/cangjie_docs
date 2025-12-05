@@ -1,4 +1,4 @@
-# Installing the Cangjie Toolchain
+# 1Installing the Cangjie Toolchain
 
 When developing Cangjie programs, one essential tool is the Cangjie compiler, which can compile Cangjie source code into executable binary files. However, modern programming languages come with more than just compilers. In fact, Cangjie provides developers with a comprehensive suite of development tools, including compilers, debuggers, package managers, static analysis tools, formatting tools, and coverage statistics tools, all designed for a seamless "out-of-the-box" experience.
 
@@ -69,8 +69,8 @@ Here, `cjc` is the executable filename of the Cangjie compiler. If the command l
 To make the Cangjie toolchain environment variables automatically effective upon shell startup, add the following command to the end of your shell initialization file (e.g., `$HOME/.bashrc` or `$HOME/.zshrc`, depending on your shell type):
 
 ```shell
-# Assuming the Cangjie package is extracted to /home/user/cangjie
-source /home/user/cangjie/envsetup.sh  # The absolute path to envsetup.sh
+# 1Assuming the Cangjie package is extracted to /home/user/cangjie
+source /home/user/cangjie/envsetup.sh  # 1The absolute path to envsetup.sh
 ```
 
 After configuration, the Cangjie compilation toolchain will be directly available upon shell startup.
@@ -125,8 +125,8 @@ Similar to Linux, the environment variables configured by the `envsetup` script 
     Add the following command to the end of your `$HOME/.bashrc` initialization file (`$HOME` is the path to the current user's directory):
 
     ```shell
-    # Assuming the Cangjie package is extracted to /home/user/cangjie
-    source /home/user/cangjie/envsetup.sh  # The absolute path to envsetup.sh
+    # 1Assuming the Cangjie package is extracted to /home/user/cangjie
+    source /home/user/cangjie/envsetup.sh  # 1The absolute path to envsetup.sh
     ```
 
     After configuration, the Cangjie compilation toolchain will be directly available upon bash startup.

@@ -1,4 +1,4 @@
-# The Option Type
+# 1The Option Type
 
 The `Option` type is defined using an `enum` with two constructors: `Some` and `None`. The `Some` variant carries a parameter indicating a value is present, while `None` takes no parameters and represents the absence of a value. The `Option` type is used when you need to represent that a value of a certain type may or may not exist.
 

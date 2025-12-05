@@ -1,4 +1,4 @@
-# Introduction to `cjpm`
+# 1Introduction to `cjpm`
 
 `CJPM (Cangjie Package Manager)` is the official package management tool for the Cangjie language, designed to manage and maintain the module system of Cangjie projects while providing a simpler and unified compilation entry point with support for custom compilation commands. Through automated dependency management, it analyzes and merges multi-version third-party dependencies, eliminating concerns about version conflicts and significantly reducing developer workload. Additionally, it offers a native custom build mechanism for the Cangjie language, allowing developers to add pre-processing and post-processing workflows at different build stages. This enables flexible customization of the build process to meet various compilation requirements across different business scenarios.
 
@@ -61,59 +61,59 @@ The `cjpm.toml` configuration file defines basic information, dependencies, and 
 Example configuration:
 
 ```text
-[package] # Single-module configuration field; cannot coexist with [workspace]
-  cjc-version = "1.0.0" # Minimum required `cjc` version (mandatory)
-  name = "demo" # Module name and root package name (mandatory)
-  description = "nothing here" # Description (optional)
-  version = "1.0.0" # Module version (mandatory)
-  compile-option = "" # Additional compilation options (optional)
-  override-compile-option = "" # Additional global compilation options (optional)
-  link-option = "" # Linker passthrough options (optional)
-  output-type = "executable" # Compilation output type (mandatory)
-  src-dir = "" # Source code directory (optional)
-  target-dir = "" # Output directory (optional)
-  package-configuration = {} # Single-package configuration (optional)
+[package] # 1Single-module configuration field; cannot coexist with [workspace]
+  cjc-version = "1.0.0" # 1Minimum required `cjc` version (mandatory)
+  name = "demo" # 1Module name and root package name (mandatory)
+  description = "nothing here" # 1Description (optional)
+  version = "1.0.0" # 1Module version (mandatory)
+  compile-option = "" # 1Additional compilation options (optional)
+  override-compile-option = "" # 1Additional global compilation options (optional)
+  link-option = "" # 1Linker passthrough options (optional)
+  output-type = "executable" # 1Compilation output type (mandatory)
+  src-dir = "" # 1Source code directory (optional)
+  target-dir = "" # 1Output directory (optional)
+  package-configuration = {} # 1Single-package configuration (optional)
 
-[workspace] # Workspace management field; cannot coexist with [package]
-  members = [] # Workspace member modules (mandatory)
-  build-members = [] # Workspace compilation modules (subset of members, optional)
-  test-members = [] # Workspace test modules (subset of build-members, optional)
-  compile-option = "" # Additional compilation options for all workspace members (optional)
-  override-compile-option = "" # Additional global compilation options for all workspace members (optional)
-  link-option = "" # Linker passthrough options for all workspace members (optional)
-  target-dir = "" # Output directory (optional)
+[workspace] # 1Workspace management field; cannot coexist with [package]
+  members = [] # 1Workspace member modules (mandatory)
+  build-members = [] # 1Workspace compilation modules (subset of members, optional)
+  test-members = [] # 1Workspace test modules (subset of build-members, optional)
+  compile-option = "" # 1Additional compilation options for all workspace members (optional)
+  override-compile-option = "" # 1Additional global compilation options for all workspace members (optional)
+  link-option = "" # 1Linker passthrough options for all workspace members (optional)
+  target-dir = "" # 1Output directory (optional)
 
-[dependencies] # Source code dependencies (optional)
-  coo = { git = "xxx", branch = "dev" } # Git dependency
-  doo = { path = "./pro1" } # Local source dependency
+[dependencies] # 1Source code dependencies (optional)
+  coo = { git = "xxx", branch = "dev" } # 1Git dependency
+  doo = { path = "./pro1" } # 1Local source dependency
 
-[test-dependencies] # Test-phase dependencies (format same as [dependencies], optional)
+[test-dependencies] # 1Test-phase dependencies (format same as [dependencies], optional)
 
-[script-dependencies] # Build script dependencies (format same as [dependencies], optional)
+[script-dependencies] # 1Build script dependencies (format same as [dependencies], optional)
 
-[replace] # Dependency replacement (format same as [dependencies], optional)
+[replace] # 1Dependency replacement (format same as [dependencies], optional)
 
-[ffi.c] # C library dependencies (optional)
+[ffi.c] # 1C library dependencies (optional)
   clib1.path = "xxx"
 
-[profile] # Command profile configuration (optional)
-  build = {} # Build command configuration
-  test = {} # Test command configuration
-  bench = {} # Benchmark command configuration
-  customized-option = {} # Custom passthrough options
+[profile] # 1Command profile configuration (optional)
+  build = {} # 1Build command configuration
+  test = {} # 1Test command configuration
+  bench = {} # 1Benchmark command configuration
+  customized-option = {} # 1Custom passthrough options
 
-[target.x86_64-unknown-linux-gnu] # Backend and platform-specific configuration (optional)
-  compile-option = "value1" # Additional compilation options for specific targets or cross-compilation (optional)
-  override-compile-option = "value2" # Additional global compilation options for specific targets or cross-compilation (optional)
-  link-option = "value3" # Linker passthrough options for specific targets or cross-compilation (optional)
+[target.x86_64-unknown-linux-gnu] # 1Backend and platform-specific configuration (optional)
+  compile-option = "value1" # 1Additional compilation options for specific targets or cross-compilation (optional)
+  override-compile-option = "value2" # 1Additional global compilation options for specific targets or cross-compilation (optional)
+  link-option = "value3" # 1Linker passthrough options for specific targets or cross-compilation (optional)
 
-[target.x86_64-w64-mingw32.dependencies] # Dependencies for specific targets (optional)
+[target.x86_64-w64-mingw32.dependencies] # 1Dependencies for specific targets (optional)
 
-[target.x86_64-w64-mingw32.test-dependencies] # Test-phase dependencies for specific targets (optional)
+[target.x86_64-w64-mingw32.test-dependencies] # 1Test-phase dependencies for specific targets (optional)
 
-[target.x86_64-unknown-linux-gnu.bin-dependencies] # Cangjie binary library dependencies for specific targets or cross-compilation (optional)
-  path-option = ["./test/pro0", "./test/pro1"] # Binary library dependencies via directory paths
-[target.x86_64-unknown-linux-gnu.bin-dependencies.package-option] # Binary library dependencies via single files
+[target.x86_64-unknown-linux-gnu.bin-dependencies] # 1Cangjie binary library dependencies for specific targets or cross-compilation (optional)
+  path-option = ["./test/pro0", "./test/pro1"] # 1Binary library dependencies via directory paths
+[target.x86_64-unknown-linux-gnu.bin-dependencies.package-option] # 1Binary library dependencies via single files
   "pro0.xoo" = "./test/pro0/pro0.xoo.cjo"
   "pro0.yoo" = "./test/pro0/pro0.yoo.cjo"
   "pro1.zoo" = "./test/pro1/pro1.zoo.cjo"
