@@ -975,10 +975,10 @@ let ff = f.call // 报错：不允许值类型赋值。
 
 具体规格如下：
 
-- ObjCFunc<F> 中的 F 必须为合法的仓颉函数类型。
+- ObjCFunc\<F> 中的 F 必须为合法的仓颉函数类型。
 - F 的返回值和参数必须为 ObjC 兼容类型。
 - ObjCFunc 中的 call 属性仅允许被直接调用，禁止用于其他场景（如赋值给变量、作为函数参数等）。
-- 不允许在仓颉侧构造 ObjCFunc<F> 类型对象。
+- 不允许在仓颉侧构造 ObjCFunc\<F> 类型对象。
 
 ### ObjCId
 
@@ -1121,9 +1121,9 @@ class ComponentChild <: Component {
 @end
 ```
 
-ObjC 不认为同参数类型但不同参数名的构造函数属于冲突，但在仓颉中，参数类型一致即认为声明冲突。
+ObjC 中，参数类型相同但参数名不同的构造函数不属于声明冲突，但在仓颉中，参数类型相同即被认为声明冲突，编译时会报错。
 
-<!-- compile-error -->
+<!-- compile.error -->
 
 ```cangjie
 @ObjCMirror
@@ -1137,9 +1137,10 @@ class M {
 
 因此，新增 `@ObjCInit` 注解，通过不同名的静态函数映射 ObjC 中的同类型构造函数。
 
-<!-- compile -->
+<!-- code_no_check -->
 
 ```cangjie
+
 @ObjCMirror
 class M {
     @ObjCInit["initWithA:andB:"]
