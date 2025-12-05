@@ -975,10 +975,10 @@ let ff = f.call // 报错：不允许值类型赋值。
 
 具体规格如下：
 
-- ObjCFunc<F> 中的 F 必须为合法的仓颉函数类型。
+- ObjCFunc\<F> 中的 F 必须为合法的仓颉函数类型。
 - F 的返回值和参数必须为 ObjC 兼容类型。
 - ObjCFunc 中的 call 属性仅允许被直接调用，禁止用于其他场景（如赋值给变量、作为函数参数等）。
-- 不允许在仓颉侧构造 ObjCFunc<F> 类型对象。
+- 不允许在仓颉侧构造 ObjCFunc\<F> 类型对象。
 
 ### ObjCId
 
@@ -1121,9 +1121,9 @@ class ComponentChild <: Component {
 @end
 ```
 
-ObjC 不认为同参数类型但不同参数名的构造函数属于冲突，但在仓颉中，参数类型一致即认为声明冲突。
+ObjC 中，参数类型相同但参数名不同的构造函数不属于声明冲突，但在仓颉中，参数类型相同即被认为声明冲突，编译时会报错。
 
-<!-- compile-error -->
+<!-- compile.error -->
 
 ```cangjie
 @ObjCMirror
@@ -1131,15 +1131,16 @@ class M {
     @ForeignName["initWithA:andB:"]
     public init(a: Int32, b: Float32)
     @ForeignName["initWithC:andD:"]
-    public init(c: Int32, b: Float32) // cjc error, duplicated init type signature
+    public init(c: Int32, b: Float32) // 编译报错，声明冲突
 }
 ```
 
 因此，新增 `@ObjCInit` 注解，通过不同名的静态函数映射 ObjC 中的同类型构造函数。
 
-<!-- compile -->
+<!-- code_no_check -->
 
 ```cangjie
+
 @ObjCMirror
 class M {
     @ObjCInit["initWithA:andB:"]
@@ -1728,6 +1729,6 @@ static struct RuntimeParam defaultCJRuntimeParams = {0};
     - ObjC Mirror 和 Impl 类的实例不能作为其他 ObjC Mirror 或 Impl 对象的字段成员
     - ObjC Mirror 和 Impl 类的实例不能被 Lambda 表达式块或 spawn 线程捕获
 
-3. 版本使用过程中需额外下载依赖文件 `Cangjie.h` (下载地址： <https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/runtime/src/Cangjie.h>),并集成至项目中。
-4. 在仓颉中依赖了 Foundation 中的类型时，例如 NSObject 等，由于 Foundation 实际已被导入，但是 NSObject.h 头文件未被显式指定，因此当前可通过创建同名空头文件，保证编译正常。
-5. 当前 ObjCImpl 的构造函数实现使用 `[self doesNotRecognizeSelecor:_cmd];` 特性，每次均抛出异常，无返回值，因此需关闭 `-Werror=return-type` 的编译期检查能力，保证编译正常。
+3. 使用仓颉与 ObjC 互操作时，需额外下载依赖文件 `Cangjie.h` (下载地址： <https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/runtime/src/Cangjie.h>)，并在编译时通过编译选项指定其所在位置。
+4. 在仓颉中依赖了 Foundation 中的类型（例如 NSObject），且定义改类型的头文件（例如 NSObject.h）未在编译选项中显式指定时，由于实际 Foundation 已被导入，且该类型实际已在 Foundation 中被定义，因此当前可通过创建同名空头文件，保证编译正常。
+5. 当前 ObjCImpl 的构造函数实现使用 `[self doesNotRecognizeSelecor:_cmd];` 特性，运行时总是抛出异常，无需返回值，因此需关闭 `-Werror=return-type` 的编译期检查能力，保证编译正常。
