@@ -1132,8 +1132,13 @@ interface I {
 - 函数类型变量。
 - 互操作场景下的 `inout` 变量。
 - 使用 Common/Platform 特性。详见[跨平台](../multiplatform/common_platform.md)。
+- 使用反射 API 获取信息时，将获取到编译器内部生成的类型。
 
 建议在启动 `mock=on` 模式时，避免在代码中使用上述特性，以确保稳定性。
+
+> 注意：
+>
+> `mock=on` 选项不支持 ABI 兼容性。使用该选项编译的二进制不应该用于分发。
 
 ## 宏选项
 
