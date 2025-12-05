@@ -778,7 +778,7 @@ Example configuration:
   "pro1.zoo" = "./test/pro1/pro1.zoo.cjo"
 ```
 
-For detailed information about CJO files, see [CJO Artifacts](../../dev-guide/source_en/Appendix/cjo_artifacts.md).
+For detailed information about CJO files, see [CJO Artifacts](../../dev-guide-test/source_en/Appendix/cjo_artifacts.md).
 
 Unused fields default to empty (for paths, the default is the directory containing the configuration file).
 

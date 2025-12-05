@@ -712,7 +712,7 @@ attach 29551
 
 1. 先用 `Xcode` 启动被调试程序。
 
-2. 在 `Xcode` 调试窗口的命令行中加载脚本，命令为 `command script import $CANGJIE_HOME/tools/script/cangjie_cjdb.py` ，其中 `$CANGJIE_HOME` 需要替换成仓颉的安装目录。
+2. 在 `Xcode` 调试窗口的命令行中加载脚本，命令为 `command script import $CANGJIE_HOME/tools-test/script/cangjie_cjdb.py` ，其中 `$CANGJIE_HOME` 需要替换成仓颉的安装目录。
    如果希望每次 `Xcode` 启动调试时自动加载脚本，可以在用户目录下创建 `.lldbinit` 文件并输入上述命令。
 
 3. 加载成功以后即可正常进行调试。

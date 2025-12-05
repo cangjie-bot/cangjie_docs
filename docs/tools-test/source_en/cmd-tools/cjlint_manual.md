@@ -72,10 +72,10 @@ cjlint -f ./src -r csv -o ./output/report  // Generates report.csv in the output
 
 By default, `cjlint` uses the `config` and `modules` directories in its installation path. Developers can override these using `-c` and `-m`.
 
-Example: If custom config and modules paths are `./tools/cjlint/config` and `./tools/cjlint/modules` respectively (both under `./tools/cjlint`), the command would be:
+Example: If custom config and modules paths are `./tools-test/cjlint/config` and `./tools-test/cjlint/modules` respectively (both under `./tools-test/cjlint`), the command would be:
 
 ```bash
-cjlint -f ./src -c ./tools/cjlint -m ./tools/cjlint
+cjlint -f ./src -c ./tools-test/cjlint -m ./tools-test/cjlint
 ```
 
 `--import-path` specifies `.cjo` search paths (supports multiple paths).

@@ -22,8 +22,8 @@
 
 ### 新增特性
 
-    * 互操作支持 ObjC 使用 Cangjie 接口，详见[仓颉-ObjC 互操作](../docs/dev-guide/source_zh_cn/multiplatform/cangjie-ios-objc.md)。
-    * 互操作支持 ObjC 使用 Cangjie 枚举类型，详见[仓颉-ObjC 互操作](../docs/dev-guide/source_zh_cn/multiplatform/cangjie-ios-objc.md)。
+    * 互操作支持 ObjC 使用 Cangjie 接口，详见[仓颉-ObjC 互操作](../docs/dev-guide-test/source_zh_cn/multiplatform/cangjie-ios-objc.md)。
+    * 互操作支持 ObjC 使用 Cangjie 枚举类型，详见[仓颉-ObjC 互操作](../docs/dev-guide-test/source_zh_cn/multiplatform/cangjie-ios-objc.md)。
 
 ### 变更特性
 
@@ -41,7 +41,7 @@
 
 ### 新增特性
 
-* 条件编译新增 `env`内置条件变量，在其他条件变量的基础上提供额外信息，比如目标平台的 ABI （Application Binary Interface），用于消除目标平台之间的歧义。新增特性具体描述详见[条件编译](../docs/dev-guide/source_zh_cn/compile_and_build/conditional_compilation.md#内置编译条件变量)
+* 条件编译新增 `env`内置条件变量，在其他条件变量的基础上提供额外信息，比如目标平台的 ABI （Application Binary Interface），用于消除目标平台之间的歧义。新增特性具体描述详见[条件编译](../docs/dev-guide-test/source_zh_cn/compile_and_build/conditional_compilation.md#内置编译条件变量)
 
 ### 变更特性
 

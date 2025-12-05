@@ -72,10 +72,10 @@ cjlint -f ./src -r csv -o ./output/report  // 在output目录下生成report.csv
 
 在默认情况下，`cjlint`会调用其所在目录下的`config`和`modules`作为默认的配置目录和依赖目录。若有需要，开发者可以用命令行选项 `-c`， `-m`来指定`config`和`modules`所在的目录路径。
 
-例：指定的 config 和 modules 的路径分别为：`./tools/cjlint/config` 和 `./tools/cjlint/modules`。则`config`和`modules`所在的目录路径同为`./tools/cjlint`, 所以命令应为：
+例：指定的 config 和 modules 的路径分别为：`./tools-test/cjlint/config` 和 `./tools-test/cjlint/modules`。则`config`和`modules`所在的目录路径同为`./tools-test/cjlint`, 所以命令应为：
 
 ```bash
-cjlint -f ./src -c ./tools/cjlint -m ./tools/cjlint
+cjlint -f ./src -c ./tools-test/cjlint -m ./tools-test/cjlint
 ```
 
 `--import-path` 在开发者需要时用以指定 `cjo` 所在的目录路径，且支持多个路径。
