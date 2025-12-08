@@ -50,35 +50,35 @@ To automatically generate glue code, cjc requires symbol information about the O
 
 **Type Mapping:**
 
-| Cangjie Type                              |                ObjC Type            |
-|:------------------------------------------|:------------------------------------|
-|    `Unit`                                 |        `void`                       |
-|     `Int8`                                |        `signed char`                |
-|    `Int16`                                |        `short`                      |
-|     `Int32`                               |        `int`                        |
-|     `Int64`                               |        `long/NSInteger`             |
-|     `Int64`                               |        `long long`                  |
-|     `UInt8`                               |        `unsigned char`              |
-|    `UInt16`                               |        `unsigned short`             |
-|    `UInt32`                               |        `unsigned int`               |
-|    `UInt64`                               |   `unsigned long/NSUInteger`        |
-|    `UInt64`                               |   `unsugned long long`              |
-|    `Float32`                              |        `float`                      |
-|   `Float64`                               |        `double`                     |
-|  `Bool`                                   |        `bool/BOOL`                  |
-| `?A` where `A` is `class`                 | `A*` where `A` is `@interface`      |
-| `A` where `A` is `class`                  | `nonnull A*`, `A` is `@interface`   |
-| `ObjCPointer<A>` where `A` is `class`     | `A**` where `A` is `@interface`     |
-| `ObjCPointer<A>` where `A` is not `class` | `A*` otherwise                      |
-| `struct A`                                | `@C struct A`                       |
-| `ObjCBlock<F>`                            | block                               |
-| `ObjCFunc<F>`                             | function type                       |
-| `?ObjCId`                                 | `id`                                |
-| `ObjCId`                                  | `nonnull id`                        |
-| `?A` where `A` is `interface`             | `id<A>`                             |
-| `A` where `A` is `interface`              | `nonnull id<A>`                     |
-| `?ObjCId`                                 | `id<A,B>`, `id<A,B,C>`, etc.        |
-| `ObjCId`                                  | `nonnull id<A,B>`, etc.             |
+| Cangjie Type                              |                ObjC Type                    |
+|:------------------------------------------|:--------------------------------------------|
+|    `Unit`                                 |        `void`                               |
+|     `Int8`                                |        `signed char`                        |
+|    `Int16`                                |        `short`                              |
+|     `Int32`                               |        `int`                                |
+|     `Int64`                               |        `long/NSInteger`                     |
+|     `Int64`                               |        `long long`                          |
+|     `UInt8`                               |        `unsigned char`                      |
+|    `UInt16`                               |        `unsigned short`                     |
+|    `UInt32`                               |        `unsigned int`                       |
+|    `UInt64`                               |   `unsigned long/NSUInteger`                |
+|    `UInt64`                               |   `unsugned long long`                      |
+|    `Float32`                              |        `float`                              |
+|   `Float64`                               |        `double`                             |
+|  `Bool`                                   |        `bool/BOOL`                          |
+| `?A` where `A` is `class`                 | `A*` where `A` is `@interface`              |
+| `A` where `A` is `class`                  | `nonnull A*` where `A` is `@interface`      |
+| `ObjCPointer<A>` where `A` is `class`     | `A**` where `A` is `@interface`             |
+| `ObjCPointer<A>` where `A` is not `class` | `A*` otherwise                              |
+| `@C struct A`                             | `struct A`                                  |
+| `ObjCBlock<F>`                            | block                                       |
+| `ObjCFunc<F>`                             | function type                               |
+| `?ObjCId`                                 | `id`                                        |
+| `ObjCId`                                  | `nonnull id`                                |
+| `?A` where `A` is `interface`             | `id<A>`                                     |
+| `A` where `A` is `interface`              | `nonnull id<A>`                             |
+| `?ObjCId`                                 | `id<A,B>`, `id<A,B,C>`, etc.                |
+| `ObjCId`                                  | `nonnull id<A,B>`, etc.                     |
 
 Notes:
 
