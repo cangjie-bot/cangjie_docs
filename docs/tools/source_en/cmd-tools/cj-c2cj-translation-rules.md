@@ -42,7 +42,7 @@ struct Point {
     int z;
 };
 
-struct person {
+struct Person {
     int age;
 };
 
@@ -70,18 +70,17 @@ public struct _cjbind_ty_1 {
 
 @C
 public struct Point {
-    // todo 实现有问题
     public let __cjbind_anon_1: _cjbind_ty_1
     public let z: Int32
 
-    public init(__cjbind_anon_1: _cjbind_ty_1, __cjbind_anon_2: _cjbind_ty_1, z: Int32, __cjbind_anon_3: _cjbind_ty_1) {
+    public init(__cjbind_anon_1: _cjbind_ty_1, z: Int32) {
         this.__cjbind_anon_1 = __cjbind_anon_1
         this.z = z
     }
 }
 
 @C
-public struct person {
+public struct Person {
     public let age: Int32
 
     public init(age: Int32) {
@@ -115,7 +114,7 @@ The generated glue code is as follows:
 
 <!-- compile -->
 ```cangjie
-foreign func testPointer(a: Int32): CPointer
+foreign func testPointer(a: Int32): CPointer<Unit>
 ```
 
 #### Function Types
@@ -286,7 +285,7 @@ The generated corresponding Cangjie code is as follows, and the user needs to ma
 @C
 public struct OpaqueType {
     init() {
-        throw Exception("type should not be inited")
+        throw Exception("This type should be implemented by user")
     }
 }
 
@@ -315,19 +314,15 @@ The generated corresponding Cangjie code is as follows, and the user needs to ma
 <!-- compile -->
 ```cangjie
 @C
-public struct OpaqueType {
-    init() {
-        throw Exception("type should not be inited")
+public struct FlexibleString {
+    public let length: Int32
+    public let data: CPointer<UInt8>
+
+    public init(length: Int32, data: CPointer<UInt8>) {
+        this.length = length
+        this.data = data
     }
 }
-
-foreign func create_opaque(initial_value: Int32): CPointer<OpaqueType>
-
-foreign func set_value(obj: CPointer<OpaqueType>, value: Int32): Unit
-
-foreign func get_value(obj: CPointer<OpaqueType>): Int32
-
-foreign func destroy_opaque(obj: CPointer<OpaqueType>): Unit
 ```
 
 #### Extension Types
@@ -352,12 +347,27 @@ The generated corresponding Cangjie code is as follows, and the user needs to ma
 
 <!-- compile -->
 ```cangjie
-public const pi_high: Float64 = 3.141592653589793
-public const Planck_constant: Float64 = 6.62607015e-34
-public const counter: Int32 = 0i64
+/*FIXME: Non-constant global variable details need to be verified and rewritten by user.*/
+/* float _Complex c_float */
+
+/*FIXME: Non-constant global variable details need to be verified and rewritten by user.*/
+/* double _Complex c_double */
+
+/*FIXME: Non-constant global variable details need to be verified and rewritten by user.*/
+/* long double _Complex c_ld */
+
+/*FIXME: Non-constant global variable details need to be verified and rewritten by user.*/
+/* long double pi_high = 3.14159265358979323846264338327950288L */
+
+/*FIXME: Non-constant global variable details need to be verified and rewritten by user.*/
+/* long double Planck_constant = 6.62607015e-34L */
+
+/*FIXME: Non-constant global variable details need to be verified and rewritten by user.*/
+/* _Atomic ( int ) counter = 0 */
 ```
 
 > Explanation:
 >
 > 1. Memory Alignment: Cangjie does not provide syntax for alignment control, so the HLE tool uses the default C alignment. If the C code uses `#pragma pack` or `__attribute__((packed))` to control alignment, the generated binding code cannot be guaranteed to be correct.
 > 2. Calling Conventions: The Cangjie documentation does not clearly describe calling conventions. In fact, the default calling convention is used. Currently, the HLE tool will try to infer the calling convention based on the function signatures in the C code, but correctness cannot be guaranteed.
+> 3. Usage limitation: Generating the glue code automatically by HLE from C to Cangjie is subject to the system glibc version limit, and currently only supports Ubuntu 22.04 and above.
