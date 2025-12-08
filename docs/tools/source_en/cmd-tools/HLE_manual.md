@@ -1,44 +1,49 @@
 # HLE Tool User Guide
 
-## Introduction to Open Source Project
+## Introduction
 
 `HLE (HyperlangExtension)` is a tool for automatically generating interoperability code templates for Cangjie calling ArkTS or C language.
+The input of this tool is the interface declaration file of ArkTS or C language, such as files ending with .d.ts, .d.ets or .h, and the output is a cj file, which stores the generated interoperability code. If the generated code is a glue layer code from ArkTS to Cangjie, the tool will also output a json file containing all the information of the ArkTS file. For the conversion rules from ArkTS to Cangjie, please refer to: [ArkTS Third-Party Module Generation Cangjie Glue Code Rules](cj-dts2cj-translation-rules.md). For the conversion rules from C language to Cangjie, please refer to: [C Language Conversion to Cangjie Glue Code Rules](cj-c2cj-translation-rules.md).
 
-The input of this tool is the interface declaration file of ArkTS or C language, such as files ending with .d.ts, .d.ets, or .h, and the output is a cj file, which stores the generated interoperability code. If the generated code is a glue layer code from ArkTS to Cangjie, the tool will also output a json file containing all the information of the ArkTS file. For the conversion rules from ArkTS to Cangjie, please refer to: [ArkTS Third-Party Module Generation Cangjie Glue Code Rules](cj-dts2cj-translation-rules.md). For the conversion rules from C language to Cangjie, please refer to: [C Language Conversion to Cangjie Glue Code Rules](cj-c2cj-translation-rules.md).
+## Instructions
 
-## Parameter Meaninog
+### Parameter Meaning
 
-| Parameter | Meaning | Parameter Type | Description |
-| --------------- | ------------------------------------------- | -------- | -------------------- |
-| `-i` | Absolute path of the input d.ts, d.ets, or .h file | Optional | Either this or `-d` can be used, or both may exist |
-| `-r` | Absolute path of the TypeScript compiler | Required | Used only when generating ArkTS Cangjie bindings |
-| `-d` | Absolute path of the folder containing d.ts, d.ets, or .h files | Optional | Either this or `-i` can be used, or both may exist |
-| `-o` | Directory to save the generated interop code | Optional | Defaults to the current directory if not specified |
-| `-j` | Path for analyzing d.t or d.ets files | Optional | Used only when generating ArkTS Cangjie bindings |
-| `--module-name` | Custom generated Cangjie package name | Optional | |
-| `--lib` | Generate third-party library code | Optional | Used only when generating ArkTS Cangjie bindings |
-| `-c` | Generate C to Cangjie binding code | Optional | Used only when generating C language Cangjie bindings |
-| `-b` | Specify the directory of the cjbind binary | Optional | Used only when generating C language Cangjie bindings |
-| `--clang-args` | Arguments passed directly to clang | Optional | Used only when generating C language Cangjie bindings |
-| `--no-detect-include-path` | Disable automatic include path detection | Optional | Used only when generating C language Cangjie bindings |
-| `--help` | Help option | Optional | |
+| Parameter           | Meaning                                       | Parameter Type | Description                  |
+| ------------------- | --------------------------------------------- | -------------- | ---------------------------- |
+| `-i`                | Absolute path of d.ts, d.ets or .h file input | Optional       | Choose one from `-d` or both |
+| `-r`                | Absolute path of typescript compiler          | Required       |                              |
+| `-d`                | Absolute path of the folder where d.ts, d.ets or .h file input is located | Optional       | Choose one from `-i` or both |
+| `-o`                | Directory to save the output interoperability code | Optional       | Output to the current directory by default |
+| `-j`                | Path to analyze d.t or d.ets files            | Optional       |                              |
+| `--module-name`     | Custom generated Cangjie package name         | Optional       |                              |
+| `--lib`             | Generate third-party library code             | Optional       |                              |
+| `-c`                | Generate C to Cangjie binding code             | Optional       |                              |
+| `-b`                | Specify the path of the cjbind binary             | Optional       |                              |
+| `--clang-args`      | Parameters that will be directly passed to clang | Optional       |                              |
+| `--no-detect-include-path` | Disable automatic include path detection    | Optional       |                              |
+| `--help`            | Help option                                   | Optional       |                              |
 
-For example:
+### Command Line
 
-You can use the following command to generate interface glue layer code:
+You can use the following command to generate ArkTS to Cangjie binding code:
 
 ```sh
-main  -i  /path/to/test.d.ts  -o  out  –j  /path/to/analysis.js --module-name=ohos.hilog
+hle -i /path/to/test.d.ts -o out –j ${CANGJIE_HOME}/tools/dtsparser/analysis.js --module-name="my_module"
 ```
 
 In the Windows environment, the file directory currently does not support the symbol "\\", only "/" is supported.
 
-```sh
-main -i  /path/to/test.d.ts -o out -j /path/to/analysis.js --module-name=ohos.hilog
-```
-
-You can use the following command to generate C to Cangjie binding code:
+The command to generate C to Cangjie binding code is as follows:
 
 ```sh
-./target/bin/main -c --module-name="my_module" -d ./tests/c_cases -o ./tests/expected/c_module/ --clang-args="-I/usr/lib/llvm-20/lib/clang/20/include/"
+hle -b ${CANGJIE_HOME}/tools/dtsparser/node_modules/.bin/cjbind -c --module-name="my_module" -d ./tests/c_cases -o ./tests/expected/c_module/ --clang-args="-I/usr/lib/llvm-20/lib/clang/20/include/"
 ```
+
+The `-b` parameter is used to specify the path to the cjbind binary file. The cjbind download link is as follows:
+
+- Linux: 'https://gitcode.com/Cangjie-SIG/cjbind-cangjie/releases/download/v0.2.7/cjbind-linux-x64'
+- Windows: 'https://gitcode.com/Cangjie-SIG/cjbind-cangjie/releases/download/v0.2.7/cjbind-windows-x64.exe'
+- MacOS: 'https://gitcode.com/Cangjie-SIG/cjbind-cangjie/releases/download/v0.2.7/cjbind-darwin-arm64'
+
+The `--clang-args` parameter is directly passed to clang, and the -I option can be used within its value to specify header file search paths. System header file paths are searched automatically by the program, while user-defined header file paths need to be explicitly specified.
