@@ -49,30 +49,35 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 
 **类型映射：**
 
-| 仓颉类型                                   |                ObjC 类型      |
-|:------------------------------------------|:------------------------------|
-|    `Unit`                                 |        `void`                 |
-|     `Int8`                                |        `signed char`          |
-|    `Int16`                                |        `short`                |
-|     `Int32`                               |        `int`                  |
-|     `Int64`                               |        `long/NSInteger`       |
-|     `Int64`                               |        `long long`            |
-|     `UInt8`                               |        `unsigned char`        |
-|    `UInt16`                               |        `unsigned short`       |
-|    `UInt32`                               |        `unsigned int`         |
-|    `UInt64`                               |   `unsigned long/NSUInteger`  |
-|    `UInt64`                               |   `unsugned long long`        |
-|    `Float32`                              |        `float`                |
-|   `Float64`                               |        `double`               |
-|  `Bool`                                   |        `bool/BOOL`            |
-| `A` where `A` is `class`                  | `A*`                          |
-| `ObjCPointer<A>` where `A` is `class`     | `A**`                         |
-| `ObjCPointer<A>` where `A` is not `class` | `A*`                          |
-| `struct A`                                | `@C struct A`                 |
-| `ObjCBlock`                               | `Block`                       |
-| `ObjCFunc`                                | `function type`               |
-| `ObjCId`                                  | `id`                          |
-| `A` where `A` is `interface`              | `id<A>`                       |
+| 仓颉类型                                      | ObjC 类型                    |
+|:------------------------------------------|:---------------------------|
+| `Unit`                                    | `void`                     |
+| `Int8`                                    | `signed char`              |
+| `Int16`                                   | `short`                    |
+| `Int32`                                   | `int`                      |
+| `Int64`                                   | `long/NSInteger`           |
+| `Int64`                                   | `long long`                |
+| `UInt8`                                   | `unsigned char`            |
+| `UInt16`                                  | `unsigned short`           |
+| `UInt32`                                  | `unsigned int`             |
+| `UInt64`                                  | `unsigned long/NSUInteger` |
+| `UInt64`                                  | `unsigned long long`       |
+| `Float32`                                 | `float`                    |
+| `Float64`                                 | `double`                   |
+| `Bool`                                    | `bool/BOOL`                |
+| `?A` where `A` is `class`                 | `A*` where `A` is `@interface`              |
+| `A` where `A` is `class`                  | `nonnull A*` where `A` is `@interface`      |
+| `ObjCPointer<A>` where `A` is `class`     | `A**` where `A` is `@interface`             |
+| `ObjCPointer<A>` where `A` is not `class` | `A*` otherwise                              |
+| `@C struct A`                             | `struct A`                                  |
+| `ObjCBlock<F>`                            | block                                       |
+| `ObjCFunc<F>`                             | function type                               |
+| `?ObjCId`                                 | `id`                                        |
+| `ObjCId`                                  | `nonnull id`                                |
+| `?A` where `A` is `interface`             | `id<A>`                                     |
+| `A` where `A` is `interface`              | `nonnull id<A>`                             |
+| `?ObjCId`                                 | `id<A,B>`, `id<A,B,C>`, etc.                |
+| `ObjCId`                                  | `nonnull id<A,B>`, etc.                     |
 
 注意：
 
@@ -81,6 +86,7 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 3. 匿名 `C enumeration` 的类型不做映射转化
 4. `C unions` 的类型不做映射转化
 5. `const` `volatile` `restrict`  的类型不做映射转化
+6. 如果OC侧方法签名中，返回类型或形参类型被nonnull修饰，则生成的仓颉侧对应类型不进行Option封装。
 
 以仓颉调用 ObjC 为例，整体开发过程描述如下：
 
@@ -432,7 +438,7 @@ class A <: M {
 // M.h
 @interface M : NSObject
 
-@property int f
+@property int f;
 
 @end
 ```
@@ -627,6 +633,29 @@ int main(int argc, char** argv) {
 >
 > 支持在 Impl 类或普通仓颉类中调用 Mirror 类成员，规格一致。
 
+## ObjCMirror 全局函数
+
+支持映射 Objc 中的全局函数，具体示例如下：
+
+```objectivec
+int foo(NSObject* o, double x) { ... }
+```
+
+```cangjie
+@ObjCMirror
+public func foo(o: ?NSObject, x: Float64): Int64
+```
+
+具体规格如下:
+
+- 该函数不能包含函数体
+- 该函数不能标记为 foreign 函数和 const 函数
+- 该函数不能使用泛型
+- 函数的返回类型必须显示指定
+- 函数可以拥有任意个数的形参
+- 不支持 vararg 参数
+- 支持命名形参和形参默认值，当形参拥有默认值时，仓颉侧调用该@ObjCMirror全局函数时可以不提供该实参，OC侧实际调用其全局函数时采用该默认值。
+
 ## ObjCMirror 接口
 
 支持映射 ObjC 中的 `protocol` 为接口，`interface` 为 `open class`，具体示例如下：
@@ -663,7 +692,7 @@ public interface Foo {
 @ObjCMirror
 public open class M {
     public init()
-    public open func acceptFoo(foo: Foo): Unit 
+    public open func acceptFoo(foo: ?Foo): Unit
 }
 ```
 
@@ -675,7 +704,7 @@ public open class M {
 class A <: M {
     public init() {}
 
-    public func acceptFoo(foo: Foo) {
+    public func acceptFoo(foo: ?Foo) {
         foo.foo()
     }
 }
