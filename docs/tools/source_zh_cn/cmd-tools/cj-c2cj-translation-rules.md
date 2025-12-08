@@ -1,6 +1,6 @@
 # C 语言转换到仓颉胶水代码的规则
 
-HLE 自动生成 C 语言到仓颉的胶水代码，支持函数、结构体、枚举和全局变量的翻译，类型支持：基础类型、结构体类型、指针、数组和字符串。 
+HLE 自动生成 C 语言到仓颉的胶水代码，支持函数、结构体、枚举和全局变量的翻译，类型支持：基础类型、结构体类型、指针、数组和字符串。
 
 ### 基础类型
 
@@ -42,7 +42,7 @@ struct Point {
     int z;
 };
 
-struct person {
+struct Person {
     int age;
 };
 
@@ -73,14 +73,14 @@ public struct Point {
     public let __cjbind_anon_1: _cjbind_ty_1
     public let z: Int32
 
-    public init(__cjbind_anon_1: _cjbind_ty_1, __cjbind_anon_2: _cjbind_ty_1, z: Int32, __cjbind_anon_3: _cjbind_ty_1) {
+    public init(__cjbind_anon_1: _cjbind_ty_1, z: Int32) {
         this.__cjbind_anon_1 = __cjbind_anon_1
         this.z = z
     }
 }
 
 @C
-public struct person {
+public struct Person {
     public let age: Int32
 
     public init(age: Int32) {
@@ -114,7 +114,7 @@ void* testPointer(int a);
 
 <!-- compile -->
 ```cangjie
-foreign func testPointer(a: Int32): CPointer
+foreign func testPointer(a: Int32): CPointer<Unit>
 ```
 
 #### 函数类型
@@ -285,7 +285,7 @@ void destroy_opaque(OpaqueType* obj);
 @C
 public struct OpaqueType {
     init() {
-        throw Exception("type should not be inited")
+        throw Exception("This type should be implemented by user")
     }
 }
 
@@ -314,19 +314,15 @@ typedef struct {
 <!-- compile -->
 ```cangjie
 @C
-public struct OpaqueType {
-    init() {
-        throw Exception("type should not be inited")
+public struct FlexibleString {
+    public let length: Int32
+    public let data: CPointer<UInt8>
+
+    public init(length: Int32, data: CPointer<UInt8>) {
+        this.length = length
+        this.data = data
     }
 }
-
-foreign func create_opaque(initial_value: Int32): CPointer<OpaqueType>
-
-foreign func set_value(obj: CPointer<OpaqueType>, value: Int32): Unit
-
-foreign func get_value(obj: CPointer<OpaqueType>): Int32
-
-foreign func destroy_opaque(obj: CPointer<OpaqueType>): Unit
 ```
 
 #### 扩展类型
@@ -352,12 +348,28 @@ _Atomic(int) counter = 0;
 
 <!-- compile -->
 ```cangjie
-public const pi_high: Float64 = 3.141592653589793
-public const Planck_constant: Float64 = 6.62607015e-34
-public const counter: Int32 = 0
+/*FIXME: Non-constant global variable details need to be verified and rewritten by user.*/
+/* float _Complex c_float */
+
+/*FIXME: Non-constant global variable details need to be verified and rewritten by user.*/
+/* double _Complex c_double */
+
+/*FIXME: Non-constant global variable details need to be verified and rewritten by user.*/
+/* long double _Complex c_ld */
+
+/*FIXME: Non-constant global variable details need to be verified and rewritten by user.*/
+/* long double pi_high = 3.14159265358979323846264338327950288L */
+
+/*FIXME: Non-constant global variable details need to be verified and rewritten by user.*/
+/* long double Planck_constant = 6.62607015e-34L */
+
+/*FIXME: Non-constant global variable details need to be verified and rewritten by user.*/
+/* _Atomic ( int ) counter = 0 */
 ```
 
 > 说明：
 > 
 > 1. 内存对齐：仓颉没有提供对齐控制的语法，因此 HLE工具使用 C 默认的对齐方式。如果 C 代码中使用了 `#pragma pack` 或者 `__attribute__((packed))` 等方式来控制对齐，生成的绑定代码不保证正确性。
 > 2. 调用约定：仓颉文档中对于调用约定描述不清晰，其实是采用了默认的调用约定，目前HLE工具会尝试根据C代码中的函数签名推断调用约定，但是不保证正确性。
+
+> 3. 使用限制：HLE 自动生成 C 语言到仓颉的胶水代码受到系统 glibc 版本 限制，当前仅支持Ubuntu 24.04系统。
