@@ -637,7 +637,7 @@ int main(int argc, char** argv) {
 
 支持映射 Objc 中的全局函数，具体示例如下：
 
-```objectivec
+```objec
 int foo(NSObject* o, double x) { ... }
 ```
 
