@@ -567,6 +567,7 @@ $ cjc test.cj --pgo-instr-use=default.profdata -o testOptimized
 | aarch64-apple-darwin | aarch64-linux-android31 | cangjie-sdk-mac-aarch64-android.x.y.z.tar.gz |
 | aarch64-apple-darwin | aarch64-apple-ios | cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz |
 | aarch64-apple-darwin | aarch64-apple-ios-simulator | cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz |
+| x86_64-apple-darwin | x86_64-apple-ios-simulator | cangjie-sdk-mac-x86_64-ios.x.y.z.tar.gz |
 
 在使用 `--target` 指定目标平台进行交叉编译之前，请准备好对应目标平台的交叉编译工具链，以及可以在本地平台上运行的、向该目标平台编译的对应 Cangjie SDK 版本。
 

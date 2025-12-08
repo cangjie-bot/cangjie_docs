@@ -78,9 +78,9 @@ $ adb shell "LD_LIBRARY_PATH=/data/local/tmp /data/local/tmp/main"
 
 ### 安装包下载
 
-支持交叉编译至 `iOS` 的仓颉安装包 `cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz`。
+支持交叉编译至 `iOS` 的仓颉安装包 `cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz`以及 `cangjie-sdk-mac-x86_64-ios.x.y.z.tar.gz`。
 
-若需要在 `macOS aarch64` 平台交叉编译至 `iOS`，可以下载安装 `cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz` 仓颉软件包。仓颉运行时以及标准库默认支持运行于 `iOS 11` 及以上系统（对于例外场景，请见《仓颉编程语言库 API》手册）。
+若需要在 `macOS` 平台交叉编译至 `iOS`，可根据开发设备架构选择对应的仓颉软件包。开发设备为 `aarch64` 可以下载安装 `cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz` 仓颉软件包。开发设备为 `x86_64` 可以下载安装 `cangjie-sdk-mac-x86_64-ios.x.y.z.tar.gz` 软件包。仓颉运行时以及标准库默认支持运行于 `iOS 11` 及以上系统（对于例外场景，请见《仓颉编程语言库 API》手册）。
 
 除了支持交叉编译的仓颉软件包，还需要下载 `Xcode`。下载完成后，请在 Xcode 中安装 iOS 开发组件。具体步骤可参考 Xcode 手册中的 "Downloading and installing additional Xcode components" 章节。
 
@@ -93,7 +93,7 @@ $ adb shell "LD_LIBRARY_PATH=/data/local/tmp /data/local/tmp/main"
 
 若需要在 iOS 模拟器上运行，需要指定以下选项：
 
-- `--target=aarch64-apple-ios-simulator` 指定目标平台 `ios-simulator` 进行交叉编译
+- `--target=aarch64-apple-ios-simulator` 或 `--target=x86_64-apple-ios-simulator`指定目标平台 `ios-simulator` 进行交叉编译
 - `--output-type=staticlib` 指定输出文件的类型为静态库
 
 编译产物需要添加至 `Xcode` 工程中，并通过 `Xcode` 构建 `iOS` 应用。
