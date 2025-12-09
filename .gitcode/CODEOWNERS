@@ -27,7 +27,7 @@
 /docs/dev-guide/source_zh_cn/class_and_interface/ @Mr_Kang_Yi @Timi3 @wuying21
 /docs/dev-guide/source_zh_cn/collections/ @EMROF @chaosjohn @wuying21
 /docs/dev-guide/source_zh_cn/compile_and_build/cjc_usage.md @neilliuistaken @ozzy_young @wuying21
-/docs/dev-guide/source_zh_cn/compile_and_build/cjpm_usage.md @zjdd @zxudong @wuying21
+/docs/dev-guide/source_zh_cn/compile_and_build/cjpm_usage.md @zjdd @wuying21
 /docs/dev-guide/source_zh_cn/compile_and_build/conditional_compilation.md @xiaoxuheng @mini-tang @wuying21
 /docs/dev-guide/source_zh_cn/compile_and_build/cross_compilation.md @neilliuistaken @ozzy_young @wuying21
 /docs/dev-guide/source_zh_cn/concurrency/ @cocoix @chaosjohn @wuying21
@@ -61,7 +61,7 @@
 /docs/dev-guide/source_en/class_and_interface/ @Mr_Kang_Yi @Timi3 @guoyuqing
 /docs/dev-guide/source_en/collections/ @EMROF @chaosjohn @guoyuqing
 /docs/dev-guide/source_en/compile_and_build/cjc_usage.md @neilliuistaken @ozzy_young @guoyuqing
-/docs/dev-guide/source_en/compile_and_build/cjpm_usage.md @zjdd @zxudong @guoyuqing
+/docs/dev-guide/source_en/compile_and_build/cjpm_usage.md @zjdd @guoyuqing
 /docs/dev-guide/source_en/compile_and_build/conditional_compilation.md @xiaoxuheng @mini-tang @guoyuqing
 /docs/dev-guide/source_en/compile_and_build/cross_compilation.md @neilliuistaken @ozzy_young @guoyuqing
 /docs/dev-guide/source_en/concurrency/ @cocoix @chaosjohn @guoyuqing
@@ -81,4 +81,4 @@
 /docs/dev-guide/source_en/struct/ @Cangjie-hljyaozhen @Timi3 @guoyuqing
 
 # 指定docs/tools目录下文件的Code Owner
-/docs/tools/ @chopupu @zjdd @zxudong @Ant2024
+/docs/tools/ @chopupu @zxudong
