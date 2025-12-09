@@ -232,7 +232,6 @@ main() {
 Calling conventions describe how callers and callees interact (e.g., parameter passing, stack cleanup). Both sides must use the same calling convention. Cangjie uses `@CallingConv` to represent calling conventions, supporting:
 
 - **CDECL**: Default calling convention for clang's C compiler across platforms.
-- **STDCALL**: Calling convention used by Win32 APIs.
 
 C functions called via FFI use `CDECL` by default when no calling convention is specified. Example calling C's `rand`:
 
