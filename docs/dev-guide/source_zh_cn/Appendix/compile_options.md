@@ -1677,6 +1677,30 @@ It is resumed, a = 9
 >
 > 该选项仅能用于编译仓颉标准库 core 包，不能用于编译其他仓颉代码的场景。
 
+### 打印 AST
+
+可通过 `--dump-ast`<sup>[frontend]</sup>打印 AST。默认输出到文件，产物目录会创建以包名（或使用 `-o` 指定的产物名）命名的 *_AST 目录，文件命名为 `编号_编译阶段名称_ast.txt`。加上 --dump-to-screen<sup>[frontend]</sup> 可输出到屏幕。
+
+### 打印 CHIR
+
+可通过 `--dump-chir`<sup>[frontend]</sup>打印 CHIR。默认输出到文件，产物目录会创建以包名（或使用 `-o` 指定的产物名）命名的 *_CHIR 目录，文件命名为 `编号_PASS阶段名称.chirtxt`。加上 --dump-to-screen<sup>[frontend]</sup> 可输出到屏幕。
+
+### 打印 LLVM IR
+
+可通过 `--dump-ir`<sup>[frontend]</sup>打印 LLVM IR。默认输出到文件，产物目录会创建以包名（或使用 `-o` 指定的产物名）命名的 *_IR 目录并在 *_IR 目录下创建 `编号_CodeGen阶段名称` 子文件夹，文件名为 `子模块编号加-包名.ll`， 子模块的编号和数量与编译并发度相关。加上 --dump-to-screen<sup>[frontend]</sup> 可输出到屏幕。
+
+### 打印 AST, CHIR, LLVM IR
+
+可通过 `--dump-all`<sup>[frontend]</sup>打印 AST, CHIR, LLVM IR。默认输出到文件，产物目录会创建以包名（或使用 `-o` 指定的产物名）命名的 *_AST, *_CHIR, *_IR 目录。加上 --dump-to-screen<sup>[frontend]</sup> 可输出到屏幕。
+
+### 将 dump 内容打印到屏幕上
+
+可通过 `--dump-to-screen`<sup>[frontend]</sup> 配合前端相关的转储选项（如 `--dump-ast`<sup>[frontend]</sup>， `--dump-chir`<sup>[frontend]</sup>, `--dump-ir`<sup>[frontend]</sup>和 `--dump-all`<sup>[frontend]</sup>）将相应的中间表示文本内容打印到屏幕上。
+
+> **注意：**
+>
+> 输出到屏幕时仅显示最终结果；输出到文件时会在产物目录下创建以 `_AST`, `_CHIR`, `_IR` 为后缀的目录，用以保存中间过程的详细信息。
+
 ## `cjc` 用到的环境变量
 
 这里介绍一些仓颉编译器在编译代码的过程中可能使用到的环境变量。
