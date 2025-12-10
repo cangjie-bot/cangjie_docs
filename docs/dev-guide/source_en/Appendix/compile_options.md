@@ -1510,7 +1510,7 @@ This feature is not supported when compiling Windows targets.
 
 ### Incremental Compilation
 
-Enable incremental compilation with `--incremental-compile`<sup>[frontend]</sup>. When enabled, `cjc` uses cache files from previous compilations to speed up the current compilation.
+Enable incremental compilation with `--incremental-compile` <sup>[frontend]</sup>. When enabled, `cjc` uses cache files from previous compilations to speed up the current compilation.
 
 > **Note:**
 >
@@ -1518,7 +1518,7 @@ Enable incremental compilation with `--incremental-compile`<sup>[frontend]</sup>
 
 ### Output CHIR
 
-Use `--emit-chir=[raw|opt]`<sup>[frontend]</sup> to specify output of serialized CHIR compilation phase products. `raw` outputs CHIR before compiler optimization, `opt` outputs CHIR after optimization. Using `--emit-chir` defaults to outputting optimized CHIR.
+Use `--emit-chir=[raw|opt]` <sup>[frontend]</sup> to specify output of serialized CHIR compilation phase products. `raw` outputs CHIR before compiler optimization, `opt` outputs CHIR after optimization. Using `--emit-chir` defaults to outputting optimized CHIR.
 
 ### `--no-prelude` <sup>[frontend]</sup>
 
@@ -1527,6 +1527,30 @@ Disables automatic import of the standard library core package.
 > **Note:**
 >
 > This option can only be used when compiling the Cangjie standard library core package, not for other Cangjie code compilation scenarios.
+
+### Dump AST
+
+You can dump the AST using `--dump-ast` <sup>[frontend]</sup>. By default, the output is written to a file. The output directory will create a folder named with the package name (or the product name specified with `-o`) followed by *_AST. Files are named as `number_phase_ast.txt`. Adding `--dump-to-screen` <sup>[frontend]</sup> will dump the output to the screen.
+
+### Dump CHIR
+
+You can dump CHIR using `--dump-chir` <sup>[frontend]</sup>. By default, the output is written to a file. The output directory will create a folder named with the package name (or the product name specified with `-o`) followed by *_CHIR. Files are named as `number_phase.chirtxt`. Adding `--dump-to-screen` <sup>[frontend]</sup> will dump the output to the screen.
+
+### Dump LLVM IR
+
+You can dump LLVM IR using `--dump-ir` <sup>[frontend]</sup>. By default, the output is written to a file. The output directory will create a folder named with the package name (or the product name specified with `-o`) followed by *_IR. Inside the *_IR directory, subfolders named `number_phase` will be created. Files are named as `submoduleNumber-packageName.ll`. The numbering and quantity of submodules depend on the compilation concurrency. Adding `--dump-to-screen` <sup>[frontend]</sup> will dump the output to the screen.
+
+### Dump AST, CHIR, LLVM IR
+
+You can dump AST, CHIR, and LLVM IR using `--dump-all` <sup>[frontend]</sup>. By default, the output is written to a file. The output directory will create *_AST, *_CHIR, and *_IR folders named with the package name (or the product name specified with `-o`). Adding `--dump-to-screen` <sup>[frontend]</sup> will dump the output to the screen.
+
+### Dump content to the screen
+
+You can use `--dump-to-screen` <sup>[frontend]</sup> together with frontend-related dump options (such as `--dump-ast` <sup>[frontend]</sup>, `--dump-chir` <sup>[frontend]</sup>, `--dump-ir` <sup>[frontend]</sup>, and `--dump-all` <sup>[frontend]</sup>) to dump the corresponding intermediate representation text content to the screen.
+
+> **Note:**
+>
+> When outputting to the screen, only the final result is displayed. When outputting to files, the output directory will contain folders with suffixes `_AST`, `_CHIR`, and `_IR` to store detailed information about intermediate processes.
 
 ## Environment Variables Used by `cjc`
 
