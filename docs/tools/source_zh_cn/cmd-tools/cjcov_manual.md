@@ -203,9 +203,9 @@ line number:    4  ==>  data: [(0, 0), (1, 1)]
 ```text
 /work/cangjie/tests/API/test01/src/1.cj
 /work/cangjie/tests/API/test01/src/2.cj
-/work/cangjie/tests/LLVM/test02/src/3.cj
-/work/cangjie-tools/tests/LLVM/test01/src/4.cj
-/work/cangjie-tools/tests/LLVM/test02/src/5.cj
+/work/cangjie/tests/cjnative/test02/src/3.cj
+/work/cangjie-tools/tests/cjnative/test01/src/4.cj
+/work/cangjie-tools/tests/cjnative/test02/src/5.cj
 ```
 
 1. 在 `/work` 目录执行命令：
@@ -219,9 +219,9 @@ line number:    4  ==>  data: [(0, 0), (1, 1)]
     ```text
     tests/API/test01/src/1.cj
     tests/API/test01/src/2.cj
-    tests/LLVM/test02/src/3.cj
-    LLVM/test01/src/4.cj
-    LLVM/test02/src/5.cj
+    tests/cjnative/test02/src/3.cj
+    cjnative/test01/src/4.cj
+    cjnative/test02/src/5.cj
     ```
 
 2. 在 `/work` 目录执行命令, 没有指定 `--root` 参数和 `--source` 参数，默认当前所在路径为相对路径的参考路径，执行命令如下：
@@ -235,9 +235,9 @@ line number:    4  ==>  data: [(0, 0), (1, 1)]
     ```text
     cangjie/tests/API/test01/src/1.cj
     cangjie/tests/API/test01/src/2.cj
-    cangjie/tests/LLVM/test02/src/3.cj
-    cangjie-tools/tests/LLVM/test01/src/4.cj
-    cangjie-tools/tests/LLVM/test02/src/5.cj
+    cangjie/tests/cjnative/test02/src/3.cj
+    cangjie-tools/tests/cjnative/test01/src/4.cj
+    cangjie-tools/tests/cjnative/test02/src/5.cj
     ```
 
 ### -e EXCLUDE | --exclude=EXCLUDE
@@ -251,23 +251,23 @@ line number:    4  ==>  data: [(0, 0), (1, 1)]
 ```text
 /usr1/cangjie/tests/API/test01/src/1.cj
 /usr1/cangjie/tests/API/test01/src/2.cj
-/usr1/cangjie/tests/LLVM/test02/src/3.cj
-/usr1/cangjie-tools/tests/LLVM/test01/src/4.cj
-/usr1/cangjie-tools/tests/LLVM/test02/src/5.cj
+/usr1/cangjie/tests/cjnative/test02/src/3.cj
+/usr1/cangjie-tools/tests/cjnative/test01/src/4.cj
+/usr1/cangjie-tools/tests/cjnative/test02/src/5.cj
 ```
 
 在 `/usr1` 目录执行命令：
 
 ```shell
-cjcov --root=./ -s "/usr1/cangjie" -e "/usr1/cangjie-tools/tests/LLVM" --html-details --output=html_output
+cjcov --root=./ -s "/usr1/cangjie" -e "/usr1/cangjie-tools/tests/cjnative" --html-details --output=html_output
 ```
 
-最后 `html` 中呈现的源文件相对路径是,其中以 `/usr1/cangjie-tools/tests/LLVM` 路径开头的文件不会出现在 `html` 的文件列表中。
+最后 `html` 中呈现的源文件相对路径是,其中以 `/usr1/cangjie-tools/tests/cjnative` 路径开头的文件不会出现在 `html` 的文件列表中。
 
 ```text
 tests/API/test01/src/1.cj
 tests/API/test01/src/2.cj
-tests/LLVM/test02/src/3.cj
+tests/cjnative/test02/src/3.cj
 ```
 
 ### -i INCLUDE | --include=INCLUDE
@@ -284,7 +284,7 @@ tests/LLVM/test02/src/3.cj
 │       └── src
 │           ├── 1.cj
 │           └── 2.cj
-└── LLVM
+└── cjnative
     └── test02
         └── src
             └── 3.cj
@@ -293,14 +293,14 @@ tests/LLVM/test02/src/3.cj
 在 `/usr1` 目录执行命令, 其中 `-i` 参数表示需要体现在覆盖率报告 `index.html` 的文件，命令如下：
 
 ```shell
-cjcov --root=./ -s "/usr1/cangjie" -i "/usr1/cangjie/tests/API/test01/src/1.cj /usr1/cangjie/tests/LLVM/test02" --html-details --output=html_output
+cjcov --root=./ -s "/usr1/cangjie" -i "/usr1/cangjie/tests/API/test01/src/1.cj /usr1/cangjie/tests/cjnative/test02" --html-details --output=html_output
 ```
 
 上面命令执行后, 在 `index.html` 中文件路径列表如下(`tests/API/test01/src/2.cj` 不在 `-i` 参数指定的列表里面，所以不会出现在 `html` 的文件列表中):
 
 ```text
 tests/API/test01/src/1.cj
-tests/LLVM/test02/src/3.cj
+tests/cjnative/test02/src/3.cj
 ```
 
 ## 特殊场景
