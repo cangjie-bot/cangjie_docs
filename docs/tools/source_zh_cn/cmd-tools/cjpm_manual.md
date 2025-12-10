@@ -62,6 +62,7 @@ Available options:
   --target <value>              generate code for the given target platform
   --target-dir <value>          specify target directory
   -o, --output <value>          specify product name when compiling an executable file
+  -l, --lint                    enable cjlint code check
   --mock                        enable support of mocking classes in tests
   --skip-script                 disable script 'build.cj'.
 ```
@@ -242,11 +243,12 @@ cjpm tree success
 - `-V, --verbose` 用于展示编译日志
 - `-g` 用于生成 `debug` 版本的输出产物
 - `--coverage` 用于生成覆盖率信息，默认情况下不开启覆盖率功能
-- `--cfg` 指定后，能够透传 `cjpm.toml` 中的自定义 `cfg` 选项，`cjpm.toml` 中的配置可参考 [profile.customized-option](#profile.customized-option) 章节
+- `--cfg` 指定后，能够透传 `cjpm.toml` 中的自定义 `cfg` 选项，`cjpm.toml` 中的配置可参考 [profile.customized-option](#profilecustomized-option) 章节
 - `-m, --member <value>` 仅可在工作空间下使用，可用于指定单个模块作为编译入口
 - `--target <value>` 指定后，可交叉编译代码到目标平台，`cjpm.toml` 中的配置可参考 [target](#target) 章节
 - `--target-dir <value>` 用于指定输出产物的存放路径
 - `-o, --output <value>` 用于指定输出可执行文件的名称，默认名称为 `main`（`Windows` 系统下则默认为 `main.exe`）。注意，当前不支持编译名称为 `cjc` 的可执行文件
+- `-l, --lint` 用于在编译时调用仓颉语言静态检查工具进行代码检查
 - `--mock` 带有此选项的构建版本中的类可用于在测试中进行 `mock` 测试
 - `--skip-script` 配置后，将会跳过构建脚本的编译运行
 
@@ -256,6 +258,7 @@ cjpm tree success
 > - `-i, --incremental` 选项目前仅支持基于源码的增量分析。如果导入的库内容有变更，需要开发者重新使用全量方式构建。
 
 编译生成的中间文件默认会存放在 `target` 文件夹，而可执行文件会根据编译模式存放到 `target/release/bin` 或 `target/debug/bin` 文件夹。运行可执行文件的方式可参考 `run`。
+
 为了提供可复制的构建，此命令会创建 `cjpm.lock` 文件，该文件包含所有可传递依赖项的确切版本，这些依赖项将用于所有后续构建，需要更新该文件时请使用 `update` 命令。如果有必要保证每个项目参与者都有可复制的构建，那么此文件应提交到版本控制系统中。
 
 例如：
@@ -509,10 +512,11 @@ Error: cjpm build failed
     - `nCores` 指定了并行的测试进程个数应该等于可用的 CPU 核数
     - `NUMBER` 指定了并行的测试进程个数值。该数值应该为正整数
     - `NUMBERnCores` 指定了并行的测试进程个数值为可用的 CPU 核数的指定数值倍。该数值应该为正数（支持浮点数或整数）
+- `--show-tags` 用于在测试报告中显示测试用例中 `@Tag` 的信息。在 `--dry-run` 模式下，并且测试报告为 `xml` 格式时，将始终包含 `Tag` 信息
 - `--show-all-output` 启用测试输出打印，包括通过的测试用例
 - `--no-capture-output` 禁用测试输出捕获，输出将在测试执行期间立即打印
 - `--report-path <value>` 指定测试执行后的报告生成路径
-- `--report-format <value>` 指定报告输出格式，当前单元测试报告仅支持 `xml` 格式（可忽略大小写），使用其它值将会抛出异常
+- `--report-format <value>` 指定报告输出格式，当前单元测试报告仅支持 `xml` 和 `xml-per-package` 格式（可忽略大小写），使用其它值将会抛出异常
 - `--skip-script` 配置后，将会跳过构建脚本的编译运行
 - `--no-progress` 禁用进度报告。如果指定选项 `--dry-run`，则隐含选项 `--no-progress`
 - `--progress-brief` 显示简短（单行）进度报告而不是详细进度报告
@@ -525,8 +529,9 @@ Error: cjpm build failed
 ```text
 输入：
 cjpm test src --coverage
+cjcov --root=./ --html-details -o html_output
 输出：cjpm test success
-覆盖率数据生成：在 cov_output 目录下对应模块的目录中，会生成 gcno 和 gcda 文件
+覆盖率生成：在 html_output 目录下会生成 html 文件，总的覆盖率报告文件名固定为 index.html
 ```
 
 ```text
@@ -602,6 +607,7 @@ Summary: TOTAL: 1
     - `--exclude-tags=Unittest+Smoke+JiraTask3271` 运行所有未被标记为 `@Tag[Unittest, Smoke, JiraTask3271]` 同时都有的测试
     - `--include-tags=Unittest --exclude-tags=Smoke` 运行所有被标记为 `@Tag[Unittest]` 且不带有 `@Tag[Smoke]` 的测试
 - `--no-color` 关闭控制台颜色显示
+- `--show-tags` 用于在测试报告中显示测试用例中 `@Tag` 的信息。在 `--dry-run` 模式下，并且测试报告为 `xml` 格式时，将始终包含 `Tag` 信息
 - `--random-seed <N>` 用来指定随机种子的值
 - `--report-path <value>` 指定执行后生成报告的路径。与 `test` 子命令不同，它具有默认值 `bench_report`
 - `--report-format <value>` 性能测试报告仅支持 `csv` 和 `csv-raw` 格式
@@ -708,7 +714,7 @@ cjpm install --git url              # 从 git 对应地址安装
 
 配置文件代码如下所示：
 
-```text
+```toml
 [package] # 单模块配置字段，与 workspace 字段不能同时存在
   cjc-version = "1.0.0" # 所需 `cjc` 的最低版本要求，必需
   name = "demo" # 模块名及模块 root 包名，必需
@@ -865,7 +871,15 @@ target-dir = "temp"
 
 ### "package-configuration"
 
-每个模块的单包可配置项。该选项是个 `map` 结构，需要配置的包名作为 `key`，单包配置信息作为 `value`。当前可配置的信息包含输出类型和条件选项（`output-type`,`compile-option`），这几个选项可缺省按需配置。如下所示，`demo` 模块中的 `demo.aoo` 包的输出类型会被指定为动态库类型，`-g` 命令会在编译时透传给 `demo.aoo` 包。
+每个模块的单包可配置项。该选项是个 `map` 结构，需要配置的包名作为 `key`，单包配置信息作为 `value`。当前可配置的信息包含：
+
+- `output-type`：包编译产物类型，取值同 [`output-type`](#output-type)
+- `compile-option`：仅用于该包的额外编译选项
+- `combine-all-deps`：工程级编译产物合并开关，取值为 `true/false`，仅可配置于 `root` 包
+
+上述选项均可按需配置。
+
+如下所示，`demo` 模块中的 `demo.aoo` 包的输出类型会被指定为动态库类型，`-g` 命令会在编译时透传给 `demo.aoo` 包。
 
 ```text
 [package.package-configuration."demo.aoo"]
@@ -925,6 +939,16 @@ src
 |-- demo.boo
 `-- demo
 ```
+
+`combine-all-deps = true` 配置后，可以开启工程级别的编译产物合并。该配置仅在以下条件下生效：
+
+- 开启模块级动态库合并 `profile.build.combined` 和 `LTO` 编译优化 `profile.build.lto` （参考 [`profile.build` 字段](#profilebuild)）；
+- 配置的模块为当前执行的 `cjpm build` 命令对应的模块，并且配置的包为该模块的 `root` 包。配置在当前模块的非 `root` 包中，或配置在被依赖的模块中的该字段将被忽略。
+
+在满足上述配置条件后，该模块会按照如下方式编译：
+
+- 除该模块 `root` 包以外的所有包（该模块下的所有子包，以及该模块直接、间接依赖的其他模块的包含 `root` 包的所有包），会以 `LTO` 优化编译模式编译成 `.bc` 文件；
+- 该模块的 `root` 包会被编译成动态库，并且链入上述所有 `.bc` 文件，无论对应的包是否被该 `root` 包导入。
 
 ### "workspace"
 
@@ -1179,7 +1203,7 @@ demo = "dynamic"
 > - 目前 `profile.build.combined` 配置项为实验特性，暂不稳定，开发者若想启用该配置，需要注意如下限制：
 >     - 如果配置了该字段的模块直接或间接依赖了其他源码模块，那么这些依赖模块也需要配置该字段；
 >     - 构建脚本依赖的源码模块中，若配置了 `profile.build.combined`，不会生效；
->     - 编译产物目标平台为 `macOS` 时，暂不支持 `profile.build.combined` 选项。
+>     - `profile.build.combined` 选项仅支持 `Linux/OHOS/Windows` 平台。
 
 若启用了 `combined` 配置，可能会出现无法通过导入关系识别的循环依赖，导致出现 `cyclic dependency` 循环依赖报错，解决方式如下：
 
@@ -1222,7 +1246,7 @@ PATH = { value = "/usr/bin", splice-type = "prepend" }
     - `random-seed` 用来指定随机种子的值，参数值类型为正整数
     - `no-color` 指定执行结果在控制台中是否无颜色显示，值为 `true` 或 `false`
     - `report-path` 指定测试执行后的报告生成路径（不能通过 `@Configure` 配置）
-    - `report-format` 指定报告输出格式，当前当前单元测试报告仅支持 `xml` 格式（可忽略大小写），使用其它值将会抛出异常（不能通过 `@Configure` 配置），性能测试报告仅支持 `csv` 和 `csv-raw` 格式
+    - `report-format` 指定报告输出格式，当前当前单元测试报告仅支持 `xml` 和 `xml-per-package` 格式（可忽略大小写），使用其它值将会抛出异常（不能通过 `@Configure` 配置），性能测试报告仅支持 `csv` 和 `csv-raw` 格式
     - `verbose` 指定显示编译过程详细信息，参数值类型为 `BOOL`，即值可为 `true` 或 `false`
 
 #### "profile.test.build"
@@ -1263,7 +1287,7 @@ verbose = true
     - `random-seed` 用来指定随机种子的值, 参数值类型为正整数
     - `no-color` 指定执行结果在控制台中是否无颜色显示，值为 `true` 或 `false`
     - `report-path` 指定测试执行后的报告生成路径（不能通过 `@Configure` 配置）
-    - `report-format` 指定报告输出格式，当前当前单元测试报告仅支持 `xml` 格式（可忽略大小写），使用其它值将会抛出异常（不能通过 `@Configure` 配置）, 性能测试报告仅支持 `csv` 和 `csv-raw` 格式
+    - `report-format` 指定报告输出格式，当前当前单元测试报告仅支持 `xml` 和 `xml-per-package` 格式（可忽略大小写），使用其它值将会抛出异常（不能通过 `@Configure` 配置）, 性能测试报告仅支持 `csv` 和 `csv-raw` 格式
     - `verbose` 指定显示编译过程详细信息，参数值类型为 `BOOL`, 即值可为 `true` 或 `false`
     - `baseline-path` 与当前性能结果进行比较的现有报告的路径。默认情况下它使用 `--report-path` 值。
 
@@ -1798,11 +1822,12 @@ cj_project
 - 新建仓颉项目并编写源码 `xxx.cj` 文件，如示例结构所示的 `koo` 包和 `main.cj` 文件。
 
     ```shell
-    cjpm init --name test --path .../cj_project
-    mkdir koo
+    cjpm init --name test --path ./cj_project
+    cd cj_project
+    mkdir src/koo
     ```
 
-    此时，会自动生成 `src` 文件夹和默认的 `cjpm.toml` 配置文件。
+    此时，会在当前执行命令的目录下创建 `cj_project` 目录，并在该目录中自动生成 `src` 文件夹和默认的 `cjpm.toml` 配置文件。开发者可以自行在源码目录 `src` 中新建子包（如 `src/koo`），或是自行在各包中新增源码文件和测试文件。
 
 - 当前模块需要依赖外部的 `pro0` 模块时，可以新建 `pro0` 模块及该模块的配置文件，接下来编写该模块的源码文件，需要自行在 `pro0` 下新建 `src` 文件夹，在 `src` 下新建 `pro0` 的 root 包 `pro0.cj`，并将编写的仓颉包放置在 `src` 下，如示例结构所示的 `zoo` 包。
 
