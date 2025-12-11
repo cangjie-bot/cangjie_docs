@@ -3,5 +3,7 @@
     - [Debugging Tool](source_en/cmd-tools/cjdb_manual.md)
     - [Formatting Tool](source_en/cmd-tools/cjfmt_manual.md)
     - [HLE Tool](source_en/cmd-tools/HLE_manual.md)
+        - [Conversion Rules for Generating Cangjie Glue Code from ArkTS Third-Party Modules](source_en/cmd-tools/cj-dts2cj-translation-rules.md)
+        - [Rules for Converting C Language to Cangjie Glue Code](source_en/cmd-tools/cj-c2cj-translation-rules.md)
     - [Language Server Tool](source_en/cangjie-language-server/LSPServer_manual.md)
     - [CHIR Deserialization Tool](source_en/cmd-tools/chir_dis_manual.md)

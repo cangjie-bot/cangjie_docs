@@ -7,7 +7,7 @@
 通过 `cjpm -h` 即可查看主界面，由几个板块组成，从上到下分别是： 当前命令说明、使用示例（Usage）、支持的可用命令（Available subcommands）、支持的配置项（Available options）、更多提示内容。
 
 ```text
-Cangjie Package Manager
+Cangjie Project Manager
 
 Usage:
   cjpm [subcommand] [option]
