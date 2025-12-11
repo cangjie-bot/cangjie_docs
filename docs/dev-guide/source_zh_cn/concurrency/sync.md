@@ -32,6 +32,7 @@
 以 `Int8` 类型为例，对应的原子操作类型声明如下：
 
 <!-- code_no_check -->
+
 ```cangjie
 class AtomicInt8 {
     public func load(): Int8
@@ -51,6 +52,7 @@ class AtomicInt8 {
 类似的，其他整数类型对应的原子操作类型有：
 
 <!-- code_no_check -->
+
 ```cangjie
 class AtomicInt16 {...}
 class AtomicInt32 {...}
@@ -175,6 +177,7 @@ true
 `Mutex` 提供的主要成员函数如下：
 
 <!-- code_no_check -->
+
 ```cangjie
 public class Mutex <: UniqueLock {
     // Create a Mutex.
@@ -401,6 +404,7 @@ count = 220
 `Condition` 是与某个互斥锁绑定的条件变量（也就是等待队列），`Condition` 实例由互斥锁创建，一个互斥锁可以创建多个 `Condition` 实例。`Condition` 可以使线程阻塞并等待来自另一个线程的信号以恢复执行。这是一种利用共享变量进行线程同步的机制，主要提供如下方法：
 
 <!-- code_no_check -->
+
 ```cangjie
 public class Mutex <: UniqueLock {
     // ...
@@ -720,6 +724,7 @@ in main, count = 10
 使用 core 包中的 `ThreadLocal` 可以创建并使用线程局部变量，每一个线程都有它独立的一个存储空间来保存这些线程局部变量。因此，在每个线程可以安全地访问他们各自的线程局部变量，而不受其他线程的影响。
 
 <!-- code_no_check -->
+
 ```cangjie
 public class ThreadLocal<T> {
     /* 构造一个携带空值的仓颉线程局部变量 */

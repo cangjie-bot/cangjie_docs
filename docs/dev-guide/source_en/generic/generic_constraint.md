@@ -18,7 +18,6 @@ In Cangjie, the `println` function can accept parameters of type string. If you 
 
 <!-- code_no_check -->
 
-
 ```cangjie
 package std.core // `ToString` is defined in core.
 

@@ -23,6 +23,7 @@
 可以使用三种静态的 `of` 方法来生成 TypeInfo 信息类。
 
 <!-- code_no_check -->
+
 ```cangjie
 public class TypeInfo {
     public static func of(a: Any): TypeInfo
@@ -61,6 +62,7 @@ default.Foo
 此外 TypeInfo 还提供了静态函数 `get`，该接口可通过传入的类型名称获取 TypeInfo。
 
 <!-- code_no_check -->
+
 ```cangjie
 public class TypeInfo {
     public static func get(qualifiedName: String): TypeInfo

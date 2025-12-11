@@ -31,6 +31,7 @@ Notes:
 Taking the `Int8` type as an example, the corresponding atomic operation type declaration is as follows:
 
 <!-- code_no_check -->
+
 ```cangjie
 class AtomicInt8 {
     public func load(): Int8
@@ -50,6 +51,7 @@ Each method of the above atomic types has a corresponding overload that accepts 
 Similarly, the corresponding atomic operation types for other integer types are:
 
 <!-- code_no_check -->
+
 ```cangjie
 class AtomicInt16 {...}
 class AtomicInt32 {...}
@@ -173,6 +175,7 @@ When using a reentrant mutex, two rules must be remembered:
 The main member functions provided by `Mutex` are as follows:
 
 <!-- code_no_check -->
+
 ```cangjie
 public class Mutex <: UniqueLock {
     // Create a Mutex.
@@ -396,6 +399,7 @@ In the above example, whether in the main thread or the newly created thread, if
 A `Condition` is a condition variable (i.e., a wait queue) bound to a mutex. `Condition` instances are created by mutexes, and a single mutex can create multiple `Condition` instances. A `Condition` allows threads to block and wait for a signal from another thread to resume execution. This is a mechanism for thread synchronization using shared variables, providing the following main methods:
 
 <!-- code_no_check -->
+
 ```cangjie
 public class Mutex <: UniqueLock {
     // ...
@@ -712,6 +716,7 @@ In practice, the line `in thread` is not printed because the `break` statement c
 The `ThreadLocal` class in the core package allows creating and using thread-local variables. Each thread has its own independent storage space for these variables. Therefore, each thread can safely access its own thread-local variables without interference from other threads.
 
 <!-- code_no_check -->
+
 ```cangjie
 public class ThreadLocal<T> {
     /* Constructs a Cangjie thread-local variable with a null value. */

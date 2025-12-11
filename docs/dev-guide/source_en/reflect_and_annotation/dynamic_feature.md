@@ -21,6 +21,7 @@ For Cangjie's reflection feature, it is essential to understand the `TypeInfo` t
 Three static `of` methods can be used to generate `TypeInfo` information classes.
 
 <!-- code_no_check -->
+
 ```cangjie
 public class TypeInfo {
     public static func of(a: Any): TypeInfo
@@ -59,6 +60,7 @@ default.Foo
 Additionally, `TypeInfo` provides a static function `get`, which retrieves `TypeInfo` by passing in a type name.
 
 <!-- code_no_check -->
+
 ```cangjie
 public class TypeInfo {
     public static func get(qualifiedName: String): TypeInfo
