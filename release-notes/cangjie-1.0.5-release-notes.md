@@ -4,17 +4,17 @@
 
 该版本版本号 `1.0.5` ，构建时间 xxx，构建 id xxx。
 
-本版本**相对于xxx版本**新增，删除，变更特性和修复问题做一个总结，描述需要开发者关注的重大特性和问题修复。
+本版本**相对于 `1.0.4` 版本**新增，删除，变更特性和修复问题做一个总结，描述需要开发者关注的重大特性和问题修复。
 
-* 请注意，本版本相对于前一个版本**存在不兼容变更**，详情请见 [不兼容变更说明](#不兼容变更说明) 章节。
+- 请注意，本版本相对于前一个版本**存在不兼容变更**，详情请见 [不兼容变更说明](#不兼容变更说明) 章节。
 
-* 本版本新增 xxx，xxx 等特性。
+- 本版本新增 `--no-prelude`、`--dump-ast`、`--dump-chir`、`--dump-ir`、`--dump-all`、`--dump-to-screen` 选项等特性。
 
-* 删除 xxx，xxx 等特性。
+- 删除 xxx，xxx 等特性。
 
-* xxx 等特性发生了变更。
+- xxx 等特性发生了变更。
 
-* 修复了 xxx 等若干 bug。
+- 修复了 xxx 等若干 bug。
 
 详见后续章节介绍。
 
@@ -25,6 +25,8 @@
 ### 新增特性
 
 - cjc 支持 `--no-prelude` 选项（仅用于构建 std.core 包使用）
+
+- 新增 `--dump-ast`、`--dump-chir`、`--dump-ir`、`--dump-all`、`--dump-to-screen` 选项供编译器开发者调试分析编译器行为，查看编译过程中的可读形式的抽象表达，详见[编译选项](../docs/dev-guide/source_zh_cn/Appendix/compile_options.md)。
 
 ### 变更特性
 
@@ -61,7 +63,6 @@
 ### 修复问题
 
 - 【[issue227](https://gitcode.com/Cangjie/cangjie_runtime/issues/227)】RelWithDebInfo 下交叉编译 windows 报错: error: unsupported option '-fdebug-types-section' for target 'x86\_64-w64-windows-gnu'。
-
 
 ## 工具链
 
