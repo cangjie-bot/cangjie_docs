@@ -1,18 +1,18 @@
-# Conversion Rules for Generating Cangjie Glue Code from ArkTS Third-Party Modules
+# ArkTS Third-Party Module Generation Rules for Cangjie Glue Code
 
-## Top-level Declarations
+## Top-Level Declarations
 
-| .d.ts    | Support Scope                                                     | Specification Constraints                                                     |
+| .d.ts    | Supported Scope                                              | Specifications                                               |
 | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Namespace | None                                                           | Not Supported                                                     |
-| Global Functions | Supports Overloading and Generic Functions                                                     | |
-| Global Variables | Requires Manual User Modification to Correct Initialization Values                             | Generic Type Global Variables Are Not Supported                                       |
-| Interfaces     | Supports Basic Type Interfaces, Optional Properties, Readonly Properties, Member Functions, Generics, Function Overloading, Array Types, Inheritance, and Nested Objects | Does Not Support Index Signatures, Dynamic Properties, Function Types, Constructors, or Declaration Merging |
-| Type Aliases | Supports Enum Type Aliases, Class Type Aliases, Function Type Aliases, and Union Type Aliases  | Does Not Support Object Literal Type Aliases, Type Aliases of Types within Namespaces, Intersection Type Aliases, or Generic Type Aliases |
-| Class       | Supports constructor, static member, private member, protected member, private property, generic member, abstract class, class implementing interface, inheritance, and overloaded methods. | Does not support decorated classes or types with namespaces.                           |
-| Enum     | Supports string enum, numeric enum, constant enum, and heterogeneous enum.                 | Does not support computed enum values. In heterogeneous enums, enum values are uniformly converted to string type; users must manually convert them when used. |
-| Import     | Supported                                                           |                                                        |
-| Export     | None                                                           | Not Supported                                                       |
+| Namespace | None                                                         | Not supported                                               |
+| Global Functions | Supports overloading, supports generic functions             |                                                              |
+| Global Variables | Requires manual modification to correct initialization values | Does not support generic type global variables              |
+| Interfaces | Supports basic type interfaces, optional properties, readonly properties, member functions, generics, function overloading, array types, inheritance, nested objects | Does not support index signatures, dynamic properties, function types, constructors, declaration merging |
+| Type Aliases | Supports enum type aliases, class type aliases, function type aliases, union type aliases | Does not support object literal type aliases, type aliases within namespaces, intersection type aliases, generic type aliases |
+| Classes | Supports constructors, static members, private members, protected members, private properties, generic members, abstract classes, class implementing interfaces, class inheritance, overloaded methods | Does not support decorated classes, types with namespaces   |
+| Enums | Supports string enums, numeric enums, const enums, heterogeneous enums | Does not support computed value enums. In heterogeneous enums, enum values will be uniformly converted to string type, requiring manual conversion during usage |
+| Imports | Supported                                                    |                                                              |
+| Exports | None                                                         | Not supported                                               |
 
 ### Namespace
 
@@ -21,8 +21,8 @@ Currently not supported
 ### Global Functions
 
 - Supports overloading.
-- Supported parameter and return value types: basic types, function types, tuple types, optional types, and generic functions.
-- Union types (parameters with union types are mapped to multiple type overloads).
+- Parameter and return value types supported: basic types, function types, tuple types, optional types, generic functions.
+- Union types (parameters of union type will be mapped to multiple type overloads).
 
 Example:
 
@@ -33,7 +33,7 @@ declare function greeter(fn: (a: string) => void): void;
 declare function printToConsole(s: string): void;
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 import ohos.ark_interop.*
@@ -69,7 +69,7 @@ Generic function example:
 declare function testMultiGenericT<T, M>(t: T, m: M): T;
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 /**
@@ -85,7 +85,7 @@ public func testMultiGenericT < T, M >(t: T, m: M): T where T <: JSInteropType<T
 
 ### Global Variables
 
-- As global variable declarations lack initial values, the generated Cangjie Code requires users to complete the initialization.
+- Since global variable declarations do not include initial values, the generated Cangjie code requires users to complete the initialization values.
 
 Example:
 
@@ -97,7 +97,7 @@ declare const goo: number;
 declare let qoo: number;
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public const foo = !!!!!check in dts!!!!!
@@ -109,10 +109,10 @@ public const qoo = !!!!!check in dts!!!!!
 
 ### Interfaces
 
-- Supports basic types, optional properties, readonly properties, member functions, generics, function overloading, and array types.
-- Does not support index signatures, inheritance, dynamic properties, nested objects, function types, constructors, or declaration merging.
+- Supports basic types, optional properties, readonly properties, member functions, generics, function overloading, array types.
+- Does not support index signatures, inheritance, dynamic properties, nested objects, function types, constructors, declaration merging.
 
-#### Basic types
+#### Basic Types
 
 .d.ts code:
 
@@ -124,7 +124,7 @@ interface GreetingSettings {
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class GreetingSettings {
@@ -166,18 +166,18 @@ public class GreetingSettings {
 }
 ```
 
-#### Optional Property
+#### Optional Properties
 
 .d.ts code:
 
 ```typescript
 // product.d.ts
 interface Product {
-  price?: number; // 可选属性
+  price?: number; // Optional property
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class Product {
@@ -207,7 +207,7 @@ public class Product {
 }
 ```
 
-#### Readonly Property
+#### Readonly Properties
 
 .d.ts code:
 
@@ -219,7 +219,7 @@ interface Point {
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class Point {
@@ -246,7 +246,7 @@ public class Point {
 }
 ```
 
-#### Function Type
+#### Function Types
 
 .d.ts code:
 
@@ -257,9 +257,9 @@ interface Callback {
 }
 ```
 
-Not currently supported
+Currently not supported
 
-#### Member Function
+#### Member Functions
 
 .d.ts code:
 
@@ -271,7 +271,7 @@ interface Person {
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class Person {
@@ -322,7 +322,7 @@ interface Calculator {
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class Calculator {
@@ -353,7 +353,7 @@ public class Calculator {
 }
 ```
 
-#### Array Type
+#### Array Types
 
 .d.ts code:
 
@@ -365,7 +365,7 @@ interface List {
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class List {
@@ -432,7 +432,7 @@ interface F extends C {
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public open class A {
@@ -574,7 +574,7 @@ public open class F <: C {
 }
 ```
 
-#### Nested objects
+#### Nested Objects
 
 .d.ts code:
 
@@ -590,7 +590,7 @@ interface UserProfile {
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 
@@ -649,7 +649,7 @@ public open class UserProfile {
 
 Currently not supported
 
-#### Index Signature
+#### Index Signatures
 
 .d.ts code:
 
@@ -658,7 +658,7 @@ Currently not supported
 interface Dictionary {
   [key: string]: string;
 }
-// 使用
+// Usage
 const dict: Dictionary = {
   name: 'Alice',
   job: 'Developer',
@@ -666,9 +666,9 @@ const dict: Dictionary = {
 console.log(dict['name']); // Alice
 ```
 
-Not currently supported
+Currently not supported
 
-#### Dynamic Property
+#### Dynamic Properties
 
 .d.ts code:
 
@@ -683,7 +683,7 @@ Currently not supported
 
 
 
-#### Constructor
+#### Constructors
 
 .d.ts code:
 
@@ -698,9 +698,9 @@ Currently not supported
 ### Type Aliases
 
 - Supports enum type aliases, class type aliases, function type aliases, and union type aliases.
-- Does not support object literal type aliases, type aliases of types within namespaces, intersection type aliases, or generic type aliases.
+- Does not support object literal type aliases, type aliases for types within namespaces, intersection type aliases, or generic type aliases.
 
-#### Object Literal Type Alias
+#### Object Literal Type Aliases
 
 .d.ts code:
 
@@ -715,7 +715,7 @@ Currently not supported
 
 Currently not supported
 
-#### Enum Type Alias
+#### Enum Type Aliases
 
 .d.ts code:
 
@@ -729,13 +729,13 @@ declare enum Colors {
 type ColorAlias = Colors;
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public type ColorAlias = Colors
 ```
 
-#### Class Type Alias
+#### Class Type Aliases
 
 .d.ts code:
 
@@ -749,13 +749,13 @@ public type ColorAlias = Colors
   type AnimalAlias = Animal;
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public type AnimalAlias = Animal
 ```
 
-#### Type Alias of Types within a Namespace
+#### Type Aliases for Types Within Namespaces
 
 .d.ts code:
 
@@ -771,7 +771,7 @@ type RectangleAlias = Shapes.Rectangle;
 
 Currently not supported
 
-#### Function Type Alias
+#### Function Type Aliases
 
 .d.ts code:
 
@@ -779,13 +779,13 @@ Currently not supported
 type MathOperation = (a: number, b: number) => number;
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public type MathOperation = (a: Float64, b: Float64) -> Float64
 ```
 
-#### Union Type Alias
+#### Union Type Aliases
 
 .d.ts code:
 
@@ -793,7 +793,7 @@ public type MathOperation = (a: Float64, b: Float64) -> Float64
 type GreetingLike = string | number;
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public enum GreetingLike {
@@ -809,7 +809,7 @@ public enum GreetingLike {
 }
 ```
 
-#### Intersection Type Alias
+#### Intersection Type Aliases
 
 .d.ts code:
 
@@ -823,7 +823,7 @@ interface Point {
 
 Currently not supported
 
-#### Generic Type Alias
+#### Generic Type Aliases
 
 .d.ts code:
 
@@ -837,12 +837,12 @@ interface Point {
 
 Currently not supported
 
-### Class
+### Classes
 
-- Supports constructors, static members, private members, protected members, private properties, generic members, abstract classes, classes implementing interfaces, inheritance, and overloaded methods.
+- Supports constructors, static members, private members, protected members, private properties, generic members, abstract classes, class implementation of interfaces, class inheritance, and method overloading.
 - Does not support index signatures, inheritance, dynamic properties, nested objects, function types, or constructors.
 
-#### Constructor
+#### Constructors
 
 .d.ts code:
 
@@ -854,7 +854,7 @@ declare class Greeter {
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class Greeter {
@@ -904,28 +904,28 @@ public class Greeter {
 
 ```
 
-#### Static Member
+#### Static Members
 
 .d.ts code:
 
 ```typescript
 // MathUtils.d.ts
 declare class MathUtils {
-  // 静态属性
+  // Static property
   static PI: number;
-  // 静态方法
+  // Static method
   static square(x: number): number;
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class MathUtils {
 
     protected MathUtils(let arkts_object: JSObject) {}
 
-    // 静态属性
+    // Static property
     public mut prop PI: Float64 {
         get() {
             checkThreadAndCall < Float64 >(getMainContext()) {
@@ -957,23 +957,23 @@ public class MathUtils {
 }
 ```
 
-#### Private Member
+#### Private Members
 
 .d.ts code:
 
 ```typescript
 declare class Person {
-    // 私有属性
+    // Private property
     private age: number;
 
   }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class Person {
-    // 不需要生成私有成员属性
+    // No need to generate private member properties
     protected Person(let arkts_object: JSObject) {}
 
     func toJSValue(context: JSContext): JSValue {
@@ -986,28 +986,28 @@ public class Person {
 }
 ```
 
-#### Protected Member
+#### Protected Members
 
 .d.ts code:
 
 ```typescript
 declare class AnimalProtect {
-    // 受保护属性
+    // Protected property
     protected name: string;
 
-    // 受保护方法
+    // Protected method
     protected makeSound(): void;
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class AnimalProtect {
 
     protected AnimalProtect(let arkts_object: JSObject) {}
 
-    // 受保护属性
+    // Protected property
     public mut prop name: String {
         get() {
             checkThreadAndCall < String >(getMainContext()) {
@@ -1039,26 +1039,26 @@ public class AnimalProtect {
 }
 ```
 
-#### Readonly Property
+#### Readonly Properties
 
 .d.ts code:
 
 ```typescript
 declare class Car {
-    // 只读属性
+    // Readonly property
     readonly brand: string;
     name: string
   }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class Car {
 
     protected Car(let arkts_object: JSObject) {}
 
-    // 只读属性
+    // Readonly property
     public prop brand: String {
         get() {
             checkThreadAndCall < String >(getMainContext()) {
@@ -1092,27 +1092,27 @@ public class Car {
 }
 ```
 
-#### Generic Member
+#### Generic Members
 
 .d.ts code:
 
 ```typescript
 declare class Box<T> {
-    // 属性
+    // Property
     value: T;
-    // 方法
+    // Method
     getValue(): T;
   }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class Box<T> {
 
     protected Box(let arkts_object: JSObject) {}
 
-    // 属性
+    // Property
     public mut prop value: T {
         get() {
             checkThreadAndCall < T >(getMainContext()) {
@@ -1146,18 +1146,18 @@ public class Box<T> {
 }
 ```
 
-#### Abstract Class
+#### Abstract Classes
 
 .d.ts code:
 
 ```typescript
 declare abstract class Shape {
-    // 抽象方法
+    // Abstract method
     abstract getArea(): number;
   }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public open class Shape {
@@ -1181,7 +1181,7 @@ public open class Shape {
 }
 ```
 
-#### Class Implementing Interface
+#### Class Implementation of Interfaces
 
 .d.ts code:
 
@@ -1197,7 +1197,7 @@ declare class Car implements Drivable {
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class Drivable {
@@ -1254,7 +1254,7 @@ public class Car1 <: Drivable {
 }
 ```
 
-#### Inherited Class
+#### Class Inheritance
 
 .d.ts code:
 
@@ -1272,7 +1272,7 @@ declare class Dog extends Animal {
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class Animal1 {
@@ -1341,22 +1341,22 @@ public class Dog <: Animal1 {
 }
 ```
 
-#### Overloaded Method
+#### Method Overloading
 
 .d.ts code:
 
 ```typescript
 declare class Calculator {
-    // 方法重载
+    // Method overloading
     add(x: number, y: number): number;
     add(x: string, y: string): string;
 
-    // 实现
+    // Implementation
     add(x: any, y: any): any;
   }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class Calculator {
@@ -1395,7 +1395,7 @@ public class Calculator {
 }
 ```
 
-#### Class with Decorators
+#### Classes with Decorators
 
 .d.ts code:
 
@@ -1412,7 +1412,7 @@ declare class MyClass {
 
 Currently not supported
 
-#### Class with Namespace
+#### Classes with Namespaces
 
 .d.ts code:
 
@@ -1429,12 +1429,12 @@ declare namespace Shapes {
 
 Currently not supported
 
-### Enum
+### Enumerations
 
-- Supports string enums, numeric enums, constant enums, and heterogeneous enums. In Cangjie glue code, all enum values of heterogeneous enums are converted to string type regardless of their original type. Therefore, when invoking the glue code, developers must manually convert heterogeneous enum members of non-string types (e.g., number) back to their original types as defined in ArkTS.
-- Does not support computed enum values.
+- Supports string enums, numeric enums, const enums, and heterogeneous enums. In Cangjie glue code, all enum values in heterogeneous enums will be converted to string type. Therefore, when developers invoke the glue code, they need to manually convert non-string type enum members (e.g., `number` type) in heterogeneous enums to their original types as defined in ArkTS.
+- Computed value enums are not supported.
 
-#### String Enum
+#### String Enums
 
 .d.ts code:
 
@@ -1447,7 +1447,7 @@ declare enum Colors {
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public enum Colors <: ToString & Equatable < Colors > {
@@ -1498,7 +1498,7 @@ public enum Colors <: ToString & Equatable < Colors > {
 }
 ```
 
-#### Numeric Enum
+#### Numeric Enums
 
 .d.ts code:
 
@@ -1511,7 +1511,7 @@ declare enum Status {
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public enum Status <: ToString & Equatable < Status > {
@@ -1566,7 +1566,7 @@ public enum Status <: ToString & Equatable < Status > {
 }
 ```
 
-#### Constant Enum
+#### Const Enums
 
 .d.ts code:
 
@@ -1579,7 +1579,7 @@ declare const enum Status {
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public enum Status <: ToString & Equatable < Status > {
@@ -1634,7 +1634,7 @@ public enum Status <: ToString & Equatable < Status > {
 }
 ```
 
-#### Heterogeneous Enum
+#### Heterogeneous Enums
 
 .d.ts code:
 
@@ -1646,7 +1646,7 @@ declare enum Response {
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public enum Response <: ToString & Equatable < Response > {
@@ -1695,11 +1695,11 @@ public enum Response <: ToString & Equatable < Response > {
 
 ## Type Mapping Relationships
 
-The conversion of ArkTS .d.ts interfaces to interoperable Cangjie Code supports the following type conversions: primitive types, Array types, Function types, Optional types, Object types, tuple types, Union types, and Promise types.
+The conversion of ArkTS `.d.ts` interfaces to interoperable Cangjie code supports the following type conversions: basic types, Array types, function types, Optional types, Object types, tuple types, Union types, and Promise types.
 
-Unsupported types will default to the JSValue type, and a FIXME comment—specifying the original .d.ts declaration type—will be added. Additionally, the command line will display warning messages for unsupported types.
+For unsupported types, they will default to the `JSValue` type, accompanied by a `FIXME` comment (containing the original type from the `.d.ts` declaration). A warning message will also be printed in the command line indicating the unsupported type.
 
-- 注释的格式
+- Comment format:
 
   .d.ts code:
 
@@ -1707,36 +1707,36 @@ Unsupported types will default to the JSValue type, and a FIXME comment—specif
   type TA80 = undefined;
   ```
 
-  对应的仓颉代码：
+  Corresponding Cangjie code:
 
   ```typescript
-  // 对应的仓颉代码的类型是JSValue，并且会带FIXME的注释信息，其中填写的.d.ts中声明的类型
+  // The corresponding Cangjie code type is JSValue, with a FIXME comment containing the original .d.ts declared type
   public type TA80 = JSValue/* FIXME: `undefined` */
   ```
 
-- 告警信息的格式：
+- Warning message format:
 
   ```typescript
   WARNING: type is not supported - undefined
   ```
 
-### 基础类型
+### Basic Types
 
-支持的数据类型有：
+Supported data types:
 
-| ArkTS类型 | 仓颉类型 |
-| --------- | -------- |
-| string    | String   |
-| number    | Float64  |
-| boolean   | bool     |
-| bigint    | BigInt   |
-| object    | JSValue  |
-| symbol    | JSValue  |
-| void      | Unit     |
-| undefined | JSValue  |
-| any       | Any      |
-| unknown   | JSValue  |
-| never     | JSValue  |
+| ArkTS Type | Cangjie Type |
+| ---------- | ------------ |
+| string     | String       |
+| number     | Float64      |
+| boolean    | bool         |
+| bigint     | BigInt       |
+| object     | JSValue      |
+| symbol     | JSValue      |
+| void       | Unit         |
+| undefined  | JSValue      |
+| any        | Any          |
+| unknown    | JSValue      |
+| never      | JSValue      |
 
 Example:
 
@@ -1758,7 +1758,7 @@ interface BasicTypes {
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class BasicTypes {
@@ -1814,14 +1814,14 @@ public class BasicTypes {
 
 ### Array
 
-Array目前支持4种类型转换：
+Currently supports four types of array conversions:
 
-| ArkTS类型                     | 仓颉类型       |
-| ----------------------------- | -------------- |
-| Uint8Array                    | Array\<UInt8>   |
-| ArrayBuffer                   | Array\<UInt8>   |
-| Float32Array                  | Array\<Float32> |
-| 基本类型的array，比如number[] | Array\<Float64> |
+| ArkTS Type                   | Cangjie Type      |
+| ---------------------------- | ----------------- |
+| Uint8Array                   | Array\<UInt8>     |
+| ArrayBuffer                  | Array\<UInt8>     |
+| Float32Array                 | Array\<Float32>   |
+| Basic type arrays (e.g., `number[]`) | Array\<Float64>   |
 
 Example:
 
@@ -1836,7 +1836,7 @@ interface arrayInterface {
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class arrayInterface {
@@ -1869,12 +1869,12 @@ public class arrayInterface {
 }
 ```
 
-### Function Type
+### Function Types
 
-- 支持接口属性、函数参数。
-- `Function`类型不支持转换。
+- Supports interface properties and function parameters.
+- The `Function` type does not support conversion.
 
-#### 接口属性
+#### Interface Properties
 
 Example:
 
@@ -1890,7 +1890,7 @@ interface TestListener {
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class TestListener {
@@ -1997,7 +1997,7 @@ public class TestListener {
 }
 ```
 
-#### 函数参数
+#### Function Parameters
 
 Example:
 
@@ -2009,7 +2009,7 @@ interface MyListener {
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class MyListener {
@@ -2046,7 +2046,7 @@ public class MyListener {
 }
 ```
 
-### Optional类型
+### Optional Types
 
 Example:
 
@@ -2059,7 +2059,7 @@ interface Optionals {
 }
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class Optionals {
@@ -2103,7 +2103,7 @@ public class Optionals {
 }
 ```
 
-### Object 类型
+### Object Types
 
 Example:
 
@@ -2117,9 +2117,9 @@ interface ObjectTypes<U, T> {
 }
 ```
 
-当前类型不支持，会默认转换成JSValue。
+Current type is not supported and will be converted to JSValue by default.
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class ObjectTypes<U, T> {
@@ -2149,7 +2149,7 @@ public class ObjectTypes<U, T> {
 }
 ```
 
-### tuple 类型
+### Tuple Types
 
 Example:
 
@@ -2159,15 +2159,15 @@ Example:
 tupleType: [number, number, string];
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public var tupleType: Tuple<Float64, Float64, String>
 ```
 
-### Union 类型
+### Union Types
 
-- 目前只支持union类型作为类型别名和函数参数。
+- Currently only supports union types as type aliases and function parameters.
 
 Example:
 
@@ -2177,7 +2177,7 @@ Example:
 type ARK1 = null | number | string | boolean | Uint8Array | Float32Array | bigint;
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public enum ARK1 {
@@ -2215,7 +2215,7 @@ public enum ARK2 {
 }
 ```
 
-### Promise 类型
+### Promise Types
 
 .d.ts code:
 
@@ -2223,13 +2223,13 @@ public enum ARK2 {
 typeReference21: Promise<T>;
 ```
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public var typeReference21: Promise<T>,
 ```
 
-### 交叉类型
+### Intersection Types
 
 .d.ts code:
 
@@ -2239,9 +2239,9 @@ interface IntersectionTypes<U, T> {
 }
 ```
 
-当前类型不支持，会默认转换成JSValue。
+Current type is not supported and will be converted to JSValue by default.
 
-Generated Cangjie Code:
+Generated Cangjie code:
 
 ```cangjie
 public class IntersectionTypes<U, T> {
@@ -2265,9 +2265,9 @@ public class IntersectionTypes<U, T> {
 }
 ```
 
-### Import
+### Imports
 
-- 目前导入会翻译，但是还是需要用户收到确认修改。
+- Currently imports will be translated, but manual confirmation and modification by users is still required.
 
 .d.ts code:
 
