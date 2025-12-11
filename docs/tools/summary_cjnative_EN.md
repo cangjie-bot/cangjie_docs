@@ -1,5 +1,5 @@
 - [Tool Usage Guide](source_en/command_line_overview.md)
-    - [Package Management Tool](source_en/cmd-tools/cjpm_manual.md)
+    - [Project Management Tool](source_en/cmd-tools/cjpm_manual.md)
     - [Debugging Tool](source_en/cmd-tools/cjdb_manual.md)
     - [Formatting Tool](source_en/cmd-tools/cjfmt_manual.md)
     - [HLE Tool](source_en/cmd-tools/HLE_manual.md)
