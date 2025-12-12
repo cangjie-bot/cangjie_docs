@@ -77,7 +77,7 @@ c = b'\u{90}' - b'\u{66}' + c   // c is 162 with type UInt8
 
 Integer types natively support the following operators: arithmetic operators, bitwise operators, relational operators, increment and decrement operators, and compound assignment operators. The precedence of these operators can be found in the [Operators](../Appendix/operator.md) section of the appendix.
 
-Conversions are allowed between integer types, as well as between integer and floating-point types. Integer types can also be converted to character types. For specific syntax and rules on type conversions, refer to [Numeric Type Conversions](../class_and_interface/typecast.md#numeric-type-conversions).
+Conversions are allowed between integer types, as well as between integer and floating-point types. Integer types can also be converted to character types. For specific syntax and rules on type conversions, refer to [Numeric Type Conversions](../class_and_interface/typecast.md#type-conversion).
 
 > **Note:**
 >

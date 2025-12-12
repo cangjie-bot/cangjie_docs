@@ -48,4 +48,4 @@ Compiling and executing the above code will output:
 
 Character types support the following operators: relational operators, namely less than (`<`), greater than (`>`), less than or equal to (`<=`), greater than or equal to (`>=`), equal to (`==`), and not equal to (`!=`). These comparisons are based on the Unicode values of the characters.
 
-`Rune` can be converted to `UInt32`, and integer types can be converted to `Rune`. For specific type conversion syntax and rules, please refer to [`Rune` to `UInt32` and Integer Type to `Rune` Conversion](../class_and_interface/typecast.md#rune-到-uint32-和整数类型到-rune-的转换).
+`Rune` can be converted to `UInt32`, and integer types can be converted to `Rune`. For specific type conversion syntax and rules, please refer to [`Rune` to `UInt32` and Integer Type to `Rune` Conversion](../class_and_interface/typecast.md#conversion-from-rune-to-uint32-and-from-integer-types-to-rune).

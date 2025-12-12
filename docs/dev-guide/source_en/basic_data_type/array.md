@@ -168,7 +168,7 @@ arr2[0] = 3
 
 In addition to the reference-type Array, Cangjie introduces a value-type array `VArray<T, $N>`, where `T` is the element type and `$N` is a fixed syntax. The `$` followed by an `Int64` literal denotes the length of the value-type array. Note that `VArray<T, $N>` cannot omit `<T, $N>`, and when using type aliases, the `VArray` keyword and its generic parameters cannot be split.
 
-Compared to frequently using reference-type Arrays, value-type `VArray`s reduce heap memory allocation and garbage collection pressure. However, due to the overhead of copying during value-type passing and assignment, it is not recommended to use large `VArray`s in performance-sensitive scenarios. For characteristics of value types and reference types, refer to [Value Types and Reference Type Variables](../basic_programming_concepts/program_structure.md#value-types-and-reference-type-variables).
+Compared to frequently using reference-type Arrays, value-type `VArray`s reduce heap memory allocation and garbage collection pressure. However, due to the overhead of copying during value-type passing and assignment, it is not recommended to use large `VArray`s in performance-sensitive scenarios. For characteristics of value types and reference types, refer to [Value Types and Reference Type Variables](../basic_programming_concepts/program_structure.md#value-type-and-reference-type-variables).
 
 <!-- compile.error -->
 
