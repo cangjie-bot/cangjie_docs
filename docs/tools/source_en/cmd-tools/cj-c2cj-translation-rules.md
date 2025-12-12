@@ -2,7 +2,7 @@
 
 HLE automatically generates glue code from C to Cangjie, supporting the translation of functions, structures, enums, and global variables. Type support includes: basic types, structure types, pointers, arrays, and strings.
 
-### Basic Types
+## Basic Types
 
 The tool supports the following basic types:
 
@@ -25,11 +25,11 @@ The tool supports the following basic types:
 | double             | Float64          |
 | int arr[10]        | Varry            |
 
-### Complex Types
+## Complex Types
 
 The tool supports complex types including: struct types, pointer types, enum types, strings, and arrays.
 
-#### Struct Types
+### Struct Types
 
 .h declaration file:
 
@@ -102,7 +102,7 @@ public struct Point3D {
 }
 ```
 
-#### Pointer Types
+### Pointer Types
 
 .h declaration file:
 
@@ -117,7 +117,7 @@ The generated glue code is as follows:
 foreign func testPointer(a: Int32): CPointer<Unit>
 ```
 
-#### Function Types
+### Function Types
 
 .h declaration file:
 
@@ -132,8 +132,7 @@ The corresponding generated glue code is as follows:
 foreign func test(a: Int32): Unit
 ```
 
-
-#### Enumeration Types
+### Enumeration Types
 
 .h declaration file:
 
@@ -158,7 +157,7 @@ public const Color_YELLOW: Color = 6
 public type Color = UInt32
 ```
 
-#### String
+### String
 
 .h declaration file:
 
@@ -173,7 +172,7 @@ The corresponding generated glue code is as follows:
 foreign func test(a: CString): Unit
 ```
 
-#### Global Variables
+### Global Variables
 
 Currently, only constants of basic types in C are supported.
 
@@ -190,7 +189,7 @@ The corresponding generated glue code is as follows:
 public const GLOBAL_CONST: Int32 = 42
 ```
 
-#### Array Type
+### Array Type
 
 .h declaration file:
 
@@ -205,11 +204,11 @@ The corresponding generated glue code is as follows:
 foreign func test(arr: VArray<Int32, $3>): Unit
 ```
 
-### Unsupported Specifications
+## Unsupported Specifications
 
 Unsupported specifications include: bit fields, unions, macros, opaque types, flexible arrays, extended types
 
-#### Bit Fields
+### Bit Fields
 
 .h declaration file:
 
@@ -236,7 +235,7 @@ public struct X {
 }
 ```
 
-#### Union
+### Union
 
 .h declaration file:
 
@@ -261,11 +260,11 @@ public struct X {
 }
 ```
 
-#### Macros
+### Macros
 
 Currently, Cangjie does not have a suitable expression parsing library, so it cannot directly compute the value of macros. When encountering a macro, the current implementation will skip the entire #define.
 
-#### Opaque Types
+### Opaque Types
 
 .h declaration file:
 
@@ -298,7 +297,7 @@ foreign func get_value(obj: CPointer<OpaqueType>): Int32
 foreign func destroy_opaque(obj: CPointer<OpaqueType>): Unit
 ```
 
-#### Flexible Arrays
+### Flexible Arrays
 
 .h declaration file:
 
@@ -325,7 +324,7 @@ public struct FlexibleString {
 }
 ```
 
-#### Extension Types
+### Extension Types
 
 .h declaration file:
 

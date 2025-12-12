@@ -1,35 +1,37 @@
 name: 新需求|Feature
-description: 您需要反馈或实现一个新需求时，使用此模板。
-title: "[新需求]: "
+description: 您需要反馈或实现一个新需求时，使用此模板。 | Use this template when you need to provide new features.
+title: "[Feature]: "
 labels: ["enhancement"]
 body:
   - type: markdown
     attributes:
       value: |
-        感谢提出新需求。
+        感谢提出新需求。| Thanks for submitting the features issue.
   - type: textarea
     attributes:
-      label: 新需求提供了什么功能？
-      description: 请描述下新需求的功能是什么，解决了什么问题：
+      label: 新需求提供了什么功能？| Describe what functions the feature provides?
+      description: 请详细描述下新需求的功能是什么，解决了什么问题：| Describe in detail what functions the fearture provides and what problems it solves.
     validations:
       required: true
   - type: textarea
     attributes:
-      label: 该需求带来的价值、应用场景？
-      description: 请描述下该需求的价值，应用场景等：
+      label: 该需求带来的价值、应用场景？| The value and application scenario
+      description: 请描述下该需求的价值，应用场景等：| Describe in detail What is the value and application scenario brought by this feature?
     validations:
       required: false
   - type: checkboxes
     id: version
     attributes:
-      label: 新需求涉及的分支版本
-      description: 请选择涉及的分支版本：
+      label: 新需求涉及的分支版本 | Involved Branches
+      description: 请选择涉及的分支版本：| Select the branches involved in the modification.
       options:
         - label: dev
           required: false
         - label: main
           required: false
         - label: release/1.0
+          required: false
+        - label: release/OpenHarmony-release-6.0
           required: false
     validations:
       required: true

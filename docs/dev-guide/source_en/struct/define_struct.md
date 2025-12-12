@@ -159,6 +159,7 @@ struct Rectangle {
 ## struct Member Functions
 
 `struct` member functions are divided into instance member functions and static member functions (modified with the `static` modifier). The differences are:
+
 - Instance member functions can only be accessed through `struct` instances, while static member functions can only be accessed through the `struct` type name.
 - Static member functions cannot access instance member variables or call instance member functions, but instance member functions can access static member variables and call static member functions.
 

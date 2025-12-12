@@ -45,4 +45,4 @@ let d = .123e2f64 // d is 12.300000 with type Float64
 
 Floating-point types natively support the following operators: arithmetic operators, relational operators, and compound assignment operators. Floating-point types do not support increment and decrement operators.
 
-Floating-point types can be converted between each other, as well as between floating-point types and integer types. For specific type conversion syntax and rules, refer to [Numeric Type Conversions](../class_and_interface/typecast.md#numeric-type-conversions).
+Floating-point types can be converted between each other, as well as between floating-point types and integer types. For specific type conversion syntax and rules, refer to [Numeric Type Conversions](../class_and_interface/typecast.md#type-conversion).
