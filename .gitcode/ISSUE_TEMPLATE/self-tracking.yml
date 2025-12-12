@@ -1,49 +1,51 @@
 name: 文档更新自提单|Self-tracking
-description: 您需要自主更新文档时，使用此模板。
-title: "[文档更新自提单]: [xxx模块]"
+description: 您需要自主更新文档时，使用此模板。｜ Use this template when you need to update documents independently.
+title: "[Self-tracking]:"
 labels: ["SelfTracking"]
 body:
   - type: markdown
     attributes:
       value: |
-        感谢提交文档更新需求单。
+        感谢提交文档更新需求单。| Thanks for submitting the Self-tracking issue.
   - type: textarea
     attributes:
-      label: 问题描述
-      description: 请描述下您的问题：
+      label: 问题描述 | Describe the problem that occurred.
+      description: 提供尽可能多的信息描述产生了什么问题：| Provide as much information as possible describing what issue occurred.
     validations:
       required: true
   - type: textarea
     attributes:
-      label: 文档更新涉及子系统模块
-      description: 请提供文档更新内容所属子系统名称，如：仓颉xxx语言特性、互操作、命令行工具等：
+      label: 文档更新涉及子系统模块 ｜ Involved Subsystem Modules.
+      description: 请提供文档更新内容所属子系统名称，如：仓颉xxx语言特性、互操作、命令行工具等：| Provide the name of the subsystem to which the document update content belongs, such as `Cangjie xxx language features`, `interoperability`, `command-line tools`, etc.
     validations:
       required: true
   - type: checkboxes
     id: docs_name
     attributes:
-      label: 文档更新涉及手册或模块
-      description: 请提供文档更新内容所属手册或模块：
+      label: 文档更新涉及手册或模块 | Involved manuals or modules
+      description: 请提供文档更新内容所属手册或模块：| Provide the manuals or modules involed in the document updates.
       options:
-        - label: 仓颉编程语言开发指南（dev-guide）
+        - label: 仓颉编程语言开发指南 | dev-guide
           required: false
-        - label: 仓颉编程语言工具使用指南（tools）
+        - label: 仓颉编程语言工具使用指南 | tools
           required: false
-        - label: 仓库配置相关
+        - label: 仓库配置相关 | Repository Configuration
           required: false
     validations:
       required: true
   - type: checkboxes
     id: version
     attributes:
-      label: 受影响的分支版本
-      description: 请选择自提修改涉及的文档分支版本：
+      label: 受影响的分支版本 | Involved Branches
+      description: 请选择自提修改涉及的文档分支版本：| Select the branches involved in the self-tracking modification.
       options:
         - label: dev
           required: false
         - label: main
           required: false
         - label: release/1.0
+          required: false
+        - label: release/OpenHarmony-release-6.0
           required: false
     validations:
       required: true

@@ -196,7 +196,7 @@ main() {
 }
 ```
 
-Additionally, for [try-catch](../error_handle/handle.md#普通-try-表达式) scenarios, the compiler assumes that the `try` block is always fully executed and always throws an exception, leading to related errors, as shown in the following example:
+Additionally, for [try-catch](../error_handle/handle.md#regular-try-expressions) scenarios, the compiler assumes that the `try` block is always fully executed and always throws an exception, leading to related errors, as shown in the following example:
 
 <!-- compile.error -->
 
