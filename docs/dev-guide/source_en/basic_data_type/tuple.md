@@ -49,7 +49,7 @@ Compiling and executing the above code will output:
 PI
 ```
 
-In assignment expressions, tuples can be used for multiple assignments. Refer to the [Assignment Operators](./basic_operators.md#assignment-operators) section.
+In assignment expressions, tuples can be used for multiple assignments. Refer to the [Assignment Operators](./basic_operators.md#assignment-operator) section.
 
 ## Type Parameters of Tuple Types
 

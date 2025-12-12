@@ -73,8 +73,8 @@ Generated Cangjie code:
 
 ```cangjie
 /**
-	 * @brief testMultiGenericT(t: T, m: M): T
-	 */
+  * @brief testMultiGenericT(t: T, m: M): T
+  */
 public func testMultiGenericT < T, M >(t: T, m: M): T where T <: JSInteropType<T>, M <: JSInteropType<M> {
     hmsGlobalApiCall < T >( "my_module_genericFunction", "testMultiGenericT", { ctx =>[t.toJSValue(ctx), m.toJSValue(ctx)] }) {
         ctx, info => T.fromJSValue(ctx, info)
@@ -492,8 +492,8 @@ public open class C {
     
     
     /**
-	 * @brief f(): void
-	 */
+     * @brief f(): void
+     */
     public func f(): Unit {
         jsObjApiCall < Unit >( arkts_object, "f", emptyArg)
     }
@@ -558,8 +558,8 @@ public open class F <: C {
     
     
     /**
-	 * @brief g(): void
-	 */
+     * @brief g(): void
+     */
     public func g(): Unit {
         jsObjApiCall < Unit >( arkts_object, "g", emptyArg)
     }
@@ -645,8 +645,6 @@ public open class UserProfile {
 }
 ```
 
-
-
 Currently not supported
 
 #### Index Signatures
@@ -680,8 +678,6 @@ interface Config {
 ```
 
 Currently not supported
-
-
 
 #### Constructors
 
@@ -2325,8 +2321,8 @@ public const value2 = 0/* FIXME: Initialization is required */
 
 /***********METHOD***********/
 /**
-	 * @brief createSub(): Inheritances.SubClass
-	 */
+  * @brief createSub(): Inheritances.SubClass
+  */
 public func createSub(): JSValue/* FIXME: `Inheritances.SubClass` */ {
     hmsGlobalApiCall < JSValue/* FIXME: `Inheritances.SubClass` */ >( "my_module_imports", "createSub", emptyArg) {
         ctx, info => info

@@ -85,7 +85,7 @@ func add(a: Int64, b: Int64): Int64 {
 
 The return type of a function is the type of the value obtained when the function is called. In function definitions, the return type is optional: it can be explicitly defined (placed between the parameter list and the function body) or omitted, leaving it to the compiler to infer.
 
-When the return type is explicitly defined, the type of the function body (see the [Function Body](./define_functions.md#函数体) section below for how the function body type is determined) and the types of all `return e` expressions in the function body must be subtypes of the return type. For example, in the `add` function above, the return type is explicitly defined as `Int64`. If the function body is modified to `return (a, b)`, a type mismatch error will occur:
+When the return type is explicitly defined, the type of the function body (see the [Function Body](./define_functions.md#function-body) section below for how the function body type is determined) and the types of all `return e` expressions in the function body must be subtypes of the return type. For example, in the `add` function above, the return type is explicitly defined as `Int64`. If the function body is modified to `return (a, b)`, a type mismatch error will occur:
 
 <!-- compile.error -->
 
@@ -177,7 +177,7 @@ func add(a: Int64, b: Int64) {
 
 In the example above, a global variable `r` of type `Int64` is defined before the `add` function, and a local variable `r` with the same name is defined within the function body. Within the function body, all references to `r` (e.g., `r = a + b`) will refer to the local variable `r`, meaning the local variable `r` "shadows" the global variable `r` within the function body.
 
-As mentioned in the [Return Type](./define_functions.md#函数返回值类型) section, the function body also has a type. The type of the function body is the type of the last "item" in the function body: if the last item is an expression, the function body's type is the type of that expression; if the last item is a variable definition, function declaration, or the function body is empty, the function body's type is `Unit`. For example:
+As mentioned in the [Return Type](./define_functions.md#return-type) section, the function body also has a type. The type of the function body is the type of the last "item" in the function body: if the last item is an expression, the function body's type is the type of that expression; if the last item is a variable definition, function declaration, or the function body is empty, the function body's type is `Unit`. For example:
 
 <!-- compile -->
 

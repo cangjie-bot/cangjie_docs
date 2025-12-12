@@ -6,7 +6,7 @@ Installing the complete Cangjie toolchain includes both the Cangjie code compila
 
 This section describes the deployment of the Cangjie runtime.
 
-**Important Note**: When compiling with [fully static linking](../Appendix/compile_options.md#static) of Cangjie libraries, the runtime modules are already embedded in the executable during compilation. Therefore, no additional runtime deployment is needed in the execution environment, and the compiled executable can be run directly.
+**Important Note**: When compiling with [fully static linking](../Appendix/compile_options.md#--static) of Cangjie libraries, the runtime modules are already embedded in the executable during compilation. Therefore, no additional runtime deployment is needed in the execution environment, and the compiled executable can be run directly.
 
 ## Linux
 

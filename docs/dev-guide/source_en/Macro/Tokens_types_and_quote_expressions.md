@@ -115,7 +115,7 @@ x = 1.0
 s = "Hello"
 ```
 
-For more interpolation usage, refer to [Using Quote to Interpolate Syntax Nodes](./syntax_node.md#使用-quote-插值语法节点).
+For more interpolation usage, refer to [Using Quote to Interpolate Syntax Nodes](./syntax_node.md#interpolating-syntax-nodes-using-quote).
 
 Specifically, when a `quote` expression contains certain special `Token` elements, escaping is required:
 
