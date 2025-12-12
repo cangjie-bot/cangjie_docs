@@ -1,4 +1,4 @@
-# ArkTS三方模块生成仓颉胶水代码的转换规则
+# ArkTS 三方模块生成仓颉胶水代码的转换规则
 
 ## 顶层声明
 
@@ -8,7 +8,7 @@
 | 全局函数 | 支持重载，支持泛型函数                                                     | |
 | 全局变量 | 需要用户手动修改成正确的初始化值                             | 不支持泛型类型全局变量                                       |
 | 接口     | 支持基本类型接口、可选属性、只读属性、成员函数、泛型、函数重载、数组类型、继承、嵌套对象 | 不支持索引签名、动态属性、函数类型、构造函数、声明合并 |
-| 类型别名 | 支持枚举类型别名、class类型别名、函数类型别名、联合类型别名  | 不支持对象字面量类型别名、命名空间中的类型的类型别名、交叉类型别名、泛型类型别名 |
+| 类型别名 | 支持枚举类型别名、class 类型别名、函数类型别名、联合类型别名  | 不支持对象字面量类型别名、命名空间中的类型的类型别名、交叉类型别名、泛型类型别名 |
 | 类       | 支持构造函数、静态成员、私有成员、保护成员、私有属性、泛型成员、抽象类、类实现接口、继承类、重载方法 | 不支持待装饰器类、带命名空间的类型                           |
 | 枚举     | 支持字符串枚举、数字枚举、常量枚举、异构枚举                 | 不支持计算值枚举。异构枚举中，枚举值会被统一转成字符串类型，需用户在使用时手动转换 |
 | 导入     | 支持                                                           |                                                        |
@@ -22,11 +22,11 @@
 
 - 支持重载。
 - 参数和返回值类型支持：基础类型、函数类型、tuple 类型、optional 类型、泛型函数。
-- union 类型（参数是union类型会映射为多个类型重载）。
+- union 类型（参数是 union 类型会映射为多个类型重载）。
 
 示例：
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 declare function greeter(fn: (a: string) => void): void;
@@ -63,7 +63,7 @@ public func printToConsole(s: String): Unit {
 
 泛型函数示例：
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 declare function testMultiGenericT<T, M>(t: T, m: M): T;
@@ -73,8 +73,8 @@ declare function testMultiGenericT<T, M>(t: T, m: M): T;
 
 ```cangjie
 /**
-	 * @brief testMultiGenericT(t: T, m: M): T
-	 */
+  * @brief testMultiGenericT(t: T, m: M): T
+  */
 public func testMultiGenericT < T, M >(t: T, m: M): T where T <: JSInteropType<T>, M <: JSInteropType<M> {
     hmsGlobalApiCall < T >( "my_module_genericFunction", "testMultiGenericT", { ctx =>[t.toJSValue(ctx), m.toJSValue(ctx)] }) {
         ctx, info => T.fromJSValue(ctx, info)
@@ -89,7 +89,7 @@ public func testMultiGenericT < T, M >(t: T, m: M): T where T <: JSInteropType<T
 
 示例：
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 declare var foo: number;
@@ -114,7 +114,7 @@ public const qoo = !!!!!check in dts!!!!!
 
 #### 基本类型
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 interface GreetingSettings {
@@ -168,7 +168,7 @@ public class GreetingSettings {
 
 #### 可选属性
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 // product.d.ts
@@ -209,7 +209,7 @@ public class Product {
 
 #### 只读属性
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 // point.d.ts
@@ -248,7 +248,7 @@ public class Point {
 
 #### 函数类型
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 // callback.d.ts
@@ -261,7 +261,7 @@ interface Callback {
 
 #### 成员函数
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 // person.d.ts
@@ -312,7 +312,7 @@ public class Person {
 
 #### 函数重载
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 // calculator.d.ts
@@ -355,7 +355,7 @@ public class Calculator {
 
 #### 数组类型
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 // list.d.ts
@@ -406,7 +406,7 @@ public class List {
 
 #### 继承
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 interface A {
@@ -492,8 +492,8 @@ public open class C {
     
     
     /**
-	 * @brief f(): void
-	 */
+  * @brief f(): void
+  */
     public func f(): Unit {
         jsObjApiCall < Unit >( arkts_object, "f", emptyArg)
     }
@@ -558,8 +558,8 @@ public open class F <: C {
     
     
     /**
-	 * @brief g(): void
-	 */
+  * @brief g(): void
+  */
     public func g(): Unit {
         jsObjApiCall < Unit >( arkts_object, "g", emptyArg)
     }
@@ -576,7 +576,7 @@ public open class F <: C {
 
 #### 嵌套对象
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 // userProfile.d.ts
@@ -645,13 +645,11 @@ public open class UserProfile {
 }
 ```
 
-
-
 目前不支持
 
 #### 索引签名
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 // dictionary.d.ts
@@ -670,7 +668,7 @@ console.log(dict['name']); // Alice
 
 #### 动态属性
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 // config.d.ts
@@ -681,11 +679,9 @@ interface Config {
 
 目前不支持
 
-
-
 #### 构造函数
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 interface ClockConstructor {
@@ -697,12 +693,12 @@ interface ClockConstructor {
 
 ### 类型别名
 
-- 支持枚举类型别名、class类型别名、函数类型别名、联合类型别名。
+- 支持枚举类型别名、class 类型别名、函数类型别名、联合类型别名。
 - 不支持对象字面量类型别名、命名空间中的类型的类型别名、交叉类型别名、泛型类型别名。
 
 #### 对象字面量类型别名
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
   type AppConfig = {
@@ -717,7 +713,7 @@ interface ClockConstructor {
 
 #### 枚举类型别名
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 declare enum Colors {
@@ -735,9 +731,9 @@ type ColorAlias = Colors;
 public type ColorAlias = Colors
 ```
 
-#### class类型别名
+#### class 类型别名
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
   declare class Animal {
@@ -757,7 +753,7 @@ public type AnimalAlias = Animal
 
 #### 命名空间中的类型的类型别名
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 declare namespace Shapes {
@@ -773,7 +769,7 @@ type RectangleAlias = Shapes.Rectangle;
 
 #### 函数类型别名
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 type MathOperation = (a: number, b: number) => number;
@@ -787,7 +783,7 @@ public type MathOperation = (a: Float64, b: Float64) -> Float64
 
 #### 联合类型别名
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 type GreetingLike = string | number;
@@ -811,7 +807,7 @@ public enum GreetingLike {
 
 #### 交叉类型别名
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 // point.d.ts
@@ -825,7 +821,7 @@ interface Point {
 
 #### 泛型类型别名
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 // point.d.ts
@@ -844,7 +840,7 @@ interface Point {
 
 #### 构造函数
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 declare class Greeter {
@@ -906,7 +902,7 @@ public class Greeter {
 
 #### 静态成员
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 // MathUtils.d.ts
@@ -959,7 +955,7 @@ public class MathUtils {
 
 #### 私有成员
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 declare class Person {
@@ -988,7 +984,7 @@ public class Person {
 
 #### 保护成员
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 declare class AnimalProtect {
@@ -1041,7 +1037,7 @@ public class AnimalProtect {
 
 #### 只读属性
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 declare class Car {
@@ -1094,7 +1090,7 @@ public class Car {
 
 #### 泛型成员
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 declare class Box<T> {
@@ -1148,7 +1144,7 @@ public class Box<T> {
 
 #### 抽象类
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 declare abstract class Shape {
@@ -1183,7 +1179,7 @@ public open class Shape {
 
 #### 类实现接口
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 interface Drivable {
@@ -1256,7 +1252,7 @@ public class Car1 <: Drivable {
 
 #### 继承类
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 // Animal.d.ts
@@ -1343,7 +1339,7 @@ public class Dog <: Animal1 {
 
 #### 重载方法
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 declare class Calculator {
@@ -1397,7 +1393,7 @@ public class Calculator {
 
 #### 带装饰器的类
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 // LogClass.d.ts
@@ -1414,7 +1410,7 @@ declare class MyClass {
 
 #### 带命名空间的类
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 // Shapes.d.ts
@@ -1431,12 +1427,12 @@ declare namespace Shapes {
 
 ### 枚举
 
-- 支持字符串枚举、数字枚举、常量枚举、异构枚举。其中，在仓颉胶水代码里，异构枚举中所有类型的枚举值都会被转换成字符串类型。因此，开发者调用胶水代码时，需要将非字符串类型（例如number类型)的异构枚举成员手动转换为ArkTS中定义的原类型。
+- 支持字符串枚举、数字枚举、常量枚举、异构枚举。其中，在仓颉胶水代码里，异构枚举中所有类型的枚举值都会被转换成字符串类型。因此，开发者调用胶水代码时，需要将非字符串类型（例如 number 类型）的异构枚举成员手动转换为 ArkTS 中定义的原类型。
 - 不支持计算值枚举。
 
 #### 字符串枚举
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 // colors.d.ts
@@ -1500,7 +1496,7 @@ public enum Colors <: ToString & Equatable < Colors > {
 
 #### 数字枚举
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 // status.d.ts
@@ -1568,7 +1564,7 @@ public enum Status <: ToString & Equatable < Status > {
 
 #### 常量枚举
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 // constants.d.ts
@@ -1636,7 +1632,7 @@ public enum Status <: ToString & Equatable < Status > {
 
 #### 异构枚举
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 // response.d.ts
@@ -1695,13 +1691,13 @@ public enum Response <: ToString & Equatable < Response > {
 
 ## 类型映射关系
 
-ArkTS的.d.ts接口转换到互操作的仓颉代码，支持的类型转换有：基础类型、Array类型、函数类型、Optional类型、Object类型、tuple类型、Union类型、Promise类型。
+ArkTS 的 .d.ts 接口转换到互操作的仓颉代码，支持的类型转换有：基础类型、Array 类型、函数类型、Optional 类型、Object 类型、tuple 类型、Union 类型、Promise 类型。
 
-对于不支持的类型，会默认改成JSValue类型，并且会添加一个FIXME的注释（注释中会填写原始的.d.ts声明中的类型），命令行也会打印类型不支持的告警信息。
+对于不支持的类型，会默认改成 JSValue 类型，并且会添加一个 FIXME 的注释（注释中会填写原始的 .d.ts 声明中的类型），命令行也会打印类型不支持的告警信息。
 
 - 注释的格式
 
-  .d.ts代码：
+  .d.ts 代码：
 
   ```typescript
   type TA80 = undefined;
@@ -1724,7 +1720,7 @@ ArkTS的.d.ts接口转换到互操作的仓颉代码，支持的类型转换有�
 
 支持的数据类型有：
 
-| ArkTS类型 | 仓颉类型 |
+| ArkTS 类型 | 仓颉类型 |
 | --------- | -------- |
 | string    | String   |
 | number    | Float64  |
@@ -1740,7 +1736,7 @@ ArkTS的.d.ts接口转换到互操作的仓颉代码，支持的类型转换有�
 
 示例：
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 interface BasicTypes {
@@ -1814,18 +1810,18 @@ public class BasicTypes {
 
 ### Array
 
-Array目前支持4种类型转换：
+Array 目前支持 4 种类型转换：
 
-| ArkTS类型                     | 仓颉类型       |
+| ArkTS 类型                     | 仓颉类型       |
 | ----------------------------- | -------------- |
 | Uint8Array                    | Array\<UInt8>   |
 | ArrayBuffer                   | Array\<UInt8>   |
 | Float32Array                  | Array\<Float32> |
-| 基本类型的array，比如number[] | Array\<Float64> |
+| 基本类型的 array，比如 number[] | Array\<Float64> |
 
 示例：
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 interface arrayInterface {
@@ -1878,7 +1874,7 @@ public class arrayInterface {
 
 示例：
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 interface TestListener {
@@ -2001,7 +1997,7 @@ public class TestListener {
 
 示例：
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 interface MyListener {
@@ -2046,11 +2042,11 @@ public class MyListener {
 }
 ```
 
-### Optional类型
+### Optional 类型
 
 示例：
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 interface Optionals {
@@ -2107,7 +2103,7 @@ public class Optionals {
 
 示例：
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 interface ObjectTypes<U, T> {
@@ -2117,7 +2113,7 @@ interface ObjectTypes<U, T> {
 }
 ```
 
-当前类型不支持，会默认转换成JSValue。
+当前类型不支持，会默认转换成 JSValue。
 
 生成的仓颉代码：
 
@@ -2153,7 +2149,7 @@ public class ObjectTypes<U, T> {
 
 示例：
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 tupleType: [number, number, string];
@@ -2167,11 +2163,11 @@ public var tupleType: Tuple<Float64, Float64, String>
 
 ### Union 类型
 
-- 目前只支持union类型作为类型别名和函数参数。
+- 目前只支持 union 类型作为类型别名和函数参数。
 
 示例：
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 type ARK1 = null | number | string | boolean | Uint8Array | Float32Array | bigint;
@@ -2217,7 +2213,7 @@ public enum ARK2 {
 
 ### Promise 类型
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 typeReference21: Promise<T>;
@@ -2231,7 +2227,7 @@ public var typeReference21: Promise<T>,
 
 ### 交叉类型
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 interface IntersectionTypes<U, T> {
@@ -2239,7 +2235,7 @@ interface IntersectionTypes<U, T> {
 }
 ```
 
-当前类型不支持，会默认转换成JSValue。
+当前类型不支持，会默认转换成 JSValue。
 
 生成的仓颉代码：
 
@@ -2269,7 +2265,7 @@ public class IntersectionTypes<U, T> {
 
 - 目前导入会翻译，但是还是需要用户收到确认修改。
 
-.d.ts代码：
+.d.ts 代码：
 
 ```typescript
 import { a } from '@umeng/common';
@@ -2325,8 +2321,8 @@ public const value2 = 0/* FIXME: Initialization is required */
 
 /***********METHOD***********/
 /**
-	 * @brief createSub(): Inheritances.SubClass
-	 */
+  * @brief createSub(): Inheritances.SubClass
+  */
 public func createSub(): JSValue/* FIXME: `Inheritances.SubClass` */ {
     hmsGlobalApiCall < JSValue/* FIXME: `Inheritances.SubClass` */ >( "my_module_imports", "createSub", emptyArg) {
         ctx, info => info
