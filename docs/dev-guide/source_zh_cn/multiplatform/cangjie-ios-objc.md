@@ -1605,7 +1605,7 @@ static struct RuntimeParam defaultCJRuntimeParams = {0};
 
 ### ObjC 使用 Cangjie 类
 
-为实现 Cangjie 与 Objective-C 的互操作，需将 Cangjie 的非 open 类映射为 ObjC 的类。映射后，用户可在 ObjC 代码中，直接调用 Cangjie 侧公开类（public class）的公共实例方法与静态方法。
+为实现 Cangjie 与 Objective-C 的互操作，需将 Cangjie 的类映射为 ObjC 的类。映射后，用户可在 ObjC 代码中，直接调用 Cangjie 侧公开类（public class）的公共实例方法与静态方法，如果被映射的 Cangjie 类为 open 类，则可以在 ObjC 侧继承 Cangjie 类，并重写它的公开方法。
 
 #### 示例
 
@@ -1734,14 +1734,14 @@ static struct RuntimeParam defaultCJRuntimeParams = {0};
 
 由于与其他语言特性的集成仍在开发中，以下场景暂不支持：
 
-- 不支持 open class
 - Cangjie class 不得实现其他接口
-- 仅支持 public 成员函数映射，其它成员不会报错，不会映射到 ObjC 端
+- 非 open 类仅支持 public 成员函数映射，open 类支持 public 成员函数 和 protected open 成员函数，其它成员不会报错，不会映射到 ObjC 端
 - 不支持泛型 class
 - 不支持泛型成员函数
 - 不支持函数重载
-- 成员函数参数和返回值允许使用基础数据类型（数值类型、Bool 类型和 Unit 类型）和本包定义的非 open public class 类型
+- 非 open 类成员函数参数和返回值允许使用基础数据类型（数值类型、Bool 类型和 Unit 类型）和本包定义的非 open public class 类型，open 类仅支持基本数据类型（数值类型、Bool 类型和 Unit 类型）
 - 不支持通过 extend 对 class 进行扩展
+- 不支持 Cangjie abstract 类
 
 ## 版本约束限制
 
