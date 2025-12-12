@@ -1284,7 +1284,7 @@ JavaImpl 类型支持直接扩展，规格同 JavaMirror，详见 JavaMirror 章
 参数：需要指定一个 toml 格式的配置文件路径，例如：src/cj/config.toml或 javaCallCangjie.toml。
 > **注意：**
 >
-> - 此选项必须与 `--experimental --enable-interop-cj-mapping=` 同时使用。
+> - 此选项必须与 `--experimental --enable-interop-cj-mapping` 同时使用。
 > - `--import-interop-cj-package-config-path` 用于指定互操作的配置文件。
 > - `--enable-interop-cj-mapping` 用于指定目标语言并启用对应的互操作映射。
 
@@ -1689,6 +1689,127 @@ public class User {
 - 直接扩展不支持操作符重载
 - 直接扩展和接口扩展均不支持泛型
 
+### Java 使用 Cangjie 泛型数据类型
+
+- Java使用泛型类/结构体
+  - 介绍：Java 侧调用 Cangjie 侧泛型类/结构体
+    Java使用Cangjie泛型类/结构体之前需对泛型类型进行配置，参考[泛型类型配置介绍]: ###Java使用配置文件
+  - 支持范围
+    - 泛型类型支持 Cangjie 基础数据类型
+    - 支持多泛型参数用法
+    - 支持普通成员函数带有泛型参数
+  - 示例
+    class/struct 均参考如下示例：
+
+    - Cangije 侧源码
+
+    <!-- compile -->
+
+      ```Cangjie
+      public class GenericClass<T> {
+
+          private var value: T
+
+          public GenericClass(v: T) {
+              this.value = v
+          }
+          public func getValue() : T {
+              return this.value
+          }
+
+          public func setValue(t: T) {
+              value = t
+          }
+      }
+      ```
+
+    - 配置信息
+
+    ```toml
+    [[package]]
+    name = "genericClass"
+    APIStrategy = "Full"
+    GenericTypeStrategy = "Partial"
+    excluded_apis = [
+    ]
+    generic_object_configuration = [
+        { name = "GenericClass", type_arguments = ["Float64", "Int32"] },
+        { name = "GenericClass<Float64>", symbols = [
+            "getValue",
+            "GenericClass",
+            "value",
+            "setValue"
+        ]},
+
+        { name = "GenericClass<Int32>", symbols = [
+            "getValue",
+            "GenericClass",
+            "value",
+            "setValue"
+        ]}
+    ]
+    ```
+- Java使用泛型
+  - 介绍：Java 侧调用 Cangjie 侧泛型枚举
+    Java使用Cangjie泛型枚举之前需对泛型类型进行配置，参考[泛型类型配置介绍]: ###Java使用配置文件
+  - 支持范围
+    - 泛型类型支持 Cangjie 基础数据类型
+    - 支持多泛型参数用法
+    - 支持普通成员函数带有泛型参数
+  - 示例
+    - Cangije 侧源码
+
+    <!-- compile -->
+
+      ```Cangjie
+      public class GenericClass<T> {
+
+          private var value: T
+
+          public GenericClass(v: T) {
+              this.value = v
+          }
+          public func getValue() : T {
+              return this.value
+          }
+
+          public func setValue(t: T) {
+              value = t
+          }
+      }
+      ```
+
+    - 配置信息
+
+    ```toml
+    [[package]]
+    name = "genericClass"
+    APIStrategy = "Full"
+    GenericTypeStrategy = "Partial"
+    excluded_apis = [
+    ]
+    generic_object_configuration = [
+        { name = "GenericClass", type_arguments = ["Float64", "Int32"] },
+        { name = "GenericClass<Float64>", symbols = [
+            "getValue",
+            "GenericClass",
+            "value",
+            "setValue"
+        ]},
+
+        { name = "GenericClass<Int32>", symbols = [
+            "getValue",
+            "GenericClass",
+            "value",
+            "setValue"
+        ]}
+    ]
+    ```
+#### 规格限制
+- 暂不支持自定义数据类型
+- 暂不支持泛型静态方法
+- 支持如下类型: Int8,Int16,Int32,Int64,Float16,Float32,Bool
+
 ### Java 使用 配置文件
 
 配置文件采用 toml 格式进行配置，按照包级别对于符号以及泛型实例化信息进行控制，实例参考如下：
@@ -1832,75 +1953,9 @@ public class GenericClass<T> {
           ]}
       ```
 
-**#### 符号控制规格约束**
+#### 符号控制规格约束
 
 配置文件需要用户保障配置的语法正确性，例如 B.funcA 为 exposed ，则 B 不允许设置为 hiddened（其他场景同理）
-
-**### Java 使用 Cangjie 泛型数据类型**
-
-- Java使用泛型类/结构体
-  - 介绍：Java 侧调用 Cangjie 侧泛型类/结构体
-    [Java配置格式介绍]: ###Java使用配置文件
-  - 支持范围
-    - primitive 类型，且类型对应 Cangjie 基础数据类型
-    - 支持多泛型参数用法
-    - 支持普通函数
-  - 示例
-    class/struct 均参考如下示例：
-
-    - Cangije 侧源码
-
-    <!-- compile -->
-
-      ```Cangjie
-      public class GenericClass<T> {
-
-          private var value: T
-
-          public GenericClass(v: T) {
-              this.value = v
-          }
-          public func getValue() : T {
-              return this.value
-          }
-
-          public func setValue(t: T) {
-              value = t
-          }
-      }
-      ```
-
-    - 配置信息
-
-    ```toml
-    [[package]]
-    name = "genericClass"
-    APIStrategy = "Full"
-    GenericTypeStrategy = "Partial"
-    excluded_apis = [
-    ]
-    generic_object_configuration = [
-        { name = "GenericClass", type_arguments = ["Float64", "Int32"] },
-        { name = "GenericClass<Float64>", symbols = [
-            "getValue",
-            "GenericClass",
-            "value",
-            "setValue"
-        ]},
-
-        { name = "GenericClass<Int32>", symbols = [
-            "getValue",
-            "GenericClass",
-            "value",
-            "setValue"
-        ]}
-    ]
-    ```
-
-  - 规格限制
-    - 暂不支持自定义数据类型
-    - 暂不支持静态方法
-    - 支持如下类型: Int8,Int16,Int32,Int64,Float16,Float32,Bool
 
 ## 版本约束限制
 
