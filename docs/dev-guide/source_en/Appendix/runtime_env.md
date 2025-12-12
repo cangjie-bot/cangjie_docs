@@ -1,6 +1,6 @@
 # Runtime Environment Variables User Manual
 
-This section introduces the environment variables provided by the `runtime` .
+This section introduces the environment variables provided by the `runtime`.
 
 In Linux shell and macOS shell, you can set the environment variables provided by the Cangjie runtime using the following method:
 
