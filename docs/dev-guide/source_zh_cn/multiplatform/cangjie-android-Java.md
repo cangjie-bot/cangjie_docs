@@ -1284,7 +1284,7 @@ JavaImpl 类型支持直接扩展，规格同 JavaMirror，详见 JavaMirror 章
 参数：需要指定一个 toml 格式的配置文件路径，例如：src/cj/config.toml或 javaCallCangjie.toml。
 > **注意：**
 >
-> - 此选项必须与 `--experimental --enable-interop-cj-mapping=` 同时使用。
+> - 此选项必须与 `--experimental --enable-interop-cj-mapping` 同时使用。
 > - `--import-interop-cj-package-config-path` 用于指定互操作的配置文件。
 > - `--enable-interop-cj-mapping` 用于指定目标语言并启用对应的互操作映射。
 
@@ -1370,10 +1370,9 @@ public class Main {
 #### 规格约束
 
 1. 要求 Cangjie struct 无 interface 实现
-2. 暂不支持 Cangjie 泛型 struct
-3. 暂不支持 Java 侧对 struct 成员变量的访问
-4. 暂不支持 mut 函数的调用
-5. 暂不支持属性
+2. 暂不支持 Java 侧对 struct 成员变量的访问
+3. 暂不支持 mut 函数的调用
+4. 暂不支持属性
 
 ### Java 使用 Cangjie 的 Enum
 
@@ -1472,12 +1471,11 @@ public class TimeUnit {
 目前枚举支持与其他语言特性组合仍在开发过程中，暂不支持如下场景：
 
 1. 要求 Cangjie enum 无 interface 实现
-2. 要求 Cangjie enum 成员函数中不使用泛型
-3. 要求 Cangjie enum 成员函数中不使用 Lamda
-4. 要求 Cangjie enum 中不包含操作符重载
-5. 要求 Cangjie enum 中仅使用基础的数据类型
-6. 要求 Cangjie 不适应 extend 对 enum 进行拓展
-7. 不支持 option
+2. 要求 Cangjie enum 成员函数中不使用 Lamda
+3. 要求 Cangjie enum 中不包含操作符重载
+4. 要求 Cangjie enum 中仅使用基础的数据类型
+5. 要求 Cangjie 不适应 extend 对 enum 进行拓展
+6. 不支持 option
 
 ### Java 使用 Cangjie 的 Class
 
@@ -1535,7 +1533,6 @@ public class Main
 
 目前 Java 使用 Cangjie Class 暂不支持如下场景：
 
-- 不支持使用仓颉泛型 Class
 - 不支持访问继承 Cangjie class 的普通成员变量、静态成员变量、静态成员方法、prop 成员
 - 不支持跨包引用
 
@@ -1591,7 +1588,6 @@ final class A_fwd {
 目前接口支持与其他语言特性组合仍在开发过程中，暂不支持如下场景：
 
 - 要求 Cangjie interface 不继承其他 interface
-- 要求 Cangjie interface 成员函数中不使用泛型
 - 要求 Cangjie interface 成员函数非 static
 - 要求 Cangjie interface 中仅使用基础的数据类型
 - 要求 Cangjie 不适应 extend 对 interaface 进行扩展
@@ -1688,6 +1684,305 @@ public class User {
 - 接口扩展不支持 @JavaMirror 属性相关接口
 - 直接扩展不支持操作符重载
 - 直接扩展和接口扩展均不支持泛型
+
+### Java 使用 Cangjie 泛型数据类型
+
+#### Java 使用泛型类/结构体
+Java 使用 Cangjie 泛型类（非 open ）、结构体之前需对泛型类型进行配置，参考[类型配置介绍](###Java使用配置文件)
+
+- 支持范围
+    - 泛型类型支持 Cangjie 基础数值类型和Bool类型
+    - 支持多泛型参数用法
+    - 支持普通成员函数、构造函数带有泛型参数
+  
+- 示例，class/struct 均参考如下示例：
+  
+  - Cangije 侧源码
+
+    <!-- compile -->
+
+      ```Cangjie
+      package genericClass
+
+      public class GenericClass<T> {
+
+          private var value: T
+
+          public GenericClass(v: T) {
+              this.value = v
+          }
+          public func getValue() : T {
+              return this.value
+          }
+
+          public func setValue(t: T) {
+              value = t
+          }
+      }
+      ```
+
+  - 配置信息
+
+    ```toml
+    [[package]]
+    name = "genericClass"
+    APIStrategy = "Full"
+    GenericTypeStrategy = "Partial"
+    excluded_apis = [
+    ]
+    generic_object_configuration = [
+        { name = "GenericClass", type_arguments = ["Float64", "Int32"] },
+        { name = "GenericClass<Float64>", symbols = [
+            "getValue",
+            "GenericClass",
+            "value",
+            "setValue"
+        ]},
+
+        { name = "GenericClass<Int32>", symbols = [
+            "getValue",
+            "GenericClass",
+            "value",
+            "setValue"
+        ]}
+    ]
+    ```
+  - 映射后的 Java 代码如下：
+
+    ```java
+    public class GenericClassFloat64 {
+    static {
+        loadLibrary("genericClass");
+    }
+
+    long self;
+
+    public GenericClassFloat64(double v) {
+        self = initCJObjectG_(v);
+    }
+
+    public native long initCJObjectG_(double v);
+
+    public double getValue() {
+        return getValue(this.self);
+    }
+
+    public native double getValue(long self);
+
+    public void setValue(double t) {
+        setValueG_(this.self, t);
+    }
+
+    public native void setValueG_(long self, double t);
+    }
+
+    public class GenericClassInt32 {
+    static {
+        loadLibrary("genericClass");
+    }
+
+    long self;
+
+    public GenericClassInt32(int v) {
+        self = initCJObjectG_(v);
+    }
+
+    public native long initCJObjectG_(int v);
+
+    public int getValue() {
+        return getValue(this.self);
+    }
+
+    public native int getValue(long self);
+
+    public void setValue(int t) {
+        setValueG_(this.self, t);
+    }
+
+    public native void setValueG_(long self, int t);
+    }
+    ```
+
+#### Java 使用泛型枚举
+Java 使用 Cangjie 泛型枚举之前需对泛型类型进行配置，参考[类型配置介绍]: ###Java使用配置文件
+
+- 支持范围
+  - 泛型类型支持 Cangjie 基础数值类型和Bool类型
+  - 支持多泛型参数用法
+  - 支持普通成员函数、属性带有泛型参数
+ 
+- 示例
+  - Cangije 侧源码
+
+    <!-- compile -->
+
+    ```Cangjie
+    package genericEnum
+
+    public enum GenericEnum<T> where T <: ToString {
+        | Red(T) | Green(T) | Blue(T)
+
+        public func printValue(): Unit {
+            let s = match (this) {
+                case Red(n) => "red(${n})"
+                case Green(n) => "green(${n})"
+                case Blue(n) => "blue(${n})"
+            }
+            print("cangjie: ${s}\n", flush: true)
+        }
+
+        public func setValue(a: T): T {
+            print("cangjie: ${a}\n", flush: true)
+            a
+        }
+
+        public prop value: T {
+            get() {
+                match (this) {
+                    case Red(n) => n
+                    case Green(n) => n
+                    case Blue(n) => n
+                }
+            }
+        }
+    }
+    ```
+
+  - 配置信息
+
+    ```toml
+    [[package]]
+    name = "genericEnum"
+    APIStrategy = "Full"
+    GenericTypeStrategy = "Partial"
+    excluded_apis = [
+    ]
+    generic_object_configuration = [
+        { name = "GenericEnum", type_arguments = ["Int32"] },
+        { name = "GenericEnum<Int32>", symbols = [
+            "printValue",
+            "setValue",
+            "value"
+        ]}
+    ]
+    ```
+
+  - 映射后的 Java 代码如下：
+
+    ```java
+    public class GenericEnumInt32 {
+    static {
+        loadLibrary("genericEnum");
+    }
+
+    long self;
+
+    public int getValue() {
+        return getValueImpl(this.self);
+    }
+
+    public native int getValueImpl(long self);
+
+    private GenericEnumInt32 (long id) {
+        self = id;
+    }
+
+    public static GenericEnumInt32 Red(int p1) {
+        return new GenericEnumInt32(RedinitCJObjectG_(p1));
+    }
+
+    private static native long RedinitCJObjectG_(int p1);
+
+    public static GenericEnumInt32 Green(int p1) {
+        return new GenericEnumInt32(GreeninitCJObjectG_(p1));
+    }
+
+    private static native long GreeninitCJObjectG_(int p1);
+
+    public static GenericEnumInt32 Blue(int p1) {
+        return new GenericEnumInt32(BlueinitCJObjectG_(p1));
+    }
+
+    private static native long BlueinitCJObjectG_(int p1);
+
+    public void printValue() {
+        printValue(this.self);
+    }
+
+    public native void printValue(long self);
+
+    public int setValue(int a) {
+        return setValueG_(this.self, a);
+    }
+
+    public native int setValueG_(long self, int a);
+    }
+    ``` 
+#### Java 使用泛型接口
+Java 使用 Cangjie 泛型接口之前需对泛型类型进行配置，参考[类型配置介绍]: ###Java使用配置文件
+
+- 支持范围
+  - 泛型类型支持 Cangjie 基础数值类型和Bool类型
+  - 支持多泛型参数用法
+  - 支持抽象成员函数、默认实现函数带有泛型参数
+ 
+- 示例
+  - Cangije 侧源码
+
+    <!-- compile -->
+
+    ```Cangjie
+    package genericInterface
+
+    public interface GenericInterface<T> {
+    func foo(v:T) : T {
+        goo(v)
+        return v
+    }
+
+    func goo(v:T) : Unit
+    }
+    ```
+
+  - 配置信息
+
+    ```toml
+    [[package]]
+    name = "genericInterface"
+    APIStrategy = "Full"
+    GenericTypeStrategy = "Partial"
+    excluded_apis = [   
+    ]
+    generic_object_configuration = [
+    { name = "GenericInterface", type_arguments = ["Int32"] },
+    { name = "GenericInterface<Int32>", symbols = [
+        "foo",
+        "goo"
+    ]}
+    ]
+    ```
+
+  - 映射后的 Java 代码如下：
+
+    ```java
+    public interface GenericInterfaceInt32 {
+    public default int foo(int v) {
+        return GenericInterfaceInt32_fwd.foo_default_impli(this, v);
+    }
+    public void goo(int v);
+    }
+    final class GenericInterfaceInt32_fwd {
+    private GenericInterfaceInt32_fwd() {}
+    static {
+        loadLibrary("genericInterface");
+    }
+
+    public static native int foo_default_impli(GenericInterfaceInt32 selfobj, int v);
+    }
+    ``` 
+#### 规格限制
+- 暂不支持自定义数据类型
+- 支持如下类型: Int8,Int16,Int32,Int64,Float16,Float32,Bool
 
 ### Java 使用 配置文件
 
@@ -1832,75 +2127,9 @@ public class GenericClass<T> {
           ]}
       ```
 
-**#### 符号控制规格约束**
+#### 符号控制规格约束
 
 配置文件需要用户保障配置的语法正确性，例如 B.funcA 为 exposed ，则 B 不允许设置为 hiddened（其他场景同理）
-
-**### Java 使用 Cangjie 泛型数据类型**
-
-- Java使用泛型类/结构体
-  - 介绍：Java 侧调用 Cangjie 侧泛型类/结构体
-    [Java配置格式介绍]: ###Java使用配置文件
-  - 支持范围
-    - primitive 类型，且类型对应 Cangjie 基础数据类型
-    - 支持多泛型参数用法
-    - 支持普通函数
-  - 示例
-    class/struct 均参考如下示例：
-
-    - Cangije 侧源码
-
-    <!-- compile -->
-
-      ```Cangjie
-      public class GenericClass<T> {
-
-          private var value: T
-
-          public GenericClass(v: T) {
-              this.value = v
-          }
-          public func getValue() : T {
-              return this.value
-          }
-
-          public func setValue(t: T) {
-              value = t
-          }
-      }
-      ```
-
-    - 配置信息
-
-    ```toml
-    [[package]]
-    name = "genericClass"
-    APIStrategy = "Full"
-    GenericTypeStrategy = "Partial"
-    excluded_apis = [
-    ]
-    generic_object_configuration = [
-        { name = "GenericClass", type_arguments = ["Float64", "Int32"] },
-        { name = "GenericClass<Float64>", symbols = [
-            "getValue",
-            "GenericClass",
-            "value",
-            "setValue"
-        ]},
-
-        { name = "GenericClass<Int32>", symbols = [
-            "getValue",
-            "GenericClass",
-            "value",
-            "setValue"
-        ]}
-    ]
-    ```
-
-  - 规格限制
-    - 暂不支持自定义数据类型
-    - 暂不支持静态方法
-    - 支持如下类型: Int8,Int16,Int32,Int64,Float16,Float32,Bool
 
 ## 版本约束限制
 
