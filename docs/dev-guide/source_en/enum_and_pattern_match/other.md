@@ -1,6 +1,6 @@
 # Other Usage Scenarios of Patterns
 
-Patterns can be used not only in `match` expressions but also in variable definitions and `for in` expressions. For example, the left side of an equals sign is a pattern, and the part between the `for` keyword and the `in` keyword is also a pattern. Additionally, conditions in `if` expressions and `while` expressions can utilize patterns. For specific examples, refer to the ["Conditions Involving let-pattern"](../basic_programming_concepts/expression.md#conditions-involving-let-pattern) section.
+Patterns can be used not only in `match` expressions but also in variable definitions and `for in` expressions. For example, the left side of an equals sign is a pattern, and the part between the `for` keyword and the `in` keyword is also a pattern. Additionally, conditions in `if` expressions and `while` expressions can utilize patterns. For specific examples, refer to the ["Conditions Involving let-pattern"](../basic_programming_concepts/expression.md#examples-of-conditions-involving-let-patterns) section.
 
 However, not all patterns can be used in variable definitions and `for in` expressions. Only `irrefutable` patterns are permitted in these contexts. Therefore, only wildcard patterns, binding patterns, `irrefutable` tuple patterns, and `irrefutable` enum patterns are allowed.
 

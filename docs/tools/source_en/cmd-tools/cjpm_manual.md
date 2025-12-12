@@ -242,9 +242,9 @@ cjpm tree success
 - `-V, --verbose` displays compilation logs.
 - `-g` generates `debug` version output.
 - `--coverage` generates coverage information. By default, coverage is disabled.
-- `--cfg` when specified, custom `cfg` options in `cjpm.toml` can be passed through. For `cjpm.toml` configuration, refer to the [profile.customized-option](#profile.customized-option) section.
+- `--cfg` when specified, custom `cfg` options in `cjpm.toml` can be passed through. For `cjpm.toml` configuration, refer to the `profile.customized-option` section.
 - `-m, --member <value>` can only be used in a workspace to specify a single module as the compilation entry point.
-- `--target <value>` when specified, enables cross-compilation to the target platform. For `cjpm.toml` configuration, refer to the [target](#target) section.
+- `--target <value>` when specified, enables cross-compilation to the target platform. For `cjpm.toml` configuration, refer to the `target` section.
 - `--target-dir <value>` specifies the output directory for the build artifacts.
 - `-o, --output <value>` specifies the name of the output executable file. The default name is `main` (`main.exe` on Windows). Note that compiling an executable named `cjc` is currently not supported.
 - `--mock` enables `mock` testing for classes in the build version with this option.
@@ -276,7 +276,7 @@ Output: cjpm build success
 
 > **Note:**
 >
-> According to the Cangjie package management specifications, only valid source code packages that meet the requirements can be correctly included in the compilation scope. If warnings like `no '.cj' file` appear during compilation, it is likely because the corresponding package does not meet the specifications, causing the source files to be excluded. In such cases, refer to the [Cangjie Package Management Specifications](#cangjie-package-management-specifications) to modify the code directory structure.
+> According to the Cangjie package management specifications, only valid source code packages that meet the requirements can be correctly included in the compilation scope. If warnings like `no '.cj' file` appear during compilation, it is likely because the corresponding package does not meet the specifications, causing the source files to be excluded. In such cases, refer to the [Cangjie Package Management Specifications](#cangjie-package-management-specification) to modify the code directory structure.
 
 Before executing `cjpm build`, `cjpm` checks the package dependency relationships of the current module or workspace. If mutual imports between packages form a dependency cycle, the build will be aborted, and an error message will be returned, indicating the cyclic dependency path.
 
@@ -793,7 +793,7 @@ Instructions for calling external `C` dynamic libraries in Cangjie:
 hello = { path = "./src/" }
 ```
 
-To specify `C` library configurations for different platforms, refer to [target](#target).
+To specify `C` library configurations for different platforms, refer to `target`.
 
 ### "profile"
 
@@ -958,7 +958,7 @@ verbose = true
 
 Benchmark configuration supports specifying options during benchmark compilation and execution. All fields are optional and will not take effect if not configured. Only the `profile.bench` settings of the top-level module take effect. The option list aligns with the console execution options provided by `cjpm bench`. If an option is configured in both the configuration file and the console, the console option takes precedence. `profile.bench` supports the following runtime options:
 
-- `filter`: Specifies the benchmark case filter. The value is a string with the same format as the `--filter` value in the [bench command description](#bench).
+- `filter`: Specifies the benchmark case filter. The value is a string with the same format as the `--filter` value in the [bench command description](#profilebench).
 - `option:<value>`: Works with `@Configure` to define runtime options. For example:
     - `random-seed`: Specifies the random seed value. Must be a positive integer.
     - `no-color`: Specifies whether to disable colored output in the console. Can be `true` or `false`.
