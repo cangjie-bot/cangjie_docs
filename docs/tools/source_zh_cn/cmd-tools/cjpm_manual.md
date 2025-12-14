@@ -2618,9 +2618,36 @@ features = [ "os.windows" ]
 
 > **注意：**
 >
-> 对于在 source-set 中的源码文件，必须在源码文件头中，通过 `feature` 关键字显式声明其对应的 feature 名称。例如：
->
-> `features user.cjmpterm.wayland, user.cjmpterm.x11`
+> 对于在 source-set 中的源码文件，必须在源码文件头中，通过 `feature` 关键字显式声明其对应的 feature 名称。
+
+如下为 feature 声明的具体规则：
+
+- features 声明以关键字 `features` 开头。
+- 它必须在包声明之前声明。
+- features 声明应使用限定 feature 名称指定一组特征，feature 名称之间用逗号分隔。
+- 限定 feature 名称由标识符和点号组成。
+- 如果源码集不是产品源码集，则可以在 features 指令中包含 @NonProduct 注解。
+- 源码集中的 features 指令必须与源码集的配置保持一致。
+
+示例如下：
+
+```cangjie
+// An empty features directive
+features {}
+
+// An empty features directive with annotation
+@NonProduct
+features {}
+
+// A features directive with a specific feature name
+features {os.linux}
+
+// Using a user-defined feature
+features {user.define.feature}
+
+// Multiple features in one directive
+features {os.linux, user.define.feature}
+```
 
 源码集是与 feature 对应的一组源码文件。在一个项目中，代码可以按包和按源码集分。一个项目的源码集可以创建一个有向无环图，该图可仅包含单个节点。图中节点的源码集的 feature 列表必须为传入节点源码集 feature 列表的超集。
 
