@@ -339,7 +339,7 @@ common class A {
 ```
 
 <!-- compile -->
-```
+```cangjie
 // platform file
 package cmp
 
@@ -939,7 +939,7 @@ common enum A {
 ```
 
 <!-- compile -->
-```
+```cangjie
 // platform file
 package cmp
 
