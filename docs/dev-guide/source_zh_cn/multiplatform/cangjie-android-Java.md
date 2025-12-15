@@ -1482,6 +1482,7 @@ public class TimeUnit {
 ### Java 使用 Cangjie 的 Class
 
 支持 Java 使用 Cangjie Class, 规格如下：
+
 - 允许 Java 类继承 Cangjie 的 public open Class
 - 允许访问父类中的非 private 方法(包括 public、protected方法)
 - 允许重写父类中的非静态非 private open 方法(包括 public、protected 方法)
@@ -1778,6 +1779,7 @@ public class GenericClass<T> {
     }
 }
 ```
+
 - **[default]** 字段：全局默认设置，package 未具体配置信息情况下采用默认设置规则
 
 - **APIStrategy** 字段：符号可见性策略表示外部配置默认 Cangjie 符号对目标语言的可见性
@@ -1786,51 +1788,51 @@ public class GenericClass<T> {
 
 - **[[package]]** 字段：包配置信息
 
-  - **name** 字段：package name
+    - **name** 字段：package name
 
-  - **APIStrategy** 字段：当前包中配置的符号可见性模式
-    - Full : 对应 excluded_apis
-    - None : 对应 included_apis
+    - **APIStrategy** 字段：当前包中配置的符号可见性模式
+        - Full : 对应 excluded_apis
+        - None : 对应 included_apis
 
-  - **GenericTypeStrategy** 字段：当前包中配置的泛型实例化模式
-    - Partial : 需要对泛型进行指定类型的实例化
-    - None : 无需使用泛型
+    - **GenericTypeStrategy** 字段：当前包中配置的泛型实例化模式
+        - Partial : 需要对泛型进行指定类型的实例化
+        - None : 无需使用泛型
 
-  - **included_apis** 字段：
-    用户提供的完全限定名称将在目标语言中暴露（前提是满足公开等语法要求，否则将产生告警，
-    如果结构体中的符号需要暴露，则必须暴露该结构体；如果该结构体位于此列表中，则会发出警告）
+    - **included_apis** 字段：
+        用户提供的完全限定名称将在目标语言中暴露（前提是满足公开等语法要求，否则将产生告警，
+        如果结构体中的符号需要暴露，则必须暴露该结构体；如果该结构体位于此列表中，则会发出警告）
 
-  - **excluded_apis** 字段：与 included_apis 相反，其中符号将被隐藏
+    - **excluded_apis** 字段：与 included_apis 相反，其中符号将被隐藏
 
-  - **generic_object_configuration** 字段：当前包允许进行实例化的一系列类型和符号配置
+    - **generic_object_configuration** 字段：当前包允许进行实例化的一系列类型和符号配置
 
-    - 泛型数据结构 & 实例化类型
-      - name 字段：泛型数据类型(struct/class/interface/enum)对象名称
-      - type_arguments 字段：配置实例化类型，若多泛型参数则为 "Int32, Int64" 方式对应 <T,U>
+        - 泛型数据结构 & 实例化类型
+            - name 字段：泛型数据类型(struct/class/interface/enum)对象名称
+            - type_arguments 字段：配置实例化类型，若多泛型参数则为 "Int32, Int64" 方式对应 <T,U>
 
-      ```toml
-      { name = "GenericClass", type_arguments = ["Int64", "Int32"] }
-      ```
+            ```toml
+            { name = "GenericClass", type_arguments = ["Int64", "Int32"] }
+            ```
 
-    - 实例化数据结构 & 实例化符号
-      - name 字段：对应实例化后上述泛型数据类型对象名称
-      - symbols 字段：实例化数据结构内对应变量以及函数等符号
+        - 实例化数据结构 & 实例化符号
+            - name 字段：对应实例化后上述泛型数据类型对象名称
+            - symbols 字段：实例化数据结构内对应变量以及函数等符号
 
-      ```toml
-          { name = "GenericClass<Int64>", symbols = [
-              "getValue",
-              "GenericClass",
-              "value",
-              "setValue"
-          ]},
+            ```toml
+                { name = "GenericClass<Int64>", symbols = [
+                    "getValue",
+                    "GenericClass",
+                    "value",
+                    "setValue"
+                ]},
 
-          { name = "GenericClass<Int32>", symbols = [
-              "getValue",
-              "GenericClass",
-              "value",
-              "setValue"
-          ]}
-      ```
+                { name = "GenericClass<Int32>", symbols = [
+                    "getValue",
+                    "GenericClass",
+                    "value",
+                    "setValue"
+                ]}
+            ```
 
 **#### 符号控制规格约束**
 
@@ -1839,72 +1841,73 @@ public class GenericClass<T> {
 **### Java 使用 Cangjie 泛型数据类型**
 
 - Java使用泛型类/结构体
-  - 介绍：Java 侧调用 Cangjie 侧泛型类/结构体
-    [Java配置格式介绍]: ###Java使用配置文件
-  - 支持范围
-    - primitive 类型，且类型对应 Cangjie 基础数据类型
-    - 支持多泛型参数用法
-    - 支持普通函数
-  - 示例
-    class/struct 均参考如下示例：
+    - 介绍：Java 侧调用 Cangjie 侧泛型类/结构体
+      [Java配置格式介绍](#java-使用-配置文件)
+    - 支持范围
+        - primitive 类型，且类型对应 Cangjie 基础数据类型
+        - 支持多泛型参数用法
+        - 支持普通函数
+    - 示例
+        class/struct 均参考如下示例：
 
-    - Cangije 侧源码
+        - Cangije 侧源码
 
-    <!-- compile -->
+        <!-- compile -->
 
-      ```Cangjie
-      public class GenericClass<T> {
+        ```Cangjie
+        public class GenericClass<T> {
 
-          private var value: T
+            private var value: T
 
-          public GenericClass(v: T) {
-              this.value = v
-          }
-          public func getValue() : T {
-              return this.value
-          }
+            public GenericClass(v: T) {
+                this.value = v
+            }
+            public func getValue() : T {
+                return this.value
+            }
 
-          public func setValue(t: T) {
-              value = t
-          }
-      }
-      ```
+            public func setValue(t: T) {
+                value = t
+            }
+        }
+        ```
 
-    - 配置信息
+        - 配置信息
 
-    ```toml
-    [[package]]
-    name = "genericClass"
-    APIStrategy = "Full"
-    GenericTypeStrategy = "Partial"
-    excluded_apis = [
-    ]
-    generic_object_configuration = [
-        { name = "GenericClass", type_arguments = ["Float64", "Int32"] },
-        { name = "GenericClass<Float64>", symbols = [
-            "getValue",
-            "GenericClass",
-            "value",
-            "setValue"
-        ]},
+        ```toml
+        [[package]]
+        name = "genericClass"
+        APIStrategy = "Full"
+        GenericTypeStrategy = "Partial"
+        excluded_apis = [
+        ]
+        generic_object_configuration = [
+            { name = "GenericClass", type_arguments = ["Float64", "Int32"] },
+            { name = "GenericClass<Float64>", symbols = [
+                "getValue",
+                "GenericClass",
+                "value",
+                "setValue"
+            ]},
 
-        { name = "GenericClass<Int32>", symbols = [
-            "getValue",
-            "GenericClass",
-            "value",
-            "setValue"
-        ]}
-    ]
-    ```
+            { name = "GenericClass<Int32>", symbols = [
+                "getValue",
+                "GenericClass",
+                "value",
+                "setValue"
+            ]}
+        ]
+        ```
 
-  - 规格限制
-    - 暂不支持自定义数据类型
-    - 暂不支持静态方法
-    - 支持如下类型: Int8,Int16,Int32,Int64,Float16,Float32,Bool
+    - 规格限制
+        - 暂不支持自定义数据类型
+        - 暂不支持静态方法
+        - 支持如下类型: Int8,Int16,Int32,Int64,Float16,Float32,Bool
 
 ## 版本约束限制
 
 当前版本的 Java 互操作方案存在如下约束限制：
-  - 不支持 Java Mirror 和 Impl 类的实例逃逸出线程范围，即不能作为全局变量、静态变量，或作为这些变量的字段成员
-  - Java Mirror 和 Impl 类的实例不能作为其他 Java Mirror 或 Impl 对象的字段成员
-  - Java Mirror 和 Impl 类的实例不能被 Lambda 表达式块或 spawn 线程捕获
+
+- 不支持 Java Mirror 和 Impl 类的实例逃逸出线程范围，即不能作为全局变量、静态变量，或作为这些变量的字段成员
+- Java Mirror 和 Impl 类的实例不能作为其他 Java Mirror 或 Impl 对象的字段成员
+- Java Mirror 和 Impl 类的实例不能被 Lambda 表达式块或 spawn 线程捕获

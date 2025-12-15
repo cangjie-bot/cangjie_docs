@@ -2,7 +2,7 @@
 
 HLE 自动生成 C 语言到仓颉的胶水代码，支持函数、结构体、枚举和全局变量的翻译，类型支持：基础类型、结构体类型、指针、数组和字符串。
 
-### 基础类型
+## 基础类型
 
 工具支持以下几种基础类型：
 
@@ -25,11 +25,11 @@ HLE 自动生成 C 语言到仓颉的胶水代码，支持函数、结构体、�
 | double             | Float64          |
 | int arr[10]        | Varry |
 
-### 复杂类型
+## 复杂类型
 
 工具支持的复杂类型有：struct 类型、指针类型、枚举类型、字符串、数组。
 
-#### struct 类型
+### struct 类型
 
 .h声明文件：
 
@@ -102,7 +102,7 @@ public struct Point3D {
 }
 ```
 
-#### 指针类型
+### 指针类型
 
 .h声明文件：
 
@@ -117,7 +117,7 @@ void* testPointer(int a);
 foreign func testPointer(a: Int32): CPointer<Unit>
 ```
 
-#### 函数类型
+### 函数类型
 
 .h声明文件：
 
@@ -132,8 +132,7 @@ void test(int a);
 foreign func test(a: Int32): Unit
 ```
 
-
-#### 枚举类型
+### 枚举类型
 
 .h声明文件：
 
@@ -158,7 +157,7 @@ public const Color_YELLOW: Color = 6
 public type Color = UInt32
 ```
 
-#### 字符串
+### 字符串
 
 .h声明文件：
 
@@ -173,7 +172,7 @@ void test(char* a);
 foreign func test(a: CString): Unit
 ```
 
-#### 全局变量
+### 全局变量
 
 目前只支持C语言中的基础类型的常量。
 
@@ -190,7 +189,7 @@ const int GLOBAL_CONST = 42;
 public const GLOBAL_CONST: Int32 = 42
 ```
 
-#### 数组类型
+### 数组类型
 
 .h声明文件：
 
@@ -205,11 +204,11 @@ void test(int arr[3]);
 foreign func test(arr: VArray<Int32, $3>): Unit
 ```
 
-### 不支持的规格
+## 不支持的规格
 
 不支持的规格有：位域、联合体、宏、不透明类型、柔性数组、扩展类型。
 
-#### 位域
+### 位域
 
 .h声明文件：
 
@@ -236,7 +235,7 @@ public struct X {
 }
 ```
 
-#### 联合体
+### 联合体
 
 .h声明文件：
 
@@ -261,11 +260,11 @@ public struct X {
 }
 ```
 
-#### 宏
+### 宏
 
 仓颉目前没有合适的表达式解析库，因此无法直接计算宏的值。在遇到宏时，当前会跳过整个 #define。
 
-#### 不透明类型
+### 不透明类型
 
 .h声明文件：
 
@@ -298,7 +297,7 @@ foreign func get_value(obj: CPointer<OpaqueType>): Int32
 foreign func destroy_opaque(obj: CPointer<OpaqueType>): Unit
 ```
 
-#### 柔性数组
+### 柔性数组
 
 .h声明文件：
 
@@ -325,7 +324,7 @@ public struct FlexibleString {
 }
 ```
 
-#### 扩展类型
+### 扩展类型
 
 .h声明文件：
 
@@ -368,7 +367,7 @@ _Atomic(int) counter = 0;
 ```
 
 > 说明：
-> 
+>
 > 1. 内存对齐：仓颉没有提供对齐控制的语法，因此 HLE工具使用 C 默认的对齐方式。如果 C 代码中使用了 `#pragma pack` 或者 `__attribute__((packed))` 等方式来控制对齐，生成的绑定代码不保证正确性。
 > 2. 调用约定：仓颉文档中对于调用约定描述不清晰，其实是采用了默认的调用约定，目前HLE工具会尝试根据C代码中的函数签名推断调用约定，但是不保证正确性。
 > 3. 使用限制：HLE 自动生成 C 语言到仓颉的胶水代码受到系统 glibc 版本 限制，当前仅支持 Ubuntu 22.04及以上系统。

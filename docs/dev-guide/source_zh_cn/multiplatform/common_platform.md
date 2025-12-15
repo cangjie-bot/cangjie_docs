@@ -339,7 +339,7 @@ common class A {
 ```
 
 <!-- compile -->
-```
+```cangjie
 // platform file
 package cmp
 

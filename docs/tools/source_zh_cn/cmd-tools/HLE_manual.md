@@ -16,7 +16,7 @@
     [如何安装 Node.js](https://dev.nodejs.cn/learn/how-to-install-nodejs/)
 
     比如可以使用以下的命令安装：
-    
+
     ```sh
     # Download and install nvm:
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
@@ -75,8 +75,8 @@ hle -b ${CANGJIE_HOME}/tools/dtsparser/node_modules/.bin/cjbind -c --module-name
 
 其中`-b`参数用于指定cjbind二进制文件的路径，cjbind下载地址如下：
 
-- Linux: https://gitcode.com/Cangjie-SIG/cjbind-cangjie/releases/download/v0.2.7/cjbind-linux-x64
-- Windows: https://gitcode.com/Cangjie-SIG/cjbind-cangjie/releases/download/v0.2.7/cjbind-windows-x64.exe
-- macOS: https://gitcode.com/Cangjie-SIG/cjbind-cangjie/releases/download/v0.2.7/cjbind-darwin-arm64
+- Linux: <https://gitcode.com/Cangjie-SIG/cjbind-cangjie/releases/download/v0.2.7/cjbind-linux-x64>
+- Windows: <https://gitcode.com/Cangjie-SIG/cjbind-cangjie/releases/download/v0.2.7/cjbind-windows-x64.exe>
+- macOS: <https://gitcode.com/Cangjie-SIG/cjbind-cangjie/releases/download/v0.2.7/cjbind-darwin-arm64>
 
 `--clang-args`参数是会被直接传递给clang的参数，在参数值内可用-I指定头文件搜索路径。系统头文件路径程序会自动搜索，用户自定义的头文件路径需要显式指定。

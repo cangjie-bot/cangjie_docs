@@ -2725,7 +2725,6 @@ output-type = "executable"
 
 则在模块 `test` 的源码中可以导入依赖模块内的包：
 
-
 ```cangjie
 // cj_project/src/main.cj
 package test
