@@ -97,13 +97,9 @@ $ adb shell "LD_LIBRARY_PATH=/data/local/tmp /data/local/tmp/main"
 若需要在 iOS 模拟器上运行，需要指定以下选项：
 
 - `--target`
-  - `aarch64-apple-ios-simulator` for aarch64 Macs
-  - `x86_64-apple-ios-simulator` for x86_64 Macs
+  - `--target=aarch64-apple-ios-simulator` 适用于arch64架构开发设备
+  - `--target=x86_64-apple-ios-simulator` 适用于x86_64架构开发设备
 - `--output-type=staticlib` 指定输出文件的类型为静态库
-
-其中：
-- `--target=aarch64-apple-ios-simulator` 适用于arch64架构开发设备
-- `--target=x86_64-apple-ios-simulator` 适用于x86_64架构开发设备
 
 编译产物需要添加至 `Xcode` 工程中，并通过 `Xcode` 构建 `iOS` 应用。
 
