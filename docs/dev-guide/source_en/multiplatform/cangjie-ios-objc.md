@@ -1037,7 +1037,7 @@ A mirror function declaration is subject to the following restrictions:
 - It must be a declaration, not definition, i.e. it may not have a body, which also means that it must specify the return type explicitly.
 - It cannot be modified with `foreign` or `const`.
 - It cannot be generic.
-- Only Objective-C compatible types (see [Type Mapping](#type-mapping)) can be used as its parameter and return types.
+- Only Objective-C compatible types (see `Type Mapping`) can be used as its parameter and return types.
 - Vararg parameters are not supported.
 - Each `@ObjCMirror` function must have a unique name, i.e. there is no overloading.
 

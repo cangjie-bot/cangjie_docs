@@ -2,7 +2,7 @@
     - [Package Management Tool](source_en/cmd-tools/cjpm_manual.md)
     - [Debugging Tool](source_en/cmd-tools/cjdb_manual.md)
     - [Formatting Tool](source_en/cmd-tools/cjfmt_manual.md)
-    - [tatic Analysis Tool](source_en/cmd-tools/cjlint_manual.md)
+    - [Static Analysis Tool](source_en/cmd-tools/cjlint_manual.md)
     - [Coverage Statistics Tool](source_en/cmd-tools/cjcov_manual.md)
     - [HLE Tool](source_en/cmd-tools/HLE_manual.md)
         - [Conversion Rules for Generating Cangjie Glue Code from ArkTS Third-Party Modules](source_en/cmd-tools/cj-dts2cj-translation-rules.md)
