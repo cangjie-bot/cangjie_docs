@@ -290,7 +290,7 @@ cjc --debug-macro demo.cj --import-path ./target
 
 > **Note:**
 >
-> If using the Cangjie `CJPM` package manager for compilation, add the `--debug-macro` compilation option in the `cjpm.toml` configuration file to enable macro debug mode.
+> If using the Cangjie `CJPM` project manager for compilation, add the `--debug-macro` compilation option in the `cjpm.toml` configuration file to enable macro debug mode.
 >
 > ```text
 > compile-option = "--debug-macro"
