@@ -201,7 +201,7 @@ main() {
 }
 ```
 
-“let pattern” 中表达式部分运算符优先级不能低于 `..` 运算符，此处介绍对应的错误和正确示例。其中， [`Option` 类型](../enum_and_pattern_match/option_type.md)的相关介绍在后文给出。
+“let pattern” 中表达式部分运算符优先级不能低于 `..` 运算符，此处介绍对应的错误和正确示例。其中， [`Option` 类型](../enum_and_pattern_match/option_type.md) 的相关介绍在后文给出。
 
 <!-- compile.error -->
 

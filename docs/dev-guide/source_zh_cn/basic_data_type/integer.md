@@ -81,4 +81,4 @@ c = b'\u{90}' - b'\u{66}' + c   // c is 162 with type UInt8
 
 > **注意：**
 >
-> 本章所提及的某个类型支持的操作，均是指在没有[操作符重载](../function/operator_overloading.md)的前提下。
+> 本章所提及的某个类型支持的操作，均是指在没有[操作符重载](../function/operator_overloading.md) 的前提下。

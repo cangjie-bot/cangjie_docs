@@ -571,7 +571,7 @@ class C <: B { // Error, 'B' is not inheritable
 }
 ```
 
-`class` 仅支持单继承，因此下面这样一个类继承两个类的代码是不合法的（`&` 是类实现多个接口时的语法，详见[接口](interface.md)）。
+`class` 仅支持单继承，因此下面这样一个类继承两个类的代码是不合法的（`&` 是类实现多个接口时的语法，详见s[接口](interface.md)）。
 
 <!-- compile.error -->
 

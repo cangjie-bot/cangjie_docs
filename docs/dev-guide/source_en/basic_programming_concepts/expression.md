@@ -296,7 +296,7 @@ For example, the following program uses a `do-while` expression to approximate t
 
 <!-- run -->
 
-```cangjie```
+```cangjie
 import std.random.Random
 
 main() {
@@ -318,6 +318,7 @@ main() {
     let pi = 4.0 * Float64(hitPoints) / Float64(totalPoints)
     println("Approximate value of pi: ${pi}")
 }
+
 ```
 
 Running the above program will output:
@@ -374,7 +375,7 @@ main() {
 }
 ```
 
-Here, characters prefixed with `r` represent [character literals](../basic_data_type/characters.md#character-literals). Running the above program will output:
+Here, characters prefixed with `r` represent [character literals](../basic_data_type/characters.md#character-type-literals). Running the above program will output:
 
 ```text
 Heavenly Stems and Earthly Branches for Lunar Year 2024:

@@ -113,7 +113,7 @@ s = "Hello"
 
 ```
 
-更多插值的用法可以参考  [使用 quote 插值语法节点](./syntax_node.md#使用-quote-插值语法节点)。
+更多插值的用法可以参考[使用 quote 插值语法节点](./syntax_node.md#使用-quote-插值语法节点)。
 
 特别地，当 `quote` 表达式包含某些特殊 `Token` 时，需要进行转义：
 
