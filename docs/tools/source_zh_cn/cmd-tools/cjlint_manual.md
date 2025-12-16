@@ -64,8 +64,8 @@ cjlint -f xxx/xxx/src/xxx.cj
 `-r`需要与`-o`选项配合使用，如果没有`-o`指定输出到文件，即使指定了`-r`也不会生成扫描报告。如果指定了`-o`没有指定`-r`，那么默认生成`json`格式的扫描报告。
 
 ```bash
-cjlint -f ./src -r csv -o ./report         // 生成report.csv文件
-cjlint -f ./src -r csv -o ./output/report  // 在output目录下生成report.csv文件
+cjlint -f ./src -r csv -o ./report         // 生成 report.csv 文件
+cjlint -f ./src -r csv -o ./output/report  // 在 output 目录下生成 report.csv 文件
 ```
 
 `-c`, `-m` 在开发者需要时用以指定`config`和`modules`所在的目录路径。
@@ -326,7 +326,7 @@ func foo(a: Int64, b: Int64, c: Int64, d: Int64) {
 
 1. `cjlint` 可以通过将 G.SYN.01 添加至 `cjlint_rule_list.json` 以启用禁用语法的检查。如果使用了禁用的语法元素，`cjlint` 将会报错。
 
-2. 当前所支持`cjlint`检查的禁用语法如表中所示:
+2. 当前所支持`cjlint`检查的禁用语法如表中所示：
 
    | 禁用语法     | 关键词          | 说明                                             |
    | ------------ | --------------- | ------------------------------------------------ |
@@ -350,7 +350,7 @@ func foo(a: Int64, b: Int64, c: Int64, d: Int64) {
    | 条件编译     | When            | 禁止平台相关代码                                 |
    | 模式匹配     | Match           | 函数式编程范式，开发者不易掌握                   |
    | 捕获异常     | TryCatch        | 避免自行处理异常，易导致错误被忽略               |
-   | 高阶函数     | HigherOrderFunc | 函数类型的参数或返回值, 避免复杂代码             |
+   | 高阶函数     | HigherOrderFunc | 函数类型的参数或返回值，避免复杂代码             |
    | 其他基础类型 | PrimitiveType   | 不应使用 Int64、float64、bool 之外的其他基础类型 |
    | 其他容器类型 | ContainerType   | 应使用 List，Map，Set                            |
 

@@ -66,7 +66,6 @@ class U2 <: U1 {}
 open class S1 {}
 class S2 <: S1 {}
 
-
 func f(a: U1): S2 { S2() }
 func g(a: U2): S1 { S1() }
 
@@ -115,4 +114,4 @@ extend Bool <: I2 {}
 
 ## 泛型类型的子类型关系
 
-泛型类型间也有子类型关系，详见[泛型类型的子类型关系](../generic/generic_subtype.md)。
+泛型类型间也有子类型关系，详见 [泛型类型的子类型关系](../generic/generic_subtype.md)。

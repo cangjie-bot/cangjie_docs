@@ -309,22 +309,22 @@ For scenarios where long-running network service programs cannot terminate norma
 
 1) Save the following script as `stop.sh` (this script relies on `gdb`):
 
-```shell
-#!/bin/sh
-SERVER_NAME=$1
+    ```shell
+    #!/bin/sh
+    SERVER_NAME=$1
 
-pid=`ps -ef | grep $SERVER_NAME | grep -v "grep" | awk '{print $2}'`
-echo $pid
-gdb -q attach $pid <<__EOF__
-p exit(0)
-__EOF__
-```
+    pid=`ps -ef | grep $SERVER_NAME | grep -v "grep" | awk '{print $2}'`
+    echo $pid
+    gdb -q attach $pid <<__EOF__
+    p exit(0)
+    __EOF__
+    ```
 
 2) After the long-running service program completes its business logic coverage, execute `stop.sh {service_name}`. For example, if the long-running service process is started with `./main`, stop the process to generate `gcda` data as follows:
 
-```shell
-sh stop.sh ./main
-```
+    ```shell
+    sh stop.sh ./main
+    ```
 
 ### Filenames with Special Characters
 
@@ -387,47 +387,47 @@ Branch coverage is an experimental feature, and there may be instances where bra
 
 Currently known scenarios where branch coverage data may be inaccurate include the following expressions:
 
-- `try-catch-finally` expressions  
-- Loop expressions (including `for` expressions, `while` expressions)  
-- `if-else` expressions  
+- `try-catch-finally` expressions
+- Loop expressions (including `for` expressions, `while` expressions)
+- `if-else` expressions
 
-### Certain Code Not Recorded in Line Coverage Data  
+### Certain Code Not Recorded in Line Coverage Data
 
-Some code will not be recorded in line coverage data, which is normal. In general, if a line of code *only contains definitions or declarations* without actual executable code, it will not be counted in the coverage. Currently known scenarios that are not counted include:  
+Some code will not be recorded in line coverage data, which is normal. In general, if a line of code *only contains definitions or declarations* without actual executable code, it will not be counted in the coverage. Currently known scenarios that are not counted include:
 
-- Global variable definitions, for example:  
+- Global variable definitions, for example:
 
-    ```cangjie  
+    ```cangjie
     let HIGH_1_UInt8: UInt8 = 0b10000000;  
-    ```  
+    ```
 
-- Member variable declarations without initialization assignments, for example:  
+- Member variable declarations without initialization assignments, for example:
 
-    ```cangjie  
+    ```cangjie
     public class StringBuilder <: Collection & ToString {  
         private var myData: Array  
         private var mySize: Int64  
         private var endIndex: Int64  
     }  
-    ```  
+    ```
 
-- Function declarations without function bodies (including `foreign` functions, etc.), for example:  
+- Function declarations without function bodies (including `foreign` functions, etc.), for example:
 
-    ```cangjie  
+    ```cangjie
     foreign func cj_core_free(p: CPointer): Unit  
-    ```  
+    ```
 
-- Enum type definitions, for example:  
+- Enum type definitions, for example:
 
-    ```cangjie  
+    ```cangjie
     enum Numeric {  
         NumDay | NumYearDay | NumYearWeek | NumHour12 | NumHour24 | NumMinute | NumSecond  
     }  
-    ```  
+    ```
 
-- `class`, `extend`, and other definitions. The lines containing `extend` and `class` will not be recorded in coverage data, for example:  
+- `class`, `extend`, and other definitions. The lines containing `extend` and `class` will not be recorded in coverage data, for example:
 
-    ```cangjie  
+    ```cangjie
     extend Int8 <: Formatter { // This line will not account for the coverage.  
       ...  
     }  
@@ -435,11 +435,11 @@ Some code will not be recorded in line coverage data, which is normal. In genera
     public class StringBuilder <: Collection & ToString { // This line will not account for the coverage.  
        ...  
     }  
-    ```  
+    ```
 
-### The `main` Function in Source Code Is Not Covered  
+### The `main` Function in Source Code Is Not Covered
 
-**Reason:** When compiling with `cjc --test`, the Cangjie testing framework generates a new `main` as the program entry point. The `main` function in the source code will no longer serve as the program entry and will not be executed.  
+**Reason:** When compiling with `cjc --test`, the Cangjie testing framework generates a new `main` as the program entry point. The `main` function in the source code will no longer serve as the program entry and will not be executed.
 
 **Recommendation:** After using `cjc --test`, it is advised not to manually write redundant `main` functions.
 

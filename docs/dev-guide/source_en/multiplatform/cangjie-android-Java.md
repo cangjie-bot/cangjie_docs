@@ -428,7 +428,7 @@ Use `Unit` as the return type when calling Java methods that return `void`.
         com.example.c.C
     ```
 
-This command will generate the Mirror Type for C `src/cj/UNNAMED/src/com/example/c/C.cj`, along with Mirror Types for all dependent types. Dependent types refer to parameter/return value/parent type/non-private field types.
+    This command will generate the Mirror Type for C `src/cj/UNNAMED/src/com/example/c/C.cj`, along with Mirror Types for all dependent types. Dependent types refer to parameter/return value/parent type/non-private field types.
 
     The generated `src/cj/UNNAMED/src/com/example/c/C.cj` is as follows:
 
@@ -462,7 +462,7 @@ This command will generate the Mirror Type for C `src/cj/UNNAMED/src/com/example
         ...
     ```
 
-    In the [Interop Class Example](#使用场景举例) [Calling Cangjie from Java](#java-调用仓颉) section:
+    In the [Interop Class Example](#usage-examples) [Calling Cangjie from Java](#calling-cangjie-from-java) section:
 
     ```cangjie
     // Cangjie code
@@ -1197,7 +1197,7 @@ public struct Vector {
         print("cj: Hello from static func in cj.Vector (${v.x}, ${v.y})\n", flush: true)
     }
 }
-``` 
+```
 
 Corresponding Java code:
 
@@ -1235,7 +1235,7 @@ public class Main {
 }
 ```
 
-#### Constraints:
+#### Constraints
 
 1. Cangjie structs must not implement interfaces.
 2. Generic Cangjie structs are not yet supported.
@@ -1246,6 +1246,7 @@ public class Main {
 ### Java Usage of Cangjie Enums
 
 Cangjie enum types need to be mapped to Java types to enable:
+
 1. Creating enum objects in Java by calling enum constructors.
 2. Passing enum objects across language boundaries.
 3. Invoking static or non-static methods defined in enums.

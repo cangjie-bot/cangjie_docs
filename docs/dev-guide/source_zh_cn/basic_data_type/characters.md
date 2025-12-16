@@ -48,4 +48,4 @@ main() {
 
 字符类型支持的操作符包括：关系操作符，即小于（`<`）、大于（`>`）、小于等于（`<=`）、大于等于（`>=`）、相等（`==`）、不等（`!=`）。比较的是字符的 Unicode 值。
 
-`Rune` 可以转换为 `UInt32`，整数类型可以转换为 `Rune`，具体的类型转换语法及规则请参见[`Rune` 到 `UInt32` 和整数类型到 `Rune` 的转换](../class_and_interface/typecast.md#rune-到-uint32-和整数类型到-rune-的转换)。
+`Rune` 可以转换为 `UInt32`，整数类型可以转换为 `Rune`，具体的类型转换语法及规则请参见 [`Rune` 到 `UInt32` 和整数类型到 `Rune` 的转换](../class_and_interface/typecast.md#rune-到-uint32-和整数类型到-rune-的转换)。
