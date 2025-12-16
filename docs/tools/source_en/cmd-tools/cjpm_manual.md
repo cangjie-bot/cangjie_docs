@@ -242,9 +242,9 @@ cjpm tree success
 - `-V, --verbose` displays compilation logs.
 - `-g` generates `debug` version output.
 - `--coverage` generates coverage information. By default, coverage is disabled.
-- `--cfg` when specified, custom `cfg` options in `cjpm.toml` can be passed through. For `cjpm.toml` configuration, refer to the [profile.customized-option](#profile.customized-option) section.
+- `--cfg` when specified, custom `cfg` options in `cjpm.toml` can be passed through. For `cjpm.toml` configuration, refer to the `profile.customized-option` section.
 - `-m, --member <value>` can only be used in a workspace to specify a single module as the compilation entry point.
-- `--target <value>` when specified, enables cross-compilation to the target platform. For `cjpm.toml` configuration, refer to the [target](#target) section.
+- `--target <value>` when specified, enables cross-compilation to the target platform. For `cjpm.toml` configuration, refer to the `target` section.
 - `--target-dir <value>` specifies the output directory for the build artifacts.
 - `-o, --output <value>` specifies the name of the output executable file. The default name is `main` (`main.exe` on Windows). Note that compiling an executable named `cjc` is currently not supported.
 - `--mock` enables `mock` testing for classes in the build version with this option.
@@ -276,7 +276,7 @@ Output: cjpm build success
 
 > **Note:**
 >
-> According to the Cangjie package management specifications, only valid source code packages that meet the requirements can be correctly included in the compilation scope. If warnings like `no '.cj' file` appear during compilation, it is likely because the corresponding package does not meet the specifications, causing the source files to be excluded. In such cases, refer to the [Cangjie Package Management Specifications](#cangjie-package-management-specifications) to modify the code directory structure.
+> According to the Cangjie package management specifications, only valid source code packages that meet the requirements can be correctly included in the compilation scope. If warnings like `no '.cj' file` appear during compilation, it is likely because the corresponding package does not meet the specifications, causing the source files to be excluded. In such cases, refer to the `Cangjie Package Management Specifications` to modify the code directory structure.
 
 Before executing `cjpm build`, `cjpm` checks the package dependency relationships of the current module or workspace. If mutual imports between packages form a dependency cycle, the build will be aborted, and an error message will be returned, indicating the cyclic dependency path.
 
@@ -371,14 +371,17 @@ The unit test code structure for a module is as follows, where `xxx.cj` contains
 
 1. Single-module testing scenario:
 
-    ```text
+    ```text<>
     Input: cjpm test
     Progress report:
     group test.koo                                    100% [||||||||||||||||||||||||||||] ✓    (00:00:01)
     group test.zoo                                      0% [----------------------------]      (00:00:00)
     test TestZ.sayhi                                                                           (00:00:00)
 
-    passed: 1, failed: 0                                  33% [|||||||||-------------------]  1### bench
+    passed: 1, failed: 0                                  33% [|||||||||-------------------]  1/3 (00:00:01)
+    ```
+
+### bench
 
 The `bench` command is used to execute performance test cases in test files and directly print the test results. The compiled artifacts are stored by default in the `target/release/unittest_bin` directory. Performance test cases are annotated with the `@Bench` macro. For more details on how to write performance test code, refer to the description of the `std.unittest` library in the *Cangjie Programming Language Standard Library API*.
 
@@ -793,7 +796,7 @@ Instructions for calling external `C` dynamic libraries in Cangjie:
 hello = { path = "./src/" }
 ```
 
-To specify `C` library configurations for different platforms, refer to [target](#target).
+To specify `C` library configurations for different platforms, refer to `target`.
 
 ### "profile"
 

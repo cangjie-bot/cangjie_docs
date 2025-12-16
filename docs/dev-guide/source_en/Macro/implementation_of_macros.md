@@ -38,7 +38,7 @@ When a macro is applied to a declaration, the parentheses can generally be omitt
 
 Special notes on the legality of `Tokens` within parentheses:
 
-- The input must consist of a sequence of valid `Token`s. Symbols like "#", "`", "\\", etc., when used alone, are not valid Cangjie `Token`s and are not supported as input values.
+- The input must consist of a sequence of valid `Token`s. Symbols like "#", "\`", "\\", etc., when used alone, are not valid Cangjie `Token`s and are not supported as input values.
 
 - If the input contains unmatched parentheses, they must be escaped using the escape symbol "\\".
 
@@ -268,7 +268,7 @@ Regarding attribute macros, the following points should be noted:
 
 - Special notes on the legality of attribute parameters inside square brackets:
 
-    - The input must consist of a sequence of valid `Token`s. Symbols like "#", "`", "\\", etc., when used alone, are not valid Cangjie `Token`s and are not supported as input values.
+    - The input must consist of a sequence of valid `Token`s. Symbols like "#", "`", "\\", etc., when used alone, are not valid Cangjie`Token`s and are not supported as input values.
 
     - If the input contains unmatched square brackets, they must be escaped using the escape symbol "\\".
 
@@ -297,7 +297,7 @@ Regarding attribute macros, the following points should be noted:
 
 The Cangjie language does not support nested macro definitions but conditionally supports nested macro invocations within macro definitions and macro invocations.
 
-### Nested Macro Invocations in Macro DefinitionsHere is the professional translation of the provided Markdown content from Chinese to English, maintaining all structural and formatting elements:
+### Nested Macro Invocations in Macro DefinitionsHere is the professional translation of the provided Markdown content from Chinese to English, maintaining all structural and formatting elements
 
 Below is an example of macro definitions containing nested macro calls.
 
@@ -529,6 +529,7 @@ Macro calls:
 Here, `Inner` uses `assertParentContext` to verify it's called within an `Outer` macro. Since this nesting doesn't exist in the example, the compiler reports an error.
 
 Inner macros can also communicate with outer macros via key/value pairs. During execution:
+
 1. Inner macros send messages via `setItem`
 2. Outer macros receive these messages via `getChildMessages` (a collection of key/value mappings)
 
@@ -602,10 +603,11 @@ public func getCnt() {
 ```
 
 Workflow:
+
 1. Inner macros send messages via `setItem`
 2. Outer macro receives messages via `getChildMessages` (multiple `Inner` calls possible)
 3. Values are retrieved via the message object's `getString` method
 
---- 
+---
 
 The translation strictly maintains all Markdown formatting, code blocks, and structural elements while providing accurate technical terminology and natural English flow.

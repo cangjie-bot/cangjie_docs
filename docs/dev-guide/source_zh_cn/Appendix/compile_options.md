@@ -410,7 +410,7 @@ cjc --scan-dependency pkgA.cjo
 
 当编译可执行程序时（即指定了 `--output-type=exe` 时），`cjc` 默认静态链接仓颉库的 std 模块。
 
-### <span id="--dy-std">`--dy-std`</span>
+### `--dy-std`
 
 动态链接仓颉库的 std 模块。
 
