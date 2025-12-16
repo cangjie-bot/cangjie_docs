@@ -14,4 +14,4 @@ func add(a: Int64, b: Int64): Int64 {
 
 上例中定义了一个名为 `add` 的函数，其参数列表由两个 `Int64` 类型的参数 `a` 和 `b` 组成，函数返回值类型为 `Int64`，函数体中将 `a` 和 `b` 相加并返回。
 
-详细介绍可参见[定义函数](../function/define_functions.md)模块介绍。
+详细介绍可参见 [定义函数](../function/define_functions.md) 模块介绍。

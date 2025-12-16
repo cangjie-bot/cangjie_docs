@@ -297,7 +297,7 @@ main() {
 
 ## Type Mapping
 
-### Basic TypesThe mapping between Cangjie and C language for basic data types follows these general principles:
+### Basic TypesThe mapping between Cangjie and C language for basic data types follows these general principles
 
 1. Cangjie types do not include reference types that point to managed memory;
 2. Cangjie types and C types share the same memory layout.

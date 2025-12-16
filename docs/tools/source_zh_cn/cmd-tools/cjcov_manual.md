@@ -84,7 +84,7 @@ cjcov -version 或者 cjcov -v
 
 5. `cjcov` 生成 `html`
 
-    在 `WORKPATH` 目录执行 `cjcov -o output --html-details`，更多 `cjcov` 参数使用可参考[命令说明](#命令说明)章节。
+    在 `WORKPATH` 目录执行 `cjcov -o output --html-details`，更多 `cjcov` 参数使用可参考 [命令说明](#命令说明)章节。
 
 执行完 `cjcov` 命令之后，在 `WORKPATH/output` 目录会有以下文件：
 
@@ -99,7 +99,7 @@ output
 
 #### 多文件场景
 
-对于多文件场景，推荐使用包管理工具的命令`cjpm build --coverage` 或 `cjpm test --coverage` ，具体用法请参见[包管理工具](./cjpm_manual.md)。
+对于多文件场景，推荐使用包管理工具的命令`cjpm build --coverage` 或 `cjpm test --coverage` ，具体用法请参见 [包管理工具](./cjpm_manual.md)。
 
 ## 命令说明
 
@@ -141,14 +141,14 @@ line number:    4  ==>  data: [(0, 0), (1, 1)]
 - `start: xxx.gcov, end: xxx.gcov`：两行中间的文本是对应 `xxx.gcov` 文件解析到的覆盖率数据。
 - `noncode line numbers`：显示的是不统计到总代码行的行号，在 `html` 中是以白色底呈现，对应 `gcov` 中的以 `-` 开头的行数。
 - `uncovered line numbers`：显示的是没有覆盖到的数据，在 `html` 中是以红色底呈现，对应 `gcov` 文件中以 `#####` 开头的行数。
-- `covered data`：显示的是覆盖到的数据，以（代码行数, 覆盖次数）呈现，在对应 `html` 中以绿色呈现，只要覆盖次数大于 0，在 `html` 中的 `Exec` 一列中显示为 `Y`，对应于 `gcov` 文件以数字开头的行数。
-- `branches data`：显示的分支覆盖数据，以（代码行数, 分支覆盖次数）呈现，在对应 `html` 中的 `Branch` 一列中，有一个倒三角形，显示的是分支覆盖数/总分支数。该数据对应于 `gcov` 文件中以 `branch` 开头的数据。
+- `covered data`：显示的是覆盖到的数据，以（代码行数，覆盖次数）呈现，在对应 `html` 中以绿色呈现，只要覆盖次数大于 0，在 `html` 中的 `Exec` 一列中显示为 `Y`，对应于 `gcov` 文件以数字开头的行数。
+- `branches data`：显示的分支覆盖数据，以（代码行数，分支覆盖次数）呈现，在对应 `html` 中的 `Branch` 一列中，有一个倒三角形，显示的是分支覆盖数/总分支数。该数据对应于 `gcov` 文件中以 `branch` 开头的数据。
 
 ### cjcov --html-details
 
 如果指定该参数，表示会生成仓颉文件对应的 `html`。在总的 `index` 文件里面会有每个子 `html` 的索引。子 `html` 文件和 `index.html` 放在同一个目录。
 
-子 `html` 文件名是由目录和文件名由下划线拼接起来。如源文件是 `src/main.cj`，生成的 `html` 名字为 `src_main.cj.html`。如果源文件路径带有特殊字符会被替换成 `=`，下文[文件名包含特殊字符](#文件名包含特殊字符)章节会有更详细的描述。
+子 `html` 文件名是由目录和文件名由下划线拼接起来。如源文件是 `src/main.cj`，生成的 `html` 名字为 `src_main.cj.html`。如果源文件路径带有特殊字符会被替换成 `=`，下文 [文件名包含特殊字符](#文件名包含特殊字符)章节会有更详细的描述。
 
 如果没有指定该参数，表示不会生成子 `html` 。在总的 `index` 文件里面会显示每个子 `html` 的覆盖率数据，但是不能跳转到对应的子 `html` 文件。
 
@@ -222,7 +222,7 @@ line number:    4  ==>  data: [(0, 0), (1, 1)]
     LLVM/test02/src/5.cj
     ```
 
-2. 在 `/work` 目录执行命令, 没有指定 `--root` 参数和 `--source` 参数，默认当前所在路径为相对路径的参考路径，执行命令如下：
+2. 在 `/work` 目录执行命令，没有指定 `--root` 参数和 `--source` 参数，默认当前所在路径为相对路径的参考路径，执行命令如下：
 
     ```shell
     cjcov --html-details --output=html_output
@@ -260,7 +260,7 @@ line number:    4  ==>  data: [(0, 0), (1, 1)]
 cjcov --root=./ -s "/usr1/cangjie" -e "/usr1/cangjie-tools/tests/LLVM" --html-details --output=html_output
 ```
 
-最后 `html` 中呈现的源文件相对路径是,其中以 `/usr1/cangjie-tools/tests/LLVM` 路径开头的文件不会出现在 `html` 的文件列表中。
+最后 `html` 中呈现的源文件相对路径是，其中以 `/usr1/cangjie-tools/tests/LLVM` 路径开头的文件不会出现在 `html` 的文件列表中。
 
 ```text
 tests/API/test01/src/1.cj
@@ -288,13 +288,13 @@ tests/LLVM/test02/src/3.cj
             └── 3.cj
 ```
 
-在 `/usr1` 目录执行命令, 其中 `-i` 参数表示需要体现在覆盖率报告 `index.html` 的文件，命令如下：
+在 `/usr1` 目录执行命令，其中 `-i` 参数表示需要体现在覆盖率报告 `index.html` 的文件，命令如下：
 
 ```shell
 cjcov --root=./ -s "/usr1/cangjie" -i "/usr1/cangjie/tests/API/test01/src/1.cj /usr1/cangjie/tests/LLVM/test02" --html-details --output=html_output
 ```
 
-上面命令执行后, 在 `index.html` 中文件路径列表如下(`tests/API/test01/src/2.cj` 不在 `-i` 参数指定的列表里面，所以不会出现在 `html` 的文件列表中):
+上面命令执行后，在 `index.html` 中文件路径列表如下 (`tests/API/test01/src/2.cj` 不在 `-i` 参数指定的列表里面，所以不会出现在 `html` 的文件列表中）:
 
 ```text
 tests/API/test01/src/1.cj
@@ -449,7 +449,7 @@ src
 
 **解决方法：**
 
-方法 1：设置 `CANGJIE_HOME` 环境变量, `cjcov` 可通过 `CANGJIE_HOME` 环境变量找到 `llvm-cov` 命令，设置方法如下：
+方法 1：设置 `CANGJIE_HOME` 环境变量，`cjcov` 可通过 `CANGJIE_HOME` 环境变量找到 `llvm-cov` 命令，设置方法如下：
 假设 `which cjc` 显示 `/work/cangjie/bin/cjc`, 并且 `/work/cangjie/bin/llvm/bin` 和 `/work/cangjie/bin/llvm/lib` 目录都存在，则可设置：
 
 ```shell
@@ -484,6 +484,6 @@ Error VirtualMachineError OutOfMemoryError
 示例：
 
 ```text
-把堆内存扩大到2GB：
+把堆内存扩大到 2GB：
 export cjHeapSize=2GB
 ```

@@ -20,13 +20,13 @@ $ export VARIABLE=value
 
 注意：
 
-1. 所有整型参数为 Int64 类型，浮点型参数为 Float64 类型;
-2. 所有参数如果未显式规定最大值，默认隐式最大值为该类型最大值;
+1. 所有整型参数为 Int64 类型，浮点型参数为 Float64 类型；
+2. 所有参数如果未显式规定最大值，默认隐式最大值为该类型最大值；
 3. 所有参数若超出范围则设置无效，自动使用默认值。
 
 ### `cjHeapSize`
 
-指定仓颉堆的最大值，支持单位为 kb（KB）、mb（MB）、gb（GB），支持设置范围为[4MB, 系统物理内存]，超出范围的设置无效，仍旧使用默认值。若物理内存低于 1GB，默认值为 64 MB，否则为 256 MB。
+指定仓颉堆的最大值，支持单位为 kb（KB）、mb（MB）、gb（GB），支持设置范围为 [4MB, 系统物理内存]，超出范围的设置无效，仍旧使用默认值。若物理内存低于 1GB，默认值为 64 MB，否则为 256 MB。
 
 例如：
 
@@ -36,7 +36,7 @@ export cjHeapSize=4GB
 
 ### `cjRegionSize`
 
-指定 region 分配器 thread local buffer 的大小，支持单位为 kb（KB）、mb（MB）、gb（GB)，支持设置范围为[4kb, 2048kb]，超出范围的设置无效，仍旧使用默认值。默认值为 64 KB。
+指定 region 分配器 thread local buffer 的大小，支持单位为 kb（KB）、mb（MB）、gb（GB)，支持设置范围为 [4kb, 2048kb]，超出范围的设置无效，仍旧使用默认值。默认值为 64 KB。
 
 例如：
 
@@ -122,7 +122,7 @@ export cjGCThreshold=20480KB
 
 ### `cjGarbageThreshold`
 
-当 GC 发生时，如果 region 中死亡对象所占比率大于此环境变量，此 region 会被放入回收候选集中，后续可被回收（如果受到其他策略影响也可能不被回收），默认值为 0.5，无量纲，支持设置的区间为[0.0, 1.0]。
+当 GC 发生时，如果 region 中死亡对象所占比率大于此环境变量，此 region 会被放入回收候选集中，后续可被回收（如果受到其他策略影响也可能不被回收），默认值为 0.5，无量纲，支持设置的区间为 [0.0, 1.0]。
 
 例如：
 
@@ -162,7 +162,7 @@ export cjProcessorNum=2
 
 ### `cjStackSize`
 
-指定仓颉线程的栈大小，支持单位为 kb（KB）、mb（MB）、gb（GB），支持设置范围为 Linux 平台下[64KB, 1GB]，Windows 平台下[128KB, 1GB]，超出范围的设置无效，仍旧使用默认值。默认值为 128KB。
+指定仓颉线程的栈大小，支持单位为 kb（KB）、mb（MB）、gb（GB），支持设置范围为 Linux 平台下 [64KB, 1GB]，Windows 平台下 [128KB, 1GB]，超出范围的设置无效，仍旧使用默认值。默认值为 128KB。
 
 例如：
 
@@ -198,7 +198,7 @@ export MRT_LOG_PATH=/home/cangjie/runtime/runtime_log.txt
 
 #### `MRT_LOG_LEVEL`
 
-指定 runtime 运维日志的最小输出级别，大于等于这个级别的日志会被打印，默认值为 e，支持设置值为[v|d|i|w|e|f|s]。v（VERBOSE）、d（DEBUGY）、i（INFO）、w（WARNING）、e（ERROR）、f（FATAL）、s（FATAL_WITHOUT_ABORT）。
+指定 runtime 运维日志的最小输出级别，大于等于这个级别的日志会被打印，默认值为 e，支持设置值为 [v|d|i|w|e|f|s]。v（VERBOSE）、d（DEBUGY）、i（INFO）、w（WARNING）、e（ERROR）、f（FATAL）、s（FATAL_WITHOUT_ABORT）。
 
 例如：
 
@@ -228,7 +228,7 @@ export MRT_LOG_CJTHREAD=/home/cangjie/runtime/cjthread_log.txt
 
 #### `cjHeapDumpOnOOM`
 
-指定是否要在发生堆溢出后输出堆快照文件，默认不开启。支持设置值为[on|off]，设定为 on 时开启功能，设定 off 或者其他值不开启功能。
+指定是否要在发生堆溢出后输出堆快照文件，默认不开启。支持设置值为 [on|off]，设定为 on 时开启功能，设定 off 或者其他值不开启功能。
 
 例如：
 

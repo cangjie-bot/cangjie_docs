@@ -6,7 +6,7 @@
 
 ## class 定义
 
-`class` 类型的定义以关键字 `class` 开头，后跟 `class` 的名字，接着是定义在一对花括号中的 `class` 定义体。`class` 定义体中可以定义一系列的成员变量、成员属性（参见[属性](prop.md)）、静态初始化器、构造函数、成员函数和操作符函数（详见[操作符重载](../function/operator_overloading.md)）。
+`class` 类型的定义以关键字 `class` 开头，后跟 `class` 的名字，接着是定义在一对花括号中的 `class` 定义体。`class` 定义体中可以定义一系列的成员变量、成员属性（参见 [属性](prop.md)）、静态初始化器、构造函数、成员函数和操作符函数（详见 [操作符重载](../function/operator_overloading.md)）。
 
 <!-- compile -->
 
@@ -131,7 +131,7 @@ class Rectangle {
 }
 ```
 
-一个类中可以定义多个普通构造函数，但它们必须构成重载（参见[函数重载](../function/function_overloading.md)），否则报重定义错误。
+一个类中可以定义多个普通构造函数，但它们必须构成重载（参见 [函数重载](../function/function_overloading.md)），否则报重定义错误。
 
 <!-- compile.error -->
 
@@ -346,7 +346,7 @@ class Rectangle {
 }
 ```
 
-根据是否有函数体，实例成员函数又可以分为抽象成员函数和非抽象成员函数。抽象成员函数没有函数体，只能定义在抽象类或接口（详见[接口](interface.md)）中。需要注意的是，抽象实例成员函数默认具有 `open` 的语义，`open` 修饰符是可选的，且必须使用 `public` 或 `protected` 进行修饰。
+根据是否有函数体，实例成员函数又可以分为抽象成员函数和非抽象成员函数。抽象成员函数没有函数体，只能定义在抽象类或接口（详见 [接口](interface.md)）中。需要注意的是，抽象实例成员函数默认具有 `open` 的语义，`open` 修饰符是可选的，且必须使用 `public` 或 `protected` 进行修饰。
 
 非抽象函数必须有函数体，在函数体中可以通过 `this` 访问实例成员变量，例如：
 
@@ -368,8 +368,8 @@ class Rectangle {
 对于 `class` 的成员（包括成员变量、成员属性、构造函数、成员函数），可以使用的访问修饰符有 4 种访问修饰符修饰：`private`、`internal`、`protected` 和 `public`，缺省的含义是 `internal`。
 
 - `private` 表示在 `class` 定义内可见。
-- `internal` 表示仅当前包及子包（包括子包的子包，详见[包](../package/toplevel_access.md)）内可见。
-- `protected` 表示当前模块（详见[包](../package/toplevel_access.md)）及当前类的子类可见。
+- `internal` 表示仅当前包及子包（包括子包的子包，详见 [包](../package/toplevel_access.md)）内可见。
+- `protected` 表示当前模块（详见 [包](../package/toplevel_access.md)）及当前类的子类可见。
 - `public` 表示模块内外均可见。
 
 <!-- compile.error -error-->
@@ -571,7 +571,7 @@ class C <: B { // Error, 'B' is not inheritable
 }
 ```
 
-`class` 仅支持单继承，因此下面这样一个类继承两个类的代码是不合法的（`&` 是类实现多个接口时的语法，详见[接口](interface.md)）。
+`class` 仅支持单继承，因此下面这样一个类继承两个类的代码是不合法的（`&` 是类实现多个接口时的语法，详见 [接口](interface.md)）。
 
 <!-- compile.error -->
 
