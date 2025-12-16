@@ -127,7 +127,7 @@ cjc main.cj -o a.out
 
 文件名的格式应为 `lib[arg].[extension]`。当需要链接库 `a` 时，可以使用选项 `-l a`，库文件搜索目录下的 `liba.a`、`liba.so`（或链接 Windows 目标程序时会搜索 `liba.dll`）等文件会被链接器搜索到并根据需要被链接至最终输出中。
 
-链接 `Windows` 目标程序默认使用 `ld.lld` 链接器, 会搜索 `.dll` 和 `.a` 后缀的库文件。如果要链接 `.lib` 后缀的库文件，请使用选项 `--link-options=/path/to/lib[arg].lib` 指定路径，`[arg]` 为链接库的名称。
+链接 `Windows` 目标程序默认使用 `ld.lld` 链接器，会搜索 `.dll` 和 `.a` 后缀的库文件。如果要链接 `.lib` 后缀的库文件，请使用选项 `--link-options=/path/to/lib[arg].lib` 指定路径，`[arg]` 为链接库的名称。
 
 例如需要链接 `libssl.lib`，`libcrypto.lib`，可以通过 `--link-options` 选项添加链接库，命令如下：
 
@@ -461,9 +461,9 @@ cjc --scan-dependency pkgA.cjo
 
 异常调用栈的格式说明如下：
 
-- `default` 格式：`省略泛型参数的函数名 (文件名:行号)`
-- `simple` 格式： `文件名:行号`
-- `all` 格式：`完整的函数名 (文件名:行号)`
+- `default` 格式：`省略泛型参数的函数名 （文件名：行号）`
+- `simple` 格式： `文件名：行号`
+- `all` 格式：`完整的函数名 （文件名：行号）`
 
 ### `--lto=[full|thin]`
 
@@ -516,7 +516,7 @@ cjc --scan-dependency pkgA.cjo
 
 ### `--compile-as-exe`
 
-该选项使能会隐藏 LTO 模式下加载的 bc 文件符号可见性，仅保留 package init 符号可见性。在此基础上，LLVM 原生优化会在此基础上执行激进的无用符号删除。该选项仅在 `--lto` 开启下有效。 
+该选项使能会隐藏 LTO 模式下加载的 bc 文件符号可见性，仅保留 package init 符号可见性。在此基础上，LLVM 原生优化会在此基础上执行激进的无用符号删除。该选项仅在 `--lto` 开启下有效。
 
 ```shell
 # 编译通过
@@ -780,14 +780,14 @@ $ cjc test.cj --pgo-instr-use=default.profdata -o testOptimized
 ```text
 /usr/sdk/arch-os-env
 ├── bin
-|   ├── arch-os-env-gcc (交叉编译器)
-|   ├── arch-os-env-ld  (链接器)
+|   ├── arch-os-env-gcc （交叉编译器）
+|   ├── arch-os-env-ld  （链接器）
 |   └── ...
 ├── lib
-|   ├── crt1.o          (C 运行时目标文件)
+|   ├── crt1.o          (C 运行时目标文件）
 |   ├── crti.o
 |   ├── crtn.o
-|   ├── libc.so         (动态库)
+|   ├── libc.so         （动态库）
 |   ├── libm.so
 |   └── ...
 └── ...
@@ -823,7 +823,7 @@ cjc --target=arch-os-env --sysroot /usr/sdk/arch-os-env hello.cj -o hello
 
 ### `--set-runtime-rpath`
 
-将仓颉运行时库所在目录的绝对路径写入到二进制的 RPATH/RUNPATH 段中，使用该选项后在构建所在环境中运行该仓颉程序时无需再使用 LD_LIBRARY_PATH (适用于 Linux 平台) 或 DYLD_LIBRARY_PATH (适用于 macOS 平台) 设置仓颉运行时库目录。
+将仓颉运行时库所在目录的绝对路径写入到二进制的 RPATH/RUNPATH 段中，使用该选项后在构建所在环境中运行该仓颉程序时无需再使用 LD_LIBRARY_PATH （适用于 Linux 平台） 或 DYLD_LIBRARY_PATH （适用于 macOS 平台） 设置仓颉运行时库目录。
 
 编译 Windows 目标时不支持使用该功能。
 
@@ -837,7 +837,7 @@ cjc --target=arch-os-env --sysroot /usr/sdk/arch-os-env hello.cj -o hello
 
 指定链接器选项。
 
-`cjc` 会将该选项的多个参数透传给链接器, 参数之间用空格分隔。可用的参数会因（系统或指定的）链接器的不同而不同。可以多次使用 `--link-options` 指定多个链接器选项。
+`cjc` 会将该选项的多个参数透传给链接器，参数之间用空格分隔。可用的参数会因（系统或指定的）链接器的不同而不同。可以多次使用 `--link-options` 指定多个链接器选项。
 
 <sup>1</sup> 上标表示链接器透传选项可能会因为链接器的不同而不同，具体支持的选项请查阅链接器文档。
 
@@ -993,7 +993,7 @@ Summary: TOTAL: 2
 >
 > 使用此选项时，应单独以常规模式编译相同的包，然后通过 `-L`/`-l` 链接选项添加依赖，或在使用 `LTO` 选项时添加依赖的 `.bc` 文件。否则，编译器将报缺少依赖的符号的错误。
 
-示例:
+示例：
 
 ```cangjie
 /*main.cj*/
@@ -1043,7 +1043,7 @@ cjc -p my_pkg --test-only -L output -lmain
 
 ## 宏选项
 
-`cjc` 支持以下宏选项，关于宏的更多内容请参见[“宏的简介”](../Macro/macro_introduction.md)章节。
+`cjc` 支持以下宏选项，关于宏的更多内容请参见 [“宏的简介”](../Macro/macro_introduction.md) 章节。
 
 ### `--compile-macro` <sup>[frontend]</sup>
 
@@ -1059,7 +1059,7 @@ cjc -p my_pkg --test-only -L output -lmain
 
 ## 条件编译选项
 
-`cjc` 支持以下条件编译选项，关于条件编译的更多内容请参见[“条件编译”](../compile_and_build/conditional_compilation.md)。
+`cjc` 支持以下条件编译选项，关于条件编译的更多内容请参见 [“条件编译”](../compile_and_build/conditional_compilation.md)。
 
 ### `--cfg <value>` <sup>[frontend]</sup>
 

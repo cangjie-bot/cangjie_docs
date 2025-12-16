@@ -21,7 +21,7 @@
 **涉及的工具：**
 
 1. 仓颉 SDK：仓颉的开发者工具集。
-2. java-mirror-generator：仓颉 SDK 中提供的工具，文件名为 java-mirror-gen.jar，用于根据 Java 的.class 文件自动生成仓颉格式的 Mirror Type。
+2. java-mirror-generator：仓颉 SDK 中提供的工具，文件名为 java-mirror-gen.jar，用于根据 Java 的。class 文件自动生成仓颉格式的 Mirror Type。
 3. cjc：指代仓颉编译器。
 4. Android 工具链：Andorid 应用开发所需的工具集合。
 
@@ -43,24 +43,24 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Jav
 
 3. 开发互操作代码，使用步骤 2 中生成的 Mirror Type 创建 Java 对象、调用 Java 方法。
 
-    `互操作代码.cj` + `Mirror Type.cj`→ 实现仓颉调用 Java
+    `互操作代码。cj` + `Mirror Type.cj`→ 实现仓颉调用 Java
 
 4. 使用 cjc 编译互操作代码和 `Mirror Type.cj` 文件，cjc 将生成：
 
     - 胶水代码。
     - 实际进行互操作的 Java 源代码。
 
-    `Mirror Type.cj`\+`互操作代码.cj`→ cjc → `仓颉代码.so`和`互操作.java`
+    `Mirror Type.cj`\+`互操作代码。cj`→ cjc → `仓颉代码。so`和`互操作。java`
 
 5. 将步骤 4 中生成的文件添加到 Android 项目中：
 
-    - `互操作.java`：cjc 生成的文件
-    - `仓颉代码.so`：cjc 生成的文件
+    - `互操作。java`：cjc 生成的文件
+    - `仓颉代码。so`：cjc 生成的文件
     - 仓颉 SDK 包含的运行时库
 
     在 Java 源代码中插入必要的调用并重新生成该程序。
 
-    Android 项目+`互操作.java` + `仓颉代码.so`→ Android 工具链→`.apk`
+    Android 项目+`互操作。java` + `仓颉代码。so`→ Android 工具链→`.apk`
 
 **Mirror Type 说明：**
 
@@ -193,10 +193,10 @@ open class A {
     - `<names-of-mirrored-types>`是需要生成 Mirror Type.cj 的 Java 类型的全限定名。在未设置 `-Djar.mode` 或者  `-Djar.mode=false` 时生效。
     - `<jar-file>` 是单个 jar 文件的路径名。在设置 `-Djar.mode` 或者  `-Djar.mode=true`时生效。 在该模式下，`<jar-file>` 中包含的所有 `.class` 文件，以及 `<full-application-classpath>` 中找到的所有依赖项都将生成 Mirror Type.cj。
 
-    在 Java 代码中类 Interop 调用一个 Java 函数`f()`，接受的参数类型为 Java 类型`com.example.a.A`、Java 类型`java.lang.String`和 Java 类型`int`，并返回 Java 类型`com.example.b.B`,该类需要调用仓颉定义的方法。最终代码示例如下：
+    在 Java 代码中类 Interop 调用一个 Java 函数`f()`，接受的参数类型为 Java 类型`com.example.a.A`、Java 类型`java.lang.String`和 Java 类型`int`，并返回 Java 类型`com.example.b.B`, 该类需要调用仓颉定义的方法。最终代码示例如下：
 
     ```java
-    // Java代码
+    // Java 代码
 
     package cjworld;
 
@@ -205,7 +205,7 @@ open class A {
 
     public class Interop {
         public static B f(A a, String s, int i) {
-            /* 自动生成的Glue代码调用仓颉方法 */
+            /* 自动生成的 Glue 代码调用仓颉方法 */
         }
     }
     ```
@@ -250,7 +250,7 @@ open class A {
     |  `interface I`  |         `I'` or `?I'`         |
     |     `T[]`       | `JArray<T'>` or `?JArray<T'>` |
 
-    对于可能接收/持有 Java`null`值的仓颉参数、返回值、Mirror Type 和局部变量，需要使用仓颉的`?<T'>`(`Option<T'>`)类型。
+    对于可能接收/持有 Java`null`值的仓颉参数、返回值、Mirror Type 和局部变量，需要使用仓颉的`?<T'>`(`Option<T'>`) 类型。
 
     使用`Unit`类型来表示 Java 方法的`void`返回类型。
 
@@ -327,7 +327,7 @@ open class A {
     **示例：**
 
     ```java
-    // Java代码
+    // Java 代码
     import com.example.a.A;
         ...
         B b = InteropExample.f(new A(), "Test", 0);
@@ -414,7 +414,7 @@ open class A {
 
     public class C {
         public static String g(A a, int i) {
-            /* 一些返回字符串的Java代码 */
+            /* 一些返回字符串的 Java 代码 */
         }
     }
     ```
@@ -462,7 +462,7 @@ open class A {
         ...
     ```
 
-    在[互操作类示例](#使用场景举例) [从 Java 调用仓颉](#java-调用仓颉)一节中：
+    在 [互操作类示例](#使用场景举例） [从 Java 调用仓颉](#java-调用仓颉)一节中：
 
     ```cangjie
     // 仓颉代码
@@ -548,13 +548,13 @@ open class JString {
 public init(cjString: String)
 ```
 
-上述`public init(cjString: String)`使用仓颉`String`初始化 Java String(`JString`)对象。
+上述`public init(cjString: String)`使用仓颉`String`初始化 Java String(`JString`) 对象。
 
 > **注意：**
 >
 > 这个构造函数接受一个仓颉类型的参数`String`，cjc 编译器对该函数有特殊处理。
 
-继承自[`JObject`](# java.lang.JObject)的方法，包括：`hashCode`，`hashCode32`，`toString`，`toJString`
+继承自 [`JObject`](# java.lang.JObject) 的方法，包括：`hashCode`，`hashCode32`，`toString`，`toJString`
 
 ### java.lang.JArray
 
@@ -1152,18 +1152,18 @@ class C extends B {
 }
 ```
 
-## Java使用Cangjie规格
+## Java 使用 Cangjie 规格
 
 ### 新增实验编译选项 `--experimental --enable-interop-cjmapping=<Target Languages>`
 
-启用在FE中支持非C语言的Cangjie互操作。<目标外语>的可能值为Java、ObjC。
+启用在 FE 中支持非 C 语言的 Cangjie 互操作。<目标外语>的可能值为 Java、ObjC。
 
-### Java使用Cangjie结构体
+### Java 使用 Cangjie 结构体
 
-Cangjie与Java的互操作中，需要支持在Java使用Cangjie的struct数据类型。由于Java使用Cangjie的特性仍在开发过程中，当前仅覆盖如下场景：
+Cangjie 与 Java 的互操作中，需要支持在 Java 使用 Cangjie 的 struct 数据类型。由于 Java 使用 Cangjie 的特性仍在开发过程中，当前仅覆盖如下场景：
 
-1. 支持Java中调用Cangjie侧public struct的public实例方法，静态方法
-2. 支持Cangjie侧public struct可以作为Java函数的参数类型，返回值类型
+1. 支持 Java 中调用 Cangjie 侧 public struct 的 public 实例方法，静态方法
+2. 支持 Cangjie 侧 public struct 可以作为 Java 函数的参数类型，返回值类型
 
 示例代码如下所示：
 
@@ -1197,9 +1197,9 @@ public struct Vector {
         print("cj: Hello from static func in cj.Vector (${v.x}, ${v.y})\n", flush: true)
     }
 }
-``` 
+```
 
-对应的Java代码如下：
+对应的 Java 代码如下：
 
 ```java
 package com.java.lib;
@@ -1235,23 +1235,24 @@ public class Main {
 }
 ```
 
-#### 规格约束：
+#### 规格约束
 
-1. 要求Cangjie struct无interface实现
-2. 暂不支持Cangjie泛型struct
-3. 暂不支持Java侧对struct成员变量的访问
-4. 暂不支持mut函数的调用
+1. 要求 Cangjie struct 无 interface 实现
+2. 暂不支持 Cangjie 泛型 struct
+3. 暂不支持 Java 侧对 struct 成员变量的访问
+4. 暂不支持 mut 函数的调用
 5. 暂不支持属性
 
-### Java使用Cangjie的Enum
+### Java 使用 Cangjie 的 Enum
 
-仓颉枚举类型需要与Java类型建立映射关系，以便用户能够：
-1. 在Java端通过调用枚举类型的构造函数来创建枚举对象。
+仓颉枚举类型需要与 Java 类型建立映射关系，以便用户能够：
+
+1. 在 Java 端通过调用枚举类型的构造函数来创建枚举对象。
 2. 在语言边界之间传递枚举对象。
 3. 调用枚举中定义的静态或非静态方法。
 4. 支持枚举属性的访问。
 
-示例代码如下，仓颉的枚举类型会被映射到Java的Class类型：
+示例代码如下，仓颉的枚举类型会被映射到 Java 的 Class 类型：
 
 ```cangjie
 // Cangjie
@@ -1282,7 +1283,7 @@ public enum TimeUnit {
 }
 ```
 
-映射后的Java代码如下：
+映射后的 Java 代码如下：
 
 ```java
 public class TimeUnit {
@@ -1337,10 +1338,10 @@ public class TimeUnit {
 
 目前枚举支持与其他语言特性组合仍在开发过程中，暂不支持如下场景：
 
-1. 要求Cangjie enum无interface实现
-2. 要求Cangjie enum成员函数中不使用泛型
-3. 要求Cangjie enum成员函数中不使用Lamda
-4. 要求Cangjie enum中不包含操作符重载
-5. 要求Cangjie enum中仅使用基础的数据类型
-6. 要求Cangjie 不适应extend对enum进行拓展
-7. 不支持option
+1. 要求 Cangjie enum 无 interface 实现
+2. 要求 Cangjie enum 成员函数中不使用泛型
+3. 要求 Cangjie enum 成员函数中不使用 Lamda
+4. 要求 Cangjie enum 中不包含操作符重载
+5. 要求 Cangjie enum 中仅使用基础的数据类型
+6. 要求 Cangjie 不适应 extend 对 enum 进行拓展
+7. 不支持 option

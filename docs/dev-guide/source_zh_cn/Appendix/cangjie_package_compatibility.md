@@ -28,5 +28,4 @@
     An exception has occurred:
     IncompatiblePackageException: executable cangjie file liba.so version 0.59.5 is not compatible with deployed cangjie runtime version 0.59.3
         at package_global_init(:0)
-        at package_global_init(:0)
     ```

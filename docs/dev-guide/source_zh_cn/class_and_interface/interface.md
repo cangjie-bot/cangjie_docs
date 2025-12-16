@@ -216,12 +216,11 @@ main() {
 
 ```text
 interface NamedType
-interface NamedType
 ```
 
 通常会通过泛型约束，在泛型函数中使用这类静态成员。
 
-例如下面的 `printTypeName` 函数，当约束泛型变元 `T` 是 `NamedType` 的子类型时，需要保证 `T` 的实例化类型中所有的静态成员函数（或属性）都必须拥有实现，以保证可以使用 `T.typename` 的方式访问泛型变元的实现，达到了对静态成员抽象的目的。详见[泛型](../generic/generic_overview.md)。
+例如下面的 `printTypeName` 函数，当约束泛型变元 `T` 是 `NamedType` 的子类型时，需要保证 `T` 的实例化类型中所有的静态成员函数（或属性）都必须拥有实现，以保证可以使用 `T.typename` 的方式访问泛型变元的实现，达到了对静态成员抽象的目的。详见 [泛型](../generic/generic_overview.md)。
 
 <!-- compile.error -->
 
@@ -418,7 +417,7 @@ interface I2 <: I1 {
 一个类型实现接口有三种途径：
 
 1. 在定义类型时就声明实现接口，在以上的内容中已经见过相关例子。
-2. 通过扩展实现接口，这种方式详见[扩展](../extension/interface_extension.md)。
+2. 通过扩展实现接口，这种方式详见 [扩展](../extension/interface_extension.md)。
 3. 由语言内置实现，具体详见《仓颉编程语言库 API》相关文档。
 
 实现类型声明实现接口时，需要实现接口中要求的所有成员，为此需要满足下面一些规则。

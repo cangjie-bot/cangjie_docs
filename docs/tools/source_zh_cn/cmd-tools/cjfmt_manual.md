@@ -73,7 +73,7 @@ cjfmt -d test/ -o /home/xxx/testout
 
 cjfmt -d /home/xxx/test -o ../testout/
 
-cjfmt -d testsrc/ -o /home/../testout   // 源文件文件夹testsrc/不存在；报错：error: Source file path not exist!
+cjfmt -d testsrc/ -o /home/../testout   // 源文件文件夹 testsrc/不存在；报错：error: Source file path not exist!
 ```
 
 ### 格式化配置文件
@@ -132,7 +132,7 @@ multipleLineMethodChainOverLineLength = true
 - `-l` 选项仅适用于格式化单个文件（选项 `-f`）。如果指定了目录（选项 `-d`），则 `-l` 选项无效。
 
 ```shell
-cjfmt -f a.cj -o b.cj -l 10:25 // 仅格式化第10行至第25行
+cjfmt -f a.cj -o b.cj -l 10:25 // 仅格式化第 10 行至第 25 行
 ```
 
 ## 格式化规则
@@ -208,7 +208,7 @@ func fn(a: Int64): Unit { // 符合：跟随声明放行末，前置 1 空格
 
 // lambda 函数
 let add = {
-    base: Int64, bonus: Int64 => // 符合: lambda 表达式中非空块遵循 K&R 风格
+    base: Int64, bonus: Int64 => // 符合：lambda 表达式中非空块遵循 K&R 风格
     print("符合 news")
     base + bonus
 }
@@ -223,9 +223,9 @@ let add = {
 var isPresent: Bool = false  // 符合：变量声明冒号之后有一个空格
 func method(isEmpty!: Bool): RetType { ... } // 符合：函数定义（命名参数 / 返回类型）中的冒号之后有一个空格
 
-method(isEmpty: isPresent) // 符合: 命名参数传值中的冒号之后有一个空格
+method(isEmpty: isPresent) // 符合：命名参数传值中的冒号之后有一个空格
 
-0..MAX_COUNT : -1 // 符合: range 操作符区间前后没有空格，步长冒号前后两侧有一个空格
+0..MAX_COUNT : -1 // 符合：range 操作符区间前后没有空格，步长冒号前后两侧有一个空格
 
 var hundred = 0
 do { // 符合：关键字 do 和后面的括号之间有一个空格
@@ -254,8 +254,6 @@ x++ // 符合：一元操作符和操作数之间不留空格
 class MyApp <: App {
     let album = albumCreate()
     let page: Router
-    // 空行
-    // 空行
     // 空行
     init() {           // 不符合：类型定义内部使用连续空行
         this.page = Router("album", album)

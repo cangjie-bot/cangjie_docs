@@ -86,18 +86,18 @@ Available options:
 例如：
 
 ```text
-输入: cjpm init
-输出: cjpm init success
+输入：cjpm init
+输出：cjpm init success
 ```
 
 ```text
-输入: cjpm init --name demo --path project
-输出: cjpm init success
+输入：cjpm init --name demo --path project
+输出：cjpm init success
 ```
 
 ```text
-输入: cjpm init --type=static
-输出: cjpm init success
+输入：cjpm init --type=static
+输出：cjpm init success
 ```
 
 ### check
@@ -113,16 +113,16 @@ Available options:
 例如：
 
 ```text
-输入: cjpm check
-输出:
+输入：cjpm check
+输出：
 The valid serial compilation order is:
     b.pkgA -> b
 cjpm check success
 ```
 
 ```text
-输入: cjpm check
-输出:
+输入：cjpm check
+输出：
 Error: cyclic dependency
 b.B -> c.C
 c.C -> d.D
@@ -131,8 +131,8 @@ d.D -> b.B
 ```
 
 ```text
-输入: cjpm check
-输出:
+输入：cjpm check
+输出：
 Error: can not find the following dependencies
     pro1.xoo
     pro1.yoo
@@ -148,8 +148,8 @@ Error: can not find the following dependencies
 - `--skip-script` 配置后，将会跳过构建脚本的编译运行
 
 ```text
-输入: cjpm update
-输出: cjpm update success
+输入：cjpm update
+输出：cjpm update success
 ```
 
 ### tree
@@ -187,8 +187,8 @@ src
 依赖关系为：包 `a` 导入包 `a.aoo`、`a.boo`，子包 `aoo` 导入包 `a.coo`，子包 `boo` 导入包 `coo`，子包 `doo` 导入包 `coo`。
 
 ```text
-输入: cjpm tree
-输出:
+输入：cjpm tree
+输出：
 |-- a
     └── a.aoo
         └── a.coo
@@ -201,8 +201,8 @@ cjpm tree success
 ```
 
 ```text
-输入: cjpm tree --depth 2 -p a
-输出:
+输入：cjpm tree --depth 2 -p a
+输出：
 |-- a
     └── a.aoo
         └── a.coo
@@ -212,8 +212,8 @@ cjpm tree success
 ```
 
 ```text
-输入: cjpm tree --depth 0
-输出:
+输入：cjpm tree --depth 0
+输出：
 |-- a
 |-- a.eoo
 |-- a.aoo
@@ -224,8 +224,8 @@ cjpm tree success
 ```
 
 ```text
-输入: cjpm tree --invert a.coo --verbose
-输出:
+输入：cjpm tree --invert a.coo --verbose
+输出：
 |-- a.coo 1.2.0 （.../src/coo）
     └── a.aoo 1.1.0 （.../src/aoo）
             └── a 1.0.0 （.../src）
@@ -242,7 +242,7 @@ cjpm tree success
 `build` 有多个可配置项：
 
 - `-i, --incremental` 用于指定增量编译，默认情况下是全量编译
-- `-j, --jobs <N>` 用于指定并行编译的最大并发数，最终的最大并发数取 `N` 和 `2倍 CPU 核数` 的最小值
+- `-j, --jobs <N>` 用于指定并行编译的最大并发数，最终的最大并发数取 `N` 和 `2 倍 CPU 核数` 的最小值
 - `-V, --verbose` 用于展示编译日志
 - `-g` 用于生成 `debug` 版本的输出产物
 - `--coverage` 用于生成覆盖率信息，默认情况下不开启覆盖率功能
@@ -269,21 +269,21 @@ cjpm tree success
 例如：
 
 ```text
-输入: cjpm build -V
-输出:
+输入：cjpm build -V
+输出：
 compile package module1.package1: cjc --import-path "target/release" --output-dir "target/release/module1" -p "src/package1" --output-type=staticlib -o libmodule1.package1.a
 compile package module1: cjc --import-path "target/release" --output-dir "target/release/bin" -p "src" --output-type=exe -o main
 cjpm build success
 ```
 
 ```text
-输入: cjpm build
-输出: cjpm build success
+输入：cjpm build
+输出：cjpm build success
 ```
 
 > **注意：**
 >
-> 根据仓颉包管理规格，只有符合要求的有效源码包才能被正确纳入编译范围。如果编译时出现 `no '.cj' file` 相关的告警，很可能是因为对应包不符合规范导致源码文件不被编译。如果出现这种情况，请参考[仓颉包管理规格说明](#仓颉包管理规格说明)修改代码目录结构。
+> 根据仓颉包管理规格，只有符合要求的有效源码包才能被正确纳入编译范围。如果编译时出现 `no '.cj' file` 相关的告警，很可能是因为对应包不符合规范导致源码文件不被编译。如果出现这种情况，请参考 [仓颉包管理规格说明](#仓颉包管理规格说明)修改代码目录结构。
 
 在执行 `cjpm build` 之前，`cjpm` 会对当前模块或工作空间进行包依赖关系检查。若发现包之间存在相互导入关系形成依赖闭环，构建将被中止并返回错误信息，提示循环依赖路径。
 
@@ -304,8 +304,8 @@ src
 依赖关系为：包 `demo.aoo` 导入包 `demo.boo`，包 `demo.boo` 导入包 `demo.coo`，包 `demo.coo` 导入包 `demo.aoo`，三个包之间的依赖导入形成闭环，导致循环依赖：
 
 ```text
-输入: cjpm build
-输出:
+输入：cjpm build
+输出：
 cyclic dependency:
 demo.boo -> demo.coo
 demo.coo -> demo.aoo
@@ -341,18 +341,18 @@ Error: cjpm build failed
 例如：
 
 ```text
-输入: cjpm run
-输出: cjpm run success
+输入：cjpm run
+输出：cjpm run success
 ```
 
 ```text
-输入: cjpm run -g // 此时会默认执行 cjpm build -i -g 命令
-输出: cjpm run success
+输入：cjpm run -g // 此时会默认执行 cjpm build -i -g 命令
+输出：cjpm run success
 ```
 
 ```text
-输入: cjpm run --build-args="-s -j16" --run-args="a b c"
-输出: cjpm run success
+输入：cjpm run --build-args="-s -j16" --run-args="a b c"
+输出：cjpm run success
 ```
 
 ### test
@@ -379,7 +379,7 @@ Error: cjpm build failed
 1. 单模块测试场景
 
     ```text
-    输入: cjpm test
+    输入：cjpm test
     进度报告：
     group test.koo                                    100% [||||||||||||||||||||||||||||] ✓    (00:00:01)
     group test.zoo                                      0% [----------------------------]      (00:00:00)
@@ -387,7 +387,7 @@ Error: cjpm build failed
 
     passed: 1, failed: 0                                  33% [|||||||||-------------------]  1/3 (00:00:01)
 
-    输出:
+    输出：
     --------------------------------------------------------------------------------------------------
     TP: test, time elapsed: 177921 ns, RESULT:
         TCS: TestM, time elapsed: 177921 ns, RESULT:
@@ -426,8 +426,8 @@ Error: cjpm build failed
 2. 单包测试场景
 
     ```text
-    输入: cjpm test src/koo
-    输出:
+    输入：cjpm test src/koo
+    输出：
     --------------------------------------------------------------------------------------------------
     TP: test.koo, time elapsed: 160133 ns, RESULT:
         TCS: TestK, time elapsed: 160133 ns, RESULT:
@@ -450,8 +450,8 @@ Error: cjpm build failed
 3. 多包测试场景
 
     ```text
-    输入: cjpm test src/koo src
-    输出:
+    输入：cjpm test src/koo src
+    输出：
     --------------------------------------------------------------------------------------------------
     TP: test.koo, time elapsed: 168204 ns, RESULT:
         TCS: TestK, time elapsed: 168204 ns, RESULT:
@@ -481,7 +481,7 @@ Error: cjpm build failed
 
 `test` 有多个可配置项：
 
-- `-j, --jobs <N>` 用于指定并行编译的最大并发数，最终的最大并发数取 `N` 和 `2倍 CPU 核数` 的最小值
+- `-j, --jobs <N>` 用于指定并行编译的最大并发数，最终的最大并发数取 `N` 和 `2 倍 CPU 核数` 的最小值
 - `-V, --verbose` 配置项开启后，会输出单元测试的日志
 - `-g` 用于生成 `debug` 版本的单元测试产物，此时的产物存放在 `target/debug/unittest_bin` 文件夹
 - `-i, --incremental` 用于指定测试代码的增量编译，默认情况下是全量编译
@@ -529,7 +529,7 @@ Error: cjpm build failed
     - `0` 不限制条目数
     - `n` 其中 `n` 是正整数，指定终端上可以同时显示的最大条目
 
-`cjpm test` 参数选项使用示例:
+`cjpm test` 参数选项使用示例：
 
 ```text
 输入：
@@ -540,13 +540,13 @@ cjcov --root=./ --html-details -o html_output
 ```
 
 ```text
-输入: cjpm test --filter=*
-输出: cjpm test success
+输入：cjpm test --filter=*
+输出：cjpm test success
 ```
 
 ```text
-输入: cjpm test src --report-path=reports --report-format=xml
-输出: cjpm test success
+输入：cjpm test src --report-path=reports --report-format=xml
+输出：cjpm test success
 ```
 
 > **注意：**
@@ -562,8 +562,8 @@ cjcov --root=./ --html-details -o html_output
 与 `test` 子命令类似，如果您有 `xxx.cj` 文件，则 `xxx_test.cj` 也可以包含性能测试用例。
 
 ```text
-输入: cjpm bench
-输出:
+输入：cjpm bench
+输出：
 TP: bench, time elapsed: 8107939844 ns, RESULT:
     TCS: Test_UT, time elapsed: 8107939844 ns, RESULT:
     | Case       |   Median |         Err |   Err% |     Mean |
@@ -584,7 +584,7 @@ Summary: TOTAL: 1
 
 `bench` 有多个可配置项：
 
-- `-j, --jobs <N>` 用来指定并行编译的最大并发数，最终的最大并发数取 `N` 和 `2倍 CPU 核数` 的最小值
+- `-j, --jobs <N>` 用来指定并行编译的最大并发数，最终的最大并发数取 `N` 和 `2 倍 CPU 核数` 的最小值
 - `-V, --verbose` 配置项开启后，会输出单元测试的日志
 - `-g` 用来生成 `debug` 版本的单元测试产物，此时的产物存放在 `target/debug/unittest_bin` 文件夹
 - `-i, --incremental` 用于指定测试代码的增量编译，默认情况下是全量编译
@@ -598,7 +598,7 @@ Summary: TOTAL: 1
 - `--dry-run` 配置后，将不执行用例，仅打印
 - `--filter <value>` 用于过滤测试的子集，`value` 的形式如下所示：
     - `--filter=*` 匹配所有测试类
-    - `--filter=*.*` 匹配所有测试类所有测试用例(结果和*相同)
+    - `--filter=*.*` 匹配所有测试类所有测试用例（结果和*相同）
     - `--filter=*.*Test,*.*case*` 匹配所有测试类中以 `Test` 结尾的用例，或者所有测试类中名字中带有 `case` 的测试用例
     - `--filter=MyTest*.*Test,*.*case*,-*.*myTest` 匹配所有 `MyTest` 开头测试类中以 `Test` 结尾的用例，或者名字中带有 `case` 的用例，或者名字中不带有 `myTest` 的测试用例
 - `--include-tags <value>` 用于获取由 `@Tag` 宏指定的测试类别的子集。 `value` 的形式如下：
@@ -619,20 +619,20 @@ Summary: TOTAL: 1
 - `--baseline-path <value>` 与当前性能结果进行比较的现有报告的路径。默认情况下它使用 `--report-path` 值
 - `--skip-script` 配置后，将会跳过构建脚本的编译运行
 
-`cjpm bench` 参数选项使用示例:
+`cjpm bench` 参数选项使用示例：
 
 ```text
-输入: cjpm bench
-输出: cjpm bench success
+输入：cjpm bench
+输出：cjpm bench success
 
-输入: cjpm bench src
-输出: cjpm bench success
+输入：cjpm bench src
+输出：cjpm bench success
 
-输入: cjpm bench src --filter=*
-输出: cjpm bench success
+输入：cjpm bench src --filter=*
+输出：cjpm bench success
 
-输入: cjpm bench src --report-format=csv
-输出: cjpm bench success
+输入：cjpm bench src --report-format=csv
+输出：cjpm bench success
 ```
 
 > **注意：**
@@ -647,13 +647,13 @@ Summary: TOTAL: 1
 例如：
 
 ```text
-输入: cjpm clean
-输出: cjpm clean success
+输入：cjpm clean
+输出：cjpm clean success
 ```
 
 ```text
-输入: cjpm clean --target-dir temp
-输出: cjpm clean success
+输入：cjpm clean --target-dir temp
+输出：cjpm clean success
 ```
 
 > **注意：**
@@ -675,7 +675,7 @@ Summary: TOTAL: 1
 - `--branch <value>` 用于指定 `git` 安装的项目分支。
 - `--tag <value>` 用于指定 `git` 安装的项目 `tag`。
 - `--commit <value>` 用于指定 `git` 安装的项目 `commit ID`。
-- `-j, --jobs <N>` 用于指定并行编译的最大并发数，最终的最大并发数取 `N` 和 `2倍 CPU 核数` 的最小值。
+- `-j, --jobs <N>` 用于指定并行编译的最大并发数，最终的最大并发数取 `N` 和 `2 倍 CPU 核数` 的最小值。
 - `--cfg` 指定后，能够透传 `cjpm.toml` 中的自定义 `cfg` 选项。
 - `--target-dir <value>` 用于指定编译产物的存放路径。
 - `--name <value>` 用于指定最终安装的产物名。
@@ -816,7 +816,7 @@ cjpm install --git url              # 从 git 对应地址安装
 compile-option = "-O1 -V"
 ```
 
-这里填入的命令会在 `build` 执行时插入到编译命令中间，多个命令可以用空格隔开。可用的命令参考《仓颉编程语言开发指南》的[编译选项](../../../dev-guide/source_zh_cn/Appendix/compile_options.md)章节内容。
+这里填入的命令会在 `build` 执行时插入到编译命令中间，多个命令可以用空格隔开。可用的命令参考《仓颉编程语言开发指南》的 [编译选项](../../../dev-guide/source_zh_cn/Appendix/compile_options.md) 章节内容。
 
 ### "override-compile-option"
 
@@ -828,7 +828,7 @@ compile-option = "-O1 -V"
 override-compile-option = "-O1 -V"
 ```
 
-这里填入的命令会在 `build` 执行时插入到编译命令中间，并且拼接于模块配置的 `compile-option` 内容之后，优先级高于 `compile-option`。可用的命令参考《仓颉编程语言开发指南》的[编译选项](../../../dev-guide/source_zh_cn/Appendix/compile_options.md)章节内容。
+这里填入的命令会在 `build` 执行时插入到编译命令中间，并且拼接于模块配置的 `compile-option` 内容之后，优先级高于 `compile-option`。可用的命令参考《仓颉编程语言开发指南》的 [编译选项](../../../dev-guide/source_zh_cn/Appendix/compile_options.md) 章节内容。
 
 > **注意：**
 >
@@ -837,7 +837,7 @@ override-compile-option = "-O1 -V"
 
 ### "link-option"
 
-传给链接器的编译选项，可用于透传安全编译命令，如下所示:
+传给链接器的编译选项，可用于透传安全编译命令，如下所示：
 
 ```text
 link-option = "-z noexecstack -z relro -z now --strip-all"
@@ -892,12 +892,12 @@ target-dir = "temp"
 [package.package-configuration.demo]
   compile-option = "-O2"
 
-# profile字段会在下文介绍
+# profile 字段会在下文介绍
 [profile.customized-option]
   cfg1 = "-O0"
 
-输入: cjpm build --cfg1 -V
-输出: cjc --import-path build -O0 -O1 -O2 ...
+输入：cjpm build --cfg1 -V
+输出：cjc --import-path build -O0 -O1 -O2 ...
 ```
 
 通过配置这个字段，可以同时生成多个二进制产物（生成多个二进制产物时，`-o, --output <value>` 选项将会失效），示例如下：
@@ -1054,7 +1054,7 @@ abc = { path = "libs" }
 
 ### "script-dependencies"
 
-具有与 `dependencies` 字段相同的格式。它用于指定仅在编译构建脚本中使用的依赖项，而不是构建主项目所需的依赖项。构建脚本相关功能将在[其他-构建脚本](#构建脚本)章节中详述。
+具有与 `dependencies` 字段相同的格式。它用于指定仅在编译构建脚本中使用的依赖项，而不是构建主项目所需的依赖项。构建脚本相关功能将在 [其他-构建脚本](#构建脚本)章节中详述。
 
 ### "replace"
 
@@ -1228,7 +1228,7 @@ PATH = { value = "/usr/bin", splice-type = "prepend" }
 
 测试配置支持指定编译和运行测试用例时的选项，所有字段均可缺省，不配置时不生效，顶层模块设置的 `profile.test` 项才会生效。选项列表与 `cjpm test` 提供的控制台执行选项一致。如果选项在配置文件和控制台中同时被配置，则控制台中的选项优先级高于配置文件中的选项。`profile.test` 支持的运行时选项：
 
-- `filter` 指定用例过滤器，参数值类型为字符串，格式与 [test 命令说明](#test)中 `--filter` 的值格式一致
+- `filter` 指定用例过滤器，参数值类型为字符串，格式与 [test 命令说明](#test) 中 `--filter` 的值格式一致
 - `timeout-each <value>` 中 `value` 的格式为 `%d[millis|s|m|h]`，为每个测试用例指定默认的超时时间
 - `parallel` 指定测试用例并行执行的方案，`value` 的形式如下所示：
     - `<BOOL>` 值为 `true` 或 `false`，指定为 `true` 时，测试类可被并行运行，并行进程个数将受运行系统上的 CPU 核数控制
@@ -1244,7 +1244,7 @@ PATH = { value = "/usr/bin", splice-type = "prepend" }
 
 #### "profile.test.build"
 
-用于指定支持的编译选项，其列表如下:
+用于指定支持的编译选项，其列表如下：
 
 - `compile-option` 是一个包含附加 `cjc` 编译选项的字符串。为顶级 `compile-option` 字段做补充
 - `lto` 指定是否开启 `LTO` 优化编译模式，该值可为 `thin` 或 `full` ，仅 `Linux` 平台支持该功能
@@ -1252,7 +1252,7 @@ PATH = { value = "/usr/bin", splice-type = "prepend" }
 
 #### "profile.test.env"
 
-用于在 `test` 命令时运行可执行文件时配置临时环境变量，`key` 值为需要配置的环境变量的名称，有如下配置项:
+用于在 `test` 命令时运行可执行文件时配置临时环境变量，`key` 值为需要配置的环境变量的名称，有如下配置项：
 
 - `value` 指定配置的环境变量值
 - `splice-type` 指定环境变量的拼接方式，非必填，不配置时默认为 `absent`，共有以下四种取值：
@@ -1273,11 +1273,11 @@ report-format = "csv"
 verbose = true
 ```
 
-测试配置支持指定编译和运行测试用例时的选项，所有字段均可缺省，不配置时不生效，顶层模块设置的 `profile.bench` 项才会生效。选项列表与 `cjpm bench` 提供的控制台执行选项一致。如果选项在配置文件和控制台中同时被配置，则控制台中的选项优先级高于配置文件中的选项。`profile.bench` 支持的运行时选项:
+测试配置支持指定编译和运行测试用例时的选项，所有字段均可缺省，不配置时不生效，顶层模块设置的 `profile.bench` 项才会生效。选项列表与 `cjpm bench` 提供的控制台执行选项一致。如果选项在配置文件和控制台中同时被配置，则控制台中的选项优先级高于配置文件中的选项。`profile.bench` 支持的运行时选项：
 
-- `filter` 指定用例过滤器，参数值类型为字符串, 格式与 [bench 命令说明](#bench)中 `--filter` 的值格式一致
+- `filter` 指定用例过滤器，参数值类型为字符串，格式与 [bench 命令说明](#bench) 中 `--filter` 的值格式一致
 - `option:<value>` 与 `@Configure` 协同定义运行选项。例如，如下选项：
-    - `random-seed` 用来指定随机种子的值, 参数值类型为正整数
+    - `random-seed` 用来指定随机种子的值，参数值类型为正整数
     - `no-color` 指定执行结果在控制台中是否无颜色显示，值为 `true` 或 `false`
     - `report-path` 指定测试执行后的报告生成路径（不能通过 `@Configure` 配置）
     - `report-format` 指定报告输出格式，当前当前单元测试报告仅支持 `xml` 格式（可忽略大小写），使用其它值将会抛出异常（不能通过 `@Configure` 配置）, 性能测试报告仅支持 `csv` 和 `csv-raw` 格式
@@ -1394,7 +1394,7 @@ cfg3 = "-O2"
   "pro1.zoo" = "./test/pro1/pro1.zoo.cjo"
 ```
 
-`package-option` 选项为 `map` 结构，`pro0.xoo` 名称作为 `key` (`toml` 配置文件中含有 `.` 的字符串作为整体时，需要用 `""` 包含)，所以 `key` 的值为 `libpro0.xoo.so` 。前端文件 `cjo` 的路径作为 `value`，对应于该 `cjo` 的 `.a` 或 `.so` 需放置在相同路径下。
+`package-option` 选项为 `map` 结构，`pro0.xoo` 名称作为 `key` (`toml` 配置文件中含有 `.` 的字符串作为整体时，需要用 `""` 包含），所以 `key` 的值为 `libpro0.xoo.so` 。前端文件 `cjo` 的路径作为 `value`，对应于该 `cjo` 的 `.a` 或 `.so` 需放置在相同路径下。
 
 > **注意：**
 >
@@ -1426,21 +1426,21 @@ main(): Int64 {
 方式一：宏包在交叉编译时默认仅编译本地平台的产物，不编译目标平台的产物，对该模块内的所有宏包生效
 
 ```text
-[target.目标平台]
+[target. 目标平台]
   compile-macros-for-target = ""
 ```
 
 方式二：在交叉编译时同时编译本地平台和目标平台的产物，对该模块内的所有宏包生效
 
 ```text
-[target.目标平台]
+[target. 目标平台]
   compile-macros-for-target = "all" # 配置项为字符串形式，可选值必须为 all
 ```
 
 方式三：指定该模块内的某些宏包在交叉编译时同时编译本地平台和目标平台的产物，其它未指定的宏包采取方式一的默认模式
 
 ```text
-[target.目标平台]
+[target. 目标平台]
   compile-macros-for-target = ["pkg1", "pkg2"] # 配置项为字符串数字形式，可选值是宏包名
 ```
 
@@ -1793,7 +1793,7 @@ main(): Int64 {
 
 ## 使用示例
 
-以下面仓颉项目的目录结构为例，介绍 `cjpm` 的使用方法，该目录下对应的源码文件示例可见[源代码](#示例的源代码)。该仓颉项目的模块名为 `test`。
+以下面仓颉项目的目录结构为例，介绍 `cjpm` 的使用方法，该目录下对应的源码文件示例可见 [源代码](#示例的源代码)。该仓颉项目的模块名为 `test`。
 
 ```text
 cj_project
@@ -2124,7 +2124,7 @@ cjpm build --target=aarch64-linux-android --enable-features=feature.arch.aarch64
 ```bash
 # 将出现 "No source set was selected" 的错误信息
 cjpm build --target=aarch64-linux-android --no-feature-deduce
-# 可选择合适的 feature 值进行指定:
+# 可选择合适的 feature 值进行指定：
 # 1. [..., "feature.os.linux", "feature.env.android"]
 # 2. [..., "feature.os.linux"]
 # 3. [..., "feature.env.android"]
@@ -2134,7 +2134,7 @@ cjpm build --no-feature-deduce --target=aarch64-linux-android --enable-features=
 
 #### 源码集及其配置
 
-默认的 `cjpm.toml` 如下:
+默认的 `cjpm.toml` 如下：
 
 ```toml
 [package]
@@ -2198,7 +2198,7 @@ cjpm build --no-feature-deduce --target=aarch64-linux-android --enable-features=
 
 ```toml
 # 如果源码集声明不包含 `condition` 字段 - 则不设置任何约束。
-# 可能的语法:
+# 可能的语法：
 # 1. 同时满足多个 feature 。
 
  [source-set.${source set fully qualified name}]
@@ -2232,7 +2232,7 @@ cjpm build --no-feature-deduce --target=aarch64-linux-android --enable-features=
 
 ##### 嵌套源码集
 
-当源码集存在嵌套层级时，要求代码目录层级与源码集层级存在对应关系(及父级源码集的路径需为子级源码集路径的前缀)。同时，嵌套源码集场景下，不支持多个路径。
+当源码集存在嵌套层级时，要求代码目录层级与源码集层级存在对应关系（及父级源码集的路径需为子级源码集路径的前缀）。同时，嵌套源码集场景下，不支持多个路径。
 
 ```toml
 [source-set.common]

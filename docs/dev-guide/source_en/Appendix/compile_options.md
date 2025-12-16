@@ -2,11 +2,11 @@
 
 This chapter introduces commonly used `cjc` compilation options. If an option is also applicable to `cjc-frontend`, it will be marked with a <sup>[frontend]</sup> superscript; if the behavior differs between `cjc-frontend` and `cjc`, additional explanations will be provided.
 
-- Options starting with two hyphens are long options, such as `--xxxx`.  
-  If a long option has an optional parameter, the option and parameter must be connected with an equals sign, e.g., `--xxxx=<value>`.  
+- Options starting with two hyphens are long options, such as `--xxxx`.
+  If a long option has an optional parameter, the option and parameter must be connected with an equals sign, e.g., `--xxxx=<value>`.
   If a long option has a mandatory parameter, the option and parameter can be separated by either a space or an equals sign, e.g., `--xxxx <value>` is equivalent to `--xxxx=<value>`.
 
-- Options starting with a single hyphen are short options, such as `-x`.  
+- Options starting with a single hyphen are short options, such as `-x`.
   For short options, if they are followed by a parameter, the option and parameter can be separated by a space or directly concatenated, e.g., `-x <value>` is equivalent to `-x<value>`.
 
 ## Basic Options

@@ -41,6 +41,7 @@ import org::{package1.*, package2.*}
 - 只允许导入当前文件可见的顶层声明或定义，导入不可见的声明或定义将会在导入处报错。
 - 禁止通过 `import` 导入当前源文件所在包的声明或定义。
 - 禁止包间的循环依赖导入，如果包之间存在循环依赖，编译器会报错。
+
 * `::` 后必须接包名。
 * 使用完整包名访问导入成员时，不能使用组织名。
 
@@ -62,7 +63,7 @@ import pkga.*
 // pkgc/c1.cj
 package pkgc
 
-import pkga.C // 错误, C 在 pkga 不可访问
+import pkga.C // 错误，C 在 pkga 不可访问
 import pkga.R // 正确，R 是包 pkga 的 external 的顶层声明
 import pkgc.f1 // 错误，包 pkgc 不能导入自己
 import org::* // 错误，'*' 后应紧跟包名
