@@ -6,7 +6,7 @@
 
 仓颉编程语言还提供了区间操作符，例如 `a..b` 或 `a..=b`，这方便表达一个区间内的数值。
 
-本章节只描述了仓颉编程语言中的基本操作符，其他操作符参见附录中的[操作符](../Appendix/operator.md)。如何进行自定义类型的操作符重载参见[操作符重载](../function/operator_overloading.md)章节。
+本章节只描述了仓颉编程语言中的基本操作符，其他操作符参见附录中的 [操作符](../Appendix/operator.md)。如何进行自定义类型的操作符重载参见 [操作符重载](../function/operator_overloading.md) 章节。
 
 ## 赋值操作符
 
@@ -36,7 +36,7 @@ main(): Int64 {
     var a: Int64
     var b: Int64
     (a, b) = (1, 2) // a = 1, b = 2
-    (a, b) = (b, a) // 交换, a = 2, b = 1
+    (a, b) = (b, a) // 交换，a = 2, b = 1
     (a, _) = (3, 4) // a = 3
     (_, _) = (5, 6) // 无赋值
     return 0
@@ -180,7 +180,7 @@ main(): Int64 {
 
 ## coalescing 操作符
 
-coalescing 操作符使用 `??` 表示，`??` 是二元中缀操作符。coalescing 操作符用于 [Option 类型](../enum_and_pattern_match/option_type.md)的解构。
+coalescing 操作符使用 `??` 表示，`??` 是二元中缀操作符。coalescing 操作符用于 [Option 类型](../enum_and_pattern_match/option_type.md) 的解构。
 
 `e1 ?? e2` 表达式，在 e1 的值等于 `Option<T>.Some(v)` 时，`e1 ?? e2` 的值等于 v 的值（此时，不会再去对 e2 求值，即满足 “短路求值”）；在 e1 的值等于 `Option<T>.None` 时，`e1 ?? e2` 的值等于 e2 的值。
 
@@ -249,12 +249,11 @@ func isEven(a: Int64): Bool {
     }
 }
 
-
 main() {
     var a: Bool = isEven(2) && isEven(20)
-    var b: Bool = isEven(3) && isEven(30) // isEven(3)返回值是false, b 值为false，无需对isEven(30)求值
+    var b: Bool = isEven(3) && isEven(30) // isEven(3) 返回值是 false, b 值为 false，无需对 isEven(30) 求值
 
-    a = isEven(4) || isEven(40)  // isEven(4)返回值是true, a 值为true，无需对isEven(40)求值
+    a = isEven(4) || isEven(40)  // isEven(4) 返回值是 true, a 值为 true，无需对 isEven(40) 求值
     b = isEven(5) || isEven(50)
 }
 ```
@@ -265,7 +264,7 @@ main() {
 
 对于移位操作符，要求其操作数必须是整数类型（但两个操作数可以是不同的整数类型，例如：左操作数是 Int8，右操作数是 Int16），并且无论左移还是右移，右操作数都不允许为负数（对于编译时可检查出的此类错误，编译报错，如果运行时发生此错误，则抛出异常）。对于无符号数的移位操作，移位和补齐规则是：左移低位补 0 高位丢弃，右移高位补 0 低位丢弃。对于有符号数的移位操作，移位和补齐规则是：
 
-1. 正数和无符号数的移位补齐规则一致;
+1. 正数和无符号数的移位补齐规则一致；
 2. 负数左移低位补 0 高位丢弃；
 3. 负数右移高位补 1 低位丢弃。
 

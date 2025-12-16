@@ -43,7 +43,7 @@ Below are detailed usage rules for types that support cross-platform development
 
 #### Global Functions
 
-Global functions support cross-platform features. Users can use the `common` and `platform` modifiers for global functions.  
+Global functions support cross-platform features. Users can use the `common` and `platform` modifiers for global functions.
 A `common` global function may or may not include an implementation.
 
 ```cangjie
@@ -51,7 +51,7 @@ common func foo(): Int64
 common func goo(a: Int64): Int64 { 1 }
 ```
 
-In the above example, two `common` global functions are defined. The function `foo` has no function body, while `goo` includes a function body. Both are valid definitions of `common` global functions.  
+In the above example, two `common` global functions are defined. The function `foo` has no function body, while `goo` includes a function body. Both are valid definitions of `common` global functions.
 `common`/`platform` global functions must adhere to the following restrictions:
 
 - A `common` global function must specify its return type.

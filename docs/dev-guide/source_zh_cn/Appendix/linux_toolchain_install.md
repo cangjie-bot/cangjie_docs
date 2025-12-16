@@ -12,7 +12,7 @@
 
 > **注意：**
 >
-> 当前仓颉工具链依赖的某些工具在一些 Linux 发行版上可能无法通过系统默认软件源直接安装。可参考下一节[编译安装依赖工具](./linux_toolchain_install.md#编译安装依赖工具)进行手动安装。
+> 当前仓颉工具链依赖的某些工具在一些 Linux 发行版上可能无法通过系统默认软件源直接安装。可参考下一节 [编译安装依赖工具](./linux_toolchain_install.md#编译安装依赖工具)进行手动安装。
 
 ### SUSE Linux Enterprise Server 12 SP5
 
@@ -23,7 +23,7 @@ $ zypper install \
          gcc-c++
 ```
 
-此外，还需要安装 OpenSSL 3，安装方法请参见[编译安装依赖工具](./linux_toolchain_install.md#编译安装依赖工具)。
+此外，还需要安装 OpenSSL 3，安装方法请参见 [编译安装依赖工具](./linux_toolchain_install.md#编译安装依赖工具)。
 
 ### Ubuntu 18.04
 
@@ -35,7 +35,7 @@ $ apt-get install \
           libgcc-7-dev
 ```
 
-此外，还需要安装 OpenSSL 3，安装方法请参见[编译安装依赖工具](./linux_toolchain_install.md#编译安装依赖工具)。
+此外，还需要安装 OpenSSL 3，安装方法请参见 [编译安装依赖工具](./linux_toolchain_install.md#编译安装依赖工具)。
 
 ### Ubuntu 20.04
 
@@ -47,7 +47,7 @@ $ apt-get install \
           libgcc-9-dev
 ```
 
-此外，还需要安装 OpenSSL 3，安装方法请参见[编译安装依赖工具](./linux_toolchain_install.md#编译安装依赖工具)。
+此外，还需要安装 OpenSSL 3，安装方法请参见 [编译安装依赖工具](./linux_toolchain_install.md#编译安装依赖工具)。
 
 ### UnionTech OS Server 20
 
@@ -59,7 +59,7 @@ $ yum install \
       gcc \
 ```
 
-此外，还需要安装 OpenSSL 3，安装方法请参见[编译安装依赖工具](./linux_toolchain_install.md#编译安装依赖工具)。
+此外，还需要安装 OpenSSL 3，安装方法请参见 [编译安装依赖工具](./linux_toolchain_install.md#编译安装依赖工具)。
 
 ### Kylin Linux Advanced Server release V10
 
@@ -71,7 +71,7 @@ $ yum install \
       gcc \
 ```
 
-此外，还需要安装 OpenSSL 3，安装方法请参见[编译安装依赖工具](./linux_toolchain_install.md#编译安装依赖工具)。
+此外，还需要安装 OpenSSL 3，安装方法请参见 [编译安装依赖工具](./linux_toolchain_install.md#编译安装依赖工具)。
 
 ### 其他 Linux 发行版
 
