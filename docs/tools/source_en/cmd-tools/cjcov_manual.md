@@ -328,6 +328,8 @@ For scenarios where long-running network service programs cannot terminate norma
 
 ### Filenames with Special Characters
 
+`cjcov` does not support scenarios where source code file names contain Chinese characters on the Windows platform.
+
 It is recommended to follow Cangjie programming conventions for naming files and avoid characters other than `[0-9a-zA-Z_]`. Special characters will be replaced with `=`.
 
 If filenames contain special characters, to ensure correct `html` navigation, the `html` filenames displayed in `index.html` will differ from the actual `html` filenames. Special characters in `html` filenames will be replaced with `=`.
