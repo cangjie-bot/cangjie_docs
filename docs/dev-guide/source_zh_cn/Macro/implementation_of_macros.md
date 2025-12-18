@@ -6,7 +6,7 @@
 
 非属性宏只接受被转换的代码，不接受其他参数（属性），其定义格式如下：
 
-<!-- code_check_manual -->
+<!-- code_no_check -->
 
 ```cangjie
 import std.ast.*
@@ -18,7 +18,7 @@ public macro MacroName(args: Tokens): Tokens {
 
 宏的调用格式如下：
 
-<!-- code_check_manual -->
+<!-- code_no_check -->
 
 ```cangjie
 @MacroName(...)
@@ -28,7 +28,7 @@ public macro MacroName(args: Tokens): Tokens {
 
 当宏作用于声明时，一般可以省略括号。参考如下示例：
 
-<!-- code_check_manual -->
+<!-- code_no_check -->
 
 ```cangjie
 @MacroName func name() {}        // Before a FuncDecl
@@ -38,7 +38,11 @@ public macro MacroName(args: Tokens): Tokens {
 @MacroName enum e {}             // Before a Enum
 @MacroName interface i {}        // Before a InterfaceDecl
 @MacroName extend e <: i {}      // Before a ExtendDecl
-@MacroName mut prop i: Int64 {}  // Before a PropDecl
+class C {
+    @MacroName prop i: Int64 {   // Before a PropDecl
+        get() { 0 }
+    }
+} 
 @MacroName @AnotherMacro(input)  // Before a macro call
 ```
 
@@ -52,7 +56,7 @@ public macro MacroName(args: Tokens): Tokens {
 
 对于输入的特殊说明，可以参考如下示例：
 
-<!-- code_check_manual -->
+<!-- code_no_check -->
 
 ```cangjie
 // Illegal input Tokens
@@ -116,7 +120,7 @@ public macro MacroName(args: Tokens): Tokens {
 
   在用例中添加了打印信息，其中宏定义中的 `I'm in macro body` 将在编译 `macro_call.cj` 的期间输出。同时，宏调用点被展开，如编译如下代码：
 
-  <!-- code_check_manual -->
+  <!-- code_no_check -->
 
   ```cangjie
   let a: Int64 = @testDef(1 + 2)
@@ -124,7 +128,7 @@ public macro MacroName(args: Tokens): Tokens {
 
   编译器将宏返回的 `Tokens` 更新到调用点的语法树上，得到如下代码：
 
-  <!-- code_check_manual -->
+  <!-- code_no_check -->
 
   ```cangjie
   let a: Int64 = 1 + 2
@@ -132,7 +136,7 @@ public macro MacroName(args: Tokens): Tokens {
 
   也就是说，可执行程序中的代码实际变为了：
 
-  <!-- code_check_manual -->
+  <!-- code_no_check -->
 
   ```cangjie
   main(): Int64 {
@@ -247,9 +251,12 @@ public macro MacroName(args: Tokens): Tokens {
 
 和非属性宏相比，属性宏的定义会增加一个 Tokens 类型的输入，这个增加的入参可以让开发者输入额外的信息。比如开发者可能希望在不同的调用场景下使用不同的宏展开策略，则可以通过这个属性入参进行标记位设置。同时，这个属性入参也可以传入任意 Tokens，这些 Tokens 可以与被宏修饰的代码进行组合拼接等。下面是一个简单的例子：
 
-<!-- code_check_manual -->
+<!-- run -macro72 -->
+<!-- cfg="--compile-macro" -->
 
 ```cangjie
+macro package define
+
 // Macro definition with attribute
 public macro Foo(attrTokens: Tokens, inputTokens: Tokens): Tokens {
     return attrTokens + inputTokens  // Concatenate attrTokens and inputTokens.
@@ -260,9 +267,11 @@ public macro Foo(attrTokens: Tokens, inputTokens: Tokens): Tokens {
 
 带属性的宏与不带属性的宏的调用类似，属性宏调用时新增的入参 attrTokens 通过 [] 传入，其调用形式为：
 
-<!-- code_check_manual -->
+<!-- run -macro72 -->
 
 ```cangjie
+import define.Foo
+
 // attribute macro with parentheses
 var a: Int64 = @Foo[1+](2+3)
 
@@ -271,6 +280,8 @@ var a: Int64 = @Foo[1+](2+3)
 struct Data {
     var count: Int64 = 100
 }
+
+main() {}
 ```
 
 - 宏 Foo 调用，当参数是 `2+3` 时，与 `[]` 内的属性 `1+` 进行拼接，经过宏展开后，得到 `var a: Int64 = 1+2+3` 。
@@ -298,7 +309,7 @@ struct Data {
 
     - 输入的内容中，若希望 "@" 作为输入的 `Token` 则必须使用转义符号 "\\" 对其进行转义。
 
-    <!-- code_check_manual -->
+    <!-- code_no_check -->
 
     ```cangjie
     // Illegal attribute Tokens
@@ -393,7 +404,7 @@ main() {
 
 注意，按照宏定义必须比宏调用点先编译的约束，上述 3 个文件的编译顺序必须是：pkg1 -> pkg2 -> pkg3。pkg2 中的 `Prop` 宏定义：
 
-<!-- code_check_manual -->
+<!-- code_no_check -->
 
 ```cangjie
 public macro Prop(input:Tokens):Tokens {
@@ -412,7 +423,7 @@ public macro Prop(input:Tokens):Tokens {
 
 会先被展开成如下代码，再进行编译。
 
-<!-- code_check_manual -->
+<!-- code_no_check -->
 
 ```cangjie
 public macro Prop(input: Tokens): Tokens {
@@ -515,7 +526,7 @@ main(): Int64 {
 
 嵌套宏可以出现在带括号和不带括号的宏调用中，二者可以组合，但开发者需要保证没有歧义，且明确宏的展开顺序：
 
-<!-- code_check_manual -->
+<!-- code_no_check -->
 
 ```cangjie
 var a = @foo(@foo1(2 * 3)+@foo2(1 + 3))  // foo1, foo2 have to be defined.
