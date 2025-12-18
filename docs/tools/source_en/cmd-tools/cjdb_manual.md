@@ -681,7 +681,7 @@ Architecture set to: x86_64-unknown-linux-gnu.
 
 5. If developers run cjdb on system environments newer than this version, compatibility issues and risks may arise, such as in C language interoperability scenarios where cjdb cannot properly resolve C code file and line number information.
 
-    ```cffi.c
+    ```c
     int32_t cfoo()
     {
         printf("cfoo\n");
@@ -689,7 +689,7 @@ Architecture set to: x86_64-unknown-linux-gnu.
     }
     ```
 
-    ```test.cj
+    ```cangjie
     foreign func cfoo(): Int32
     unsafe main() {
         cfoo()

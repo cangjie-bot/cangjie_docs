@@ -406,7 +406,7 @@ This option only takes effect when compiling dynamic libraries or executable fil
 
 When compiling executable programs (i.e., when `--output-type=exe` is specified), `cjc` statically links the std module of the Cangjie library by default.
 
-### <span id="--dy-std">`--dy-std`
+### <span id="--dy-std">`--dy-std`</span>
 
 Dynamically link the std module of the Cangjie library.
 

@@ -687,7 +687,7 @@ Architecture set to: x86_64-unknown-linux-gnu.
 
 5. 如果开发者在高于该版本的系统环境上运行时可能会出现不兼容的问题和风险，如 `C` 语言互操作场景， cjdb 无法正常解析 `C` 代码的文件和行号信息。
 
-    ```cffi.c
+    ```c
     int32_t cfoo()
     {
         printf("cfoo\n");
@@ -695,7 +695,7 @@ Architecture set to: x86_64-unknown-linux-gnu.
     }
     ```
 
-    ```test.cj
+    ```cangjie
     foreign func cfoo(): Int32
     unsafe main() {
         cfoo()
@@ -703,11 +703,11 @@ Architecture set to: x86_64-unknown-linux-gnu.
     ```
 
     ```shell
-    // step 1: 使用系统自带 clang 版本编译 c 文件，生成 dylib
+    # step 1: 使用系统自带 clang 版本编译 c 文件，生成 dylib
     clang -g -shared cffi.c -o libcffi.dylib
-    // step 2: 使用 cjc 版本编译 cj 文件并连接 c 语言动态库
+    # step 2: 使用 cjc 版本编译 cj 文件并连接 c 语言动态库
     cjc -g test.cj -L. -lcffi -o test
-    // step 3: 使用 cjdb 调试 test 文件，由于调试信息不兼容导致无法调试 c 代码
+    # step 3: 使用 cjdb 调试 test 文件，由于调试信息不兼容导致无法调试 c 代码
     cjdb test
     ```
 
