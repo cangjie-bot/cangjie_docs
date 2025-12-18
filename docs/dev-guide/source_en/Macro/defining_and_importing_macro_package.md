@@ -83,7 +83,7 @@ Refer to the following examples:
 
   The compilation command is as follows. Note that explicit linking of package B's dynamic library is required:
 
-  ```cangjie
+  ```shell
   cjc C.cj --compile-macro -L. -lB
   ```
 
@@ -102,11 +102,13 @@ Refer to the following examples:
 
   The compilation command is as follows:
 
-  ```cangjie
+  ```shell
   cjc main.cj -o main -L. -lB
   ```
 
   The expanded result of macro `M2` in `main.cj` is as follows:
+
+  <!-- code_no_check -->
 
   ```cangjie
   import C.*

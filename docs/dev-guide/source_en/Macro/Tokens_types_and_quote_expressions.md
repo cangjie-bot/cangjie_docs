@@ -6,6 +6,8 @@ The fundamental type for macro operations is `Tokens`, representing a code fragm
 
 The type of a `Token` is an enum value from `TokenKind`. For available values of `TokenKind`, refer to the *Cangjie Programming Language Library API* documentation. By providing `TokenKind` and `Token` values (the identifier or literal corresponding to `TokenKind`), any `Token` can be directly constructed. The specific constructors are as follows:
 
+<!-- code_no_check -->
+
 ```cangjie
 Token(k: TokenKind)
 Token(k: TokenKind, v: String)
@@ -28,6 +30,8 @@ let tk5 = Token(TokenKind.STRING_LITERAL, "xyz")  // string literal
 ## Tokens Type
 
 A `Tokens` represents a sequence composed of multiple `Token` elements. `Tokens` can be constructed directly from an array of `Token`. Below are three basic ways to construct `Tokens` instances:
+
+<!-- code_no_check -->
 
 ```cangjie
 Tokens()   // construct an empty list

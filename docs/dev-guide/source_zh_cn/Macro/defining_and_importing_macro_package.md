@@ -83,7 +83,7 @@ public macro M(input: Tokens): Tokens { // macro M 外部可见
 
   编译命令如下，注意这里需要显式链接 B 包动态库：
 
-  ```cangjie
+  ```shell
   cjc C.cj --compile-macro -L. -lB
   ```
 
@@ -102,11 +102,13 @@ public macro M(input: Tokens): Tokens { // macro M 外部可见
 
   编译命令如下：
 
-  ```cangjie
+  ```shell
   cjc main.cj -o main -L. -lB
   ```
 
   `main.cj`中 `M2` 宏展开后的结果如下：
+
+  <!-- code_no_check -->
 
   ```cangjie
   import C.*

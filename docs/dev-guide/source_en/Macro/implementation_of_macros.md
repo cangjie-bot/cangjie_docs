@@ -6,6 +6,8 @@ This chapter introduces the definition and usage of Cangjie macros, which can be
 
 Non-attribute macros only accept the code to be transformed and do not take other parameters (attributes). Their definition format is as follows:
 
+<!-- code_no_check -->
+
 ```cangjie
 import std.ast.*
 
@@ -16,6 +18,8 @@ public macro MacroName(args: Tokens): Tokens {
 
 The macro invocation format is as follows:
 
+<!-- code_no_check -->
+
 ```cangjie
 @MacroName(...)
 ```
@@ -23,6 +27,8 @@ The macro invocation format is as follows:
 Macro invocations are enclosed in `()`. The content inside the parentheses can be any valid `Tokens` or empty.
 
 When a macro is applied to a declaration, the parentheses can generally be omitted. Refer to the following examples:
+
+<!-- code_no_check -->
 
 ```cangjie
 @MacroName func name() {}        // Before a FuncDecl
@@ -32,7 +38,11 @@ When a macro is applied to a declaration, the parentheses can generally be omitt
 @MacroName enum e {}             // Before a Enum
 @MacroName interface i {}        // Before a InterfaceDecl
 @MacroName extend e <: i {}      // Before a ExtendDecl
-@MacroName mut prop i: Int64 {}  // Before a PropDecl
+class C {
+    @MacroName prop i: Int64 {   // Before a PropDecl
+        get() { 0 }
+    }
+} 
 @MacroName @AnotherMacro(input)  // Before a macro call
 ```
 
@@ -45,6 +55,8 @@ Special notes on the legality of `Tokens` within parentheses:
 - If the input contains "@" as a `Token`, it must be escaped using the escape symbol "\\".
 
 For special cases of input, refer to the following examples:
+
+<!-- code_no_check -->
 
 ```cangjie
 // Illegal input Tokens
@@ -108,17 +120,23 @@ Below are several typical examples of macro applications.
 
   Print statements have been added in the example, where `I'm in macro body` in the macro definition will be output during the compilation of `macro_call.cj`. Simultaneously, the macro invocation point is expanded. For example, compiling the following code:
 
+  <!-- code_no_check -->
+
   ```cangjie
   let a: Int64 = @testDef(1 + 2)
   ```
 
   The compiler updates the `Tokens` returned by the macro to the syntax tree at the invocation point, resulting in the following code:
 
+  <!-- code_no_check -->
+
   ```cangjie
   let a: Int64 = 1 + 2
   ```
 
   In other words, the actual code in the executable becomes:
+
+  <!-- code_no_check -->
 
   ```cangjie
   main(): Int64 {
@@ -197,6 +215,8 @@ Now, let's look at a more meaningful example of using a macro to process a funct
 
   In this example, the ModifyFunc macro takes a function declaration as input, so the parentheses can be omitted:
 
+  <!-- code_no_check -->
+
   ```cangjie
   @ModifyFunc
   func myFunc() {
@@ -205,6 +225,8 @@ Now, let's look at a more meaningful example of using a macro to process a funct
   ```
 
   After macro expansion, the following code is obtained:
+
+  <!-- code_no_check -->
 
   ```cangjie
   func myFunc(id: Int64) {
@@ -229,7 +251,12 @@ Now, let's look at a more meaningful example of using a macro to process a funct
 
 Compared to non-attribute macros, attribute macros include an additional `Tokens` type input parameter. This additional parameter allows developers to input extra information. For example, developers might want to use different macro expansion strategies in different invocation scenarios, which can be indicated via this attribute parameter. Additionally, this attribute parameter can accept any `Tokens`, which can be combined or concatenated with the code modified by the macro. Below is a simple example:
 
+<!-- run -macro72 -->
+<!-- cfg="--compile-macro" -->
+
 ```cangjie
+macro package define
+
 // Macro definition with attribute
 public macro Foo(attrTokens: Tokens, inputTokens: Tokens): Tokens {
     return attrTokens + inputTokens  // Concatenate attrTokens and inputTokens.
@@ -240,7 +267,11 @@ As shown in the macro definition above, an attribute macro has two parameters of
 
 The invocation of an attribute macro is similar to that of a non-attribute macro. The additional parameter `attrTokens` is passed via `[]`, and the invocation form is as follows:
 
+<!-- run -macro72 -->
+
 ```cangjie
+import define.Foo
+
 // attribute macro with parentheses
 var a: Int64 = @Foo[1+](2+3)
 
@@ -249,10 +280,14 @@ var a: Int64 = @Foo[1+](2+3)
 struct Data {
     var count: Int64 = 100
 }
+
+main() {}
 ```
 
 - For the macro Foo invocation, when the parameter is `2+3`, it is concatenated with the attribute `1+` inside `[]`. After macro expansion, the result is `var a: Int64 = 1+2+3`.
 - For the macro Foo invocation, when the parameter is `struct Data`, it is concatenated with the attribute `public` inside `[]`. After macro expansion, the result is:
+
+  <!-- code_no_check -->
 
   ```cangjie
   public struct Data {
@@ -273,6 +308,8 @@ Regarding attribute macros, the following points should be noted:
     - If the input contains unmatched square brackets, they must be escaped using the escape symbol "\\".
 
     - If the input contains "@" as a `Token`, it must be escaped using the escape symbol "\\".
+
+    <!-- code_no_check -->
 
     ```cangjie
     // Illegal attribute Tokens
@@ -369,6 +406,8 @@ main() {
 
 Note: Due to the constraint that macro definitions must be compiled before their call sites, the compilation order must be: pkg1 → pkg2 → pkg3. The `Prop` macro definition in pkg2:
 
+<!-- code_no_check -->
+
 ```cangjie
 public macro Prop(input:Tokens):Tokens {
     let v = parseDecl(input)
@@ -385,6 +424,8 @@ public macro Prop(input:Tokens):Tokens {
 ```
 
 Will first be expanded into the following code before compilation:
+
+<!-- code_no_check -->
 
 ```cangjie
 public macro Prop(input: Tokens): Tokens {
@@ -487,6 +528,8 @@ As shown above, macro `Foo` decorates `struct Data`, while macro calls `addToMul
 
 Nested macros can appear in both parenthesized and unparenthesized macro calls. These can be combined, but developers must ensure unambiguous expansion order:
 
+<!-- code_no_check -->
+
 ```cangjie
 var a = @foo(@foo1(2 * 3)+@foo2(1 + 3))  // foo1, foo2 have to be defined.
 
@@ -508,6 +551,9 @@ Inner macros can use the library function `assertParentContext` to ensure they a
 
 Macro definitions:
 
+<!-- compile.error -macro92 -->
+<!-- cfg="--compile-macro" -->
+
 ```cangjie
 public macro Outer(input: Tokens): Tokens {
     return input
@@ -520,6 +566,9 @@ public macro Inner(input: Tokens): Tokens {
 ```
 
 Macro calls:
+
+<!-- compile.error -macro92 -->
+<!-- cfg="--debug-macro" -->
 
 ```cangjie
 @Outer var a = 0
@@ -595,6 +644,8 @@ main(): Int64 {
 ```
 
 In this code, `Outer` receives variable names from two `Inner` macros and automatically adds to the class:
+
+<!-- code_no_check -->
 
 ```cangjie
 public func getCnt() {
