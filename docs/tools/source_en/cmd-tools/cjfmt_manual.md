@@ -60,9 +60,9 @@ cjfmt -f ../../../test/uilang/Thread.cj -o ../../../test/formated/Thread.cj
 - Option `-d` specifies a directory of Cangjie source files to format (supports relative/absolute paths):
 
 ```shell
-cjfmt -d test/              // Relative path source directory
+cjfmt -d test/              # Relative path source directory
 
-cjfmt -d /home/xxx/test     // Absolute path source directory
+cjfmt -d /home/xxx/test     # Absolute path source directory
 ```
 
 - Option `-o` specifies output directory (can be existing or new; supports relative/absolute paths). Note: MAX_PATH length varies by system (e.g., typically ≤260 on Windows, ≤4096 recommended on Linux):
@@ -72,7 +72,7 @@ cjfmt -d test/ -o /home/xxx/testout
 
 cjfmt -d /home/xxx/test -o ../testout/
 
-cjfmt -d testsrc/ -o /home/../testout   // Error if source directory doesn't exist: "error: Source file path not exist!"
+cjfmt -d testsrc/ -o /home/../testout   # Error if source directory doesn't exist: "error: Source file path not exist!"
 ```
 
 ### Formatting Configuration
