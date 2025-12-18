@@ -88,7 +88,7 @@ cjc src/demo.cj -o demo.exe --import-path ./target --output-dir ./target
 
 > **说明：**
 >
-> 宏替换过程依赖仓颉 runtime ，宏替换过程中仓颉 runtime 的初始化配置采用宏提供的默认配置，配置参数支持使用仓颉 runtime 运维日志进行查询，其中 cjHeapSize 与 cjStackSize 支持用户修改，其余暂不支持，仓颉 runtime 初始化配置可参见[runtime 初始化可选配置](../Appendix/runtime_env.md#runtime初始化可选配置)章节。
+> 宏替换过程依赖仓颉 runtime ，宏替换过程中仓颉 runtime 的初始化配置采用宏提供的默认配置，配置参数支持使用仓颉 runtime 运维日志进行查询，其中 cjHeapSize 与 cjStackSize 支持用户修改，其余暂不支持。注意所有配置参数在 OpenHarmonyOS 平台下均无效，OpenHarmonyOS 平台下仓颉运行时使用默认值。仓颉 runtime 初始化配置可参见[runtime 初始化可选配置](../Appendix/runtime_env.md#runtime-初始化可选配置)章节。
 
 ## 并行宏展开
 
