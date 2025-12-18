@@ -9,4 +9,3 @@
         - [Rules for Converting C Language to Cangjie Glue Code](source_en/cmd-tools/cj-c2cj-translation-rules.md)
     - [Language Server Tool](source_en/cangjie-language-server/LSPServer_manual.md)
     - [CHIR Deserialization Tool](source_en/cmd-tools/chir_dis_manual.md)
-    - [Exception Stack Trace Recovery Tool](source_en/cmd-tools/chir_dis_manual.md)
