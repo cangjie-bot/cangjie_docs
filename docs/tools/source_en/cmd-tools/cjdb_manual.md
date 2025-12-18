@@ -699,11 +699,11 @@ Architecture set to: x86_64-unknown-linux-gnu.
     ```
 
     ```shell
-    // step 1: Compile C file using system's native clang version to generate dylib
+    # step 1: Compile C file using system's native clang version to generate dylib
     clang -g -shared cffi.c -o libcffi.dylib
-    // step 2: Compile CJ file using cjc and link with C dynamic library
+    # step 2: Compile CJ file using cjc and link with C dynamic library
     cjc -g test.cj -L. -lcffi -o test
-    // step 3: Debug test file using cjdb (C code debugging fails due to incompatible debug info)
+    # step 3: Debug test file using cjdb (C code debugging fails due to incompatible debug info)
     cjdb test
     ```
 
