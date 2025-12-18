@@ -54,6 +54,8 @@ char* foo()
 
 Cangjie file `main.cj`:
 
+<!-- code_no_check -->
+
 ```cangjie
 @FastNative
 foreign func foo(): CPointer<Int32>
