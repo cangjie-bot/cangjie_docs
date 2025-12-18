@@ -54,6 +54,8 @@ char* foo()
 
 Cangjie file `main.cj`:
 
+<!-- code_no_check -->
+
 ```cangjie
 @FastNative
 foreign func foo(): CPointer<Int32>
@@ -125,6 +127,8 @@ public class testClass {
 
 Cangjie internally provides the `@Attribute` tag, allowing developers to set attribute values for declarations using the built-in `@Attribute` to mark them. Attribute values can be either `identifier` or `string` types. Below is a simple example where the variable `cnt` is given an `identifier`-type attribute `State`, and the variable `bcnt` is given a `string`-type attribute `"Binding"`.
 
+<!-- compile -->
+
 ```cangjie
 @Attribute[State] var cnt = 0       // identifier
 @Attribute["Binding"] var bcnt = 0  // string
@@ -134,7 +138,12 @@ Additionally, the standard library `std.ast` package provides the `getAttrs()` m
 
 Macro definition:
 
+<!-- run -macro0 -->
+<!-- cfg="--compile-macro" -->
+
 ```cangjie
+macro package define
+
 public macro Component(input: Tokens): Tokens {
     var varDecl = parseDecl(input)
     if (varDecl.hasAttr("State")) { // Returns true if the node is marked with the "State" attribute, otherwise false
@@ -147,15 +156,24 @@ public macro Component(input: Tokens): Tokens {
 
 Macro invocation:
 
+<!-- run -macro0 -->
+<!-- cfg="--debug-macro" -->
+
 ```cangjie
+import define.Component
+
 @Component(
     @Attribute[State] var cnt = 0
 )
+
+main() {}
 ```
 
 ## @Deprecated
 
 `@Deprecated` indicates that an API is deprecated. While it remains temporarily usable, it will be removed or changed in the future, and developers are advised not to use it. Example:
+
+<!-- compile -->
 
 ```cangjie
 @Deprecated["Use boo instead", since: "1.3.4"]
@@ -201,6 +219,8 @@ The `@Deprecated` custom macro can be applied to the following declarations:
 - `message: String` - Describes why the declaration is deprecated and how to migrate.
 - `since!: ?String` - The version in which the deprecation occurred.
 - `strict!: Bool` - Defaults to `false`, triggering a warning at call sites of the marked API. If set to `true`, it triggers a compilation error.
+
+<!-- compile.error -->
 
 ```cangjie
 @Deprecated["Use Macro2", since: "1990", strict: true]
