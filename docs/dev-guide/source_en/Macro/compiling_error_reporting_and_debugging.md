@@ -88,7 +88,7 @@ If the macro package depends on other dynamic libraries, ensure these dependenci
 
 > **Note:**
 >
-> The macro substitution process depends on the Cangjie runtime. During macro substitution, the Cangjie runtime's initialization configuration uses the default settings provided by macros. Configuration parameters can be queried using Cangjie runtime operational logs. Among these, `cjHeapSize` and `cjStackSize` can be modified by users, while others currently cannot. For Cangjie runtime initialization configurations, refer to the [Runtime Initialization Optional Configurations](../Appendix/runtime_env.md#runtime-initialization-optional-configurations) section.
+> The macro substitution process depends on the Cangjie runtime. During macro substitution, the Cangjie runtime's initialization configuration uses the default settings provided by macros. Configuration parameters can be queried using Cangjie runtime operational logs. Among these, `cjHeapSize` and `cjStackSize` can be modified by users, while others currently cannot. Note that all parameters are invalid on the OHOS platform. The Cangjie runtime uses default values on the OHOS platform. For Cangjie runtime initialization configurations, refer to the [Runtime Initialization Optional Configurations](../Appendix/runtime_env.md#runtime-initialization-optional-configurations) section.
 
 ## Parallel Macro Expansion
 
