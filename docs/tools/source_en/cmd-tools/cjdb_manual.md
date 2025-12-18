@@ -796,7 +796,7 @@ Use the `cjthread` command to view Cangjie call stacks.
 
 5. If developers run cjdb on system environments newer than this version, compatibility issues and risks may arise, such as in C language interoperability scenarios where cjdb cannot properly resolve C code file and line number information.
 
-    ```cffi.c
+    ```c
     int32_t cfoo()
     {
         printf("cfoo\n");
@@ -804,7 +804,7 @@ Use the `cjthread` command to view Cangjie call stacks.
     }
     ```
 
-    ```test.cj
+    ```cangjie
     foreign func cfoo(): Int32
     unsafe main() {
         cfoo()
@@ -812,11 +812,11 @@ Use the `cjthread` command to view Cangjie call stacks.
     ```
 
     ```shell
-    // step 1: Compile C file using system's native clang version to generate dylib
+    # step 1: Compile C file using system's native clang version to generate dylib
     clang -g -shared cffi.c -o libcffi.dylib
-    // step 2: Compile CJ file using cjc and link with C dynamic library
+    # step 2: Compile CJ file using cjc and link with C dynamic library
     cjc -g test.cj -L. -lcffi -o test
-    // step 3: Debug test file using cjdb (C code debugging fails due to incompatible debug info)
+    # step 3: Debug test file using cjdb (C code debugging fails due to incompatible debug info)
     cjdb test
     ```
 

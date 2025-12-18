@@ -967,7 +967,7 @@ JavaImpl is a Cangjie annotation indicating that the methods and members of the 
 
 Constructors of JavaImpl classes can be invoked by other JavaImpl classes.
 
-```cangie
+```cangjie
 @JavaMirror
 public class Handler {
     public prop isAlive: Bool

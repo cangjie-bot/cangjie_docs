@@ -35,7 +35,7 @@ Options:
 ```bash
 cjlint -f fileDir [option] fileDir...
 
-// 若需要指定多个路径，则在 "" 中以空格相隔
+# 若需要指定多个路径，则在 "" 中以空格相隔
 cjlint -f "fileDir1 fileDir2" [option] fileDir...
 ```
 
@@ -64,8 +64,8 @@ cjlint -f xxx/xxx/src/xxx.cj
 `-r`需要与`-o`选项配合使用，如果没有`-o`指定输出到文件，即使指定了`-r`也不会生成扫描报告。如果指定了`-o`没有指定`-r`，那么默认生成`json`格式的扫描报告。
 
 ```bash
-cjlint -f ./src -r csv -o ./report         // 生成report.csv文件
-cjlint -f ./src -r csv -o ./output/report  // 在output目录下生成report.csv文件
+cjlint -f ./src -r csv -o ./report         # 生成report.csv文件
+cjlint -f ./src -r csv -o ./output/report  # 在output目录下生成report.csv文件
 ```
 
 `-c`, `-m` 在开发者需要时用以指定`config`和`modules`所在的目录路径。
@@ -83,7 +83,7 @@ cjlint -f ./src -c ./tools/cjlint -m ./tools/cjlint
 ```bash
 cjlint --import-path fileDir
 
-// 若需要指定多个路径，则在 "" 中以空格相隔
+# 若需要指定多个路径，则在 "" 中以空格相隔
 cjlint --import-path "fileDir1 fileDir2"
 ```
 

@@ -35,7 +35,7 @@ Options:
 ```bash
 cjlint -f fileDir [option] fileDir...
 
-// For multiple paths, separate them with spaces within ""
+# For multiple paths, separate them with spaces within ""
 cjlint -f "fileDir1 fileDir2" [option] fileDir...
 ```
 
@@ -64,8 +64,8 @@ cjlint -f xxx/xxx/src/xxx.cj
 `-r` must be used with `-o`. If `-o` is not specified to output to a file, no report will be generated even if `-r` is set. If `-o` is specified without `-r`, the default format is `json`.
 
 ```bash
-cjlint -f ./src -r csv -o ./report         // Generates report.csv
-cjlint -f ./src -r csv -o ./output/report  // Generates report.csv in the output directory
+cjlint -f ./src -r csv -o ./report         # Generates report.csv
+cjlint -f ./src -r csv -o ./output/report  # Generates report.csv in the output directory
 ```
 
 `-c` and `-m` allow developers to specify custom `config` and `modules` directory paths when needed.
@@ -83,7 +83,7 @@ cjlint -f ./src -c ./tools/cjlint -m ./tools/cjlint
 ```bash
 cjlint --import-path fileDir
 
-// For multiple paths, separate them with spaces within ""
+# For multiple paths, separate them with spaces within ""
 cjlint --import-path "fileDir1 fileDir2"
 ```
 
