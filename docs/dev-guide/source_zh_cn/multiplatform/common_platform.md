@@ -62,8 +62,9 @@ common/platform 全局函数必须满足如下限制：
 - platform 全局函数的函数签名必须与同包的 common 全局函数匹配，即参数类型和返回值类型必须一致，并需要同时满足以下规则：
     - common 全局函数与全局平台函数必须使用相同的修饰符，如 public，unsafe 等，common/platform 除外。
     - 当 common 全局函数使用命名参数时，platform 全局函数对应位置必须使用相同名字的命名参数。
-    - 当 common 全局函数包含默认值时，platform 全局函数的相应位置必须为同参数名的命名参数，platform 全局函数不支持默认值。
+    - 函数的默认参数只能在 common 侧 或 platform 侧 中的一侧定义，不可同时在两侧设置默认值。若 common 侧的全局函数某参数已指定默认值，则 platform 侧对应位置的参数必须使用相同的参数名作为命名参数，且不得再设置默认值。
     - 每个 platform 全局函数必须匹配唯一的 common 全局函数，不可以出现多个平台全局函匹配相同的 common 全局函数。
+    - common 全局函数与 platform 全局函数必须使用相同的注解。
     - 如果是全局泛型函数，还需满足以下泛型特定限制：
         - common 全局泛型函数和 platform 全局泛型函数必须具有相同个数的类型形参。
         - 当 common 全局泛型函数有泛型约束时，platform 全局泛型函数对应类型形参的泛型约束必须保持一致或者更宽松。
@@ -119,14 +120,16 @@ platform func printValue2<T>(value: T): Unit {}
 
 仓颉 class 支持跨平台特性，用户可以使用 common 和 platform 修饰 class 及其部分成员。
 
-若存在一个 common class，则必须存在与之匹配的 platform class，具体要求如下：
+对于 common class，至多存在一个与之匹配的 platform class。当存在时，需要满足以下要求：
 
 - common class 和 platform class 可见性必须相同。
 - common class 和 platform class 接口实现性必须相同。
 - common class 和 platform class 继承性必须相同。
+- common class 和 platform class 必须使用相同的注解。
 - common open class 匹配 platform open class。
 - common abstract class 匹配 platform abstract class。
 - common sealed abstract class 匹配 platform sealed abstract class。
+- common abstract class 匹配 platform sealed abstract class。
 - 如果是 common 修饰的泛型类，还需满足以下泛型特定限制：
     - common 泛型类和 platform 泛型类必须具有相同个数的类型形参。
     - 当 common 泛型类泛型约束时，platform 泛型类对应类型形参的泛型约束必须保持一致或者更宽松。
@@ -202,7 +205,7 @@ platform class Container<T> where T <: Comparable<T> {
 - 若 common init 有完整实现，则可省略 platform init，否则必须存在一个匹配的 platform init。
 - common init 和 platform init 的可见性必须相同。
 - platform init 实现会覆盖 common init 实现。
-- 主构造函数规则与构造函数一致。
+- 主构造函数不可以被 common 或 platform 修饰。
 - common/platform class 支持普通构造函数，在 common class 或 platform class 中均可以定义。
 - common class 或 platform class 中必须存在至少一个显示定义的构造函数。
 - 静态初始化器不支持被 common/platform 修饰。
@@ -237,7 +240,7 @@ platform class A {
 
 common class 和 platform class 的成员变量需要满足如下限制：
 
-- common/platform 成员变量必须定义变量类型。
+- common/platform 成员变量必须定义变量类型，但有初始值时可以省略变量类型声明。
 - common 成员变量和 platform 成员变量的类型、可变性和可见性必须相同。
 - common 成员变量可以直接赋初值或在构造函数中赋初值，也可以仅保留类型声明，在 platform 侧赋初值。
 - common/platform class 支持普通成员变量，且 common class 或 platform class 中均可以定义。
@@ -361,6 +364,8 @@ platform class A {
 ##### class 的继承
 
 common/platform class 支持继承，其继承关系的处理与 common/platform 的可见性相关，当子类仅在 platform 中时，在 common 部分中，其不可见。
+
+**注意：** common sealed class 的所有直接子类型必须定义在同一个 common 包中。
 
 具体示例如下：
 
@@ -501,7 +506,7 @@ A2::foo5 platform
 
 当 common/platform 为抽象函数时，新增了如下规则：
 
-- 如果成员函数/属性没有 body 体，则必须有 `abstact` 修饰符。
+- 如果成员函数/属性没有 body 体，则必须有 `abstract` 修饰符。
 - 支持 `common abstract`。
 - `abstract common` 修饰的成员可以被 `open platform` 修饰的成员替换。
 
@@ -552,15 +557,20 @@ public platform abstract class A {
 }
 ```
 
+**注意：**
+
+不可以在 abstract platform class 中额外添加抽象成员。
+
 #### struct
 
 仓颉 struct 支持跨平台特性，用户可以使用 common 和 platform 修饰 struct 及其部分成员。
 
-若存在一个 common struct，则必须存在与之匹配的 platform struct，具体要求如下：
+对于 common struct，至多存在一个与之匹配的 platform struct。当存在时，需要满足以下要求：
 
 - common struct 和 platform struct 可见性必须相同。
 - common struct 和 platform struct 接口实现性必须相同。
 - common struct 和 platform struct 必须同时被 @C 修饰或同时不被修饰。
+- common struct 和 platform struct 必须使用相同的注解。
 - 如果是 common 修饰的泛型 struct ，还需满足以下泛型特定限制：
     - common 泛型 struct 和 platform 泛型 struct 必须具有相同个数的类型形参。
     - 当 common 泛型 struct 有泛型约束时，platform 泛型 struct 对应类型形参的泛型约束必须保持一致或者更宽松。
@@ -665,7 +675,7 @@ platform struct A {
 
 common struct 和 platform struct 的成员变量需要满足如下限制：
 
-- common/platform 成员变量必须定义变量类型。
+- common/platform 成员变量必须定义变量类型，但有初始值时可以省略变量类型声明。
 - common 成员变量和 platform 成员变量的类型、可变性和可见性必须相同。
 - common 成员变量可以直接赋初值或在构造函数中赋初值，也可以仅保留类型声明，在 platform 侧赋初值。
 - common/platform struct 支持普通成员变量，且 common struct 或 platform struct 中均可以定义。
@@ -816,11 +826,12 @@ platform enum A {
 }
 ```
 
-若存在一个 common enum，则必须存在与之匹配的 platform enum，具体要求如下：
+对于 common enum，至多存在一个与之匹配的 platform enum。当存在时，需要满足以下要求：
 
 - common enum 和 platform enum 可见性必须相同。
 - common enum 和 platform enum 接口实现性必须相同。
 - common enum 和 platform enum 中对应的构造器必须是相同类型。
+- common enum 和 platform enum 必须使用相同的注解。
 - 如果 common enum 是 exhaustive enum，则 platform enum 必须也是 exhaustive enum；如果 common enum 是 non-exhaustive enum，platform 可以是 exhaustive enum。
     - 对于 exhaustive enum，platform enum 中必须包含 common enum 的全部构造器，platform enum 中不可以增加新的构造器。
     - 对于 non-exhaustive enum，platform enum 中必须包含 common enum 的全部构造器，platform enum 中可以增加新的构造器。
@@ -986,7 +997,7 @@ platform interface A {
 }
 ```
 
-若存在一个 common interface，则必须存在匹配的 platform interface，且需要满足以下要求：
+对于 common interface，至多存在一个匹配的 platform interface。当存在时，需要满足以下要求：
 
 - common interface 和 platform interface 可见性必须相同。
 - common interface 和 platform interface 接口实现性必须相同。
@@ -1137,7 +1148,7 @@ platform extend A {
 }
 ```
 
-若存在一个或多个 common extend，则必须存在唯一的 platform extend 与其匹配，且需要满足以下要求：
+对于 common extend，至多存在一个唯一的 platform extend 与其匹配。当存在时，需要满足以下要求：
 
 - 当[直接扩展](../extension/direct_extension.md)被 common 修饰时， 必须存在唯一的 platform extend。
 - 当[接口扩展](../extension/interface_extension.md)被 common 修饰时， common extend 和 platform extend 必须具有完全相同的接口集合。
