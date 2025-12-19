@@ -82,61 +82,11 @@
 
     注意该节按需提供，若没有，则删除 
 
-### cjpm
-
-#### 新增特性
-
-#### 变更特性
-
-#### 修复问题
-
 ### cjdb
 
-#### 新增特性
-
-#### 变更特性
-
 #### 修复问题
 
-### cjfmt
-
-#### 新增特性
-
-#### 变更特性
-
-#### 修复问题
-
-### cjlint
-
-#### 新增特性
-
-#### 变更特性
-
-#### 修复问题
-
-### cjcov
-
-#### 新增特性
-
-#### 变更特性
-
-#### 修复问题
-
-### cjprof
-
-#### 新增特性
-
-#### 变更特性
-
-#### 修复问题
-
-### cjtrace-recover
-
-#### 新增特性
-
-#### 变更特性
-
-#### 修复问题
+- 【[llvm-project/issues/30](https://gitcode.com/Cangjie/llvm-project/issues/30)】CFFI 在单步调试时无法由单步从仓颉侧运行至 C 侧。
 
 ### HLE
 
@@ -160,7 +110,8 @@
 
 |issue|问题描述|影响及规避方案|
 |---|---|--|
-| [cangjie_compiler/issues/105](https://gitcode.com/Cangjie/cangjie_compiler/issues/105) | 在 `lambda` 表达式体内对 `let` 静态变量赋值，编译通过，未报错 | 在 `lambda` 表达式中对 `let` 静态变量赋值可能导致重复赋值（因为 `lambda` 可能被多次执行），从而违背设计预期。规避方案：避免在 `lambda` 中对静态变量赋值。 |
+| [cangjie_compiler/issues/105](https://gitcode.com/Cangjie/cangjie_compiler/issues/105) | 在 `lambda` 表达式体内对 `let` 静态变量赋值，编译通过，未报错 | 在 `lambda` 表达式中对 `let` 静态变量赋值可能导致重复赋值（因为 `lambda` 可能被多次执行），从而违背设计预期。规避方案：避免在 `lambda` 中对静态变量赋值。 |  
+| [UsersForum/issues/2576](https://gitcode.com/Cangjie/UsersForum/issues/2576) | 使用struct修改属性，cjlint不应该报G.VAR.01告警 | 少量场景存在误报，可以通过手动屏蔽暂时规避，下个版本修复 |  
 
 ## 不兼容变更说明
 
