@@ -20,23 +20,13 @@
 
 ## 编译器
 
-本版本编译器实现了仓颉 x.y.z 版本 Spec
-
 ### 新增特性
 
 - cjc 支持 `--no-prelude` 选项（仅用于构建 std.core 包使用）
 
-### 变更特性
-
-    注意该节按需提供，若没有，则删除
-
-|变更前|变更后|适配举例|
-|---|---|--|
-|  | | |
-
 ### 修复问题
 
-    注意该节按需提供，若没有，则删除 
+- 【[cangjie_compiler/issues/30](https://gitcode.com/Cangjie/cangjie_compiler/issues/132)】修复 Option\<T\> 作为返回值时，当 T 为 Array，ArrayList 时，多层 API 调用时返回值不对的问题。
 
 ## 运行时
 
