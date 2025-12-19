@@ -28,24 +28,6 @@
 
 - 【[cangjie_compiler/issues/30](https://gitcode.com/Cangjie/cangjie_compiler/issues/132)】修复 Option\<T\> 作为返回值时，当 T 为 Array，ArrayList 时，多层 API 调用时返回值不对的问题。
 
-## 运行时
-
-### 新增特性
-
-    注意该节按需提供，若没有，则删除
-
-### 变更特性
-
-    注意该节按需提供，若没有，则删除
-
-|变更前|变更后|适配举例|
-|---|---|--|
-|   |   |   |
-
-### 修复问题
-
-    注意该节按需提供，若没有，则删除 
-
 ## 标准库
 
 ### 修复问题
