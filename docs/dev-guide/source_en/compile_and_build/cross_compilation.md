@@ -93,7 +93,7 @@ Currently, Cangjie cross-compilation to iOS only supports compiling static libra
 - `--target=aarch64-apple-ios` specifies the target platform `ios` for cross-compilation
 - `--output-type=staticlib` specifies the output file type as a static library
 
-For running on iOS simulators, specify:
+Currently, Cangjie supports cross-compiling to the x86_64 architecture iOS simulator from an ARM architecture environment (the compiled product for this architecture requires Rosetta in Xcode to run).For running on iOS simulators, specify:
 
 - `--target=aarch64-apple-ios-simulator` or `--target=x86_64-apple-ios-simulator` specifies the target platform `ios-simulator` for cross-compilation
 - `--output-type=staticlib` specifies the output file type as a static library
