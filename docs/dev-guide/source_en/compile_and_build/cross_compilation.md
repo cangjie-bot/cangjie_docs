@@ -78,9 +78,7 @@ $ adb shell "LD_LIBRARY_PATH=/data/local/tmp /data/local/tmp/main"
 
 ### Package Download
 
-The Cangjie installation package supporting cross-compilation to `iOS` are provided as :
-- `cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz` for aarch64	
-- `cangjie-sdk-mac-x86_64-ios.x.y.z.tar.gz` for Intel x86_64
+The Cangjie SDK that supports cross-compiling for iOS is provided as `cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz` .
 
 To cross-compile to `iOS` on a `macOS` platform, download and install the package that matches your host architecture . The Cangjie runtime and standard libraries natively support `iOS 11` and above (for exceptions, refer to the "Cangjie Programming Language Library API" manual).
 
@@ -93,7 +91,7 @@ Currently, Cangjie cross-compilation to iOS only supports compiling static libra
 - `--target=aarch64-apple-ios` specifies the target platform `ios` for cross-compilation
 - `--output-type=staticlib` specifies the output file type as a static library
 
-For running on iOS simulators, specify:
+Currently, Cangjie supports cross-compiling to the x86_64 architecture iOS simulator from an aarch64 architecture environment (the compiled product for this architecture requires Rosetta in Xcode to run).For running on iOS simulators, specify:
 
 - `--target=aarch64-apple-ios-simulator` or `--target=x86_64-apple-ios-simulator` specifies the target platform `ios-simulator` for cross-compilation
 - `--output-type=staticlib` specifies the output file type as a static library
