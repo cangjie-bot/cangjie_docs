@@ -13,7 +13,7 @@
 
 ### `--output-type=[exe|staticlib|dylib]` <sup>[frontend]</sup>
 
-指定输出文件的类型。`exe` 模式下会生成可执行文件，`staticlib` 模式下会生成静态库文件（ `.a` 文件），`dylib` 模式下会生成动态库文件（Linux 平台为 `.so` 文件、Windows 平台为 `.dll` 文件，macOS 平台为 `.dylib` 文件）。
+指定输出文件的类型。`exe` 模式下会生成可执行文件，`staticlib` 模式下会生成静态库文件（`.a` 文件），`dylib` 模式下会生成动态库文件（Linux 平台为 `.so` 文件、Windows 平台为 `.dll` 文件，macOS 平台为 `.dylib` 文件）。
 
 `cjc` 默认为 `exe` 模式。
 
@@ -383,7 +383,7 @@ cjc --scan-dependency pkgA.cjo
 
 当编译可执行程序时（即指定了 `--output-type=exe` 时），`cjc` 默认静态链接仓颉库的 std 模块。
 
-### `--dy-std`
+### <span id="--dy-std">`--dy-std`</span>
 
 动态链接仓颉库的 std 模块。
 
@@ -528,6 +528,11 @@ $ cjc test.cj --pgo-instr-use=default.profdata -o testOptimized
 | ------------------ | ------------------ |
 | x86_64-linux-gnu   | x86_64-windows-gnu     |
 | aarch64-linux-gnu   | x86_64-windows-gnu     |
+| <!--DelRow-->x86_64-windows-gnu   | aarch64-linux-ohos |
+| <!--DelRow-->x86_64-windows-gnu   | x86_64-linux-ohos  |
+| <!--DelRow-->x86_64-apple-darwin  | aarch64-linux-ohos |
+| <!--DelRow-->x86_64-apple-darwin  | x86_64-linux-ohos  |
+| <!--DelRow-->aarch64-apple-darwin | aarch64-linux-ohos |
 
 在使用 `--target` 指定目标平台进行交叉编译之前，请准备好对应目标平台的交叉编译工具链，以及可以在本地平台上运行的、向该目标平台编译的对应 Cangjie SDK 版本。
 
@@ -779,7 +784,7 @@ cjc --target=arch-os-env --sysroot /usr/sdk/arch-os-env hello.cj -o hello
 
 指定链接器选项。
 
-`cjc` 会将该选项的多个参数透传给链接器, 参数之间用空格分隔。可用的参数会因（系统或指定的）链接器的不同而不同。可以多次使用 `--link-options` 指定多个链接器选项。
+`cjc` 会将该选项的多个参数透传给链接器，参数之间用空格分隔。可用的参数会因（系统或指定的）链接器的不同而不同。可以多次使用 `--link-options` 指定多个链接器选项。
 
 <sup>1</sup> 上标表示链接器透传选项可能会因为链接器的不同而不同，具体支持的选项请查阅链接器文档。
 
@@ -807,6 +812,7 @@ cjc --target=arch-os-env --sysroot /usr/sdk/arch-os-env hello.cj -o hello
 
 对于 `pkgc` 目录下的仓颉文件 `a.cj`:
 <!-- run -->
+<!-- cfg="--test" -->
 
 ```cangjie
 import std.unittest.*
@@ -939,9 +945,9 @@ Summary: TOTAL: 2
 >
 > 使用此选项时，应单独以常规模式编译相同的包，然后通过 `-L`/`-l` 链接选项添加依赖，或在使用 `LTO` 选项时添加依赖的 `.bc` 文件。否则，编译器将报缺少依赖的符号的错误。
 
-示例:
-
-<!-- code_check_manual -->
+示例：
+<!-- run -my_pkg -->
+<!-- cfg="-p my_pkg --output-type=staticlib -o=output/libmain.a" -->
 
 ```cangjie
 /*main.cj*/
@@ -956,8 +962,8 @@ main(): Int64 {
     0
 }
 ```
-
-<!-- code_check_manual -->
+<!-- run -my_pkg-->
+<!-- cfg="-p my_pkg --test-only -L output -lmain --import-path output" -->
 
 ```cangjie
 /*main_test.cj*/
@@ -993,7 +999,7 @@ cjc -p my_pkg --test-only -L output -lmain
 
 ## 宏选项
 
-`cjc` 支持以下宏选项，关于宏的更多内容请参见[“宏的简介”](../Macro/macro_introduction.md)章节。
+`cjc` 支持以下宏选项，关于宏的更多内容请参见<!--RP1-->[宏](../Macro/macro_introduction.md)<!--RP1End-->章节。
 
 ### `--compile-macro` <sup>[frontend]</sup>
 
@@ -1009,7 +1015,7 @@ cjc -p my_pkg --test-only -L output -lmain
 
 ## 条件编译选项
 
-`cjc` 支持以下条件编译选项，关于条件编译的更多内容请参见[“条件编译”](../compile_and_build/conditional_compilation.md)。
+`cjc` 支持以下条件编译选项，关于条件编译的更多内容请参见<!--RP2-->[条件编译](../compile_and_build/conditional_compilation.md)<!--RP2End-->。
 
 ### `--cfg <value>` <sup>[frontend]</sup>
 
@@ -1122,7 +1128,7 @@ cjc -p my_pkg --test-only -L output -lmain
 
 ## 代码混淆选项
 
-`cjc` 支持代码混淆功能，以提供对代码的额外安全保护，默认不开启。
+`cjc` 支持代码混淆功能，以提供额外的安全保护。代码混淆功能默认不开启。
 
 `cjc` 支持以下代码混淆选项：
 
@@ -1140,7 +1146,7 @@ cjc -p my_pkg --test-only -L output -lmain
 
 开启常量混淆。
 
-混淆代码中使用的数值常量，将数值运算指令替换成等效的、更复杂的数值运算指令序列。
+混淆代码中使用的数值常量，将其数值运算指令替换成等效的、更复杂的数值运算指令序列。
 
 ### `--fno-obf-const`
 
@@ -1298,7 +1304,7 @@ class MyClassA {
 obf-cf-flatten packA.MyClassA.funcA(std.core.String, Int64)
 ```
 
-用户也可以使用通配符编写更加灵活的规则，达到一条规则保留多个对象的效果。目前支持的通配符包含以下 3 类：
+用户也可以使用通配符编写更加灵活的规则，达到一条规则保留多个对象的目的。目前支持的通配符包含以下 3 类：
 
 混淆功能通配符：
 
@@ -1564,7 +1570,7 @@ void __sanitizer_cov_trace_switch(uint64_t Val, uint64_t *Cases);
 - Array==: __sanitizer_weak_hook_memcmp
 - ArrayList==: __sanitizer_weak_hook_memcmp
 
-## 实验性功能选项
+## 实验性功能选项<!--Del-->
 
 ### `--enable-eh` <sup>[frontend]</sup>
 
@@ -1624,7 +1630,7 @@ It is resumed, a = 9
 > **注意：**
 >
 > - Effect Handler 当前仍属于实验性特性，该选项可能在未来版本中发生变化，请谨慎使用。
-> - 使用 Effect Handler 需引入 `stdx.effect` 库。
+> - 使用 Effect Handler 需引入 `stdx.effect` 库。<!--DelEnd-->
 
 ### `--experimental` <sup>[frontend]</sup>
 
