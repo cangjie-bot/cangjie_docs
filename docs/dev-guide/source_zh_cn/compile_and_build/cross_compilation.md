@@ -78,27 +78,23 @@ $ adb shell "LD_LIBRARY_PATH=/data/local/tmp /data/local/tmp/main"
 
 ### 安装包下载
 
-支持交叉编译至 `iOS` 的仓颉安装包包括 `cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz` 和 `cangjie-sdk-mac-x86_64-ios.x.y.z.tar.gz`。
-
-若需要在 `macOS` 平台交叉编译至 `iOS`，可根据开发设备架构选择对应的仓颉软件包。
-- 开发设备为 `aarch64` 可以下载安装 `cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz` 仓颉软件包。
-- 开发设备为 `x86_64` 可以下载安装 `cangjie-sdk-mac-x86_64-ios.x.y.z.tar.gz` 软件包。
+支持交叉编译至 `iOS` 的仓颉安装包为：`cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz`
 仓颉运行时以及标准库默认支持运行于 `iOS 11` 及以上系统（对于例外场景，请见《仓颉编程语言库 API》手册）。
 
 除了支持交叉编译的仓颉软件包，还需要下载 `Xcode`。下载完成后，请在 Xcode 中安装 iOS 开发组件。具体步骤可参考 Xcode 手册中的 "Downloading and installing additional Xcode components" 章节。
 
 ### 编译
 
-当前仓颉交叉编译至 iOS 仅支持编译静态库，交叉编译仓颉代码至 `iOS` 设备时需要额外指定以下选项：
+当前仓颉交叉编译至 `iOS` 仅支持编译静态库，交叉编译仓颉代码至 `iOS` 设备时需要额外指定以下选项：
 
 - `--target=aarch64-apple-ios` 指定目标平台 `ios` 进行交叉编译
 - `--output-type=staticlib`指定输出文件的类型为静态库
 
-若需要在 iOS 模拟器上运行，需要指定以下选项：
+当前仓颉支持从 `aarch64` 架构环境交叉编译生成 iOS 模拟器静态库，既适配 `aarch64` 架构模拟器，也可编译至 x86_64 架构模拟器（该架构产物需依赖 Xcode 的 Rosetta 运行）。若需在 iOS 模拟器上运行，需指定以下选项：
 
 - `--target`
-  - `--target=aarch64-apple-ios-simulator` 适用于arch64架构开发设备
-  - `--target=x86_64-apple-ios-simulator` 适用于x86_64架构开发设备
+  - `--target=aarch64-apple-ios-simulator` 适用于aarch64目标架构
+  - `--target=x86_64-apple-ios-simulator` 适用于x86_64目标架构
 - `--output-type=staticlib` 指定输出文件的类型为静态库
 
 编译产物需要添加至 `Xcode` 工程中，并通过 `Xcode` 构建 `iOS` 应用。
