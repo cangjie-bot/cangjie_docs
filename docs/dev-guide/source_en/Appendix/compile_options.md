@@ -574,8 +574,7 @@ Currently, `cjc` supports the following host and target platforms for cross-comp
 | aarch64-apple-darwin | aarch64-linux-android31 | cangjie-sdk-mac-aarch64-android.x.y.z.tar.gz |
 | aarch64-apple-darwin | aarch64-apple-ios       | cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz |
 | aarch64-apple-darwin | aarch64-apple-ios-simulator | cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz |
-| x86_64-apple-darwin | x86_64-apple-ios-simulator | cangjie-sdk-mac-x86_64-ios.x.y.z.tar.gz |
-
+| aarch64-apple-darwin | x86_64-apple-ios-simulator | cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz
 Before using `--target` to specify a target platform for cross-compilation, ensure that the corresponding cross-compilation toolchain and the Cangjie SDK version for the target platform are prepared.
 
 ### `--target-cpu <value>`
