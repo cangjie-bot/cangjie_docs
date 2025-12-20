@@ -474,6 +474,13 @@ Many Cangjie types and their features do not have direct or even reasonably
 close equivalents in Java, so some Cangjie types have limited support in the
 current version and some are not supported at all.
 
+Consequently, if the type of a public member, function/constructor parameter,
+or function return type is not supported, the respective member, function
+or constructor cannot be mirrored. The compiler reports such usages as errors.
+However, if such a type is used in an unsupported _context_, e.g. as the
+type of a public member variable, the respective entity is simply not mirrored
+and no error is reported.
+
 
 ## Names {#cangjie-names}
 
@@ -506,10 +513,48 @@ Cangjie Type   Java Type
 `Float32`      `float`
 `Float64`      `double`
 
+See [General Considerations](#cangjie-general-considerations)
+for information about the handling of unsupported types.
+
 
 ## Rune
 
 The type `Rune` is not supported.
+
+See [General Considerations](#cangjie-general-considerations)
+for information about the handling of unsupported types.
+
+
+## String
+
+The type `String` is not supported yet.
+
+See [General Considerations](#cangjie-general-considerations)
+for information about the handling of unsupported types.
+
+
+## Array
+
+Array types (`Array<T>` instantiations) are not supported yet.
+
+See [General Considerations](#cangjie-general-considerations)
+for information about the handling of unsupported types.
+
+
+## Tuple
+
+Tuple types are not supported yet.
+
+See [General Considerations](#cangjie-general-considerations)
+for information about the handling of unsupported types.
+
+
+## Range
+
+Range types are not supported yet.
+
+See [General Considerations](#cangjie-general-considerations)
+for information about the handling of unsupported types.
 
 
 ## Special Types
@@ -521,10 +566,8 @@ The type `Nothing` cannot be supported.
 
 The type `Any` is not supported yet.
 
-
-## Tuple
-
-Tuple types are not supported yet.
+See [General Considerations](#cangjie-general-considerations)
+for information about the handling of unsupported types.
 
 
 ## Struct Types
@@ -536,6 +579,8 @@ Java and Cangjie. They should not be modified manually.
 
 ```cangjie
 package cj
+
+import interoplib.interop.*
 
 public struct Vector {
     private var x: Int32 = 0
@@ -561,22 +606,31 @@ public struct Vector {
 ```java
 package cj;
 
+// Glue code imports
+
 final public class Vector {
-    // glue code
+    // Glue code
 
     public Vector(int x, int y) {
-        // glue code
+        // Glue code that constructs an instance of the Cangjie Vector struct
+        // and associates it with the Java object 'this'
     }
 
     public Vector add(v: Vector) {
-        // glue code
+        // Glue code that retrieves the associated Cangjie Vector struct
+        // instances associated with `this` and `v`, calls the add() instance
+        // member function of the Cangjie-this, passing the Cangjie-v to it
+        // as a parameter, and, finally, creates a new Java Vector instance
+        // and associates it with the result of the add() call.
     }
 
     public static void dump(v: Vector) {
-        // glue code
+        // Glue code that calls the dump() static member function of the
+        // Cangjie struct Vector, passing to it the instance associated
+        // with 'v'/
     }
 
-    // more glue code
+    // More glue code
 }
 ```
 
@@ -633,43 +687,73 @@ generated glue code and should not be altered in any way.
 ```cangjie
 package cj
 
-public class Vector {
-    private var x: Int32 = 0
-    private var y: Int32 = 0
+import interoplib.interop.*
 
-    public init(x: Int32, y: Int32) {
-        this.x = x
-        this.y = y
+public interface Valuable {
+    public func value(): Int
+}
+
+public open class Singleton <: Valuable {
+    private let _v: Int
+    public init (v: Int) { _v = v }
+    public func value(): Int { _v }
+}
+
+public class Zero <: Singleton {
+    public init() { super(0) }
+}
+```
+
+```java
+// Valuable.java
+package cj;
+
+// Glue code imports
+
+public interface Valuable {
+    public long value();
+}
+
+// Glue code
+```
+
+```java
+// Singleton.java
+package cj;
+
+// Glue code imports
+
+public class Singleton implements Valuable {
+    // Glue code
+
+    public Singleton(long v) {
+        // Glue code that constructs an instance of the Cangjie Singleton class
+        // and associates it with the Java object 'this'
     }
 
-    public func add(v: Vector): Vector {
-       let res = Vector(x + v.x, y + v.y)
-       print("cj: (${x}, ${y}) + (${v.x}, ${v.y}) = (${res.x}, ${res.y})\n", flush: true)
-       return res
+    public long value() {
+        // Glue code that retieves the associated Cangjie Singleton class
+        // instance, calls its memeber function value() and returns the result
     }
 
+    // Glue code
 }
 ```
 
 ```java
 package cj;
 
-final public class Vector {
-    // glue code
+// Glue code imports
 
-    public Vector(int x, int y) {
-        // Glue code that constructs an instance of the Cangjie Vector class
+public class Zero extends Singleton {
+    // Glue code
+
+    public Zero() {
+        // Glue code that constructs an instance of the Cangjie Zero class
         // and associates it with the Java object 'this'
     }
 
-    public Vector add(v: Vector) {
-        // Glue code that calls the 'add' instance member function
-        // of the Cangjie Vector instance associated with 'this',
-        // passing 'v' over to it as a parameter, and returns
-        // a Java Vector instance associated with the result.
-    }
-
-    // more glue code
+    // Glue code
 }
 ```
 
@@ -694,8 +778,8 @@ mirror types substituted for parameter types. _This includes the default
 constructor that might have been implicitly declared._ The modifier `public`
 is preserved.
 
-`private` and `internal` members and constructors, as well as static
-initializers, are not mirrored.
+Only `public` members and constructors are mirrored. Static initializers
+are not mirrored.
 
 
 As Cangjie does not support type nesting, unlike Java, mirror types never
@@ -711,10 +795,6 @@ them to Cangjie:
   In the meantime, you may add getter/setter functions to Cangjie
   classes manually as a workaround.
 
-* Mirroring of classes that implement interfaces other than `Any`
-  is not supported. An attempt to mirror a class that explicitly
-  implements an interface results in a compile-time error.
-
 * Mirroring of generic classes is not supported. An attempt to mirror
   a generic class results in a compile-time error.
 
@@ -727,12 +807,14 @@ them to Cangjie:
   unsupported parameter type, or a member function with an unsupported
   return type, results in a compile-time error.
 
+* Abstract class definitions are mirrored, but abstract classes are
+  not supported as parameter and return value types.
+
 
 ## Enums
 
 A Cangjie enum is mirrored into a `final` Java class without a `public`
-constructor and with `static` methods matching the enum constructors
-(factory methods).
+constructor.
 
 ```cangjie
 public enum TimeUnit {
@@ -740,6 +822,7 @@ public enum TimeUnit {
     | Month(Int64)
     | Year
     | Month
+}
 ```
 
 ```java
@@ -747,23 +830,34 @@ public class TimeUnit {
     /* Glue code */
 
     public static TimeUnit Year(long p1) {
-         // Glue code creating a Cangjie Year(p1) enum and linking it
+         // Glue code creating a Cangjie Year(p1) enum and associating it
          // with a newly creasted Java TimeUnit instance
     }
 
     public static TimeUnit Month(long p1) {
-         // Glue code creating a Cangjie Month(p1) enum and linking it
+         // Glue code creating a Cangjie Month(p1) enum and associating it
          // with a newly creasted Java TimeUnit instance
     }
-       .  .  .
+
+    public static TimeUnit Year =
+        // Gliue code creating a Cangjie Year enum and associating it
+        // with a newly creasted Java TimeUnit instance
+
+    public static TimeUnit Month =
+        // Gliue code creating a Cangjie Year enum and associating it
+        // with a newly creasted Java TimeUnit instance
 
     /* More glue code */
 }
-```
 
-**Enum constructors** are mirrored into `static` factory methods with the same
-names and matching types and numbers of parameters; names of parameters
-are synthesized (`p1`, `p2`, ...).
+**Enum constructors without parameters** are mirrored into `static`
+variables inhitalized with instances of the class associated with
+the respective constructors of the Cangjie enum.
+
+
+**Enum constructors with parameters** are mirrored into `static` factory
+methods with the same names and matching types and numbers of parameters;
+names of parameters are synthesized (`p1`, `p2`, ...).
 
 **Member functions** are mirrored into methods with the respective mirror
 types substituted for parameter types and return value type. Mirrors of
@@ -788,7 +882,7 @@ mirrored:
   unsupported parameter type, or a member function with an unsupported
   return type, results in a compile-time error.
 
-Enum extension (via `extend`) is not supported.
+Enum extension (via `extend`) is not supported. The extension is not mirrored.
 
 Recursively defined enums are supported:
 
@@ -2895,7 +2989,7 @@ of the mirror generator.
     See [Single-Package Mode](#single-package-mode) for details.
 
 
-* `-l `_`number`_, `--closure-depth-limit `_`number`_
+* `-c `_`number`_, `--closure-depth-limit `_`number`_
 
     _`number`_ is a non-negative decimal integer limiting the depth
     of dependency graph scanning when determining the set of types
