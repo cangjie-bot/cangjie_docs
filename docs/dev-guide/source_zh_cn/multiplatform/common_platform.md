@@ -41,7 +41,10 @@ public platform func foo(): Unit {
 
 ### 支持跨平台开发特性的类型和语法特性
 
-下面对支持跨平台开发特性的类型和语法特性介绍详细使用规则。
+下面对支持跨平台开发特性的类型和语法特性介绍详细使用规则。其中一些特性与普通声明基本一致，不做展开介绍，例如：
+
+- common 和 platform 的声明支持异常抛出，异常抛出的栈信息与实际所使用的声明地址一致。
+- common 声明中支持存在 Deprecated 声明，其 Deprecated 注解将传播给 platfrom 声明。不允许在 platform 声明中使用 Deprecated。
 
 #### 全局函数
 
@@ -134,6 +137,8 @@ platform func printValue2<T>(value: T): Unit {}
     - common 泛型类和 platform 泛型类必须具有相同个数的类型形参。
     - 当 common 泛型类泛型约束时，platform 泛型类对应类型形参的泛型约束必须保持一致或者更宽松。
     - common 泛型类和 platform 泛型类类型形参允许重命名，但参数结构和约束必须匹配。
+- common class 不允许存在隐式的无参构造函数，必须有至少一个显式声明的构造函数。
+- common class 不允许在构造函数中对 common let 变量赋值。
 
 普通类示例：
 
@@ -577,6 +582,8 @@ public platform abstract class A {
     - common 泛型 struct 和 platform 泛型 struct 必须具有相同个数的类型形参。
     - 当 common 泛型 struct 有泛型约束时，platform 泛型 struct 对应类型形参的泛型约束必须保持一致或者更宽松。
     - common 泛型 struct 和 platform 泛型 struct 类型形参允许重命名，但参数结构和泛型约束必须匹配。
+- common struct 不允许存在隐式的无参构造函数，必须有至少一个显式声明的构造函数。
+- common struct 不允许在构造函数中对 common let 变量赋值。
 
 普通 struct 示例：
 
@@ -1300,7 +1307,7 @@ platform extend A {
 }
 ```
 
-### 导入导出
+#### 导入导出
 
 common 和 platform 的声明支持导入与导出，其规则与其他类型的导入导出规则一致。
 

@@ -901,6 +901,36 @@ int main(int argc, char** argv) {
 - 类型可为具备与 ObjC 的映射关系的基础类型、Mirror 类型或 Impl 类型。
 - 仅 public 类型可在 ObjC 侧被调用。
 
+### 继承
+
+支持 Impl 继承 Mirror/Impl 类。并支持在 Impl 中调用 `super(x)`/`this(x)` 构造 Mirror 或 Impl 对象。具体示例如下：
+
+<!-- compile -->
+
+```cangjie
+@ObjCMirror
+open class M
+
+@ObjCImpl
+open class A <: M {
+    public init() {
+        super()
+    }
+    public static func cjMain(): Unit {
+        let impl = A()
+    }
+}
+
+@ObjCImpl
+open class B <: A {}
+```
+
+限制如下：
+
+- 暂未支持 @ObjCImpl 的生命周期管理。
+- 从 Cangjie 实例化的 @ObjCImpl 永远不会被垃圾回收。
+- 不支持通过 `super(x)` 或 `this(x)` 调用 @ObjCInit 函数。
+
 ### 约束限制
 
 - 暂不支持 String 类型。
@@ -910,7 +940,6 @@ int main(int argc, char** argv) {
 - 当成员函数或构造函数有超过一个参数时，必须使用 @ForeignName。（当该函数为重载函数时则不需要）
 - 不支持普通仓颉类继承 Impl 类。
 - 不支持继承普通仓颉类。
-- 不支持继承 Impl 类。
 - Impl 类必须继承 Mirror 类。
 - Impl 可以实现零个或多个 Mirror 接口。
 
@@ -962,7 +991,9 @@ struct ObjCPointer<T> {
 ```cangjie
 public class ObjCBlock<F> {
 
-    public ObjCBlock(let ptr: CPointer) 
+    public init(ptr: CPointer<NativeBlockABI>)
+    public init(ptr: CPointer<CangjieBlockABI>)
+    public init(f: F)
 
     public prop call: F 
 
@@ -973,6 +1004,21 @@ public class ObjCBlock<F> {
 ```
 
 `ObjCBlock` 方法的实现均在编译器中。
+
+示例如下：
+
+<!-- code_no_check -->
+```cangjie
+let f: ObjCBlock<(Int64) -> Int64> = ObjCBlock { it => it +2 } // 对象支持在仓颉侧使用 lambda 构建。
+f.call(123)
+let ff = f.call // 报错：不允许值类型赋值。
+```
+
+具体规格如下：
+
+- ObjCBlock\<F> 中的 F 必须为合法的仓颉函数类型。
+- F 的返回值和参数必须为 ObjC 兼容类型。
+- ObjCBlock 中的 call 属性仅允许被直接调用，禁止用于其他场景（如赋值给变量、作为函数参数等）。
 
 ### ObjCFunc
 

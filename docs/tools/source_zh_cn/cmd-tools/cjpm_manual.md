@@ -2508,6 +2508,93 @@ output-type = "static"
 
 为了支持多平台项目构建，在 `cjpm` 中引入了新的实体，例如 `features` 和 `source-sets`，以使多平台项目的开发更加高效。此功能为实验特性，需要在 `[profile]` 字段中指定 `experimental = true`。
 
+一个简单的示例如下：
+
+项目结构为：
+
+```text
+├── big
+│   └── tests.cj
+├── cjpm.toml
+├── common
+│   └── common.cj
+├── little
+│   └── tests.cj
+```
+
+配置文件为：
+
+```toml
+[profile]
+experimental = true
+
+[dependencies]
+
+[package]
+  cjc-version = "1.0.0"
+  compile-option = ""
+  description = "nothing here"
+  link-option = ""
+  name = "tests_in_source_sets"
+  output-type = "dynamic"
+  override-compile-option = ""
+  target-dir = ""
+  version = "1.0.0"
+  package-configuration = {}
+
+
+[[feature]]
+name = "user.tests_in_source_sets.arch.big"
+mapping = []
+
+[[feature]]
+name = "user.tests_in_source_sets.arch.little"
+mapping = []
+
+
+[[source-set]]
+name = "common"
+src-dir = "./common"
+features = []
+
+[[source-set]]
+name = "big"
+src-dir = "./big"
+features = ["user.tests_in_source_sets.arch.big"]
+
+[[source-set]]
+name = "little"
+src-dir = "./little"
+features = ["user.tests_in_source_sets.arch.little"]
+```
+
+使用选项构建：
+
+```shell
+cjpm build --no-feature-deduce --enable-features=user.tests_in_source_sets.arch.big
+```
+
+构建结果如下：
+
+```text
+├── target
+│   └── release
+│       ├── bin
+│       ├── tests_in_source_sets
+│       │   ├── big
+│       │   │   └── product
+│       │   │       └── tests_in_source_sets
+│       │   │           ├── libtests_in_source_sets.so
+│       │   │           └── tests_in_source_sets.cjo
+│       │   ├── common
+│       │   │   └── nonproduct
+│       │   │       └── tests_in_source_sets
+│       │   │           ├── tests_in_source_sets.chir
+│       │   │           └── tests_in_source_sets.cjo
+```
+
+上述示例中，通过 `user.tests_in_source_sets.arch.big` 制定了具体所编译的 `source-set` 生成了二进制文件。具体各个配置项含义、选项含义与项目结构信息将在后续逐步展开说明。
+
 #### feature
 
 feature 是一个命名的标志，用于指定需要编译的源代码。以下是 `cjpm` 中内置支持的 feature 列表：
@@ -2668,7 +2755,7 @@ name 是一个可选的配置项，指定源码集的名称。在所在包中，
 
 ##### product
 
-product 是一个可选的配置项，通过 product 指定其为产品源码集。即 product 存在时，其值仅可为 `true`。
+product 是一个可选的配置项，通过 product 指定其为产品源码集。
 
 #### 依赖
 
