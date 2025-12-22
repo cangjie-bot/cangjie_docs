@@ -6,6 +6,11 @@ The previous section discussed how to define custom exceptions. Now let's learn 
 - The Cangjie language provides the `throw` keyword for throwing exceptions. When using `throw`, the expression following it must be a subtype of `Exception` (note that `Error`, though also an exception type, cannot be manually thrown via `throw`). For example, `throw ArithmeticException("I am an Exception!")` will throw an arithmetic exception when executed.
 - Exceptions thrown via the `throw` keyword must be caught and handled. If an exception is not caught, the system will invoke the default exception handler.
 
+  > Developers can call the following static functions of the Thread class to register a custom exception handler for uncaught Error and Exception:
+  >
+  > - `public static func handleUncaughtErrorBy(erHandler: (Error) -> Unit): Unit`
+  > - `public static func handleUncaughtExceptionBy(exHandler: (Thread, Exception) -> Unit): Unit`
+
 Exception handling is performed using `try` expressions, which come in two forms:
 
 1. Regular try expressions without automatic resource management.
