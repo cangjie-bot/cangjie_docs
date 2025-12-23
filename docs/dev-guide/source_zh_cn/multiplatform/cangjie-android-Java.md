@@ -1693,9 +1693,9 @@ public class User {
 Java 使用 Cangjie 泛型类（非 open 类）、结构体之前需对泛型类型进行配置，参考[类型配置介绍](#java-使用-配置文件)
 
 - 支持范围
-    - 泛型类型支持 Cangjie 基础数值类型和 Bool 类型
+    - 泛型类型支持 Cangjie 大部分基础数值类型（具体见规格限制）和 Bool 类型
     - 支持多泛型参数用法
-    - 支持非静态成员函数带有泛型参数和返回值
+    - 支持实例成员函数带有泛型参数和返回值
 
 - class/struct 均参考如下示例：
 
@@ -1740,14 +1740,12 @@ Java 使用 Cangjie 泛型类（非 open 类）、结构体之前需对泛型类
         { name = "GenericClass<Float64>", symbols = [
             "getValue",
             "GenericClass",
-            "value",
             "setValue"
         ]},
 
         { name = "GenericClass<Int32>", symbols = [
             "getValue",
             "GenericClass",
-            "value",
             "setValue"
         ]}
     ]
@@ -1814,9 +1812,9 @@ Java 使用 Cangjie 泛型类（非 open 类）、结构体之前需对泛型类
 Java 使用 Cangjie 泛型枚举之前需对泛型类型进行配置，参考[类型配置介绍](#java-使用-配置文件)
 
 - 支持范围
-    - 泛型类型支持 Cangjie 基础数值类型和 Bool 类型
+    - 泛型类型支持 Cangjie 大部分基础数值类型（具体见规格限制）和 Bool 类型
     - 支持多泛型参数用法
-    - 支持非静态成员函数、属性带有泛型参数和返回值
+    - 支持实例成员函数、属性带有泛型参数和返回值
 
 - 示例
     - Cangije 侧源码
@@ -1871,8 +1869,7 @@ Java 使用 Cangjie 泛型枚举之前需对泛型类型进行配置，参考[�
         { name = "GenericEnum", type_arguments = ["Int32"] },
         { name = "GenericEnum<Int32>", symbols = [
             "printValue",
-            "setValue",
-            "value"
+            "setValue"
         ]}
     ]
     ```
@@ -1934,9 +1931,9 @@ Java 使用 Cangjie 泛型枚举之前需对泛型类型进行配置，参考[�
 Java 使用 Cangjie 泛型接口之前需对泛型类型进行配置，参考[类型配置介绍](#java-使用-配置文件)
 
 - 支持范围
-    - 泛型类型支持 Cangjie 基础数值类型和 Bool 类型
+    - 泛型类型支持 Cangjie 大部分基础数值类型（具体见规格限制）和 Bool 类型
     - 支持多泛型参数用法
-    - 支持非静态抽象成员函数、默认实现函数带有泛型参数和返回值
+    - 支持实例成员函数、属性带有泛型参数和返回值
 
 - 示例
     - Cangije 侧源码
@@ -1999,7 +1996,10 @@ Java 使用 Cangjie 泛型接口之前需对泛型类型进行配置，参考[�
 #### 规格限制
 
 - 暂不支持自定义数据类型
-- 支持如下类型: Int8,Int16,Int32,Int64,Float16,Float32,Bool
+- 支持如下类型: Int,Int8,Int16,Int32,Int64,Float16,Float32,Float64,Bool
+- 无符号类型: UInt8,UInt16,UInt32,UInt64在Java侧暂不支持，存在越界阶段风险
+- 用户自定义类型拥有泛型类型形参时，如果存在上界，则上界类型不允许拥有泛型类型
+- 暂时仅支持无内层类型形参的实例成员函数，其函数形参类型与返回类型允许为外层类型形参
 
 ### Java 使用 配置文件
 
@@ -2022,14 +2022,12 @@ generic_object_configuration = [
     { name = "GenericClass<Int64>", symbols = [
         "getValue",
         "GenericClass",
-        "value",
         "setValue"
     ]},
 
     { name = "GenericClass<Int32>", symbols = [
         "getValue",
         "GenericClass",
-        "value",
         "setValue"
     ]}
 ]
@@ -2133,14 +2131,12 @@ public class GenericClass<T> {
                 { name = "GenericClass<Int64>", symbols = [
                     "getValue",
                     "GenericClass",
-                    "value",
                     "setValue"
                 ]},
 
                 { name = "GenericClass<Int32>", symbols = [
                     "getValue",
                     "GenericClass",
-                    "value",
                     "setValue"
                 ]}
             ```
