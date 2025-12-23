@@ -56,7 +56,7 @@
 
 ### 新增特性
 
-- [core](https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/stdlib/doc/libs/std/core/core_package_overview.md)包中的[Thread](https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/stdlib/doc/libs/std/core/core_package_api/core_package_classes.md#class-thread)类新增[handleUncaughtErrorBy](https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/stdlib/doc/libs/std/core/core_package_api/core_package_classes.md#static-func-handleuncaughtexceptionbythread-exception---unit)接口用于注册线程未处理错误。
+- [core](https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/stdlib/doc/libs/std/core/core_package_overview.md) 包中的 [Thread](https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/stdlib/doc/libs/std/core/core_package_api/core_package_classes.md#class-thread) 类新增 [handleUncaughtErrorBy](https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/stdlib/doc/libs/std/core/core_package_api/core_package_classes.md#static-func-handleuncaughterrorbyerror---unit) 接口用于注册线程未处理错误。
 
 
 ## 工具链
