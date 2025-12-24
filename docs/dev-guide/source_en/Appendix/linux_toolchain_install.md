@@ -2,7 +2,6 @@
 
 The Cangjie toolchain has undergone comprehensive functional testing on the following Linux distributions:
 
-- SUSE Linux Enterprise Server 12 SP5
 - Ubuntu 18.04
 - Ubuntu 20.04
 - UnionTech OS Server 20
@@ -13,15 +12,6 @@ The Cangjie toolchain has undergone comprehensive functional testing on the foll
 > **Note:**
 >
 > Certain tools required by the current Cangjie toolchain may not be directly installable through default system repositories on some Linux distributions. Please refer to the next section [Compiling and Installing Dependency Tools](./linux_toolchain_install.md#compiling-and-installing-dependency-tools) for manual installation instructions.
-
-### SUSE Linux Enterprise Server 12 SP5
-
-```shell
-$ zypper install \
-         binutils \
-         glibc-devel \
-         gcc-c++
-```
 
 Additionally, OpenSSL 3 needs to be installed. Refer to [Compiling and Installing Dependency Tools](./linux_toolchain_install.md#compiling-and-installing-dependency-tools) for installation methods.
 
