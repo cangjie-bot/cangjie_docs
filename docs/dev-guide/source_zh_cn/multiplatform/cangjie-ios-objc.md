@@ -1242,6 +1242,17 @@ class M {
 
 该选项启用前端（FE）对非 C 语言的 Cangjie 互操作支持。目前支持的值为 Java 和 ObjC。
 
+### 新增实验编译选项 `--experimental --import-interop-cj-package-config-path <ConfigFile Path(*.toml)>`
+
+功能：在 FE 中启用对非 C 语言的 Cangjie 互操作支持。
+参数：需要指定一个 toml 格式的配置文件路径，例如：src/cj/config.toml 或 objcCallCangjie.toml。
+
+> **注意：**
+>
+> - 此选项必须与 `--experimental --enable-interop-cj-mapping` 同时使用。
+> - `--import-interop-cj-package-config-path` 用于指定互操作的配置文件。
+> - `--enable-interop-cj-mapping` 用于指定目标语言并启用对应的互操作映射。
+
 ### ObjC 使用 Cangjie 接口
 
 为实现 Cangjie 与 Objective-C 的互操作，需将 Cangjie 的接口类型映射为 ObjC 的协议（@protocol）。映射后，用户可：
@@ -1791,6 +1802,754 @@ static struct RuntimeParam defaultCJRuntimeParams = {0};
 - 非 open 类成员函数参数和返回值允许使用基础数据类型（数值类型、Bool 类型和 Unit 类型）和本包定义的非 open public class 类型，open 类仅支持基本数据类型（数值类型、Bool 类型和 Unit 类型）
 - 不支持通过 extend 对 class 进行扩展
 - 不支持 Cangjie abstract 类
+
+### ObjC 使用 Cangjie 泛型数据类型
+
+#### ObjC 使用泛型类/结构体
+
+ObjC 使用 Cangjie 泛型类（非 open 类）、结构体之前需对泛型类型进行配置，参考[类型配置介绍](#ObjC-使用-配置文件)
+
+- 支持范围
+    - 泛型类型支持 Cangjie 大部分基础数值类型，详情请参见[规格限制](#规格限制)
+    - 支持多泛型参数用法
+    - 支持实例成员函数带有泛型参数和返回值
+
+- class/struct 均参考如下示例：
+
+    - Cangjie 侧源码
+
+    <!-- compile -->
+
+    ```cangjie
+    package cjworld
+
+    import interoplib.objc.*
+
+    public class GenericClass<T> {
+
+        private var value: T
+
+        public GenericClass(v: T) {
+            this.value = v
+        }
+        public func getValue() : T {
+            return this.value
+        }
+
+        public func setValue(t: T) {
+            value = t
+        }
+    }
+    ```
+
+    - 配置信息
+
+    ```toml
+    [default]
+    APIStrategy = "Full"
+    GenericTypeStrategy = "None"
+
+    [[package]]
+    name = "cjworld"
+    APIStrategy = "Full"
+    GenericTypeStrategy = "Partial"
+    excluded_apis = [
+    ]
+    generic_object_configuration = [
+        { name = "GenericClass", type_arguments = ["Float64", "Int32"] },
+        { name = "GenericClass<Float64>", symbols = [
+            "getValue",
+            "GenericClass",
+            "setValue"
+        ]},
+
+        { name = "GenericClass<Int32>", symbols = [
+            "getValue",
+            "GenericClass",
+            "setValue"
+        ]}
+    ]
+    ```
+
+    - 映射后的 ObjC 代码如下：
+
+    ```ObjC
+    #import <Foundation/Foundation.h>
+    #import <stddef.h>
+    __attribute__((objc_subclassing_restricted))
+    @interface GenericClassFloat64 : NSObject
+    - (id)init;
+    - (id)initWithRegistryId:(int64_t)registryId;
+    + (void)initialize;
+    @property (readwrite) int64_t $registryId;
+    - (double)getValue:(double)t;
+    - (void)deleteCJObject;
+    - (void)dealloc;
+    @end
+    ```
+
+    ```ObjC
+    #import "GenericClassFloat64.h"
+    #import "Cangjie.h"
+    #import <dlfcn.h>
+    #import <stdlib.h>
+    static int64_t (*CJImpl_ObjC_genericClass_GenericClassFloat64_init)() = NULL;
+    static void (*CJImpl_ObjC_genericClass_GenericClassFloat64_deleteCJObject)(int64_t) = NULL;
+    static double (*CJImpl_ObjC_genericClass_GenericClassFloat64_getValue_G_)(int64_t,double) = NULL;
+    static void* CJWorldDLHandle = NULL;
+    static struct RuntimeParam defaultCJRuntimeParams = {0};
+    @implementation GenericClassFloat64
+    - (id)init {
+        if (self = [super init]) {
+            self.$registryId = CJImpl_ObjC_genericClass_GenericClassFloat64_init();
+        }
+        return self;
+    }
+    - (id)initWithRegistryId:(int64_t)registryId {
+        if (self = [super init]) {
+            self.$registryId = registryId;
+        }
+        return self;
+    }
+    + (void)initialize {
+        if (self == [GenericClassFloat64 class]) {
+            defaultCJRuntimeParams.logParam.logLevel = RTLOG_ERROR;
+            if (InitCJRuntime(&defaultCJRuntimeParams) != E_OK) {
+                NSLog(@"ERROR: Failed to initialize Cangjie runtime");
+                exit(1);
+            }
+            if (LoadCJLibraryWithInit("libgenericClass.dylib") != E_OK) {
+                NSLog(@"ERROR: Failed to init cjworld library ");
+                exit(1);
+            }
+            if ((CJWorldDLHandle = dlopen("libgenericClass.dylib", RTLD_LAZY)) == NULL) {
+                NSLog(@"ERROR: Failed to open cjworld library ");
+                NSLog(@"%s", dlerror());
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericClass_GenericClassFloat64_init = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericClass_GenericClassFloat64_init")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericClass_GenericClassFloat64_init symbol in cjworld");
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericClass_GenericClassFloat64_deleteCJObject = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericClass_GenericClassFloat64_deleteCJObject")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericClass_GenericClassFloat64_deleteCJObject symbol in cjworld");
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericClass_GenericClassFloat64_getValue_G_ = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericClass_GenericClassFloat64_getValue_G_")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericClass_GenericClassFloat64_getValue_G_ symbol in cjworld");
+                exit(1);
+            }
+        }
+    }
+    - (double)getValue:(double)t {
+        return CJImpl_ObjC_genericClass_GenericClassFloat64_getValue_G_(self.$registryId, t);
+    }
+    - (void)deleteCJObject {
+        CJImpl_ObjC_genericClass_GenericClassFloat64_deleteCJObject(self.$registryId);
+    }
+    - (void)dealloc {
+        [self deleteCJObject];
+    }
+    @end
+    ```
+
+    ```ObjC
+    #import <Foundation/Foundation.h>
+    #import <stddef.h>
+    __attribute__((objc_subclassing_restricted))
+    @interface GenericClassInt32 : NSObject
+    - (id)init;
+    - (id)initWithRegistryId:(int64_t)registryId;
+    + (void)initialize;
+    @property (readwrite) int64_t $registryId;
+    - (int32_t)getValue:(int32_t)t;
+    - (void)deleteCJObject;
+    - (void)dealloc;
+    @end
+    ```
+
+    ```ObjC
+    #import "GenericClassInt32.h"
+    #import "Cangjie.h"
+    #import <dlfcn.h>
+    #import <stdlib.h>
+    static int64_t (*CJImpl_ObjC_genericClass_GenericClassInt32_init)() = NULL;
+    static void (*CJImpl_ObjC_genericClass_GenericClassInt32_deleteCJObject)(int64_t) = NULL;
+    static int32_t (*CJImpl_ObjC_genericClass_GenericClassInt32_getValue_G_)(int64_t,int32_t) = NULL;
+    static void* CJWorldDLHandle = NULL;
+    static struct RuntimeParam defaultCJRuntimeParams = {0};
+    @implementation GenericClassInt32
+    - (id)init {
+        if (self = [super init]) {
+            self.$registryId = CJImpl_ObjC_genericClass_GenericClassInt32_init();
+        }
+        return self;
+    }
+    - (id)initWithRegistryId:(int64_t)registryId {
+        if (self = [super init]) {
+            self.$registryId = registryId;
+        }
+        return self;
+    }
+    + (void)initialize {
+        if (self == [GenericClassInt32 class]) {
+            defaultCJRuntimeParams.logParam.logLevel = RTLOG_ERROR;
+            if (InitCJRuntime(&defaultCJRuntimeParams) != E_OK) {
+                NSLog(@"ERROR: Failed to initialize Cangjie runtime");
+                exit(1);
+            }
+            if (LoadCJLibraryWithInit("libgenericClass.dylib") != E_OK) {
+                NSLog(@"ERROR: Failed to init cjworld library ");
+                exit(1);
+            }
+            if ((CJWorldDLHandle = dlopen("libgenericClass.dylib", RTLD_LAZY)) == NULL) {
+                NSLog(@"ERROR: Failed to open cjworld library ");
+                NSLog(@"%s", dlerror());
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericClass_GenericClassInt32_init = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericClass_GenericClassInt32_init")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericClass_GenericClassInt32_init symbol in cjworld");
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericClass_GenericClassInt32_deleteCJObject = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericClass_GenericClassInt32_deleteCJObject")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericClass_GenericClassInt32_deleteCJObject symbol in cjworld");
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericClass_GenericClassInt32_getValue_G_ = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericClass_GenericClassInt32_getValue_G_")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericClass_GenericClassInt32_getValue_G_ symbol in cjworld");
+                exit(1);
+            }
+        }
+    }
+    - (int32_t)getValue:(int32_t)t {
+        return CJImpl_ObjC_genericClass_GenericClassInt32_getValue_G_(self.$registryId, t);
+    }
+    - (void)deleteCJObject {
+        CJImpl_ObjC_genericClass_GenericClassInt32_deleteCJObject(self.$registryId);
+    }
+    - (void)dealloc {
+        [self deleteCJObject];
+    }
+    @end
+    ```
+
+#### ObjC 使用泛型枚举
+
+ObjC 使用 Cangjie 泛型枚举之前需对泛型类型进行配置，参考[类型配置介绍](#ObjC-使用-配置文件)
+
+- 支持范围
+    - 泛型类型支持 Cangjie 大部分基础数值类型，详情请参见[规格限制](#规格限制)
+    - 支持多泛型参数用法
+    - 支持实例成员函数、属性带有泛型参数和返回值
+
+- 示例
+    - Cangjie 侧源码
+
+    <!-- compile -->
+
+    ```cangjie
+    package genericEnum
+
+    import interoplib.objc.*
+
+    public enum GenericEnum<T> where T <: ToString {
+        | Red(T) | Green(T) | Blue(T)
+
+        public func printValue(): Unit {
+            let s = match (this) {
+                case Red(n) => "red(${n})"
+                case Green(n) => "green(${n})"
+                case Blue(n) => "blue(${n})"
+            }
+            print("cangjie: ${s}\n", flush: true)
+        }
+
+        public func setValue(a: T): T {
+            print("cangjie: ${a}\n", flush: true)
+            a
+        }
+
+        public prop value: T {
+            get() {
+                match (this) {
+                    case Red(n) => n
+                    case Green(n) => n
+                    case Blue(n) => n
+                }
+            }
+        }
+    }
+    ```
+
+    - 配置信息
+
+    ```toml
+    [default]
+    APIStrategy = "Full"
+    GenericTypeStrategy = "None"
+
+    [[package]]
+    name = "genericEnum"
+    APIStrategy = "Full"
+    GenericTypeStrategy = "Partial"
+    excluded_apis = [
+    ]
+    generic_object_configuration = [
+        { name = "GenericEnum", type_arguments = ["Int32", "Float64"] },
+        { name = "GenericEnum<Int32>", symbols = [
+            "printValue",
+            "setValue",
+            "value"
+        ]}
+        { name = "GenericEnum<Float64>", symbols = [
+            "printValue",
+            "setValue",
+            "value"
+        ]}
+    ]
+    ```
+
+    - 映射后的 ObjC 代码如下：
+
+    ```ObjC
+    #import <Foundation/Foundation.h>
+    #import <stddef.h>
+    __attribute__((objc_subclassing_restricted))
+    @interface GenericEnumFloat64 : NSObject
+    - (id)initWithRegistryId:(int64_t)registryId;
+    + (GenericEnumFloat64*)Red:(double)p1;
+    + (GenericEnumFloat64*)Green:(double)p1;
+    + (GenericEnumFloat64*)Blue:(double)p1;
+    + (void)initialize;
+    @property (readwrite) int64_t $registryId;
+    @property (readonly, getter=value) double GenericEnumFloat64;
+    - (double)value;
+    - (void)printValue;
+    - (double)setValue:(double)a;
+    - (void)deleteCJObject;
+    - (void)dealloc;
+    @end
+    ```
+
+    ```ObjC
+    #import "GenericEnumFloat64.h"
+    #import "Cangjie.h"
+    #import <dlfcn.h>
+    #import <stdlib.h>
+    static int64_t (*CJImpl_ObjC_genericEnum_GenericEnumFloat64_Red_G_)(double) = NULL;
+    static int64_t (*CJImpl_ObjC_genericEnum_GenericEnumFloat64_Green_G_)(double) = NULL;
+    static int64_t (*CJImpl_ObjC_genericEnum_GenericEnumFloat64_Blue_G_)(double) = NULL;
+    static void (*CJImpl_ObjC_genericEnum_GenericEnumFloat64_deleteCJObject)(int64_t) = NULL;
+    static void (*CJImpl_ObjC_genericEnum_GenericEnumFloat64_printValue)(int64_t) = NULL;
+    static double (*CJImpl_ObjC_genericEnum_GenericEnumFloat64_setValue_G_)(int64_t,double) = NULL;
+    static double (*CJImpl_ObjC_genericEnum_GenericEnumFloat64_value_get)(int64_t) = NULL;
+    static void* CJWorldDLHandle = NULL;
+    static struct RuntimeParam defaultCJRuntimeParams = {0};
+    @implementation GenericEnumFloat64
+    - (id)initWithRegistryId:(int64_t)registryId {
+        if (self = [super init]) {
+            self.$registryId = registryId;
+        }
+        return self;
+    }
+    + (GenericEnumFloat64*)Red:(double)p1 {
+        int64_t regId = CJImpl_ObjC_genericEnum_GenericEnumFloat64_Red_G_(p1);
+        return [[GenericEnumFloat64 alloc]initWithRegistryId: regId];
+    }
+    + (GenericEnumFloat64*)Green:(double)p1 {
+        int64_t regId = CJImpl_ObjC_genericEnum_GenericEnumFloat64_Green_G_(p1);
+        return [[GenericEnumFloat64 alloc]initWithRegistryId: regId];
+    }
+    + (GenericEnumFloat64*)Blue:(double)p1 {
+        int64_t regId = CJImpl_ObjC_genericEnum_GenericEnumFloat64_Blue_G_(p1);
+        return [[GenericEnumFloat64 alloc]initWithRegistryId: regId];
+    }
+    + (void)initialize {
+        if (self == [GenericEnumFloat64 class]) {
+            defaultCJRuntimeParams.logParam.logLevel = RTLOG_ERROR;
+            if (InitCJRuntime(&defaultCJRuntimeParams) != E_OK) {
+                NSLog(@"ERROR: Failed to initialize Cangjie runtime");
+                exit(1);
+            }
+            if (LoadCJLibraryWithInit("libgenericEnum.dylib") != E_OK) {
+                NSLog(@"ERROR: Failed to init cjworld library ");
+                exit(1);
+            }
+            if ((CJWorldDLHandle = dlopen("libgenericEnum.dylib", RTLD_LAZY)) == NULL) {
+                NSLog(@"ERROR: Failed to open cjworld library ");
+                NSLog(@"%s", dlerror());
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericEnum_GenericEnumFloat64_Red_G_ = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericEnum_GenericEnumFloat64_Red_G_")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericEnum_GenericEnumFloat64_Red_G_ symbol in cjworld");
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericEnum_GenericEnumFloat64_Green_G_ = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericEnum_GenericEnumFloat64_Green_G_")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericEnum_GenericEnumFloat64_Green_G_ symbol in cjworld");
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericEnum_GenericEnumFloat64_Blue_G_ = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericEnum_GenericEnumFloat64_Blue_G_")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericEnum_GenericEnumFloat64_Blue_G_ symbol in cjworld");
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericEnum_GenericEnumFloat64_deleteCJObject = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericEnum_GenericEnumFloat64_deleteCJObject")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericEnum_GenericEnumFloat64_deleteCJObject symbol in cjworld");
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericEnum_GenericEnumFloat64_printValue = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericEnum_GenericEnumFloat64_printValue")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericEnum_GenericEnumFloat64_printValue symbol in cjworld");
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericEnum_GenericEnumFloat64_setValue_G_ = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericEnum_GenericEnumFloat64_setValue_G_")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericEnum_GenericEnumFloat64_setValue_G_ symbol in cjworld");
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericEnum_GenericEnumFloat64_value_get = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericEnum_GenericEnumFloat64_value_get")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericEnum_GenericEnumFloat64_value_get symbol in cjworld");
+                exit(1);
+            }
+        }
+    }
+    - (double)value {
+        return CJImpl_ObjC_genericEnum_GenericEnumFloat64_value_get(self.$registryId);
+    }
+    - (void)printValue {
+        CJImpl_ObjC_genericEnum_GenericEnumFloat64_printValue(self.$registryId);
+    }
+    - (double)setValue:(double)a {
+        return CJImpl_ObjC_genericEnum_GenericEnumFloat64_setValue_G_(self.$registryId, a);
+    }
+    - (void)deleteCJObject {
+        CJImpl_ObjC_genericEnum_GenericEnumFloat64_deleteCJObject(self.$registryId);
+    }
+    - (void)dealloc {
+        [self deleteCJObject];
+    }
+    @end
+    ```
+
+    ```ObjC
+    #import <Foundation/Foundation.h>
+    #import <stddef.h>
+    __attribute__((objc_subclassing_restricted))
+    @interface GenericEnumInt32 : NSObject
+    - (id)initWithRegistryId:(int64_t)registryId;
+    + (GenericEnumInt32*)Red:(int32_t)p1;
+    + (GenericEnumInt32*)Green:(int32_t)p1;
+    + (GenericEnumInt32*)Blue:(int32_t)p1;
+    + (void)initialize;
+    @property (readwrite) int64_t $registryId;
+    @property (readonly, getter=value) int32_t GenericEnumInt32;
+    - (int32_t)value;
+    - (void)printValue;
+    - (int32_t)setValue:(int32_t)a;
+    - (void)deleteCJObject;
+    - (void)dealloc;
+    @end
+    ```
+
+    ```ObjC
+    #import "GenericEnumInt32.h"
+    #import "Cangjie.h"
+    #import <dlfcn.h>
+    #import <stdlib.h>
+    static int64_t (*CJImpl_ObjC_genericEnum_GenericEnumInt32_Red_G_)(int32_t) = NULL;
+    static int64_t (*CJImpl_ObjC_genericEnum_GenericEnumInt32_Green_G_)(int32_t) = NULL;
+    static int64_t (*CJImpl_ObjC_genericEnum_GenericEnumInt32_Blue_G_)(int32_t) = NULL;
+    static void (*CJImpl_ObjC_genericEnum_GenericEnumInt32_deleteCJObject)(int64_t) = NULL;
+    static void (*CJImpl_ObjC_genericEnum_GenericEnumInt32_printValue)(int64_t) = NULL;
+    static int32_t (*CJImpl_ObjC_genericEnum_GenericEnumInt32_setValue_G_)(int64_t,int32_t) = NULL;
+    static int32_t (*CJImpl_ObjC_genericEnum_GenericEnumInt32_value_get)(int64_t) = NULL;
+    static void* CJWorldDLHandle = NULL;
+    static struct RuntimeParam defaultCJRuntimeParams = {0};
+    @implementation GenericEnumInt32
+    - (id)initWithRegistryId:(int64_t)registryId {
+        if (self = [super init]) {
+            self.$registryId = registryId;
+        }
+        return self;
+    }
+    + (GenericEnumInt32*)Red:(int32_t)p1 {
+        int64_t regId = CJImpl_ObjC_genericEnum_GenericEnumInt32_Red_G_(p1);
+        return [[GenericEnumInt32 alloc]initWithRegistryId: regId];
+    }
+    + (GenericEnumInt32*)Green:(int32_t)p1 {
+        int64_t regId = CJImpl_ObjC_genericEnum_GenericEnumInt32_Green_G_(p1);
+        return [[GenericEnumInt32 alloc]initWithRegistryId: regId];
+    }
+    + (GenericEnumInt32*)Blue:(int32_t)p1 {
+        int64_t regId = CJImpl_ObjC_genericEnum_GenericEnumInt32_Blue_G_(p1);
+        return [[GenericEnumInt32 alloc]initWithRegistryId: regId];
+    }
+    + (void)initialize {
+        if (self == [GenericEnumInt32 class]) {
+            defaultCJRuntimeParams.logParam.logLevel = RTLOG_ERROR;
+            if (InitCJRuntime(&defaultCJRuntimeParams) != E_OK) {
+                NSLog(@"ERROR: Failed to initialize Cangjie runtime");
+                exit(1);
+            }
+            if (LoadCJLibraryWithInit("libgenericEnum.dylib") != E_OK) {
+                NSLog(@"ERROR: Failed to init cjworld library ");
+                exit(1);
+            }
+            if ((CJWorldDLHandle = dlopen("libgenericEnum.dylib", RTLD_LAZY)) == NULL) {
+                NSLog(@"ERROR: Failed to open cjworld library ");
+                NSLog(@"%s", dlerror());
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericEnum_GenericEnumInt32_Red_G_ = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericEnum_GenericEnumInt32_Red_G_")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericEnum_GenericEnumInt32_Red_G_ symbol in cjworld");
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericEnum_GenericEnumInt32_Green_G_ = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericEnum_GenericEnumInt32_Green_G_")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericEnum_GenericEnumInt32_Green_G_ symbol in cjworld");
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericEnum_GenericEnumInt32_Blue_G_ = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericEnum_GenericEnumInt32_Blue_G_")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericEnum_GenericEnumInt32_Blue_G_ symbol in cjworld");
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericEnum_GenericEnumInt32_deleteCJObject = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericEnum_GenericEnumInt32_deleteCJObject")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericEnum_GenericEnumInt32_deleteCJObject symbol in cjworld");
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericEnum_GenericEnumInt32_printValue = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericEnum_GenericEnumInt32_printValue")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericEnum_GenericEnumInt32_printValue symbol in cjworld");
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericEnum_GenericEnumInt32_setValue_G_ = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericEnum_GenericEnumInt32_setValue_G_")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericEnum_GenericEnumInt32_setValue_G_ symbol in cjworld");
+                exit(1);
+            }
+            if ((CJImpl_ObjC_genericEnum_GenericEnumInt32_value_get = dlsym(CJWorldDLHandle, "CJImpl_ObjC_genericEnum_GenericEnumInt32_value_get")) == NULL) {
+                NSLog(@"ERROR: Failed to find CJImpl_ObjC_genericEnum_GenericEnumInt32_value_get symbol in cjworld");
+                exit(1);
+            }
+        }
+    }
+    - (int32_t)value {
+        return CJImpl_ObjC_genericEnum_GenericEnumInt32_value_get(self.$registryId);
+    }
+    - (void)printValue {
+        CJImpl_ObjC_genericEnum_GenericEnumInt32_printValue(self.$registryId);
+    }
+    - (int32_t)setValue:(int32_t)a {
+        return CJImpl_ObjC_genericEnum_GenericEnumInt32_setValue_G_(self.$registryId, a);
+    }
+    - (void)deleteCJObject {
+        CJImpl_ObjC_genericEnum_GenericEnumInt32_deleteCJObject(self.$registryId);
+    }
+    - (void)dealloc {
+        [self deleteCJObject];
+    }
+    @end
+    ```
+
+#### ObjC 使用泛型接口
+
+ObjC 使用 Cangjie 泛型接口之前需对泛型类型进行配置，参考[类型配置介绍](#ObjC-使用-配置文件)
+
+- 支持范围
+    - 泛型类型支持 Cangjie 大部分基础数值类型，详情请参见[规格限制](#规格限制)
+    - 支持多泛型参数用法
+    - 支持实例成员函数带有泛型参数和返回值
+
+- 示例
+    - Cangjie 侧源码
+
+    <!-- compile -->
+
+    ```cangjie
+    package genericInterface
+
+    import interoplib.objc.*
+
+    public interface GenericInterface<T> {
+
+        func argretGenericFunc(v: T) : T {
+            setValue(v)
+            return getValue()
+        }
+
+        func setValue(v: T) : Unit
+
+        func getValue() : T
+
+        func normalFunc(v: Int32) : Int32
+    }
+    ```
+
+    - 配置信息
+
+    ```toml
+    [default]
+    APIStrategy = "Full"
+    GenericTypeStrategy = "None"
+
+    [[package]]
+    name = "genericInterface"
+    APIStrategy = "Full"
+    GenericTypeStrategy = "Partial"
+    excluded_apis = [
+    ]
+    generic_object_configuration = [
+        { name = "GenericInterface", type_arguments = ["Int32", "Float64"] },
+        { name = "GenericInterface<Int32>", symbols = [
+            "argretGenericFunc",
+            "setValue",
+            "getValue"
+        ]}
+        { name = "GenericInterface<Float64>", symbols = [
+            "argretGenericFunc",
+            "setValue",
+            "getValue"
+        ]}
+    ]
+    ```
+
+    - 映射后的 ObjC 代码如下：
+
+    ```ObjC
+    #import <Foundation/Foundation.h>
+    #import <stddef.h>
+    @protocol GenericInterfaceFloat64
+    - (double)argretGenericFunc:(double)v;
+    - (void)setValue:(double)v;
+    - (double)getValue;
+    - (int32_t)normalFunc:(int32_t)v;
+    @end
+    ```
+
+    ```ObjC
+    #import <Foundation/Foundation.h>
+    #import <stddef.h>
+    @protocol GenericInterfaceInt32
+    - (int32_t)argretGenericFunc:(int32_t)v;
+    - (void)setValue:(int32_t)v;
+    - (int32_t)getValue;
+    - (int32_t)normalFunc:(int32_t)v;
+    @end
+    ```
+
+#### 规格限制
+
+- 暂不支持自定义数据类型
+- 支持的基础类型：Int、Int8、Int16、Int32、Int64、UInt8、UInt16、UInt32、UInt64、Float32、Float64、Bool
+- 用户自定义类型的泛型形参若有上界，该上界类型不能包含泛型参数
+- 暂仅支持无内层类型形参的实例成员函数，其形参类型和返回类型允许使用外层类型形参
+- 暂不支持 Interface default 方法实现
+- 暂不支持 mut 关键字
+
+### ObjC 使用泛型配置文件
+
+配置文件采用 toml 格式进行配置，按照包级别对于符号以及泛型实例化信息进行控制，实例参考如下：
+
+```toml
+[default]
+APIStrategy = "Full"
+GenericTypeStrategy = "None"
+
+[[package]]
+name = "genericClass"
+APIStrategy = "Full"
+GenericTypeStrategy = "Partial"
+excluded_apis = [
+    "Vector.hello"
+]
+generic_object_configuration = [
+    { name = "GenericClass", type_arguments = ["Int64", "Int32"] },
+    { name = "GenericClass<Int64>", symbols = [
+        "getValue",
+        "GenericClass",
+        "setValue"
+    ]},
+
+    { name = "GenericClass<Int32>", symbols = [
+        "getValue",
+        "GenericClass",
+        "setValue"
+    ]}
+]
+```
+
+对应 cangjie 侧源码如下：
+
+<!-- compile -->
+
+```cangjie
+package genericClass
+
+import interoplib.objc.*
+
+public class GenericClass<T> {
+
+    private var value : T
+
+    public GenericClass(v: T) {
+        value = v;
+    }
+    public func getValue() : T {
+        return this.value
+    }
+    public func setValue(t: T) {
+        value = t
+    }
+}
+```
+
+- **[default]** 字段：全局默认设置，package 未具体配置信息情况下采用默认设置规则
+
+- **APIStrategy** 字段：符号可见性策略表示外部配置默认 Cangjie 符号对目标语言的可见性
+
+- **GenericTypeStrategy** 字段：泛型实例化策略表示外部配置默认 Cangjie 泛型相关 API 对目标语言的实例化范围
+
+- **[[package]]** 字段：包配置信息
+
+    - **name** 字段：package name
+
+    - **APIStrategy** 字段：当前包中配置的符号可见性模式
+        - Full : 对应 excluded_apis
+        - None : 对应 included_apis
+
+    - **GenericTypeStrategy** 字段：当前包中配置的泛型实例化模式
+        - Partial : 需要对泛型进行指定类型的实例化
+        - None : 无需使用泛型
+
+    - **included_apis** 字段：用户提供的完全限定名称将在目标语言中暴露（前提是满足公开等语法要求，否则将产生告警，如果结构体中的符号需要暴露，则必须暴露该结构体；如果该结构体位于此列表中，则会发出警告）
+
+    - **excluded_apis** 字段：与 included_apis 相反，其中符号将被隐藏
+
+    - **generic_object_configuration** 字段：当前包允许进行实例化的一系列类型和符号配置
+
+        - 泛型数据结构 & 实例化类型
+            - name 字段：对应泛型数据类型(struct/class/interface/enum)的对象名称
+            - type_arguments 字段：配置实例化类型，若多泛型参数则为 "Int32, Int64" 方式对应 <T,U>
+
+            ```toml
+            { name = "GenericClass", type_arguments = ["Int64", "Int32"] }
+            ```
+
+        - 实例化数据结构 & 实例化符号
+            - name 字段：对应实例化后上述泛型数据类型对象名称
+            - symbols 字段：实例化数据结构内对应变量以及函数等符号
+
+            ```toml
+                { name = "GenericClass<Int64>", symbols = [
+                    "getValue",
+                    "GenericClass",
+                    "setValue"
+                ]},
+
+                { name = "GenericClass<Int32>", symbols = [
+                    "getValue",
+                    "GenericClass",
+                    "setValue"
+                ]}
+            ```
+
+#### 符号控制规格约束
+
+配置文件需要用户保障配置的语法正确性，例如 B.funcA 为 exposed ，则 B 不允许设置为 hiddened（其他场景同理）。
 
 ## 版本约束限制
 
