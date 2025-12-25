@@ -665,8 +665,8 @@ to Cangjie:
   is not supported. An attempt to mirror a struct that explicitly
   implements an interface results in a compile-time error.
 
-* Mirroring of generic structs is not supported. An attempt to mirror
-  a generic struct results in a compile-time error.
+* Mirroring of generic structs is supported through monomorphization.
+  See [Generics](#cangjie-generics) for details.
 
 * Mirroring of structs that contain public member properties,
   member operator functions, or primary constructors is not supported.
@@ -795,8 +795,8 @@ them to Cangjie:
   In the meantime, you may add getter/setter functions to Cangjie
   classes manually as a workaround.
 
-* Mirroring of generic classes is not supported. An attempt to mirror
-  a generic class results in a compile-time error.
+* Mirroring of generic classes is supported through monomorphization.
+  See [Generics](#cangjie-generics) for details.
 
 * Mirroring of classes/interfaces that contain public member properties,
   member operator functions, or primary constructors is not supported.
@@ -849,6 +849,7 @@ public class TimeUnit {
 
     /* More glue code */
 }
+```
 
 **Enum constructors without parameters** are mirrored into `static`
 variables inhitalized with instances of the class associated with
@@ -871,8 +872,8 @@ mirrored:
   is not supported. An attempt to mirror an enum that explicitly
   implements an interface results in a compile-time error.
 
-* Mirroring of generic enums is not supported. An attempt to mirror
-  a generic enum results in a compile-time error.
+* Mirroring of generic enums is supported through monomorphization.
+  See [Generics](#cangjie-generics) for details.
 
 * Mirroring of enums that contain public member properties or member
   operator functions is not supported. An attempt to mirror an enum
@@ -933,13 +934,13 @@ file:
 ```toml
        .  .  .
     generic_object_configuration  = [
-        { name = "G", type_arguments = ["String", "Int"] },
+        { name = "G", type_arguments = ["Bool", "Int"] },
     ]
        .  .  .
 ```
 
-the compiler will generate Java mirror classes for `G<String>` and `G<Int>`,
-named respectively `G_String` and `G_Int`.
+the compiler will generate Java mirror classes for `G<Bool>` and `G<Int>`,
+named respectively `G_Bool` and `G_Int`.
 
 
 Refer to the
@@ -1199,7 +1200,6 @@ type or global function the name of which is specified in the `name` property.
 Given the following Cangjie definitions
 
 ```cangjie
-public class C { . . . }
 public class G<T> { . . . }
 public func f<T>(): Unit { . . . }
 public struct S<T,U> { . . . }
@@ -1209,9 +1209,9 @@ the property
 
 ```toml
 generic_object_configuration  = [
-    { name = "G", type_arguments = ["String"] },
-    { name = "f", type_arguments = ["String", "C"] },
-    { name = "S", type_arguments = ["Int"] }
+    { name = "G", type_arguments = ["Int"] },
+    { name = "f", type_arguments = ["Int", "Bool"] },
+    { name = "S", type_arguments = ["Int, Bool"] }
 ]
 ```
 
@@ -1219,13 +1219,13 @@ instructs the `cjc` compiler to generate mirrors for the following
 instantiations:
 
 ```canmgjie
-    G<String>
-    f<String>
-    f<C>
-    S<Int>
+    G<Int>
+    f<Int>
+    f<Bool>
+    S<Int, Bool>
 ```
 
-and name them like `G_String`, `f_String`, and so on. 
+and name them like `G_Int`, `f_Int`, and so on. 
 
 
 
@@ -1623,8 +1623,6 @@ Use `Unit` as a return type to call a `void` Java method.
 Skip this step if you only want to call member functions of interop classes,
 their superclasses and/or types for which you have already generated mirror
 declarations, such as the types of interop class parameters or return values.
-
-**Command line:**
 
 **Command line:**
 
