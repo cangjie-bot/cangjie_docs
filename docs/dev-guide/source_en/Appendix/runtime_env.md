@@ -23,7 +23,7 @@ Notes:
 1. All integer parameters are of Int64 type, and floating-point parameters are of Float64 type;
 2. If no maximum value is explicitly specified for any parameter, the default implicit maximum value is the maximum value of that type;
 3. If any parameter exceeds the valid range, the setting will be invalid, and the default value will be used automatically.
-4. All parameters are invalid on the OHOS platform. The Cangjie runtime uses default values on the OHOS platform.
+4. All parameters are invalid on the OpenHarmonyOS platform. The Cangjie runtime uses default values on the OpenHarmonyOS platform.
 
 ### `cjHeapSize`
 
@@ -282,7 +282,7 @@ Cangjie GWP-Asan is a sampling-based detection tool. The sampling frequency can 
 
 > **Note:**
 >
-> Cangjie GWP-Asan memory safety detection is only supported on Linux and HarmonyOS.
+> Cangjie GWP-Asan memory safety detection is only supported on Linux and OpenHarmonyOS.
 
 #### cjEnableGwpAsan
 

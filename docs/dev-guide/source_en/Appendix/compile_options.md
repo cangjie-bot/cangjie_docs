@@ -377,7 +377,9 @@ Statically links the Cangjie standard library (`std` module).
 
 This option only takes effect when compiling dynamic libraries or executables.
 
-When compiling executables (`--output-type=exe`), `cjc` defaults to statically linking the `std` module.### <span id="--dy-std">`--dy-std`</span>
+When compiling executables (`--output-type=exe`), `cjc` defaults to statically linking the `std` module.
+
+### `--dy-std`
 
 Dynamically link the std module of the Cangjie library.
 
