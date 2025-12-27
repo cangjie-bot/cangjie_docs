@@ -162,11 +162,11 @@ public enum TokenKind <: ToString {
     DOLLAR_IDENTIFIER|        /*  e.g. "$x"          */
     ANNOTATION|               /*  e.g. "@When"       */
     AT_EXCL|                  /*  e.g. "@!"          */
-    ILLEGAL|
+    ILLEGAL|<!--Del-->
     HANDLE|                   /*  "handle"           */
     PERFORM|                  /*  "perform"          */
     RESUME|                   /*  "resume"           */
-    THROWING|                 /*  "throwing"         */
+    THROWING|                 /*  "throwing"         */<!--DelEnd-->
     ...
 }
 ```
