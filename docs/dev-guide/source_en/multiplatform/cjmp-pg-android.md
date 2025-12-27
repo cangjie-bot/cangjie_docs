@@ -840,11 +840,11 @@ public class TimeUnit {
     }
 
     public static TimeUnit Year =
-        // Gliue code creating a Cangjie Year enum and associating it
+        // Glue code creating a Cangjie Year enum and associating it
         // with a newly creasted Java TimeUnit instance
 
     public static TimeUnit Month =
-        // Gliue code creating a Cangjie Year enum and associating it
+        // Glue code creating a Cangjie Year enum and associating it
         // with a newly creasted Java TimeUnit instance
 
     /* More glue code */
@@ -923,7 +923,7 @@ When compiling the following Cangjie class definition:
 ```cangjie
 public class G<T> {
     private let t: T
-    public init(t: T) { this.t = T }
+    public init(t: T) { this.t = t }
     public func get(): T { t }
 }
 ```
@@ -1218,7 +1218,7 @@ generic_object_configuration  = [
 instructs the `cjc` compiler to generate mirrors for the following
 instantiations:
 
-```canmgjie
+```cangjie
     G<Int>
     f<Int>
     f<Bool>
