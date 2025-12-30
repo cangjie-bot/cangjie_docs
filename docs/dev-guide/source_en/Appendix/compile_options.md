@@ -391,6 +391,14 @@ When compiling a dynamic library (i.e., when `--output-type=dylib` is specified)
 
 1. When both `--static-std` and `--dy-std` options are used together, only the last specified option takes effect.
 2. When compiling an executable program that links to a Cangjie dynamic library (i.e., a product compiled with the `--output-type=dylib` option), the `--dy-std` option must be explicitly specified to dynamically link the standard library. Otherwise, multiple copies of the standard library may appear in the program, potentially causing runtime issues.
+3. Platform support capabilities are as follows:
+
+| Target Platform | --static-std | --dy-std |
+| :-------------: | :------------: | :-------------: |
+|      Linux      |    Supported   |    Supported    |
+|      macOS      |    Supported   |    Supported    |
+|     Windows     |    Supported   |    Supported    |
+|  OpenHarmonyOS  |  Not Supported |    Supported    |
 
 ### `--static-libs`
 
