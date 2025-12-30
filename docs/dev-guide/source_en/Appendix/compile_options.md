@@ -446,6 +446,15 @@ This option only takes effect when compiling dynamic libraries or executable fil
 2. `--static-std` cannot be used with the `--dy-libs` option; otherwise, an error will occur.
 3. When `--dy-std` is used alone, the `--dy-libs` option is enabled by default, and a warning message will be displayed.
 4. When `--dy-libs` is used alone, the `--dy-std` option is enabled by default, and a warning message will be displayed.
+5. `--static-std` is ineffective on the `ohos` platform, which supports only dynamic linking.
+
+| Target Platform | `--static-std` | `--dy-std` |
+| :-------------: | :------------: | :--------: |
+|      Linux      |        ✔       |      ✔     |
+|      macOS      |        ✔       |      ✔     |
+|     Windows     |        ✔       |      ✔     |
+|       Ohos      |        ✘       |      ✔     |
+|  |
 
 ### `--stack-trace-format=[default|simple|all]`
 
