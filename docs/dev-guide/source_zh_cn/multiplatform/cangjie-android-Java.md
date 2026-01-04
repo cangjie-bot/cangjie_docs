@@ -1019,6 +1019,10 @@ public class Impl <: JImpl {
 }
 ```
 
+> **注意：**
+>
+> 暂不支持带有非基础类型的 JArray 在 Android 上运行。
+
 ### 字符串
 
 JString 类型支持在仓颉和 Java 侧做字符串数据的映射，支持从 Java 侧转换字符串到仓颉侧，或将仓颉字符串映射到 Java 侧。
