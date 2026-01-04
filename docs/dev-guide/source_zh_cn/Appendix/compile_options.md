@@ -407,7 +407,7 @@ cjc --scan-dependency pkgA.cjo
     | Linux            | 支持                | 支持            |
     | macOS            | 支持                | 支持            |
     | Windows          | 支持                | 支持            |
-    | OpenHarmonyOS    | 不支持              | 支持            |
+    | OpenHarmony    | 不支持              | 支持            |
 
 ### `--static-libs`
 

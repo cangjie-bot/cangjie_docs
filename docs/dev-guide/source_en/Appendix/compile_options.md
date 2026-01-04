@@ -398,7 +398,7 @@ When compiling a dynamic library (i.e., when `--output-type=dylib` is specified)
     | Linux           | Supported          | Supported      |
     | macOS           | Supported          | Supported      |
     | Windows         | Supported          | Supported      |
-    | OpenHarmonyOS   | Not supported      | Supported      |
+    | OpenHarmony   | Not supported      | Supported      |
 
 ### `--static-libs`
 
