@@ -44,7 +44,9 @@ public platform func foo(): Unit {
 下面对支持跨平台开发特性的类型和语法特性介绍详细使用规则。其中一些特性与普通声明基本一致，不做展开介绍，例如：
 
 - common 和 platform 的声明支持异常抛出，异常抛出的栈信息与实际所使用的声明地址一致。
-- common 声明中支持存在 Deprecated 声明，其 Deprecated 注解将传播给 platfrom 声明。不允许在 platform 声明中使用 Deprecated。
+- common 声明与对应的 platform 声明必须使用相同的注解（Deprecated 注解除外）。
+- common 声明中支持存在 Deprecated 声明，其 Deprecated 注解将传播给 platform 声明。不允许在 platform 声明中使用 Deprecated。
+- 对于跨平台开发中的函数（包括全局函数、成员函数、构造函数），默认参数只能在 common 声明或 platform 声明中的一侧定义。若 common 声明的某参数已指定默认值，则 platform 声明对应位置的参数必须使用相同的参数名作为命名参数，且不得再设置默认值。
 
 #### 全局函数
 
@@ -61,13 +63,11 @@ common func goo(a: Int64): Int64 { 1 }
 common/platform 全局函数必须满足如下限制：
 
 - common 全局函数必须定义函数返回值类型。
-- 当 common 全局函数有完整实现时，可以不定义 platform 全局函数；当 common 全局函数无完整实现时，必须定义 platform 全局函数。
-- platform 全局函数的函数签名必须与同包的 common 全局函数匹配，即参数类型和返回值类型必须一致，并需要同时满足以下规则：
+- 当 common 全局函数有完整实现时，可以不定义 platform 全局函数；当 common 全局函数无完整实现时 ，必须定义 platform 全局函数。
+- platform 全局函数的函数签名必须与同包的 common 全局函数匹配，即参数类型必须一致，返回值类型可以是相同类型或子类型，并需要同时满足以下规则：
     - common 全局函数与全局平台函数必须使用相同的修饰符，如 public，unsafe 等，common/platform 除外。
     - 当 common 全局函数使用命名参数时，platform 全局函数对应位置必须使用相同名字的命名参数。
-    - 函数的默认参数只能在 common 侧 或 platform 侧 中的一侧定义，不可同时在两侧设置默认值。若 common 侧的全局函数某参数已指定默认值，则 platform 侧对应位置的参数必须使用相同的参数名作为命名参数，且不得再设置默认值。
     - 每个 platform 全局函数必须匹配唯一的 common 全局函数，不可以出现多个平台全局函匹配相同的 common 全局函数。
-    - common 全局函数与 platform 全局函数必须使用相同的注解。
     - 如果是全局泛型函数，还需满足以下泛型特定限制：
         - common 全局泛型函数和 platform 全局泛型函数必须具有相同个数的类型形参。
         - 当 common 全局泛型函数有泛型约束时，platform 全局泛型函数对应类型形参的泛型约束必须保持一致或者更宽松。
@@ -123,12 +123,11 @@ platform func printValue2<T>(value: T): Unit {}
 
 仓颉 class 支持跨平台特性，用户可以使用 common 和 platform 修饰 class 及其部分成员。
 
-对于 common class，至多存在一个与之匹配的 platform class。当存在时，需要满足以下要求：
+对于 common class，至多存在一个与之匹配的 platform class。当 common 侧所有成员都有完整实现时，可以省略 platform class。若存在 platform class，则需要满足以下要求：
 
 - common class 和 platform class 可见性必须相同。
 - common class 和 platform class 接口实现性必须相同。
 - common class 和 platform class 继承性必须相同。
-- common class 和 platform class 必须使用相同的注解。
 - common open class 匹配 platform open class。
 - common abstract class 匹配 platform abstract class。
 - common sealed abstract class 匹配 platform sealed abstract class。
@@ -287,7 +286,7 @@ common class 和 platform class 的成员函数需要满足如下限制：
 
 - common 成员函数可以有具体实现，也可以仅保留函数签名，由 platform 成员函数实现。
 - 若 common 成员函数有完整实现，则可省略 platform 成员函数，否则必须存在一个匹配的 platform 成员函数。
-- common 成员函数和 platform 成员函数的参数、返回值和修饰符（common/platform 除外）必须相同。
+- common 成员函数和 platform 成员函数的参数必须相同，返回值类型可以是相同类型或子类型，修饰符（common/platform 除外）必须相同。
 - common/platform class 支持普通成员函数，且 common class 或 platform class 中均可以定义。
 - common 泛型成员函数和 platform 泛型成员函数，还需满足泛型特定限制，规则同全局泛型函数。
 
@@ -572,12 +571,11 @@ public platform abstract class A {
 
 仓颉 struct 支持跨平台特性，用户可以使用 common 和 platform 修饰 struct 及其部分成员。
 
-对于 common struct，至多存在一个与之匹配的 platform struct。当存在时，需要满足以下要求：
+对于 common struct，至多存在一个与之匹配的 platform struct。当 common 侧所有成员都有完整实现时，可以省略 platform struct。若存在 platform struct，则需要满足以下要求：
 
 - common struct 和 platform struct 可见性必须相同。
 - common struct 和 platform struct 接口实现性必须相同。
 - common struct 和 platform struct 必须同时被 @C 修饰或同时不被修饰。
-- common struct 和 platform struct 必须使用相同的注解。
 - 如果是 common 修饰的泛型 struct ，还需满足以下泛型特定限制：
     - common 泛型 struct 和 platform 泛型 struct 必须具有相同个数的类型形参。
     - 当 common 泛型 struct 有泛型约束时，platform 泛型 struct 对应类型形参的泛型约束必须保持一致或者更宽松。
@@ -653,6 +651,7 @@ platform struct Point<T> where T <: Add {
 - 若 common init 有完整实现，则可省略 platform init，否则必须存在一个匹配的 platform init。
 - common init 和 platform init 的可见性必须相同。
 - platform init 实现会覆盖 common init 实现。
+- 主构造函数不可以被 common 或 platform 修饰。
 - common/platform struct 支持普通构造函数，在 common struct 或 platform struct 中均可以定义。
 - 静态初始化器不支持被 common/platform 修饰。
 
@@ -726,7 +725,7 @@ common struct 和 platform struct 的成员函数需要满足如下限制：
 
 - common 成员函数可以有具体实现，也可以仅保留函数签名，由 platform 成员函数实现。
 - 若 common 成员函数有完整实现，则可省略 platform 成员函数，否则必须存在一个匹配的 platform 成员函数。
-- common 成员函数和 platform 成员函数的参数、返回值和修饰符（common/platform 除外）必须相同。
+- common 成员函数和 platform 成员函数的参数必须相同，返回值类型可以是相同类型或子类型，修饰符（common/platform 除外）必须相同。
 - common/platform struct 支持普通成员函数，且 common struct 或 platform struct 中均可以定义。
 - common 泛型成员函数和 platform 泛型成员函数，还需满足泛型特定限制，规则同全局泛型函数。
 
@@ -835,12 +834,11 @@ platform enum A {
 }
 ```
 
-对于 common enum，至多存在一个与之匹配的 platform enum。当存在时，需要满足以下要求：
+对于 common enum，至多存在一个与之匹配的 platform enum。当 common 侧所有成员都有完整实现时，可以省略 platform enum。若存在 platform enum，则需要满足以下要求：
 
 - common enum 和 platform enum 可见性必须相同。
 - common enum 和 platform enum 接口实现性必须相同。
 - common enum 和 platform enum 中对应的构造器必须是相同类型。
-- common enum 和 platform enum 必须使用相同的注解。
 - 如果 common enum 是 exhaustive enum，则 platform enum 必须也是 exhaustive enum；如果 common enum 是 non-exhaustive enum，platform 可以是 exhaustive enum。
     - 对于 exhaustive enum，platform enum 中必须包含 common enum 的全部构造器，platform enum 中不可以增加新的构造器。
     - 对于 non-exhaustive enum，platform enum 中必须包含 common enum 的全部构造器，platform enum 中可以增加新的构造器。
@@ -895,7 +893,7 @@ common enum 和 platform enum 的成员函数需要满足如下限制：
 
 - common 成员函数可以有具体实现，也可以仅保留函数签名，由 platform 成员函数实现。
 - 若 common 成员函数有完整实现，则可省略 platform 成员函数，否则必须存在一个匹配的 platform 成员函数。
-- common 成员函数和 platform 成员函数的参数、返回值和修饰符（common/platform 除外）必须相同。
+- common 成员函数和 platform 成员函数的参数必须相同，返回值类型可以是相同类型或子类型，修饰符（common/platform 除外）必须相同。
 - common/platform enum 支持普通成员函数，且 common enum 或 platform enum 中均可以定义。
 - common 泛型成员函数和 platform 泛型成员函数，还需满足泛型特定限制，规则同全局泛型函数。
 
@@ -1006,7 +1004,7 @@ platform interface A {
 }
 ```
 
-对于 common interface，至多存在一个匹配的 platform interface。当存在时，需要满足以下要求：
+对于 common interface，至多存在一个与之匹配的 platform interface。当 common 侧所有成员都有完整实现时，可以省略 platform interface。若存在 platform interface，则需要满足以下要求：
 
 - common interface 和 platform interface 可见性必须相同。
 - common interface 和 platform interface 接口实现性必须相同。
@@ -1050,7 +1048,7 @@ platform interface Repository<T> where T <: Entity {
 common interface 和 platform interface 的成员函数需要满足如下限制：
 
 - 无论 common 成员函数是否有完整实现，platform 成员函数都可以省略。
-- common 成员函数和 platform 成员函数的参数、返回值和修饰符（common/platform 除外）必须相同。
+- common 成员函数和 platform 成员函数的参数必须相同，返回值类型可以是相同类型或子类型，修饰符（common/platform 除外）必须相同。
 - common 成员函数如果包含具体实现，则 platform 成员函数必须也包含具体实现。
 - common/platform interface 支持普通成员函数，且 common interface 或 platform interface 中均可以定义。
 - platform interface 新增的普通函数必须包含完整实现。
@@ -1157,7 +1155,7 @@ platform extend A {
 }
 ```
 
-对于 common extend，至多存在一个唯一的 platform extend 与其匹配。当存在时，需要满足以下要求：
+对于 common extend，至多存在一个与之匹配的 platform extend。当存在时，需要满足以下要求：
 
 - 当[直接扩展](../extension/direct_extension.md)被 common 修饰时， 必须存在唯一的 platform extend。
 - 当[接口扩展](../extension/interface_extension.md)被 common 修饰时， common extend 和 platform extend 必须具有完全相同的接口集合。
@@ -1231,7 +1229,7 @@ common extend 和 platform extend 的成员函数需要满足如下限制：
 
 - common 成员函数可以有具体实现，也可以仅保留函数签名，由 platform 成员函数实现。
 - 若 common 成员函数有完整实现，则可省略 platform 成员函数，否则必须存在一个匹配的 platform 成员函数。
-- common 成员函数和 platform 成员函数的参数、返回值和修饰符（common/platform 除外）必须相同。
+- common 成员函数和 platform 成员函数的参数必须相同，返回值类型可以是相同类型或子类型，修饰符（common/platform 除外）必须相同。
 - common/platform extend 支持普通成员函数，且 common extend 或 platform extend 中均可以定义。
 - common 泛型成员函数和 platform 泛型成员函数，还需满足泛型特定限制，规则同全局泛型函数。
 
