@@ -2573,3 +2573,4 @@ public class GenericClass<T> {
 3. 使用仓颉与 ObjC 互操作时，需额外下载依赖文件 `Cangjie.h` （[点此下载](https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/runtime/src/Cangjie.h)），并在编译时通过编译选项指定其所在位置。
 4. 在仓颉中依赖了 Foundation 中的类型（例如 NSObject），且定义该类型的头文件（例如 NSObject.h）未在编译选项中显式指定时，由于实际 Foundation 已被导入，且该类型实际已在 Foundation 中被定义，因此当前可通过创建同名空头文件，保证编译正常。
 5. 当前 ObjCImpl 的构造函数实现使用 `[self doesNotRecognizeSelecor:_cmd];` 特性，运行时总是抛出异常，无需返回值，因此需关闭 `-Werror=return-type` 的编译期检查能力，保证编译正常。
+6. 当 ObjCImpl 声明中依赖了其他 ObjCMirror/ObjCImpl 对象类型，在翻译到 ObjC 侧，由 clang 编译时，该声明必须有单独的头文件。即该声明应在单独的仓颉文件中定义，或创建一个同名空头文件，保证编译正常。
