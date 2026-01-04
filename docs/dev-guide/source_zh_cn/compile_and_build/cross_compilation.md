@@ -125,7 +125,8 @@ cjc main.cj --output-type=staticlib --target=aarch64-apple-ios17.5 -o libmain.a
 
     - `-lc++`
 
-   值得注意的是，必须按照以上列表顺序添加链接选项。`$CANGJIE_HOME` 需要替换为实际的仓颉按照目录。若运行目标是模拟器，请将 `ios_aarch64_cjnative` 替换为 `ios_simulator_aarch64_cjnative` 。
+   值得注意的是，必须按照以上列表顺序添加链接选项。`$CANGJIE_HOME` 需要替换为实际的仓颉按照目录。若运行目标是模拟器，请将 `ios_aarch64_cjnative` 替换为 `ios_simulator_aarch64_cjnative` 。若 xcode 版本为15 ， 需要在 `Build Settings > Other Linker Flags` 额外添加 `-Wl,-ld_classic` 或 `-Wl,-no_compact_unwind` ，否则部分场景中 xcode 链接器可能会出现 ` Assertion failed: (false && "compact unwind compressed function offset doesn't fit in 24 bits")` 错误。
+
 
 3. 在 `Xcode` 项目中配置 `Build Settings > Dead Code Stripping` 字段，设置为 `No`。
 

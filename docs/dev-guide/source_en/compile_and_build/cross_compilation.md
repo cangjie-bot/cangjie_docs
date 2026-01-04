@@ -124,7 +124,8 @@ In addition to adding the Cangjie compilation output to the `Xcode` project, the
 
     - `-lc++`
 
-   Note: The linking options must be added in the exact order listed above. Replace `$CANGJIE_HOME` with the actual Cangjie installation directory. For simulator targets, replace `ios_aarch64_cjnative` with `ios_simulator_aarch64_cjnative`.
+   Note: The linking options must be added in the exact order listed above. Replace `$CANGJIE_HOME` with the actual Cangjie installation directory. For simulator targets, replace `ios_aarch64_cjnative` with `ios_simulator_aarch64_cjnative`.For targets built with Xcode 15, the additional linker flags `-Wl,-ld_classic` or `-Wl,-no_compact_unwind` must be appended in `Build Settings > Other Linker Flags` to to avoid linker errors in certain scenarios.
+Assertion failed: (false && "compact unwind compressed function offset doesn't fit in 24 bits").
 
 3. Set the `Build Settings > Dead Code Stripping` field in the `Xcode` project to `No`.
 
