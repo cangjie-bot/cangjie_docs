@@ -242,7 +242,7 @@ cjpm tree success
 - `-V, --verbose` 用于展示编译日志
 - `-g` 用于生成 `debug` 版本的输出产物
 - `--coverage` 用于生成覆盖率信息，默认情况下不开启覆盖率功能
-- `--cfg` 指定后，能够透传 `cjpm.toml` 中的自定义 `cfg` 选项，`cjpm.toml` 中的配置请参见 [profile.customized-option](#profilecustomized-option) 章节
+- `--cfg` 指定后，能够透传 `cjpm.toml` 中的自定义 `cfg` 选项，`cjpm.toml` 中的配置请参见 `profile.customized-option` 章节
 - `-m, --member <value>` 仅可在工作空间下使用，可用于指定单个模块作为编译入口
 - `--target <value>` 指定后，可交叉编译代码到目标平台，`cjpm.toml` 中的配置可参考 [target](#target) 章节
 - `--target-dir <value>` 用于指定输出产物的存放路径
@@ -478,7 +478,7 @@ Error: cjpm build failed
 - `-g` 用于生成 `debug` 版本的单元测试产物，此时的产物存放在 `target/debug/unittest_bin` 文件夹
 - `-i, --incremental` 用于指定测试代码的增量编译，默认情况下是全量编译
 - `--no-run` 用于仅编译单元测试产物
-- `--skip-build` 用于仅执行单元测试产物
+- `--skip-build` 用于仅运行单元测试产物
 - `--coverage` 用于生成覆盖率原始数据。使用 `cjpm test --coverage` 统计覆盖率时，源代码中的 `main` 不会再作为程序入口执行，因此会显示为未被覆盖。建议使用 `cjpm test` 之后，不再手写多余的 `main`
 - `--cfg` 指定后，能够透传 `cjpm.toml` 中的自定义 `cfg` 选项
 - `--module <value>` 用于指定目标测试模块，指定的模块需要被当前模块直接或间接依赖（或者是该模块本身），也可以通过 `--module "module1 module2"` 的方式指定多个符合要求的模块。不指定时默认只测试当前模块
@@ -588,7 +588,7 @@ Summary: TOTAL: 1
 - `--dry-run` 配置后，将不执行用例，仅打印
 - `--filter <value>` 用于过滤测试的子集，`value` 的形式如下所示：
     - `--filter=*` 匹配所有测试类
-    - `--filter=*.*` 匹配所有测试类所有测试用例(结果和*相同)
+    - `--filter=*.*` 匹配所有测试类所有测试用例（结果和*相同）
     - `--filter=*.*Test,*.*case*` 匹配所有测试类中以 `Test` 结尾的用例，或者所有测试类中名字中带有 `case` 的测试用例
     - `--filter=MyTest*.*Test,*.*case*,-*.*myTest` 匹配所有 `MyTest` 开头测试类中以 `Test` 结尾的用例，或者名字中带有 `case` 的用例，或者名字中不带有 `myTest` 的测试用例
 - `--include-tags <value>` 用于获取由 `@Tag` 宏指定的测试类别的子集。 `value` 的形式如下：
@@ -631,7 +631,7 @@ Summary: TOTAL: 1
 
 ### clean
 
-`clean` 用于清理构建过程中的临时产物（`target` 文件夹）。该命令支持通过短选项 `-g` 指定仅清理 `debug` 版本的产物。该命令支持通过长选项 `--target-dir <value>` 用于指定清理的产物存放路径，开发者需自身保证清理该目录行为的安全性。如果使用了 `cjpm build --coverage` 或者 `cjpm test --coverage` 功能，还会清除 `cov_output` 文件夹，以及当前目录下的 `*.gcno` 文件和 `*.gcda` 文件。同时，该命令也支持通过 `--skip-script` 配置跳过构建脚本的编译运行。
+`clean` 用于清理构建过程中的临时产物（`target` 文件夹）。该命令支持短选项 `-g` 指定仅清理 `debug` 版本的产物，以及长选项 `--target-dir <value>` 用于指定清理的产物存放路径（开发者需自行保证清理该目录行为的安全性）。如果使用了 `cjpm build --coverage` 或 `cjpm test --coverage` 功能，还会清除 `cov_output` 文件夹以及当前目录下的 `*.gcno` 和 `*.gcda` 文件。同时，该命令也支持 `--skip-script` 配置来跳过构建脚本的编译运行。
 
 例如：
 
@@ -1090,7 +1090,7 @@ abc = { path = "libs" }
   bbb = { path = "new/path/to/bbb" }
 ```
 
-配置后，编译 `demo` 模块时实际使用的间接依赖 `bbb` 即为`new/path/to/bbb` 下的 `bbb` 模块，`aaa` 中配置的 `path/to/bbb` 下的 `bbb` 模块不会被编译。
+配置后，编译 `demo` 模块时，实际使用的间接依赖 `bbb` 为 `new/path/to/bbb` 下的 `bbb` 模块。`aaa` 中配置的 `path/to/bbb` 下的 `bbb` 模块不会被编译。
 
 > **注意：**
 >
@@ -1242,7 +1242,7 @@ PATH = { value = "/usr/bin", splice-type = "prepend" }
     - `random-seed` 用来指定随机种子的值，参数值类型为正整数
     - `no-color` 指定执行结果在控制台中是否无颜色显示，值为 `true` 或 `false`
     - `report-path` 指定测试执行后的报告生成路径（不能通过 `@Configure` 配置）
-    - `report-format` 指定报告输出格式，当前当前单元测试报告仅支持 `xml` 格式（可忽略大小写），使用其它值将会抛出异常（不能通过 `@Configure` 配置），性能测试报告仅支持 `csv` 和 `csv-raw` 格式
+    - `report-format` 指定报告输出格式，当前单元测试报告仅支持 `xml` 格式（可忽略大小写），使用其它值将会抛出异常（不能通过 `@Configure` 配置），性能测试报告仅支持 `csv` 和 `csv-raw` 格式
     - `verbose` 指定显示编译过程详细信息，参数值类型为 `BOOL`，即值可为 `true` 或 `false`
 
 #### "profile.test.build"
@@ -1283,13 +1283,13 @@ verbose = true
     - `random-seed` 用来指定随机种子的值, 参数值类型为正整数
     - `no-color` 指定执行结果在控制台中是否无颜色显示，值为 `true` 或 `false`
     - `report-path` 指定测试执行后的报告生成路径（不能通过 `@Configure` 配置）
-    - `report-format` 指定报告输出格式，当前当前单元测试报告仅支持 `xml` 格式（可忽略大小写），使用其它值将会抛出异常（不能通过 `@Configure` 配置）, 性能测试报告仅支持 `csv` 和 `csv-raw` 格式
+    - `report-format` 指定报告输出格式，当前单元测试报告仅支持 `xml` 格式（可忽略大小写），使用其它值将会抛出异常（不能通过 `@Configure` 配置）, 性能测试报告仅支持 `csv` 和 `csv-raw` 格式
     - `verbose` 指定显示编译过程详细信息，参数值类型为 `BOOL`, 即值可为 `true` 或 `false`
     - `baseline-path` 与当前性能结果进行比较的现有报告的路径。默认情况下它使用 `--report-path` 值。
 
 #### "profile.bench.build"
 
-用于指定为 `cjpm bench` 构建可执行文件时使用的附加编译选项。与 `profile.test.build` 具有相同的配置。
+用于指定为 `cjpm bench` 构建可执行文件时使用的附加编译选项。配置与 `profile.test.build` 相同。
 
 #### "profile.bench.env"
 
@@ -1343,7 +1343,7 @@ cfg3 = "-O2"
 
 开发者可以通过配置 `target.target-name` 字段为某个 `target` 添加一系列配置项。`target` 的名称可以在相应的仓颉环境下通过命令 `cjc -v` 获取，命令输出中的 `Target` 项目即为该环境对应的 `target` 名称。上述用例应用于 `Linux` 系统，其他平台也适用，同样可以通过命令 `cjc -v` 获取 `target` 名称。
 
-可为特定 `target` 配置的专用配置项，将会适用于该 `target` 下的编译流程，同时也会适用于其他 `target` 指定该 `target` 作为目标平台的交叉编译流程。配置项列表如下：
+为特定 `target` 配置的专用配置项，将作用于该 `target` 的编译流程，也能被其他以该 `target` 为目标平台的交叉编译流程使用。配置项列表如下：
 
 - `compile-option`：额外编译命令选项
 - `override-compile-option`：额外全局编译命令选项
