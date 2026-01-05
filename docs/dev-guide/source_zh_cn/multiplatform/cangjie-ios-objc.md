@@ -1299,7 +1299,6 @@ public interface A {
 由于与其他语言特性的集成仍在开发中，以下场景暂不支持：
 
 - Cangjie 接口不得继承其他接口
-- 不支持泛型接口
 - 不支持泛型成员函数
 - 不支持成员属性、操作符重载函数
 - 成员函数不得为 static
@@ -1483,7 +1482,6 @@ static struct RuntimeParam defaultCJRuntimeParams = {0};
 由于与其他语言特性的集成仍在开发中，以下场景暂不支持：
 
 - Cangjie enum 不得实现其他接口
-- 不支持泛型 enum
 - 不支持泛型成员函数
 - 成员函数中不使用 Lambda
 - 不支持操作符重载
@@ -1651,7 +1649,6 @@ static struct RuntimeParam defaultCJRuntimeParams = {0};
 由于与其他语言特性的集成仍在开发中，以下场景暂不支持：
 
 - Cangjie 结构体不得实现其他接口
-- 不支持泛型结构体
 - 不支持泛型成员函数
 - 不支持操作符重载函数
 - 不支持函数重载
@@ -1796,7 +1793,6 @@ static struct RuntimeParam defaultCJRuntimeParams = {0};
 
 - Cangjie class 不得实现其他接口
 - 非 open 类仅支持 public 成员函数映射，open 类支持 public 成员函数 和 protected open 成员函数，其它成员不会报错，不会映射到 ObjC 端
-- 不支持泛型 class
 - 不支持泛型成员函数
 - 不支持函数重载
 - 非 open 类成员函数参数和返回值允许使用基础数据类型（数值类型、Bool 类型和 Unit 类型）和本包定义的非 open public class 类型，open 类仅支持基本数据类型（数值类型、Bool 类型和 Unit 类型）
@@ -2437,6 +2433,7 @@ ObjC 使用 Cangjie 泛型接口之前需对泛型类型进行配置，参考[�
 
 #### 规格限制
 
+- 泛型数据类型的使用需受其自身规格约束的限制
 - 暂不支持自定义数据类型
 - 支持的基础类型：Int、Int8、Int16、Int32、Int64、UInt8、UInt16、UInt32、UInt64、Float32、Float64、Bool
 - 用户自定义类型的泛型形参若有上界，该上界类型不能包含泛型参数
