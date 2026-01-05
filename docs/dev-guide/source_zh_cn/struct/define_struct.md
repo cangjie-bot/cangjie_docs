@@ -196,7 +196,7 @@ struct Rectangle {
 
 ## struct 成员的访问修饰符
 
-`struct` 的成员（包括成员变量、成员属性、构造函数、成员函数、操作符函数（详见[操作符重载](../function/operator_overloading.md)章节））用 4 种访问修饰符修饰：`private`、`internal`、`protected` 和 `public`，缺省的修饰符是 `internal`。
+`struct` 的成员包括成员变量、成员属性、构造函数、成员函数、操作符函数（详见[操作符重载](../function/operator_overloading.md)），这些成员可使用四种访问修饰符：`private`、`internal`、`protected` 和 `public`，缺省的修饰符是 `internal`。
 
 - `private` 表示在 `struct` 定义内可见。
 - `internal` 表示仅当前包及子包（包括子包的子包，详见[包](../package/toplevel_access.md)章节）内可见。
