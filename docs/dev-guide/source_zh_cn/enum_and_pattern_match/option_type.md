@@ -15,7 +15,7 @@ enum Option<T> {
 
 其中，`Some` 构造器的参数类型就是类型形参 `T`，当 `T` 被实例化为不同的类型时，会得到不同的 `Option` 类型，例如：`Option<Int64>`、`Option<String>`等。
 
-`Option` 类型还有一种简单的写法：在类型名前加 `?`。也就是说，对于任意类型 `Ty`，`?Ty` 等价于 `Option<Ty>`。例如，`?Int64` 等价于 `Option<Int64>`，`?String` 等价于 `Option<String>` 等等。
+`Option` 类型还有一种简单的写法：在类型名前加 `?`。也就是说，对于任意类型 `Ty`，`?Ty` 等价于 `Option<Ty>`。例如，`?Int64` 等价于 `Option<Int64>`，`?String` 等价于 `Option<String>`。
 
 下面的例子展示了如何定义 `Option` 类型的变量：
 
