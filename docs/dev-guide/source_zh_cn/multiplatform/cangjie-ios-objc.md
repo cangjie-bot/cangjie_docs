@@ -33,12 +33,12 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 
 **语法映射：**
 
-|            仓颉类型                            |                    ObjC 类型                       |
+|            仓颉语法                            |                    ObjC 语法                       |
 |:----------------------------------------------|:---------------------------------------------------|
 |`@ObjCMirror public interface A`         |        `@protocol A`                               |
 |  `@ObjCMirror public class A`           |        `@interface A`                              |
-|    `func fooAndB(a: A, b: B): R`              |        `- (R)foo:(A)a andB:(B)b`                   |
-|  `static func fooAndB(a: A, b: B): R`         |        `+ (R)foo:(A)a andB:(B)b`                   |
+|    `public open func fooAndB(a: A, b: B): R`              |        `- (R)foo:(A)a andB:(B)b`                   |
+|  `public static func fooAndB(a: A, b: B): R`         |        `+ (R)foo:(A)a andB:(B)b`                   |
 |    `prop foo: R`                              |        `@property(readonly) R foo`                 |
 |    `mut prop foo: R`                          |        `@property R foo`                           |
 |     `static prop foo: R`                      |        `@property(readonly, class) R foo`          |
@@ -82,7 +82,7 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 注意：
 
 1. ObjC 源码中标记为 `unavailable` 的类型不做映射转化
-2. 当前版本不支持 ObjC 中的全局函数与全局变量的转化
+2. 当前版本不支持 ObjC 中的全局变量的转化
 3. 匿名 `C enumeration` 的类型不做映射转化
 4. `C unions` 的类型不做映射转化
 5. `const` `volatile` `restrict`  的类型不做映射转化
@@ -201,7 +201,7 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
     import objc.lang.*
 
     @ObjCMirror
-    open class Base {
+    public open class Base {
         public init()
         public open func f(): Unit
     }
@@ -272,16 +272,16 @@ cjc 自动生成胶水代码需要获取在跨编程语言调用中涉及的 Obj
 **ObjCInteropGen 工具使用环境准备步骤：**
 
 1. 安装对应版本的仓颉 SDK，安装方法请参见[开发指南](https://cangjie-lang.cn/docs?url=%2F1.0.0%2Fuser_manual%2Fsource_zh_cn%2Ffirst_understanding%2Finstall_Community.html)。
-2. 执行如下命令安装 LLVM 15。
+2. 执行如下命令安装 LLVM 16。
 
     ```bash
-    brew install llvm@15
+    brew install llvm@16
     ```
 
-3. 将 `llvm@15/lib/` 子目录添加到 `DYLD_LIBRARY_PATH` 环境变量中。
+3. 将 `llvm@16/lib/` 子目录添加到 `DYLD_LIBRARY_PATH` 环境变量中。
 
    ```bash
-    export DYLD_LIBRARY_PATH=/opt/homebrew/opt/llvm@15/lib:$DYLD_LIBRARY_PATH
+    export DYLD_LIBRARY_PATH=/opt/homebrew/opt/llvm@16/lib:$DYLD_LIBRARY_PATH
     ```
 
 4. 检测是否安装成功：执行如下命令，如果出现 ObjCInteropGen 使用说明，则证明安装成功。
@@ -360,7 +360,6 @@ class A <: M {
 - 构造函数显式声明时，不为 private/static/const 类型。无显式声明的构造函数时，则无法构建该对象。
 - 仅支持单个命名参数。
 - 暂不支持默认参数值。
-- 暂不支持 this() 调用。
 
 ### 成员函数
 
@@ -481,7 +480,7 @@ class A <: M {
 - 不支持 private/const 成员。
 - 支持 static/open 修饰。
 - 暂不支持映射 assign/readonly 等 attribute，仓颉侧映射均按照 readwrite 处理，在 objc 侧处理上述 attribute 的属性时，以 objc 规格为准。
-- 若属性被 Impl 子类重载，则不允许在 ObjC 侧的构造函数中调用该属性，将出现运行时崩溃。
+- 若属性被 Impl 子类覆盖，则不允许在 ObjC 侧的构造函数中调用该属性，将出现运行时崩溃。
 
 ### 成员变量
 
@@ -705,7 +704,9 @@ class A <: M {
     public init() {}
 
     public func acceptFoo(foo: ?Foo) {
-        foo.foo()
+        match (foo) {
+            case Some(x) => x.foo()
+        }
     }
 }
 ```
@@ -715,11 +716,10 @@ class A <: M {
 - 支持成员函数，规则同 [ObjCMirror 类](#成员函数)
 - 支持属性，规则同 [ObjCMirror 类](#属性)
 - 暂不支持默认成员实现。
-- 暂不支持映射 ObjC protocols 的构造函数。
 - 暂不支持映射 ObjC protocols 的 @optional 和 @required 成员函数。
 - 暂不支持成员变量。
 - @ObjCMirror 接口仅支持继承 @ObjCMirror 接口，不支持其他类型。
-- 当成员函数或构造函数有超过一个的参数时，必须使用 @ForeignName。
+- 当成员函数有超过一个的参数时，必须使用 @ForeignName。
 
 ## ObjCImpl 类
 
@@ -758,10 +758,10 @@ class A <: M {
 ```objc
 int main(int argc, char** argv) {
     @autoreleasepool {
-        M* a = [[A alloc] init];
-        [a goo];
-        M* b = [[A alloc] init];
-        [b goo];
+        M* a = [[A alloc] init:1.0];
+        [a goo:1.0];
+        M* b = [[A alloc] init:1.0];
+        [b goo:1.0];
     }
     return 0;
 }
@@ -909,7 +909,7 @@ int main(int argc, char** argv) {
 
 ```cangjie
 @ObjCMirror
-open class M
+open class M {}
 
 @ObjCImpl
 open class A <: M {
@@ -940,7 +940,7 @@ open class B <: A {}
 - 当成员函数或构造函数有超过一个参数时，必须使用 @ForeignName。（当该函数为重载函数时则不需要）
 - 不支持普通仓颉类继承 Impl 类。
 - 不支持继承普通仓颉类。
-- Impl 类必须继承 Mirror 类。
+- Impl 类必须继承 Mirror/Impl 类。
 - Impl 可以实现零个或多个 Mirror 接口。
 
 > 注意：
