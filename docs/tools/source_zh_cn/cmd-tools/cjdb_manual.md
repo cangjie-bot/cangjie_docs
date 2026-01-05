@@ -109,7 +109,7 @@ CJDB 是一款基于 `lldb` 开发的仓颉程序命令行调试工具。当前 
 
 #### 是否进入带调试信息的函数
 
-可以使用`thread step-over <cmd-options> [<thread-id>]`（`thread step-over` 可简写为 `next` 或`n`）不进入函数，会直接执行下一行代码。
+可以使用`thread step-over <cmd-options> [<thread-id>]`（`thread step-over` 可简写为 `next` 或`n`）跳过当前函数调用，直接执行函数调用后的下一行代码。
 
 ```text
 (cjdb) n
@@ -197,7 +197,7 @@ breakpoint set --file test.cj --line line_number
 
 `--file` 指定文件。
 
-对于单文件，只需要输入行号即可，对于多文件，需要加上文件名字。
+当调试单个文件时，只需要输入行号即可；当调试涉及多个文件时，需要同时指定文件名和行号。
 
 `b test.cj:4` 是 `breakpoint set --file test.cj --line 4` 的缩写。
 
@@ -608,9 +608,9 @@ launch 方式有两种加载方式，如下：
 
 ### attach 方式
 
-attach 方式调试被调程序
+使用 attach 方式调试目标程序。
 
-针对正在运行的程序，支持 attach 方式调试被调程序，如下：
+针对正在运行的程序，支持 attach 方式进行调试，如下：
 
 ```text
 ~/0901/cangjie-linux-x86_64-release/bin$ cjdb
@@ -659,7 +659,7 @@ Architecture set to: x86_64-unknown-linux-gnu.
        23       }
     ```
 
-3. 对于 `Enum` 类型的显示，如果该 `Enum` 的构造器存在参数的情况下，会显示成如下样式：
+3. 对于 `Enum` 类型的显示，当 `Enum` 构造器有参数时，会显示成如下样式：
 
     <!-- code_no_check -->
 
@@ -685,7 +685,7 @@ Architecture set to: x86_64-unknown-linux-gnu.
 
 4. 仓颉 `cjdb` 基于 `lldb` 构建，所以支持 `lldb` 原生基础功能，详情见 [lldb 官方文档](https://lldb.llvm.org)。
 
-5. 如果开发者在高于该版本的系统环境上运行时可能会出现不兼容的问题和风险，如 `C` 语言互操作场景， cjdb 无法正常解析 `C` 代码的文件和行号信息。
+5. 如果开发者在高于该版本的系统环境上运行，可能会遇到不兼容的问题和风险，如 `C` 语言互操作场景，cjdb 无法正常解析 `C` 代码的文件和行号信息。
 
     ```c
     int32_t cfoo()
@@ -744,7 +744,7 @@ Architecture set to: x86_64-unknown-linux-gnu.
 
     问题原因：`docker` 创建容器时，未开启 SYS_PTRACE 权限。
 
-    解决方案：创建新容器时加上如下选项，并且删除已存在容器。
+    解决方案：创建新容器时加上如下选项，并且删除已存在的容器。
 
     ```shell
     docker run --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --security-opt apparmor=unconfined
@@ -807,7 +807,7 @@ Architecture set to: x86_64-unknown-linux-gnu.
     (cjdb)
     ```
 
-5. `macOS` 平台表达式计算报错 `Expression can't be run, because there is no JIT compiled function` 。
+5. `macOS` 平台表达式计算报错 `Expression can't be run, because there is no JIT compiled function`。
 
     问题原因：表达式暂不支持在 `macOS` 平台使用。
 
