@@ -577,11 +577,11 @@ $ cjc test.cj --pgo-instr-use=default.profdata -o testOptimized
 | 本地平台 (host)    | 目标平台 (target)   | 支持的软件包 |
 | ------------------ | ------------------ | ------ |
 | x86_64-linux-gnu   | x86_64-windows-gnu     | cangjie-sdk-linux-x64-x.y.z.tar.gz |
-| x86_64-linux-gnu   | aarch64-linux-android31     | cangjie-sdk-linux-x64-android-x.y.z.tar.gz |
+| x86_64-linux-gnu   | aarch64-linux-android26     | cangjie-sdk-linux-x64-android-x.y.z.tar.gz |
 | aarch64-linux-gnu   | x86_64-windows-gnu     | cangjie-sdk-linux-aarch64.x.y.z.tar.gz |
-| x86_64-apple-darwin | aarch64-linux-android31 | cangjie-sdk-mac-x64-android.x.y.z.tar.gz |
-| x86_64-windows-gnu | aarch64-linux-android31 | cangjie-sdk-windows-x64-android.x.y.z.tar.gz |
-| aarch64-apple-darwin | aarch64-linux-android31 | cangjie-sdk-mac-aarch64-android.x.y.z.tar.gz |
+| x86_64-apple-darwin | aarch64-linux-android26 | cangjie-sdk-mac-x64-android.x.y.z.tar.gz |
+| x86_64-windows-gnu | aarch64-linux-android26 | cangjie-sdk-windows-x64-android.x.y.z.tar.gz |
+| aarch64-apple-darwin | aarch64-linux-android26 | cangjie-sdk-mac-aarch64-android.x.y.z.tar.gz |
 | aarch64-apple-darwin | aarch64-apple-ios | cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz |
 | aarch64-apple-darwin | aarch64-apple-ios-simulator | cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz |
 | aarch64-apple-darwin | x86_64-apple-ios-simulator | cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz |
