@@ -47,14 +47,14 @@ main() {
 }
 ```
 
-请注意，得到的目录结构如下：
+得到的目录结构如下：
 
 ```text
 // Directory layout.
 src
 |-- define
-|     `-- dprint.cj
-`-- main.cj
+|     |-- dprint.cj
+|-- main.cj
 ```
 
 在当前目录（`src`）下，运行编译命令：

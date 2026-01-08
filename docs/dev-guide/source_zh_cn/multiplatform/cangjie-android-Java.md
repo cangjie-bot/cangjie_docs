@@ -1019,6 +1019,10 @@ public class Impl <: JImpl {
 }
 ```
 
+> **注意：**
+>
+> 暂不支持带有非基础类型的 JArray 在 Android 上运行。
+
 ### 字符串
 
 JString 类型支持在仓颉和 Java 侧做字符串数据的映射，支持从 Java 侧转换字符串到仓颉侧，或将仓颉字符串映射到 Java 侧。
@@ -1294,6 +1298,9 @@ Cangjie 与 Java 的互操作中，需要支持在 Java 使用 Cangjie 的 struc
 
 1. 支持 Java 中调用 Cangjie 侧 public struct 的 public 实例方法，静态方法
 2. 支持 Cangjie 侧 public struct 可以作为 Java 函数的参数类型，返回值类型
+3. 支持 Cangjie 侧将 Lambda 表达式、元组用作函数的参数类型或返回值类型。使用前需在配置文件中配置相关签名和类型信息，具体配置方法请参见类型配置介绍[类型配置介绍](#java-使用-配置文件)
+    - Lambda 表达式支持的参数类型和返回值类型包括：Int、Int8、Int16、Int32、Int64、Float32、Float64、Bool、Unit
+    - 元组支持的元素类型包括：Int、Int8、Int16、Int32、Int64、Float32、Float64、Bool
 
 示例代码如下所示：
 
@@ -1382,6 +1389,9 @@ public class Main {
 2. 在语言边界之间传递枚举对象。
 3. 调用枚举中定义的静态或非静态方法。
 4. 支持枚举属性的访问。
+5. 支持 Cangjie 侧将 Lambda 表达式、元组用作函数的参数类型或返回值类型。使用前需在配置文件中配置相关签名和类型信息，具体配置方法请参见类型配置介绍[类型配置介绍](#java-使用-配置文件)
+    - Lambda 表达式支持的参数类型和返回值类型包括：Int、Int8、Int16、Int32、Int64、Float32、Float64、Bool、Unit
+    - 元组支持的元素类型包括：Int、Int8、Int16、Int32、Int64、Float32、Float64、Bool
 
 示例代码如下，仓颉的枚举类型会被映射到 Java 的 Class 类型：
 
@@ -1471,11 +1481,10 @@ public class TimeUnit {
 目前枚举支持与其他语言特性组合仍在开发过程中，暂不支持如下场景：
 
 1. 要求 Cangjie enum 无 interface 实现
-2. 要求 Cangjie enum 成员函数中不使用 Lambda
-3. 要求 Cangjie enum 中不包含操作符重载
-4. 要求 Cangjie enum 中仅使用基础的数据类型
-5. 要求 Cangjie 不使用 extend 对 enum 进行拓展
-6. 不支持 option
+2. 要求 Cangjie enum 中不包含操作符重载
+3. 要求 Cangjie enum 中仅使用基础的数据类型
+4. 要求 Cangjie 不使用 extend 对 enum 进行拓展
+5. 不支持 Option
 
 ### Java 使用 Cangjie 的 Class
 
@@ -1485,6 +1494,9 @@ public class TimeUnit {
 - 允许访问父类中的非 private 方法(包括 public、protected 方法)
 - 允许重写父类中的非静态非 private open 方法(包括 public、protected 方法)
 - 支持基础数据类型作为函数参数类型
+- 支持 Cangjie 侧将 Lambda 表达式、元组用作函数的参数类型或返回值类型。使用前需在配置文件中配置相关签名和类型信息，具体配置方法请参见类型配置介绍[类型配置介绍](#java-使用-配置文件)
+    - Lambda 表达式支持的参数类型和返回值类型包括：Int、Int8、Int16、Int32、Int64、Float32、Float64、Bool、Unit
+    - 元组支持的元素类型包括：Int、Int8、Int16、Int32、Int64、Float32、Float64、Bool
 
 示例代码如下：
 
@@ -1544,6 +1556,10 @@ public class Main
 - 将仓颉接口类型作为 Java 函数的参数类型。
 - 在 Java 端实现仓颉接口，并作为仓颉接口类型的参数传递。
 - 调用仓颉接口中的默认实现。
+- 支持 Cangjie 侧将 Lambda 表达式、元组用作函数的参数类型或返回值类型。使用前需在配置文件中配置相关签名和类型信息，具体配置方法请参见类型配置介绍[类型配置介绍](#java-使用-配置文件)
+    - Lambda 表达式支持的参数类型和返回值类型包括：Int、Int8、Int16、Int32、Int64、Float32、Float64、Bool、Unit
+    - 元组支持的元素类型包括：Int、Int8、Int16、Int32、Int64、Float32、Float64、Bool
+
 
 示例代码如下，仓颉的接口类型会被映射到 Java 的 interface 类型：
 
@@ -1693,9 +1709,9 @@ public class User {
 Java 使用 Cangjie 泛型类（非 open 类）、结构体之前需对泛型类型进行配置，参考[类型配置介绍](#java-使用-配置文件)
 
 - 支持范围
-    - 泛型类型支持 Cangjie 基础数值类型和 Bool 类型
+    - 泛型类型支持 Cangjie 大部分基础数值类型，详情请参见[规格限制](#规格限制)
     - 支持多泛型参数用法
-    - 支持非静态成员函数带有泛型参数和返回值
+    - 支持实例成员函数带有泛型参数和返回值
 
 - class/struct 均参考如下示例：
 
@@ -1740,14 +1756,12 @@ Java 使用 Cangjie 泛型类（非 open 类）、结构体之前需对泛型类
         { name = "GenericClass<Float64>", symbols = [
             "getValue",
             "GenericClass",
-            "value",
             "setValue"
         ]},
 
         { name = "GenericClass<Int32>", symbols = [
             "getValue",
             "GenericClass",
-            "value",
             "setValue"
         ]}
     ]
@@ -1814,9 +1828,9 @@ Java 使用 Cangjie 泛型类（非 open 类）、结构体之前需对泛型类
 Java 使用 Cangjie 泛型枚举之前需对泛型类型进行配置，参考[类型配置介绍](#java-使用-配置文件)
 
 - 支持范围
-    - 泛型类型支持 Cangjie 基础数值类型和 Bool 类型
+    - 泛型类型支持 Cangjie 大部分基础数值类型，详情请参见[规格限制](#规格限制)
     - 支持多泛型参数用法
-    - 支持非静态成员函数、属性带有泛型参数和返回值
+    - 支持实例成员函数、属性带有泛型参数和返回值
 
 - 示例
     - Cangije 侧源码
@@ -1871,8 +1885,7 @@ Java 使用 Cangjie 泛型枚举之前需对泛型类型进行配置，参考[�
         { name = "GenericEnum", type_arguments = ["Int32"] },
         { name = "GenericEnum<Int32>", symbols = [
             "printValue",
-            "setValue",
-            "value"
+            "setValue"
         ]}
     ]
     ```
@@ -1934,9 +1947,9 @@ Java 使用 Cangjie 泛型枚举之前需对泛型类型进行配置，参考[�
 Java 使用 Cangjie 泛型接口之前需对泛型类型进行配置，参考[类型配置介绍](#java-使用-配置文件)
 
 - 支持范围
-    - 泛型类型支持 Cangjie 基础数值类型和 Bool 类型
+    - 泛型类型支持 Cangjie 大部分基础数值类型，详情请参见[规格限制](#规格限制)
     - 支持多泛型参数用法
-    - 支持非静态抽象成员函数、默认实现函数带有泛型参数和返回值
+    - 支持实例成员函数带有泛型参数和返回值
 
 - 示例
     - Cangije 侧源码
@@ -1999,7 +2012,10 @@ Java 使用 Cangjie 泛型接口之前需对泛型类型进行配置，参考[�
 #### 规格限制
 
 - 暂不支持自定义数据类型
-- 支持如下类型: Int8,Int16,Int32,Int64,Float16,Float32,Bool
+- 支持的基础类型：Int、Int8、Int16、Int32、Int64、Float32、Float64、Bool
+- 暂不支持的无符号类型：UInt8、UInt32、UInt64（在Java侧存在越界风险）
+- 用户自定义类型的泛型形参若有上界，该上界类型不能包含泛型参数
+- 暂仅支持无内层类型形参的实例成员函数，其形参类型和返回类型允许使用外层类型形参
 
 ### Java 使用 配置文件
 
@@ -2022,16 +2038,22 @@ generic_object_configuration = [
     { name = "GenericClass<Int64>", symbols = [
         "getValue",
         "GenericClass",
-        "value",
         "setValue"
     ]},
 
     { name = "GenericClass<Int32>", symbols = [
         "getValue",
         "GenericClass",
-        "value",
         "setValue"
     ]}
+]
+lambda_patterns = [
+    {signature = "(Int32) -> Int32"},
+    {signature = "(Int16) -> Float64"}
+]
+tuple_configuration = [
+    "(Int32, Int64)",
+    "(Float64, Int32)"
 ]
 ```
 
@@ -2093,9 +2115,9 @@ public class GenericClass<T> {
 
 - **[default]** 字段：全局默认设置，package 未具体配置信息情况下采用默认设置规则
 
-- **APIStrategy** 字段：符号可见性策略表示外部配置默认 Cangjie 符号对目标语言的可见性
+  - **APIStrategy** 字段：符号可见性策略表示外部配置默认 Cangjie 符号对目标语言的可见性
 
-- **GenericTypeStrategy** 字段：泛型实例化策略表示外部配置默认 Cangjie 泛型相关 API 对目标语言的实例化范围
+  - **GenericTypeStrategy** 字段：泛型实例化策略表示外部配置默认 Cangjie 泛型相关 API 对目标语言的实例化范围
 
 - **[[package]]** 字段：包配置信息
 
@@ -2133,17 +2155,124 @@ public class GenericClass<T> {
                 { name = "GenericClass<Int64>", symbols = [
                     "getValue",
                     "GenericClass",
-                    "value",
                     "setValue"
                 ]},
 
                 { name = "GenericClass<Int32>", symbols = [
                     "getValue",
                     "GenericClass",
-                    "value",
                     "setValue"
                 ]}
             ```
+    - **lambda_patterns** 字段：用于配置需映射到 Java 侧的 Lambda 表达式函数签名列表
+      - signature 字段：必选字段，用于配置 Lambda 表达式函数签名信息
+  
+        示例如下：
+
+        ```toml
+        lambda_patterns = [
+            {signature = "(Int32) -> Int32"}
+        ]
+        ```
+
+        以上配置将会被映射成如下 Java 类型：
+
+        ```Java
+        @FunctionalInterface
+        public interface Int32ToInt32 {
+            public int call(int p1);
+            public static Int32ToInt32 box(Int32ToInt32 lambda) {       
+                if (lambda instanceof Int32ToInt32.Box) {
+                return lambda;
+            } else {
+                return new Box(lambda);
+            }
+            }
+            class Box implements Int32ToInt32 {
+                static {
+                    loadLibrary("cj");
+                }
+
+                long cjLambdaId = 0;
+                Int32ToInt32 javaLambda;
+                private Box(Int32ToInt32 javaL)
+                {
+                    javaLambda = javaL;
+                }
+                private Box(long cjId)
+                {
+                    cjLambdaId = cjId;
+                }
+                @Override
+                public int call(int p1)
+                {
+                    return this.javaLambda != null ? javaLambda.call(p1): callImpl(cjLambdaId, p1);
+                }
+                @Override
+                public void finalize()
+                {
+                    if (cjLambdaId != 0) {
+                    deleteCJObject(cjLambdaId);
+                }
+            }
+            private static native int callImpl(long cjLambdaId, int p1);
+            private static native void deleteCJObject(long cjLambdaId);
+        }
+        ```
+
+    - **tuple_configuration** 字段：用于配置需映射到 Java 侧的元组类型信息列表
+  
+        示例代码如下：
+  
+        ```toml
+        tuple_configuration = [
+            "(Int32, Int64)"
+        ]
+        ```
+
+        以上配置将会被映射成如下 Java 类型：
+        
+        ```toml
+        final public class TupleOfInt32Int64 {
+            static {
+                loadLibrary("cjworld.cjworld");
+            }
+
+            long self;
+
+            public TupleOfInt32Int64(int item0, long item1) {
+                self = initCJObjectil(item0, item1);
+            }
+
+            private TupleOfInt32Int64(int item0, long item1, $$NativeConstructorMarker __init__) {
+            }
+
+            public native long initCJObjectil(int item0, long item1);
+
+            private TupleOfInt32Int64 (long id, $$NativeConstructorMarker __init__) {
+                self = id;
+            }
+
+            public int item0() {
+                return item0(this.self);
+            }
+
+            public native int item0(long self);
+
+            public long item1() {
+                return item1(this.self);
+            }
+
+            public native long item1(long self);
+
+            public native void deleteCJObject(long self);
+
+            @Override
+            public void finalize() {
+                deleteCJObject(this.self);
+            }
+        }
+        ```
 
 #### 符号控制规格约束
 

@@ -86,7 +86,7 @@ import std.net.*
 
 let SERVER_PORT: UInt16 = 8080
 
-func runUpdServer() {
+func runUdpServer() {
     try (serverSocket = UdpSocket(bindAt: SERVER_PORT)) {
         serverSocket.bind()
 
@@ -101,7 +101,7 @@ func runUpdServer() {
 
 main(): Int64 {
     let future = spawn {
-        runUpdServer()
+        runUdpServer()
     }
     sleep(Duration.second)
 

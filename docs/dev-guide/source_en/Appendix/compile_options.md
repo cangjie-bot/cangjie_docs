@@ -446,6 +446,15 @@ This option only takes effect when compiling dynamic libraries or executable fil
 2. `--static-std` cannot be used with the `--dy-libs` option; otherwise, an error will occur.
 3. When `--dy-std` is used alone, the `--dy-libs` option is enabled by default, and a warning message will be displayed.
 4. When `--dy-libs` is used alone, the `--dy-std` option is enabled by default, and a warning message will be displayed.
+5. Platform support capabilities are as follows:
+
+| Target Platform | Static Linking | Dynamic Linking |
+| :-------------: | :------------: | :-------------: |
+|      Linux      |    Supported   |    Supported    |
+|      macOS      |    Supported   |    Supported    |
+|     Windows     |    Supported   |    Supported    |
+|  OpenHarmony  |  Not Supported |    Supported    |
+
 
 ### `--stack-trace-format=[default|simple|all]`
 
