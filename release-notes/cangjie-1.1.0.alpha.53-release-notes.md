@@ -65,15 +65,14 @@
 
 ### 新增特性
 
-    注意该节按需提供，若没有，则删除
+- 标准库支持 ios-x86_64 模拟器构建以及运行。
+- [core](https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/stdlib/doc/libs/std/core/core_package_overview.md) 包中的 [Thread](https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/stdlib/doc/libs/std/core/core_package_api/core_package_classes.md#class-thread) 类新增 [handleUncaughtErrorBy](https://gitcode.com/Cangjie/cangjie_runtime/blob/dev/stdlib/doc/libs/std/core/core_package_api/core_package_classes.md#static-func-handleuncaughterrorbyerror---unit) 接口用于注册线程未处理错误。
 
 ### 变更特性
 
-    注意该节按需提供，若没有，则删除
-
 |变更前|变更后|适配举例|
 |---|---|--|
-|   |   |   |
+| 正则库依赖的开源PCRE2版本为10.44 | 正则库依赖的开源PCRE2版本升级为10.46 | NA |
 
 ### 修复问题
 
