@@ -4,12 +4,13 @@ Developers can cross-compile their Cangjie programs to run on different architec
 
 - Cross-compilation from `Linux/macOS` platform to `android-aarch64` platform
 - Cross-compilation from `Linux/macOS` platform to `android-x86_64` platform
-- Cross-compilation from `Linux/macOS` platform to `ios-aarch64` platform
-- Cross-compilation from `Linux/macOS` platform to `ios-simulator-aarch64` platform
+- Cross-compilation from `macOS` platform to `ios-aarch64` platform
+- Cross-compilation from `macOS` platform to `ios-simulator-aarch64` platform
+- Cross-compilation from `macOS` platform to `ios-simulator-x86_64`  platform
 
-The Cangjie programming language now supports cross-compilation to `Android API 31` and `iOS`, enabling developers to build applications across different platforms.
+The Cangjie programming language now supports cross-compilation to `Android API 26+` and `iOS`, enabling developers to build applications across different platforms.
 
-## Cross-Compiling Cangjie to Android API 31
+## Cross-Compiling Cangjie to Android API 26+
 
 ### Package Download
 
@@ -20,16 +21,15 @@ Developers can use Cangjie installation packages that support cross-compilation 
 - `cangjie-sdk-linux-x64-android.x.y.z.tar.gz`
 - `cangjie-sdk-windows-x64-android.x.y.z.zip`
 - `cangjie-sdk-windows-x64-android.x.y.z.exe`
-- `cangjie-sdk-mac-x64-android.x.y.z.tar.gz`
 - `cangjie-sdk-mac-aarch64-android.x.y.z.tar.gz`
 
-For example: To cross-compile to `Android API 31` on a `linux x64` platform, download and install the `cangjie-sdk-linux-x64-android.x.y.z.tar.gz` package.
+For example: To cross-compile to `Android API 26+` on a `linux x64` platform, download and install the `cangjie-sdk-linux-x64-android.x.y.z.tar.gz` package.
 
-In addition to the cross-compilation supported Cangjie package, you also need to download the `Android NDK` supporting `Android API 31`. Please download the latest `NDK` package from the official `Android` website.
+In addition to the cross-compilation supported Cangjie package, you also need to download the `Android NDK` supporting `Android API 26+`. Please download the latest `NDK` package from the official `Android` website.
 
 ### Compilation
 
-Cross-compiling Cangjie to `Android API 31` requires the following two dependency directories:
+Cross-compiling Cangjie to `Android API 26+` requires the following two dependency directories:
 
 1. `sysroot` directory, provided by `Android NDK`, typically located at `<ndk-path>/toolchains/llvm/prebuilt/<platform>/sysroot`.
 
@@ -37,7 +37,8 @@ Cross-compiling Cangjie to `Android API 31` requires the following two dependenc
 
 When using `cjc` for cross-compilation, the following additional options must be specified (replace `< >` parts with actual directories):
 
-- `--target=aarch64-linux-android31` specifies the target platform `Android API 31` for cross-compilation
+- `--target=aarch64-linux-android` defaults to API 26 for cross-compilation;
+append the API level suffix explicitly for a higher version, e.g. `--target=aarch64-linux-android31` for API 31.
 - `--sysroot=<sysroot-path>` specifies the toolchain's root directory path `<sysroot-path>`
 - `-L<lib-path>` specifies the directory `<lib-path>` containing `libclang_rt.builtins-aarch64-android.a`
 
