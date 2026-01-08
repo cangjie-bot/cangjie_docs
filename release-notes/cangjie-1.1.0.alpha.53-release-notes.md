@@ -20,11 +20,19 @@
 
 ### 新增特性
 
+<<<<<<< Updated upstream
     * 互操作支持 Java 使用 Cangjie 泛型类型，详见[仓颉-Java 互操作](../docs/dev-guide/source_zh_cn/multiplatform/cangjie-android-Java.md)。
     * 互操作支持 Java 使用 Cangjie Lambda表达式类型，详见[仓颉-Java 互操作](../docs/dev-guide/source_zh_cn/multiplatform/cangjie-android-Java.md)。
     * 互操作支持 Java 使用 Cangjie 元组类型，详见[仓颉-Java 互操作](../docs/dev-guide/source_zh_cn/multiplatform/cangjie-android-Java.md)。
     * 互操作支持 ObjC 使用 Cangjie Open class 类型，详见[仓颉-ObjC 互操作](../docs/dev-guide/source_zh_cn/multiplatform/cangjie-ios-objc.md)。
     * 互操作支持 ObjC 使用 Cangjie 泛型类型，详见[仓颉-ObjC 互操作](../docs/dev-guide/source_zh_cn/multiplatform/cangjie-ios-objc.md)。
+=======
+* 互操作支持 Java 使用 Cangjie 泛型类型，详见[仓颉-Java 互操作](../docs/dev-guide/source_zh_cn/multiplatform/cangjie-android-Java.md)。
+* 互操作支持 Java 使用 Cangjie Lambda表达式类型，详见[仓颉-Java 互操作](../docs/dev-guide/source_zh_cn/multiplatform/cangjie-android-Java.md)。
+* 互操作支持 Java 使用 Cangjie 元组类型，详见[仓颉-Java 互操作](../docs/dev-guide/source_zh_cn/multiplatform/cangjie-android-Java.md)。
+* 互操作支持 ObjC 使用 Cangjie Open class 类型，详见[仓颉-ObjC 互操作](../docs/dev-guide/source_zh_cn/multiplatform/cangjie-ios-objc.md)。
+* 互操作支持 ObjC 使用 Cangjie 泛型类型，详见[仓颉-ObjC 互操作](../docs/dev-guide/source_zh_cn/multiplatform/cangjie-ios-objc.md)。
+>>>>>>> Stashed changes
 
 ### 变更特性
 
