@@ -39,10 +39,6 @@
 * common sealed class 的所有直接子类型必须在同一个 source set，详见[跨平台](docs/dev-guide/source_zh_cn/multiplatform/common_platform.md)。
 * 函数默认参数可在 common 或 platform 声明任一侧定义，详见[跨平台](docs/dev-guide/source_zh_cn/multiplatform/common_platform.md)。
 
-|变更前|变更后|适配举例|
-|---|---|--|
-|  | | |
-
 ### 修复问题
 
 * 修复[【缺陷】运行时崩溃Thread "main" catched unhandled SIGSEGV (Segmentation fault) from runtime frame.](https://gitcode.com/Cangjie/UsersForum/issues/2815) 问题。
