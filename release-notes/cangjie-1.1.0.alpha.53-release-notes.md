@@ -47,19 +47,17 @@
 
 ### 新增特性
 
-    注意该节按需提供，若没有，则删除
-
-### 变更特性
-
-    注意该节按需提供，若没有，则删除
-
-|变更前|变更后|适配举例|
-|---|---|--|
-|   |   |   |
+【[issue262](https://gitcode.com/Cangjie/cangjie_runtime/issues/275)】仓颉运行时支持 ios-x86_64 模拟器构建以及运行
 
 ### 修复问题
 
-    注意该节按需提供，若没有，则删除 
+【[issue275](https://gitcode.com/Cangjie/cangjie_runtime/issues/275)】优化`ohos cjthread`日志
+【[issue288](https://gitcode.com/Cangjie/cangjie_runtime/issues/288)】修复使用“`--static`”编译选项时出现的“`__gnu_cxx::__verbose_terminate_handler()` 的多重定义”问题
+【[issue289](https://gitcode.com/Cangjie/cangjie_runtime/issues/289)】修复 `windows` 静态链接运行报错的问题
+【[issue293](https://gitcode.com/Cangjie/cangjie_runtime/issues/293)】修复上游包新增满足兼容性的更新时，部分程序会运行错误的问题
+【[issue320](https://gitcode.com/Cangjie/cangjie_runtime/issues/320)】修复 `mac` 平台用户注册的信号处理函数中抛出未捕获异常，程序仍然因为该信号结束的问题
+【[issue331](https://gitcode.com/Cangjie/cangjie_runtime/issues/331)】修复计算 `target` 所属 `ExtensionDef` 错误
+【[issue332](https://gitcode.com/Cangjie/cangjie_runtime/issues/332)】修复 `lds` 脚本中合并 `text section` 问题，可能会导致 `section` 过多，链接失败问题
 
 ## 标准库
 
