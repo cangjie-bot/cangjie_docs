@@ -521,6 +521,8 @@ $ cjc test.cj --compile-as-exe
 
 使能插桩编译，生成携带插桩信息的可执行程序。
 
+该选项支持传入路径参数，在传入路径参数且该路径在执行仓颉程序时可写的情况下，会将profile信息写入到指定的路径文件下。
+
 编译 macOS 与 Windows 目标时暂不支持使用该功能。
 
 `PGO`（全称 `Profile-Guided Optimization`）是一种常用的编译优化技术，通过使用运行时 profiling 信息进一步提升程序性能。`Instrumentation-based PGO` 是使用插桩信息的一种 `PGO` 优化手段，它通常包含三个步骤：
@@ -533,6 +535,11 @@ $ cjc test.cj --compile-as-exe
 # 生成支持源码执行信息统计（携带插桩信息）的可执行程序 test
 $ cjc test.cj --pgo-instr-gen -o test
 # 运行可执行程序 test 结束后，生成 default.profraw 配置文件
+$ ./test
+
+# 生成支持源码执行信息统计（携带插桩信息）的可执行程序 test 并指定profile文件路径
+$ cjc test.cj --pgo-instr-gen=/mypath/my.profraw -o test
+# 运行可执行程序 test 结束后，生成 /mypath/my.profraw 配置文件
 $ ./test
 ```
 

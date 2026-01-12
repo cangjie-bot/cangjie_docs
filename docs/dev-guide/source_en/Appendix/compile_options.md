@@ -530,6 +530,8 @@ $ cjc test.cj --compile-as-exe
 
 Enables instrumentation compilation, generating an executable program with instrumentation information.
 
+This option supports passing an optional path parameter. When a path parameter is provided and the path is writable during Cangjie program execution, profile information will be written to the specified path file.
+
 This feature is temporarily unsupported when compiling for macOS or Windows targets.
 
 `PGO` (`Profile-Guided Optimization`) is a common compilation optimization technique that uses runtime profiling information to further improve program performance. `Instrumentation-based PGO` is a `PGO` optimization method that uses instrumentation information and typically involves three steps:
@@ -542,6 +544,11 @@ This feature is temporarily unsupported when compiling for macOS or Windows targ
 # Generate an executable program `test` with instrumentation information
 $ cjc test.cj --pgo-instr-gen -o test
 # Run the executable program `test` to generate the `default.profraw` profile
+$ ./test
+
+# Generate an executable program `test` with instrumentation information and specific profile file path and name
+$ cjc test.cj --pgo-instr-gen=/mypath/my.profraw -o test
+# Run the executable program `test` to generate the `/mypath/my.profraw` profile
 $ ./test
 ```
 
