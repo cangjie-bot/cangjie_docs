@@ -517,9 +517,12 @@ $ cjc test.cj --lto=[full|thin] --compile-as-exe
 $ cjc test.cj --compile-as-exe
 ```
 
-### `--pgo-instr-gen`
+### `--pgo-instr-gen`, `--pgo-instr-gen=<.profraw>`
 
 使能插桩编译，生成携带插桩信息的可执行程序。
+
+- 如果指定了`<.profraw>`的路径参数，会将profile信息写入到指定的路径文件下。
+- 如果不指定路径参数，profile信息会写入到执行仓颉程序时的当前路径下的`default.profraw`文件中。
 
 编译 macOS 与 Windows 目标时暂不支持使用该功能。
 
@@ -533,6 +536,11 @@ $ cjc test.cj --compile-as-exe
 # 生成支持源码执行信息统计（携带插桩信息）的可执行程序 test
 $ cjc test.cj --pgo-instr-gen -o test
 # 运行可执行程序 test 结束后，生成 default.profraw 配置文件
+$ ./test
+
+# 生成支持源码执行信息统计（携带插桩信息）的可执行程序 test 并指定profile文件路径
+$ cjc test.cj --pgo-instr-gen=./cjpgo/cj.profraw -o test
+# 运行可执行程序 test 结束后，生成 ./cjpgo/cj.profraw 配置文件
 $ ./test
 ```
 
