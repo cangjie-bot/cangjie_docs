@@ -4,6 +4,8 @@
 
 如下示例代码希望实现在调试过程中打印某个表达式的值，同时打印出表达式本身。
 
+<!-- code_no_check -->
+
 ```cangjie
 let x = 3
 let y = 2
@@ -45,14 +47,14 @@ main() {
 }
 ```
 
-请注意，得到的目录结构如下：
+得到的目录结构如下：
 
 ```text
 // Directory layout.
 src
 |-- define
-|     `-- dprint.cj
-`-- main.cj
+|     |-- dprint.cj
+|-- main.cj
 ```
 
 在当前目录（`src`）下，运行编译命令：
@@ -92,6 +94,8 @@ x + y = 5
 - 第 5-7 行：`let result = quote(...)`
 
   这里 [`quote` 表达式](./Tokens_types_and_quote_expressions.md#quote-表达式和插值)是用于构造 [`Tokens`](./Tokens_types_and_quote_expressions.md#tokens-类型) 的一种表达式，它将括号内的程序片段转换为 `Tokens`。在 `quote` 的输入中，可以使用插值 `$(...)` 来将括号内的表达式转换为 `Tokens`，然后插入到 `quote` 构建的 `Tokens` 中。对于以上代码，`$(inputStr)` 中插入了 `inputStr` 字符串的值（包含字符串两端的引号），`$(input)` 中插入了 `input`，即输入的程序片段。因此，如果输入的表达式是 `x + y`，那么形成的`Tokens`为：
+
+  <!-- code_no_check -->
 
   ```cangjie
   print("x + y" + " = ")

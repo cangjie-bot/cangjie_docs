@@ -2,7 +2,6 @@
 
 仓颉工具链当前基于以下 Linux 发行版进行了完整功能测试：
 
-- SUSE Linux Enterprise Server 12 SP5
 - Ubuntu 18.04
 - Ubuntu 20.04
 - UnionTech OS Server 20
@@ -13,17 +12,6 @@
 > **注意：**
 >
 > 当前仓颉工具链依赖的某些工具在一些 Linux 发行版上可能无法通过系统默认软件源直接安装。可参考下一节[编译安装依赖工具](./linux_toolchain_install.md#编译安装依赖工具)进行手动安装。
-
-### SUSE Linux Enterprise Server 12 SP5
-
-```shell
-$ zypper install \
-         binutils \
-         glibc-devel \
-         gcc-c++
-```
-
-此外，还需要安装 OpenSSL 3，安装方法请参见[编译安装依赖工具](./linux_toolchain_install.md#编译安装依赖工具)。
 
 ### Ubuntu 18.04
 

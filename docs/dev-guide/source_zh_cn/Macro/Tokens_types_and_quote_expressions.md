@@ -6,6 +6,8 @@
 
 `Token` 的类型取值为 enum `TokenKind` 中的元素。`TokenKind` 的可用值详见《仓颉编程语言库 API》文档。通过提供 `TokenKind` 和 `Token` 的值（`TokenKind` 对应的标识符或字面量），可以直接构造任何 `Token`。具体的构造函数如下：
 
+<!-- code_no_check -->
+
 ```cangjie
 Token(k: TokenKind)
 Token(k: TokenKind, v: String)
@@ -28,6 +30,8 @@ let tk5 = Token(TokenKind.STRING_LITERAL, "xyz")  // 字符串字面量
 ## Tokens 类型
 
 一个 `Tokens` 代表由多个 `Token` 组成的序列。可以通过 `Token` 数组直接构造 `Tokens`。下面是 3 种基本的构造 `Tokens` 实例的方式：
+
+<!-- code_no_check -->
 
 ```cangjie
 Tokens()   // 构造空列表

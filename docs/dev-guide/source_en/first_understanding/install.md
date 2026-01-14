@@ -14,7 +14,7 @@ The system requirements for the Linux version of the Cangjie toolchain are as fo
 
 | Architecture | Environment Requirements                                     |
 | ------------ | ------------------------------------------------------------ |
-| x86_64       | glibc 2.22, Linux Kernel 4.12 or later, with libstdc++ 6.0.24 or later installed |
+| x86_64       | glibc 2.27, Linux Kernel 4.15 or later, with libstdc++ 6.0.24 or later installed |
 | aarch64      | glibc 2.27, Linux Kernel 4.15 or later, with libstdc++ 6.0.24 or later installed |
 
 For Ubuntu 18.04, additional dependency packages must be installed:

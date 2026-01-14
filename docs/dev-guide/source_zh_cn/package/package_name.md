@@ -41,12 +41,12 @@ package test
 ```text
 // The directory structure is as follows:
 src
-`-- directory_0
+|-- directory_0
     |-- directory_1
     |    |-- a.cj
-    |    `-- b.cj
-    `-- c.cj
-`-- main.cj
+    |    |-- b.cj
+    |-- c.cj
+|-- main.cj
 ```
 
 则 `a.cj`、`b.cj`、`c.cj`、`main.cj` 中的包声明可以为:
