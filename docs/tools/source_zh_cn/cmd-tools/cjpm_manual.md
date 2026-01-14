@@ -243,7 +243,7 @@ cjpm tree success
 - `-V, --verbose` 用于展示编译日志
 - `-g` 用于生成 `debug` 版本的输出产物
 - `--coverage` 用于生成覆盖率信息，默认情况下不开启覆盖率功能
-- `--cfg` 指定后，能够透传 `cjpm.toml` 中的自定义 `cfg` 选项，`cjpm.toml` 中的配置可参考 [profile.customized-option](#profilecustomized-option) 章节
+- `--cfg` 指定后，能够透传 `cjpm.toml` 中的自定义 `cfg` 选项，`cjpm.toml` 中的配置请参见 profile.customized-option 章节
 - `-m, --member <value>` 仅可在工作空间下使用，可用于指定单个模块作为编译入口
 - `--target <value>` 指定后，可交叉编译代码到目标平台，`cjpm.toml` 中的配置可参考 [target](#target) 章节
 - `--target-dir <value>` 用于指定输出产物的存放路径
@@ -942,7 +942,7 @@ src
 
 `combine-all-deps = true` 配置后，可以开启工程级别的编译产物合并。该配置仅在以下条件下生效：
 
-- 开启模块级动态库合并 `profile.build.combined` 和 `LTO` 编译优化 `profile.build.lto` （参考 [`profile.build` 字段](#profilebuild)）；
+- 开启模块级动态库合并 `profile.build.combined` 和 `LTO` 编译优化 `profile.build.lto` （参考 `profile.build` 字段）；
 - 配置的模块为当前执行的 `cjpm build` 命令对应的模块，并且配置的包为该模块的 `root` 包。配置在当前模块的非 `root` 包中，或配置在被依赖的模块中的该字段将被忽略。
 
 在满足上述配置条件后，该模块会按照如下方式编译：
