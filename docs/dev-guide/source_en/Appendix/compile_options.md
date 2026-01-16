@@ -11,9 +11,13 @@ This chapter introduces commonly used `cjc` compilation options. If an option is
 
 ## Basic Options
 
-### `--output-type=[exe|staticlib|dylib]` <sup>[frontend]</sup>
+### `--output-type=[exe|staticlib|dylib|obj]` <sup>[frontend]</sup>
 
-Specifies the type of the output file. In `exe` mode, an executable file is generated; in `staticlib` mode, a static library file (`.a` file) is generated; in `dylib` mode, a dynamic library file is generated (`.so` on Linux, `.dll` on Windows, and `.dylib` on macOS).
+Specifies the type of the output file. In `exe` mode, an executable file is generated; in `staticlib` mode, a static library file (`.a` file) is generated; in `dylib` mode, a dynamic library file is generated (`.so` on Linux, `.dll` on Windows, and `.dylib` on macOS); in `obj` mode ,  an intermediate object file is generated ( `.o` on Linux and macos, `obj` on Windows).
+
+> **Note:** 
+>
+> The obj mode is experimental features, and using this option may involve risks. This option must be used together with the `--experimental` option. The obj mode needs to be used in conjunction with the `--compile-target` option below. (See `--compile-target` for detailed usage)
 
 `cjc` defaults to `exe` mode.
 
@@ -28,6 +32,41 @@ This compiles `tool.cj` into a dynamic link library. On Linux, `cjc` will genera
 **Note:** If a dynamic library file from Cangjie is linked when compiling an executable program, both the `--dy-std` and `--dy-libs` options must be specified. For details, refer to the [`--dy-std` option description](#--dy-std).
 
 <sup>[frontend]</sup> In `cjc-frontend`, the compilation process stops at `LLVM IR`, so the output is always a `.bc` file. However, different `--output-type` values still affect the frontend compilation strategy.
+
+### `--compile-target==[exe|staticlib|dylib]` <sup>[frontend]</sup>
+This option is exclusively applicable to the `--output-type=obj` mode, with a default value of exe. Since the generated `.obj/.o` files are compilation intermediate products, specifying the `--compile-target` option enables the compiler to adopt the corresponding compilation strategy, thus generating intermediate files tailored for different types of final products. The compiler can directly take these `.obj/.o` files as input for subsequent linking processes.
+
+> **NOTE：**
+>
+> This is an experimental feature with potential risks, and it must be used in conjunction with the `--experimental` option.
+
+For example, the following commands implement step-by-step compilation and linking to generate an executable file:
+
+```cangjie
+// main.cj
+main(){
+  println("hello cangjie")
+}
+```
+
+```shell
+// Specify output-type as obj and explicitly set compile-target to exe
+cjc main.cj --output-type=obj --experimental -o main.o --compile-target=exe 
+
+// Link the intermediate product into an executable file
+cjc main.o -lcangjie-std-core -o main --experimental
+```
+
+In Step 2, the parameter -lcangjie-std-core is used to specify the standard library dependencies required during the compilation process. In manual linking scenarios, the naming of dependent libraries must strictly conform to the prescribed naming convention(e.g., -lcangjie-std-math, -lcangjie-std-collection.concurrent, etc.). Failure to comply with this naming convention will result in undefined symbol errors.
+
+**Important Notes**:
+
+1. This option does not support scenarios where `a .o` file is used as the input while the `--output-type=obj` option is specified again.
+Invalid usage example: `cjc main.o --output-type=obj --compile-target=exe`
+2. When `--output-type` is set to a non-obj type, the `--compile-target` option will not take effect (and will be ignored).
+Invalid usage example: `cjc main.cj --output-type=exe --compile-target=dylib`
+3. If the input file is solely `a .o` intermediate target file, the `--output-type` configured in the current step (with a default value of exe) must be logically consistent with the `--compile-target` specified when generating the `.o` file. For instance, if `a.o` file is compiled with `--compile-target=dylib` (intended for dynamic library generation), then `--output-type` should also be set to dylib during the linking phase. Otherwise, linking failures or mismatches in product types may occur.
+
 
 ### `--package`, `-p` <sup>[frontend]</sup>
 
