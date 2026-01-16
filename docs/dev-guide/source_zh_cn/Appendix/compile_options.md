@@ -11,7 +11,7 @@
 
 ## 基本选项
 
-### `--output-type=[exe|staticlib|dylib|chir]` <sup>[frontend]</sup>
+### `--output-type=[exe|staticlib|dylib|chir|obj]` <sup>[frontend]</sup>
 
 指定输出文件的类型，各模式的输出产物如下：
 
@@ -19,10 +19,11 @@
 - `staticlib` 模式下会生成静态库文件（ `.a` 文件）。
 - `dylib` 模式下会生成动态库文件（Linux 平台为 `.so` 文件、Windows 平台为 `.dll` 文件，macOS 平台为 `.dylib` 文件）。
 - `chir` 模式下会生成 CHIR 编译阶段的序列化产物（ `.chir` 文件）
+- `obj` 模式下会生成 中间产物(windows平台为 `.obj` 文件， Linux、 macOS为 `.o` 文件)
 
 > **注意：**
 >
-> `chir` 模式为实验性功能，使用该选项可能有风险。此选项必须配合 `--experimental` 选项一同使用。
+> `chir` 、 `obj` 模式为实验性功能，使用该选项可能有风险。此选项必须配合 `--experimental` 选项一同使用。`obj` 模式需要与下列 `--compile-target` 选项配合使用。（具体用法见 `--compile-target` ）
 
 `cjc` 默认为 `exe` 模式。
 
@@ -37,6 +38,33 @@ $ cjc tool.cj --output-type=dylib
 **值得注意的是**，若编译可执行程序时链接了仓颉的动态库文件，必须同时指定 `--dy-std` 选项，详情请见 [`--dy-std` 选项说明](#--dy-std)。
 
 <sup>[frontend]</sup> 在 `cjc-frontend` 中，编译流程仅进行至 `LLVM IR`，因此输出总是 `.bc` 文件，但不同的 `--output-type` 类型仍会影响前端编译的策略。
+
+### `--compile-target==[exe|staticlib|dylib]` <sup>[frontend]</sup>
+该选项主要应用于 `--output-type=obj` 模式，默认为 `exe` 由于生成的obj文件为中间产物，通过指定 `compile-target` 选项可以指定编译器进行不同的编译策略。后续编译器可以直接输入 `.obj` 或者 `.o` 文件。该选项为实验性功能，使用该选项可能有风险。此选项必须配合 `--experimental` 选项。 下面的示例给出如何分步编译链接成一个可执行文件：
+
+```
+# main.cj
+main(){
+  println("hello cangjie")
+}
+```
+
+```
+# 指定output-type 为 obj，并明确 compile-target 为 exe
+cjc main.cj --output-type=obj --experimental -o main.o --compile-target=exe 
+
+# 将中间产物链接为可执行文件
+cjc main.o -lcangjie-std-core -o main
+```
+1、在步骤 2 中，`-lcangjie-std-core` 用于指定编译过程中的标准库依赖。手动链接时，依赖项名称必须遵循 `-lcangjie-std-<模块名>` 的格式，否则链接器无法识别。
+2、当输入文件仅为 `xx.o` 时，当前步骤的 `--output-type`（默认为 exe）应与生成该 `.o` 文件时指定的 `--compile-target` 保持逻辑一致（例如，如果 `.o` 是为了生成动态库而编译的，链接时也应指定生成动态库）。
+
+**值得注意的是**：
+
+不支持以 .o 文件作为输入并再次指定 --output-type=obj 的场景。
+无效用法示例：cjc main.o --output-type=obj --compile-target=exe
+当 --output-type 指定为 exe（或其他非 obj 类型）时，--compile-target 选项不会生效（将被忽略）。
+示例：cjc main.cj --output-type=exe --compile-target=dylib
 
 ### `--package`, `-p` <sup>[frontend]</sup>
 
