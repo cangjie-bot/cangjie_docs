@@ -37,7 +37,7 @@
 
 使用 `cjc` 交叉编译仓颉代码时需要额外指定以下选项（`<>` 部分需要替换为实际目录）：
 
-- `--target=aarch64-linux-android`  默认以 API 26 为目标平台进行交叉编译；若需更高版本，可显式追加数字后缀，例如 `--target=aarch64-linux-android31` 指定 API 31
+- `--target=aarch64-linux-android`  默认以 API 26 为目标平台进行交叉编译；若需更高版本，可显式追加数字后缀，例如 `--target=aarch64-linux-android31` 则指定 API 31
 - `--sysroot=<sysroot-path>` 指定工具链的根目录路径 `<sysroot-path>`
 - `-L<lib-path>` 指定 `libclang_rt.builtins-aarch64-android.a` 所在目录 `<lib-path>`
 
