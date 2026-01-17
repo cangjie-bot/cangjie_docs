@@ -56,15 +56,15 @@ cjc main.cj --output-type=obj --experimental -o main.o --compile-target=exe
 # 将中间产物链接为可执行文件
 cjc main.o -lcangjie-std-core -o main
 ```
-1、在步骤 2 中，`-lcangjie-std-core` 用于指定编译过程中的标准库依赖。手动链接时，依赖项名称必须遵循 `-lcangjie-std-<模块名>` 的格式，否则链接器无法识别。
-2、当输入文件仅为 `xx.o` 时，当前步骤的 `--output-type`（默认为 exe）应与生成该 `.o` 文件时指定的 `--compile-target` 保持逻辑一致（例如，如果 `.o` 是为了生成动态库而编译的，链接时也应指定生成动态库）。
+1、在步骤 2 中，`-lcangjie-std-core` 用于指定编译过程中的标准库依赖。手动链接时，依赖项名称必须遵循 `-lcangjie-std-<模块名>` 的格式，否则可能会导致符号未定义的错误。
 
 **值得注意的是**：
 
-不支持以 .o 文件作为输入并再次指定 --output-type=obj 的场景。
+- 不支持以 .o 文件作为输入并再次指定 --output-type=obj 的场景。
 无效用法示例：cjc main.o --output-type=obj --compile-target=exe
-当 --output-type 指定为 exe（或其他非 obj 类型）时，--compile-target 选项不会生效（将被忽略）。
+- 当 --output-type 指定为 exe（或其他非 obj 类型）时，--compile-target 选项不会生效（将被忽略）。
 示例：cjc main.cj --output-type=exe --compile-target=dylib
+- 当输入文件仅为 `xx.o` 时，当前步骤的 `--output-type`（默认为 exe）应与生成该 `.o` 文件时指定的 `--compile-target` 保持逻辑一致（例如，如果 `.o` 是为了生成动态库而编译的，链接时也应指定生成动态库）。
 
 ### `--package`, `-p` <sup>[frontend]</sup>
 
