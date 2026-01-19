@@ -195,7 +195,7 @@ func foo(a: Int64, b: Int64, c: Int64, d: Int64) {
 // cjlint-ignore -end description
 ```
 
-**单行屏蔽错误示例 1**，屏蔽 G.FUN.02 告警
+**单行屏蔽<font color="#dd0000">错误</font>示例 1**，屏蔽 G.FUN.02 告警
 
 <!-- compile -->
 
@@ -205,7 +205,7 @@ func foo(a: Int64, b: Int64, c: Int64, d: Int64) { /*cjlint-ignore !G.FUN.02!G.F
 }
 ```
 
-**单行屏蔽错误示例 2**，屏蔽 G.FUN.02 告警
+**单行屏蔽<font color="#dd0000">错误</font>示例 2**，屏蔽 G.FUN.02 告警
 
 <!-- compile -->
 
@@ -215,7 +215,7 @@ func foo(a: Int64, b: Int64, c: Int64, d: Int64) { /*cjlint-ignore !G.FUN.02desc
 }
 ```
 
-**多行屏蔽错误示例 1**，屏蔽 G.FUN.02 告警
+**多行屏蔽<font color="#dd0000">错误</font>示例 1**，屏蔽 G.FUN.02 告警
 
 <!-- compile -->
 

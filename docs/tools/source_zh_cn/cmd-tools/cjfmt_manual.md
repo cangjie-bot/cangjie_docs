@@ -315,14 +315,18 @@ func fn(a: Int64): Unit {
 
 以下是推荐的顶层元素的修饰符排列优先级：
 
-```text
+<!-- code_no_check -->
+
+```cangjie
 public
 open/abstract
 ```
 
 以下是推荐的实例成员函数或实例成员属性的修饰符排序优先级：
 
-```text
+<!-- code_no_check -->
+
+```cangjie
 public/protected/private
 open
 override
@@ -330,7 +334,9 @@ override
 
 以下是推荐的静态成员函数的修饰符排序优先级：
 
-```text
+<!-- code_no_check -->
+
+```cangjie
 public/protected/private
 static
 redef
@@ -338,14 +344,16 @@ redef
 
 以下是推荐的成员变量的修饰符排序优先级：
 
-```text
+<!-- code_no_check -->
+
+```cangjie
 public/protected/private
 static
 ```
 
 - 多行注释的格式化行为
 
-以 `*` 开头的注释， `*` 会互相对齐， 不以 `*` 开头的注释，则会保持注释原样。
+以 `*` 开头的注释， `*` 会互相对齐， 不以 `*` 开头的注释，则会保持注释原样。若 `*` 后存在多余空格，则会将多余空格删除。
 
 <!-- compile -->
 
