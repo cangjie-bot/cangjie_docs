@@ -297,7 +297,9 @@ Watchpoint created: Watchpoint 1: addr = 0x7fffddffed70 size = 8 state = enabled
 (cjdb)
 ```
 
-Watchpoints can only be set on basic types. On `Windows`, when setting conditions for watchpoints, the program will pause at most once.### Expression Evaluation
+Watchpoints can only be set on basic types. On `Windows`, when setting conditions for watchpoints, the program will pause at most once.
+
+### Expression Evaluation
 
 In `cjdb`, expression evaluation can be performed using `expression <cmd-options> -- <expr>` (`expression` can be abbreviated as `expr`).
 
@@ -636,6 +638,117 @@ Executable module set to "/0901/cangjie-linux-x86_64-release/bin/test".
 Architecture set to: x86_64-unknown-linux-gnu.
 ```
 
+### Android Remote Debugging
+
+- To perform remote debugging, first start the `lldb-server` on the Android platform.
+
+```text
+adb shell /data/local/tmp/lldb-server platform --listen "*:1234"
+```
+
+- Launch the debugger in a separate window.
+
+```text
+(cjdb) platform select remote-android
+  Platform: remote-android
+ Connected: no
+(cjdb) platform connect connect://FMR0223A31052288:1234
+  Platform: remote-android
+    Triple: aarch64-unknown-linux-android
+OS Version: 31 (5.10.43)
+  Hostname: localhost
+ Connected: yes
+WorkingDir: /
+    Kernel: #1 SMP PREEMPT Wed Mar 20 12:20:52 CST 2024
+(cjdb) attach 29551
+(cjdb) Process 29551 stopped
+* thread #1, name = 'main', stop reason = signal SIGSTOP
+    frame #0: 0x0000007f83f7c5e4 libc.so`nanosleep + 4
+libc.so`nanosleep:
+->  0x7f83f7c5e4 <+4>:  svc    #0
+    0x7f83f7c5e8 <+8>:  cmn    x0, #0x1, lsl #12         ; =0x1000
+    0x7f83f7c5ec <+12>: cneg   x0, x0, hi
+    0x7f83f7c5f0 <+16>: b.hi   0x7f83f7b6cc              ; __set_errno_internal
+Executable module set to "C:\Users\user\.lldb\module_cache\remote-android\.cache\88DA3010\main".
+Architecture set to: aarch64-unknown-linux-android.
+(cjdb)
+```
+
+Select the Android platform for remote debugging.
+
+```text
+platform select remote-android
+```
+
+Connect to the Android device for remote debugging.
+
+```text
+platform connect connect://FMR0223A31052288:1234
+```
+
+Attach to a process for remote debugging.
+
+```text
+attach 29551
+```
+
+### iOS Simulator Remote Debugging
+
+Since running programs on the iOS simulator requires launching via `Xcode`, follow these steps when debugging programs running on the iOS simulator using `cjdb`:
+
+1. First, launch the target program using `Xcode`.
+
+2. Use the `detach` command in the `Xcode lldb` command line to disconnect debugging.
+
+3. Start `cjdb` from the command line and use the `attach` command to load the target program.
+
+Once successfully loaded, you can proceed with normal debugging using `cjdb`. Due to version differences between `Xcode` and `cjdb` dependencies on `llvm`, additional compilation parameters `-gdwarf-4` must be added during compilation.
+
+### iOS Device Remote Debugging
+
+Due to iOS device security policies, `cjdb` cannot directly debug programs on physical devices. Debugging must be performed using `lldb` bundled with `Xcode`. Therefore, a `Python` script extension is provided to support debugging Cangjie programs.
+
+To debug programs running on an iOS device, follow these steps. For compilation instructions, refer to the "Compilation and Building" chapter in the *Cangjie Programming Language Development Guide*.
+
+1. First, launch the target program using `Xcode`.
+
+2. Load the script in the `Xcode` debug window command line using the command: `command script import $CANGJIE_HOME/tools/script/cangjie_cjdb.py`, where `$CANGJIE_HOME` should be replaced with the Cangjie installation directory.
+   To automatically load the script every time `Xcode` starts debugging, create a `.lldbinit` file in the user directory and enter the above command.
+
+3. Once successfully loaded, normal debugging can proceed.
+
+Since iOS devices use `Python` script extension capabilities, the debugging features are limited by the `Python` capabilities exposed by `lldb`. Therefore, there are differences in supported debugging features compared to `cjdb`. Expression evaluation, conditional breakpoints, and `demangle` functionality are currently unsupported. `None` will be displayed as `nullptr`.
+
+#### Viewing Cangjie Thread Call Stacks
+
+Use the `cjthread` command to view Cangjie call stacks.
+
+```text
+  (lldb) cjthread
+  cjthread #6 state: pending name:
+    frame #0: 0x7ffff7f0299d libcangjie-runtime.so`CJ_CJThreadPark
+    frame #1: 0x7ffff7f19f3e libcangjie-runtime.so`CJ_TimerSleep
+    frame #2: 0x7ffff7e1c95a libcangjie-runtime.so`MRT_Sleep
+    frame #3: 0x7ffff7e224c1 libcangjie-runtime.so`CJ_MRT_Sleep
+    frame #4: 0x55555563a5e9 main`std.core.sleep(std.core::Duration) at sleep.cj:36
+    frame #5: 0x5555555f3e0b main`default.create_spawn::lambda.0() at cjthread.cj:8
+    frame #6: 0x5555555f3f67 main`_CCN7default12create_spawnHRNat6StringEEL_E$g
+    frame #7: 0x5555556425ba main`std.core.Future<...>::execute() at future.cj:161
+  cjthread #5 state: pending name:
+    frame #0: 0x7ffff7f0299d libcangjie-runtime.so`CJ_CJThreadPark
+    frame #1: 0x7ffff7f19f3e libcangjie-runtime.so`CJ_TimerSleep
+    frame #2: 0x7ffff7e1c95a libcangjie-runtime.so`MRT_Sleep
+    frame #3: 0x7ffff7e224c1 libcangjie-runtime.so`CJ_MRT_Sleep
+    frame #4: 0x55555563a5e9 main`std.core.sleep(std.core::Duration) at sleep.cj:36
+    frame #5: 0x5555555f3e0b main`default.create_spawn::lambda.0() at cjthread.cj:8
+    frame #6: 0x5555555f3f67 main`_CCN7default12create_spawnHRNat6StringEEL_E$g
+    frame #7: 0x5555556425ba main`std.core.Future<...>::execute() at future.cj:161
+```
+
+> **Note:**
+>
+> Currently, mixed call stacks (i.e., call stacks containing frames from other languages) cannot be displayed. A maximum of 100 Cangjie thread call stacks can be shown. Each Cangjie thread call stack is limited to displaying 2048 bytes.
+
 ## Notes
 
 1. The program being debugged must be compiled in `debug` version, such as programs compiled with the following command:
@@ -838,6 +951,6 @@ Architecture set to: x86_64-unknown-linux-gnu.
     Breakpoint 2: where = main`default::Pair<T0,T1>::init(T0, T1) + 150 at test.cj:6:9, address = 0x000000000001982a
     ```
 
-   Cause: Cangjie maintains ABI compatibility for generic type parameters - when developer-side generic parameter names change, the symbol names in Cangjie's binary symbol table remain unchanged.
+    Cause: Cangjie maintains ABI compatibility for generic type parameters - when developer-side generic parameter names change, the symbol names in Cangjie's binary symbol table remain unchanged.
 
-   Solution: Modify developer-written generic parameter names to T0, T1, ... Tn.
+    Solution: Modify developer-written generic parameter names to T0, T1, ... Tn.
