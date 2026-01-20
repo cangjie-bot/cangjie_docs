@@ -471,6 +471,18 @@ Enables and specifies the `LTO` (`Link Time Optimization`) compilation mode.
     $ cjc test.cj --lto=full --dy-std
     ```
 
+### `--compile-as-exe`
+
+Enabling this option will suppress the symbol visibility of bc files loaded under LTO mode, with only the package init symbol remaining visible. LLVM's native optimization passes will then conduct aggressive dead symbol stripping based on this visibility rule. This option is valid exclusively when the --lto compilation flag is activated.
+
+``` shell
+# Compiles successfully
+$ cjc test.cj --lto=[full|thin] --compile-as-exe
+# Compilation fails
+$ cjc test.cj --compile-as-exe
+```
+
+
 ### `--pgo-instr-gen`
 
 Enables instrumentation compilation, generating an executable program with instrumentation information.
