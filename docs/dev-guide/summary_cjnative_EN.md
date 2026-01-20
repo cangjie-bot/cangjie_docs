@@ -113,6 +113,7 @@
     - [cjc Usage](source_en/compile_and_build/cjc_usage.md)
     - [cjpm Introduction](source_en/compile_and_build/cjpm_usage.md)
     - [Conditional Compilation](source_en/compile_and_build/conditional_compilation.md)
+    - [Cross Compilation](source_en/compile_and_build/cross_compilation.md)
 - [Deployment and Execution]()
     - [Deploying Cangjie Runtime](source_en/deploy_and_run/runtime_deploy.md)
     - [Running Cangjie Executables](source_en/deploy_and_run/run.md)
