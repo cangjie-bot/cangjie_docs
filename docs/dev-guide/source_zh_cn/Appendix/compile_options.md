@@ -480,6 +480,17 @@ cjc --scan-dependency pkgA.cjo
     $ cjc test.cj --lto=full --dy-std
     ```
 
+### `--compile-as-exe`
+
+该选项启用后，将屏蔽 LTO 模式下加载 BC 文件的符号可见性，仅保留 package init 符号的可见性。基于此，LLVM 原生优化会执行激进的无效符号剔除操作。该选项仅在开启 `--lto` 编译参数时生效。
+
+``` shell
+# 编译通过
+$ cjc test.cj --lto=[full|thin] --compile-as-exe
+# 编译报错
+$ cjc test.cj --compile-as-exe
+```
+
 ### `--pgo-instr-gen`
 
 使能插桩编译，生成携带插桩信息的可执行程序。
