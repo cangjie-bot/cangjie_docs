@@ -115,7 +115,7 @@ cjc main.cj --output-type=staticlib --target=aarch64-apple-ios17.5 -o libmain.a
 
   - 适用于模拟器：`$CANGJIE_HOME/lib/ios_simulator_aarch64_cjnative`
 
-将对应目录下的所有 `.a` 文件添加至 Xcode 工程中。
+  将对应目录下的所有 `.a` 文件添加至 Xcode 工程中。
 
 2. 在 Xcode 项目中配置 `Build Settings > Other Linker Flags` 字段，设置为以下值：
 
@@ -125,7 +125,7 @@ cjc main.cj --output-type=staticlib --target=aarch64-apple-ios17.5 -o libmain.a
 
   - `-lc++`
 
-值得注意的是，必须按照以上列表顺序添加链接选项。`$CANGJIE_HOME` 需要替换为实际的仓颉按照目录。若运行目标是模拟器，请将 `ios_aarch64_cjnative` 替换为 `ios_simulator_aarch64_cjnative` 。
+  值得注意的是，必须按照以上列表顺序添加链接选项。`$CANGJIE_HOME` 需要替换为实际的仓颉按照目录。若运行目标是模拟器，请将 `ios_aarch64_cjnative` 替换为 `ios_simulator_aarch64_cjnative` 。
 
 3. 在 Xcode 项目中配置 `Build Settings > Dead Code Stripping` 字段，设置为 `No`。
 
