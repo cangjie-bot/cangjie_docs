@@ -110,11 +110,11 @@ In addition to adding the Cangjie compilation output to the `Xcode` project, the
 
 1. Select a directory based on the runtime target (device or simulator):
 
-    - For devices: `$CANGJIE_HOME/lib/ios_aarch64_cjnative`
+   - For devices: `$CANGJIE_HOME/lib/ios_aarch64_cjnative`
 
-    - For simulators: `$CANGJIE_HOME/lib/ios_simulator_aarch64_cjnative`
+   - For simulators: `$CANGJIE_HOME/lib/ios_simulator_aarch64_cjnative`
 
-   Add all `.a` files from the corresponding directory to the `Xcode` project.
+Add all `.a` files from the corresponding directory to the `Xcode` project.
 
 2. Configure the `Build Settings > Other Linker Flags` field in the `Xcode` project with the following values:
 
@@ -124,7 +124,7 @@ In addition to adding the Cangjie compilation output to the `Xcode` project, the
 
     - `-lc++`
 
-   Note: The linking options must be added in the exact order listed above. Replace `$CANGJIE_HOME` with the actual Cangjie installation directory. For simulator targets, replace `ios_aarch64_cjnative` with `ios_simulator_aarch64_cjnative`.
+Note: The linking options must be added in the exact order listed above. Replace `$CANGJIE_HOME` with the actual Cangjie installation directory. For simulator targets, replace `ios_aarch64_cjnative` with `ios_simulator_aarch64_cjnative`.
 
 3. Set the `Build Settings > Dead Code Stripping` field in the `Xcode` project to `No`.
 
