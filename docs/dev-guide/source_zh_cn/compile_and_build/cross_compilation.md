@@ -41,7 +41,7 @@
 - `--sysroot=<sysroot-path>` 指定工具链的根目录路径 `<sysroot-path>`
 - `-L<lib-path>` 指定 `libclang_rt.builtins-aarch64-android.a` 所在目录 `<lib-path>`
 
-例如执行命令：
+示例：
 
 ```shell
 $ cjc main.cj --target=aarch64-linux-android31 --sysroot /opt/buildtools/android_ndk-r25b/toolchains/llvm/prebuilt/linux-x86_64/sysroot -L /opt/buildtools/android_ndk-r25b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/14.0.6/lib/linux
@@ -78,26 +78,26 @@ $ adb shell "LD_LIBRARY_PATH=/data/local/tmp /data/local/tmp/main"
 
 ### 安装包下载
 
-支持交叉编译至 `iOS` 的仓颉安装包为：`cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz`
+支持交叉编译至 `iOS` 的仓颉安装包为：`cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz` 。
 仓颉运行时以及标准库默认支持运行于 `iOS 11` 及以上系统（对于例外场景，请见《仓颉编程语言库 API》手册）。
 
-除了支持交叉编译的仓颉软件包，还需要下载 `Xcode`。下载完成后，请在 Xcode 中安装 iOS 开发组件。具体步骤可参考 Xcode 手册中的 "Downloading and installing additional Xcode components" 章节。
+除了支持交叉编译的仓颉软件包，还需要下载 Xcode。下载完成后，请在 Xcode 中安装 iOS 开发组件。具体步骤可参考 Xcode 手册中的 "Downloading and installing additional Xcode components" 章节。
 
 ### 编译
 
 当前仓颉交叉编译至 `iOS` 仅支持编译静态库，交叉编译仓颉代码至 `iOS` 设备时需要额外指定以下选项：
 
-- `--target=aarch64-apple-ios` 指定目标平台 `ios` 进行交叉编译
-- `--output-type=staticlib`指定输出文件的类型为静态库
+- `--target=aarch64-apple-ios` ：指定目标平台 `ios` 进行交叉编译。
+- `--output-type=staticlib` ：指定输出文件的类型为静态库。
 
-当前仓颉支持从 `aarch64` 架构环境交叉编译生成 iOS 模拟器静态库，既适配 `aarch64` 架构模拟器，也可编译至 x86_64 架构模拟器（该架构产物需依赖 Xcode 的 Rosetta 运行）。若需在 iOS 模拟器上运行，需指定以下选项：
+当前仓颉支持从 `aarch64` 架构环境交叉编译生成 iOS 模拟器静态库：`aarch64` 架构可在 Xcode 中直接运行，x86_64 架构需要依赖 Xcode 的 Rosetta 运行。在编译过程中需指定以下选项：
 
 - `--target`
   - `--target=aarch64-apple-ios-simulator` 适用于aarch64目标架构
   - `--target=x86_64-apple-ios-simulator` 适用于x86_64目标架构
 - `--output-type=staticlib` 指定输出文件的类型为静态库
 
-编译产物需要添加至 `Xcode` 工程中，并通过 `Xcode` 构建 `iOS` 应用。
+编译产物需要添加至 Xcode 工程中，并通过 Xcode 构建 `iOS` 应用。
 
 编译 `main.cj` 生成 `libmain.a` 静态库，示例如下：
 
@@ -107,30 +107,30 @@ cjc main.cj --output-type=staticlib --target=aarch64-apple-ios17.5 -o libmain.a
 
 `main.cj` 是交叉编译的仓颉代码， `aarch64-apple-ios17.5` 为目标平台，`--output-type=staticlib` 指定输出文件的类型为静态库。
 
-除需要将仓颉代码的编译产物添加到 `Xcode` 工程外，使用 `Xcode` 构建还需要进行以下配置：
+除需要将仓颉代码的编译产物添加到 Xcode 工程外，使用 Xcode 构建还需要进行以下配置：
 
 1. 根据需要的运行目标（设备或模拟器）选择一个目录：
 
-    - 适用于设备：`$CANGJIE_HOME/lib/ios_aarch64_cjnative`
+  - 适用于设备：`$CANGJIE_HOME/lib/ios_aarch64_cjnative`
 
-    - 适用于模拟器：`$CANGJIE_HOME/lib/ios_simulator_aarch64_cjnative`
+  - 适用于模拟器：`$CANGJIE_HOME/lib/ios_simulator_aarch64_cjnative`
 
-   将对应目录下的所有 `.a` 文件添加至 `Xcode` 工程中。
+  将对应目录下的所有 `.a` 文件添加至 Xcode 工程中。
 
-2. 在 `Xcode` 项目中配置 `Build Settings > Other Linker Flags` 字段，设置为以下值：
+2. 在 Xcode 项目中配置 `Build Settings > Other Linker Flags` 字段，设置为以下值：
 
-    - `$CANGJIE_HOME/lib/ios_aarch64_cjnative/section.o`
+  - `$CANGJIE_HOME/lib/ios_aarch64_cjnative/section.o`
 
-    - `$CANGJIE_HOME/lib/ios_aarch64_cjnative/cjstart.o`
+  - `$CANGJIE_HOME/lib/ios_aarch64_cjnative/cjstart.o`
 
-    - `-lc++`
+  - `-lc++`
 
-   值得注意的是，必须按照以上列表顺序添加链接选项。`$CANGJIE_HOME` 需要替换为实际的仓颉按照目录。若运行目标是模拟器，请将 `ios_aarch64_cjnative` 替换为 `ios_simulator_aarch64_cjnative` 。
+  值得注意的是，必须按照以上列表顺序添加链接选项。`$CANGJIE_HOME` 需要替换为实际的仓颉按照目录。若运行目标是模拟器，请将 `ios_aarch64_cjnative` 替换为 `ios_simulator_aarch64_cjnative` 。
 
-3. 在 `Xcode` 项目中配置 `Build Settings > Dead Code Stripping` 字段，设置为 `No`。
+3. 在 Xcode 项目中配置 `Build Settings > Dead Code Stripping` 字段，设置为 `No`。
 
-配置完毕后通过 `Xcode` 直接构建项目即可。
+配置完毕后通过 Xcode 直接构建项目即可。
 
 ### 部署和运行
 
-通过 `Xcode` 构建并部署至真机或模拟器运行，具体步骤可参考 `Xcode` 手册的 "Build and running an app" 章节。
+通过 Xcode 构建并部署至真机或模拟器运行，具体步骤可参考 Xcode 手册的 "Build and running an app" 章节。
