@@ -118,6 +118,7 @@
     - [运行仓颉可执行程序](source_zh_cn/deploy_and_run/run.md)
 - [附录]()
     - [`cjc` 编译选项](source_zh_cn/Appendix/compile_options.md)
+    - [`cjc` 交叉编译](source_zh_cn/compile_and_build/cross_compilation.md)
     - [Linux 版本工具链的支持与安装](source_zh_cn/Appendix/linux_toolchain_install.md)
     - [runtime 环境变量使用手册](source_zh_cn/Appendix/runtime_env.md)
     - [关键字](source_zh_cn/Appendix/keyword.md)

@@ -118,6 +118,7 @@
     - [Running Cangjie Executables](source_en/deploy_and_run/run.md)
 - [Appendix]()
     - [cjc Compilation Options](source_en/Appendix/compile_options.md)
+    - [cjc Cross Compilation](source_en/compile_and_build/cross_compilation.md)
     - [Linux Version Toolchain Support and Installation](source_en/Appendix/linux_toolchain_install.md)
     - [Runtime Environment Variables Manual](source_en/Appendix/runtime_env.md)
     - [Keywords](source_en/Appendix/keyword.md)
