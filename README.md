@@ -11,7 +11,7 @@ This repository stores the developer documentation for Cangjie programming langu
 Cangjie provides the following developer documentation:
 
 - Cangjie Programming Language Development Guide: Introduces Cangjie syntax, compilation, and build content.
-- Cangjie Programming Language Tools Usage Guide: Introduces the tools provided by Cangjie, including the package management tool `cjpm`, debugging tool `cjdb`, formatting tool `cjfmt` , hyper-language extension `HLE` and the language server tool `LSP`.
+- Cangjie Programming Language Tools Usage Guide: Introduces the tools provided by Cangjie, including the project management tool `cjpm`, debugging tool `cjdb`, formatting tool `cjfmt` , hyper-language extension `HLE` and the language server tool `LSP`.
 - Cangjie Programming Language Standard Library API: Provides a reference for the Cangjie standard library API, including API functions, parameters, return values, examples, etc. Please obtain this document from the cangjie_runtime repository.
 - Cangjie Programming Language Extension Library API: Provides a reference for the Cangjie extension library API, including API functions, parameters, return values, examples, etc. Please obtain this document from the cangjie_stdx repository.
 

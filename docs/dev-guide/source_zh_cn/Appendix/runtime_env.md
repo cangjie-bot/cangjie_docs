@@ -23,6 +23,7 @@ $ export VARIABLE=value
 1. 所有整型参数为 Int64 类型，浮点型参数为 Float64 类型;
 2. 所有参数如果未显式规定最大值，默认隐式最大值为该类型最大值;
 3. 所有参数若超出范围则设置无效，自动使用默认值。
+4. 所有参数在 OpenHarmonyOS 平台下均无效，OpenHarmonyOS 平台下仓颉运行时使用默认值。
 
 ### `cjHeapSize`
 
@@ -280,7 +281,7 @@ export CJ_SOF_SIZE=30
 
 > **说明：**
 >
-> 仓颉 GWP-Asan 内存安全检测仅支持 Linux 和 HarmonyOS 操作系统。
+> 仓颉 GWP-Asan 内存安全检测仅支持 Linux 和 OpenHarmonyOS 操作系统。
 
 #### cjEnableGwpAsan
 

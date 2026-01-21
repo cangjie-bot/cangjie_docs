@@ -24,7 +24,7 @@ This section describes the deployment of the Cangjie runtime.
 3. Execute the following command in the runtime environment to complete the runtime deployment (replace `${CANGJIE_HOME}` with the path to the `cangjie` directory and `${hw_arch}` with the corresponding hardware architecture):
 
     ```bash
-    export LD_LIBRARY_PATH=${CANGJIE_HOME}/runtime/lib/linux_${hw_arch}_llvm:${LD_LIBRARY_PATH}
+    export LD_LIBRARY_PATH=${CANGJIE_HOME}/runtime/lib/linux_${hw_arch}_cjnative:${LD_LIBRARY_PATH}
     ```
 
 ## macOS
@@ -43,7 +43,7 @@ This section describes the deployment of the Cangjie runtime.
 3. Execute the following command in the runtime environment to complete the runtime deployment (replace `${CANGJIE_HOME}` with the path to the `cangjie` directory and `${hw_arch}` with the corresponding hardware architecture):
 
     ```bash
-    export DYLD_LIBRARY_PATH=${CANGJIE_HOME}/runtime/lib/darwin_${hw_arch}_llvm:${DYLD_LIBRARY_PATH}
+    export DYLD_LIBRARY_PATH=${CANGJIE_HOME}/runtime/lib/darwin_${hw_arch}_cjnative:${DYLD_LIBRARY_PATH}
     ```
 
 ## Windows
@@ -63,17 +63,17 @@ This section describes the deployment of the Cangjie runtime.
     - For Windows Command Prompt (CMD) environments, execute:
 
         ```bash
-        set "PATH=${CANGJIE_HOME}\runtime\lib\windows_x86_64_llvm;%PATH%;"
+        set "PATH=${CANGJIE_HOME}\runtime\lib\windows_x86_64_cjnative;%PATH%;"
         ```
 
     - For PowerShell environments, execute:
 
         ```bash
-        $env:PATH = "${CANGJIE_HOME}\runtime\lib\windows_x86_64_llvm;" + $env:Path
+        $env:PATH = "${CANGJIE_HOME}\runtime\lib\windows_x86_64_cjnative;" + $env:Path
         ```
 
     - For MSYS shell, bash, or similar environments, execute:
 
         ```bash
-        export PATH=${CANGJIE_HOME}/runtime/lib/windows_x86_64_llvm
+        export PATH=${CANGJIE_HOME}/runtime/lib/windows_x86_64_cjnative
         ```

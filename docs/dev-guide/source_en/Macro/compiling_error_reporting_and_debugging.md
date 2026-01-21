@@ -88,7 +88,7 @@ If the macro package depends on other dynamic libraries, ensure these dependenci
 
 > **Note:**
 >
-> The macro substitution process depends on the Cangjie runtime. During macro substitution, the Cangjie runtime's initialization configuration uses the default settings provided by macros. Configuration parameters can be queried using Cangjie runtime operational logs. Among these, `cjHeapSize` and `cjStackSize` can be modified by users, while others currently cannot. For Cangjie runtime initialization configurations, refer to the [Runtime Initialization Optional Configurations](../Appendix/runtime_env.md#runtime-initialization-optional-configurations) section.
+> The macro substitution process depends on the Cangjie runtime. During macro substitution, the Cangjie runtime's initialization configuration uses the default settings provided by macros. Configuration parameters can be queried using Cangjie runtime operational logs. Among these, `cjHeapSize` and `cjStackSize` can be modified by users, while others currently cannot. Note that all parameters are invalid on the OpenHarmonyOS platform. The Cangjie runtime uses default values on the OpenHarmonyOS platform.<!--Del--> For Cangjie runtime initialization configurations, refer to the [Runtime Initialization Optional Configurations](../Appendix/runtime_env.md#runtime-initialization-optional-configurations) section.<!--DelEnd-->
 
 ## Parallel Macro Expansion
 
@@ -146,6 +146,7 @@ public func diagReport(level: DiagReportLevel, tokens: Tokens, message: String, 
 ```
 
 Parameter meanings:
+
 - `level`: Error message severity level
 - `tokens`: Tokens corresponding to the source code referenced in the error message
 - `message`: Primary error message
@@ -289,7 +290,7 @@ cjc --debug-macro demo.cj --import-path ./target
 
 > **Note:**
 >
-> If using the Cangjie `CJPM` package manager for compilation, add the `--debug-macro` compilation option in the `cjpm.toml` configuration file to enable macro debug mode.
+> If using the Cangjie `CJPM` project manager for compilation, add the `--debug-macro` compilation option in the `cjpm.toml` configuration file to enable macro debug mode.
 >
 > ```text
 > compile-option = "--debug-macro"
@@ -356,4 +357,3 @@ If the expanded macro code contains semantic errors, the compiler's error messag
       let t = @M(1+2)
   }
   ```
-```

@@ -23,6 +23,7 @@ Notes:
 1. All integer parameters are of Int64 type, and floating-point parameters are of Float64 type;
 2. If no maximum value is explicitly specified for any parameter, the default implicit maximum value is the maximum value of that type;
 3. If any parameter exceeds the valid range, the setting will be invalid, and the default value will be used automatically.
+4. All parameters are invalid on the OpenHarmonyOS platform. The Cangjie runtime uses default values on the OpenHarmonyOS platform.
 
 ### `cjHeapSize`
 
@@ -261,6 +262,7 @@ export MRT_STACK_CHECK=true
 #### `CJ_SOF_SIZE`
 
 When a StackOverflowError occurs, the stack trace will be automatically folded for readability. The default number of folded stack frames is 32. This environment variable controls the length of the folded stack. Valid values are integers within the int range:
+
 - CJ_SOF_SIZE = 0: Prints the entire stack trace.
 - CJ_SOF_SIZE < 0: Prints the specified number of frames from the bottom of the stack.
 - CJ_SOF_SIZE > 0: Prints the specified number of frames from the top of the stack.
@@ -280,7 +282,7 @@ Cangjie GWP-Asan is a sampling-based detection tool. The sampling frequency can 
 
 > **Note:**
 >
-> Cangjie GWP-Asan memory safety detection is only supported on Linux and HarmonyOS.
+> Cangjie GWP-Asan memory safety detection is only supported on Linux and OpenHarmonyOS.
 
 #### cjEnableGwpAsan
 
@@ -312,8 +314,8 @@ export cjGwpAsanHelp=true
 
 - Cangjie GWP-Asan is a sampling-based memory checking tool, which may not detect all memory boundary violations.
 - Cangjie GWP-Asan has limited detection scope for out-of-bounds access on Cangjie heap memory. It cannot detect read out-of-bounds violations and only detects partial write out-of-bounds cases:
-  - Forward write out-of-bounds within 8 bytes.
-  - Backward write out-of-bounds into the padding area at the end (padding size varies from 0-7 bytes depending on array object length).
+    - Forward write out-of-bounds within 8 bytes.
+    - Backward write out-of-bounds into the padding area at the end (padding size varies from 0-7 bytes depending on array object length).
 
 #### Error Detection Types
 

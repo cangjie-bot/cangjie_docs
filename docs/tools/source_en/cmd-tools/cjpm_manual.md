@@ -1,15 +1,15 @@
-# Package Management Tool
+# Project Management Tool
 
 ## Overview
 
-`CJPM (Cangjie Package Manager)` is the official package management tool for the Cangjie language, designed to manage and maintain the module system of Cangjie projects. It covers operations such as module initialization, dependency checking, and updates. It provides a unified compilation entry point, supporting incremental compilation, parallel compilation, and custom compilation commands.
+`CJPM (Cangjie Project Manager)` is the official project management tool for the Cangjie language, designed to manage and maintain the module system of Cangjie projects. It covers operations such as module initialization, dependency checking, and updates. It provides a unified compilation entry point, supporting incremental compilation, parallel compilation, and custom compilation commands.
 
 ## Usage Instructions
 
-Execute the `cjpm -h` command to view the usage instructions for the package management tool, as shown below.
+Execute the `cjpm -h` command to view the usage instructions for the project management tool, as shown below.
 
 ```text
-Cangjie Package Manager
+Cangjie Project Manager
 
 Usage:
   cjpm [subcommand] [option]
@@ -242,9 +242,9 @@ cjpm tree success
 - `-V, --verbose` displays compilation logs.
 - `-g` generates `debug` version output.
 - `--coverage` generates coverage information. By default, coverage is disabled.
-- `--cfg` when specified, custom `cfg` options in `cjpm.toml` can be passed through. For `cjpm.toml` configuration, refer to the [profile.customized-option](#profile.customized-option) section.
+- `--cfg` when specified, custom `cfg` options in `cjpm.toml` can be passed through. For `cjpm.toml` configuration, refer to the `profile.customized-option` section.
 - `-m, --member <value>` can only be used in a workspace to specify a single module as the compilation entry point.
-- `--target <value>` when specified, enables cross-compilation to the target platform. For `cjpm.toml` configuration, refer to the [target](#target) section.
+- `--target <value>` when specified, enables cross-compilation to the target platform. For `cjpm.toml` configuration, refer to the `target` section.
 - `--target-dir <value>` specifies the output directory for the build artifacts.
 - `-o, --output <value>` specifies the name of the output executable file. The default name is `main` (`main.exe` on Windows). Note that compiling an executable named `cjc` is currently not supported.
 - `--mock` enables `mock` testing for classes in the build version with this option.
@@ -276,7 +276,7 @@ Output: cjpm build success
 
 > **Note:**
 >
-> According to the Cangjie package management specifications, only valid source code packages that meet the requirements can be correctly included in the compilation scope. If warnings like `no '.cj' file` appear during compilation, it is likely because the corresponding package does not meet the specifications, causing the source files to be excluded. In such cases, refer to the [Cangjie Package Management Specifications](#cangjie-package-management-specifications) to modify the code directory structure.
+> According to the Cangjie package management specifications, only valid source code packages that meet the requirements can be correctly included in the compilation scope. If warnings like `no '.cj' file` appear during compilation, it is likely because the corresponding package does not meet the specifications, causing the source files to be excluded. In such cases, refer to the `Cangjie Package Management Specifications` to modify the code directory structure.
 
 Before executing `cjpm build`, `cjpm` checks the package dependency relationships of the current module or workspace. If mutual imports between packages form a dependency cycle, the build will be aborted, and an error message will be returned, indicating the cyclic dependency path.
 
@@ -378,7 +378,9 @@ The unit test code structure for a module is as follows, where `xxx.cj` contains
     group test.zoo                                      0% [----------------------------]      (00:00:00)
     test TestZ.sayhi                                                                           (00:00:00)
 
-    passed: 1, failed: 0                                  33% [|||||||||-------------------]  1### bench
+    passed: 1, failed: 0                                  33% [|||||||||-------------------]  1/3 (00:00:01)
+
+### bench
 
 The `bench` command is used to execute performance test cases in test files and directly print the test results. The compiled artifacts are stored by default in the `target/release/unittest_bin` directory. Performance test cases are annotated with the `@Bench` macro. For more details on how to write performance test code, refer to the description of the `std.unittest` library in the *Cangjie Programming Language Standard Library API*.
 
@@ -793,7 +795,7 @@ Instructions for calling external `C` dynamic libraries in Cangjie:
 hello = { path = "./src/" }
 ```
 
-To specify `C` library configurations for different platforms, refer to [target](#target).
+To specify `C` library configurations for different platforms, refer to `target`.
 
 ### "profile"
 
@@ -958,7 +960,7 @@ verbose = true
 
 Benchmark configuration supports specifying options during benchmark compilation and execution. All fields are optional and will not take effect if not configured. Only the `profile.bench` settings of the top-level module take effect. The option list aligns with the console execution options provided by `cjpm bench`. If an option is configured in both the configuration file and the console, the console option takes precedence. `profile.bench` supports the following runtime options:
 
-- `filter`: Specifies the benchmark case filter. The value is a string with the same format as the `--filter` value in the [bench command description](#bench).
+- `filter`: Specifies the benchmark case filter. The value is a string with the same format as the `--filter` value in the `bench command description`.
 - `option:<value>`: Works with `@Configure` to define runtime options. For example:
     - `random-seed`: Specifies the random seed value. Must be a positive integer.
     - `no-color`: Specifies whether to disable colored output in the console. Can be `true` or `false`.

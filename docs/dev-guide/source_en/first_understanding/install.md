@@ -1,6 +1,6 @@
 # Installing the Cangjie Toolchain
 
-When developing Cangjie programs, one essential tool is the Cangjie compiler, which can compile Cangjie source code into executable binary files. However, modern programming languages come with more than just compilers. In fact, Cangjie provides developers with a comprehensive suite of development tools, including compilers, debuggers, package managers, static analysis tools, formatting tools, and coverage statistics tools, all designed for a seamless "out-of-the-box" experience.
+When developing Cangjie programs, one essential tool is the Cangjie compiler, which can compile Cangjie source code into executable binary files. However, modern programming languages come with more than just compilers. In fact, Cangjie provides developers with a comprehensive suite of development tools, including compilers, debuggers, project managers, static analysis tools, formatting tools, and coverage statistics tools, all designed for a seamless "out-of-the-box" experience.
 
 Currently, the Cangjie toolchain has been adapted for certain versions of Linux, macOS, and Windows platforms. However, full functional testing has only been conducted on select Linux distributions. For details, please refer to the appendix section [Support and Installation of Linux Version Toolchain](../Appendix/linux_toolchain_install.md). On platforms that have not undergone full functional testing, the completeness of the Cangjie toolchain's functionality is not guaranteed. Additionally, the current Windows version of the Cangjie compiler is implemented based on MinGW and may lack some features compared to the Linux version.
 
@@ -14,7 +14,7 @@ The system requirements for the Linux version of the Cangjie toolchain are as fo
 
 | Architecture | Environment Requirements                                     |
 | ------------ | ------------------------------------------------------------ |
-| x86_64       | glibc 2.22, Linux Kernel 4.12 or later, with libstdc++ 6.0.24 or later installed |
+| x86_64       | glibc 2.27, Linux Kernel 4.15 or later, with libstdc++ 6.0.24 or later installed |
 | aarch64      | glibc 2.27, Linux Kernel 4.15 or later, with libstdc++ 6.0.24 or later installed |
 
 For Ubuntu 18.04, additional dependency packages must be installed:
@@ -117,7 +117,7 @@ On Windows, Cangjie provides two formats of installation packages: `exe` and `zi
 
 To verify the installation, execute `cjc -v` in the same command environment. If the Cangjie compiler version information is displayed, the toolchain has been successfully installed.
 
-**Important Note:**  
+**Important Note:**
 Similar to Linux, the environment variables configured by the `envsetup` script are only effective for the current command-line session. To make the Cangjie toolchain automatically available upon command prompt or terminal startup, configure the system as follows:
 
 - For bash environments, follow these steps:
@@ -149,9 +149,9 @@ Similar to Linux, the environment variables configured by the `envsetup` script 
 
         1. In the "User variables" or "System variables" section, locate and select the `Path` variable, then click "Edit" to open the "Edit Environment Variable" window.
 
-        2. Click "New" and enter the following paths one by one:  
-           `%CANGJIE_HOME%\bin`, `%CANGJIE_HOME%\tools\bin`, `%CANGJIE_HOME%\tools\lib`, `%CANGJIE_HOME%\runtime\lib\windows_x86_64_llvm` (`%CANGJIE_HOME%` is the extraction path of the Cangjie package). For example, if the package is extracted to `D:\cangjie`, the new environment variables should be:  
-           `D:\cangjie\bin`, `D:\cangjie\tools\bin`, `D:\cangjie\tools\lib`, `D:\cangjie\runtime\lib\windows_x86_64_llvm`.
+        2. Click "New" and enter the following paths one by one:
+           `%CANGJIE_HOME%\bin`, `%CANGJIE_HOME%\tools\bin`, `%CANGJIE_HOME%\tools\lib`, `%CANGJIE_HOME%\runtime\lib\windows_x86_64_cjnative` (`%CANGJIE_HOME%` is the extraction path of the Cangjie package). For example, if the package is extracted to `D:\cangjie`, the new environment variables should be:
+           `D:\cangjie\bin`, `D:\cangjie\tools\bin`, `D:\cangjie\tools\lib`, `D:\cangjie\runtime\lib\windows_x86_64_cjnative`.
 
         3. (For current user settings only) Click "New" and enter the current user directory path, appending `.cjpm\bin` to it. For example, if the user path is `C:\Users\bob`, enter `C:\Users\bob\.cjpm\bin`.
 
@@ -161,7 +161,7 @@ Similar to Linux, the environment variables configured by the `envsetup` script 
            D:\cangjie\bin
            D:\cangjie\tools\bin
            D:\cangjie\tools\lib
-           D:\cangjie\runtime\lib\windows_x86_64_llvm
+           D:\cangjie\runtime\lib\windows_x86_64_cjnative
            C:\Users\bob\.cjpm\bin
            ```
 
@@ -169,7 +169,7 @@ Similar to Linux, the environment variables configured by the `envsetup` script 
 
     6. Click "OK" to complete the setup.
 
-    > **Note:**  
+    > **Note:**
     > After configuration, you may need to restart the command-line window or the system for the changes to take effect.
 
     After configuration, the Cangjie compilation toolchain will be directly available upon Windows Command Prompt (CMD) or PowerShell startup.

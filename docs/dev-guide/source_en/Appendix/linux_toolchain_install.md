@@ -2,26 +2,16 @@
 
 The Cangjie toolchain has undergone comprehensive functional testing on the following Linux distributions:
 
-- SUSE Linux Enterprise Server 12 SP5  
-- Ubuntu 18.04  
-- Ubuntu 20.04  
-- UnionTech OS Server 20  
-- Kylin Linux Advanced Server Release V10  
+- Ubuntu 18.04
+- Ubuntu 20.04
+- UnionTech OS Server 20
+- Kylin Linux Advanced Server Release V10
 
 ## Dependency Installation Commands for Cangjie Toolchain Across Linux Distributions
 
-> **Note:**  
->  
+> **Note:**
+>
 > Certain tools required by the current Cangjie toolchain may not be directly installable through default system repositories on some Linux distributions. Please refer to the next section [Compiling and Installing Dependency Tools](./linux_toolchain_install.md#compiling-and-installing-dependency-tools) for manual installation instructions.
-
-### SUSE Linux Enterprise Server 12 SP5
-
-```shell
-$ zypper install \
-         binutils \
-         glibc-devel \
-         gcc-c++
-```
 
 Additionally, OpenSSL 3 needs to be installed. Refer to [Compiling and Installing Dependency Tools](./linux_toolchain_install.md#compiling-and-installing-dependency-tools) for installation methods.
 
@@ -85,13 +75,13 @@ Some standard libraries (and certain tools) in the current Cangjie toolchain uti
 
 Download the OpenSSL 3 source code from the following links:
 
-- <https://www.openssl.org/source/>  
-- <https://www.openssl.org/source/old/>  
+- <https://www.openssl.org/source/>
+- <https://www.openssl.org/source/old/>
 
 OpenSSL 3.0.7 or later is recommended.
 
-> **Note:**  
->  
+> **Note:**
+>
 > Please carefully read the following notes before executing the compilation and installation commands, and adjust the commands according to your actual situation. Incorrect configuration and installation may render other system software unusable. If you encounter issues during compilation and installation or wish to perform additional configuration, refer to the `INSTALL` file in the OpenSSL source code or OpenSSL's [FAQ](https://www.openssl.org/docs/faq.html).
 
 Using OpenSSL 3.0.7 as an example, after downloading, extract the archive with the following command:
@@ -108,8 +98,8 @@ $ cd openssl-3.0.7
 
 Compile OpenSSL:
 
-> **Note:**  
->  
+> **Note:**
+>
 > If OpenSSL is already installed on the system, it is recommended to use the `--prefix=<path>` option to specify a custom installation path, such as `--prefix=/usr/local/openssl-3.0.7` or a developer's personal directory. Directly compiling and installing with the following commands in a system where OpenSSL already exists may overwrite the system OpenSSL, causing applications dependent on it to become unusable.
 
 ```shell
@@ -137,8 +127,8 @@ $ sudo make install
 
 If a custom installation path was not specified via `--prefix` during OpenSSL compilation, the installation is now complete. If a custom path was specified via `--prefix`, the following variables must be set to ensure the Cangjie toolchain can locate OpenSSL 3.
 
-> **Note:**  
->  
+> **Note:**
+>
 > If other versions of OpenSSL exist on the system, configuring these variables may affect the OpenSSL version used by other compilation and development tools besides the Cangjie toolchain. If OpenSSL incompatibility issues arise with other tools, configure these variables only for the Cangjie development environment.
 
 *Replace `<prefix>` with your specified custom installation path.*

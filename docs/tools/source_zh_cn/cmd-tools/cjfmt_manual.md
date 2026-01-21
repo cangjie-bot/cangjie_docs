@@ -61,9 +61,9 @@ cjfmt -f ../../../test/uilang/Thread.cj -o ../../../test/formated/Thread.cj
 - 选项 `-d` 让开发者指定扫描仓颉源代码目录，对文件夹下的仓颉源码格式化，支持相对路径和绝对路径。
 
 ```shell
-cjfmt -d test/              // 源文件目录为相对目录
+cjfmt -d test/              # 源文件目录为相对目录
 
-cjfmt -d /home/xxx/test     // 源文件目录为绝对目录
+cjfmt -d /home/xxx/test     # 源文件目录为绝对目录
 ```
 
 - 选项 `-o` 为输出目录，可以是已存在的路径，若不存在则会创建相关的目录结构，支持相对路径和绝对路径；目录的最大长度 MAX_PATH 不同的系统之间存在差异，如 `Windows` 上这个值一般不能超过 260；在 `Linux` 上这个值一般建议不能超过 4096。
@@ -73,7 +73,7 @@ cjfmt -d test/ -o /home/xxx/testout
 
 cjfmt -d /home/xxx/test -o ../testout/
 
-cjfmt -d testsrc/ -o /home/../testout   // 源文件文件夹testsrc/不存在；报错：error: Source file path not exist!
+cjfmt -d testsrc/ -o /home/../testout   # 源文件文件夹testsrc/不存在；报错：error: Source file path not exist!
 ```
 
 ### 格式化配置文件
