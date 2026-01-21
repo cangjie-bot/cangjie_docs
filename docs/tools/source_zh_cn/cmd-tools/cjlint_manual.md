@@ -57,9 +57,9 @@ cjlint -f xxx/xxx/src/xxx.cj
 
 > **说明：**
 >
-> 上述限制来自编译器模块编译限制， 因为当前编译器编译选项正在重构，相关 API 不稳定；而模块编译较为稳定，因此工具当前仅支持模块编译方式。最终工具支持的编译选项会与编译器一致，支持其他编译方式。
+> 上述限制来自编译器模块编译限制，因为当前编译器编译选项正在重构，相关 API 不稳定；而模块编译较为稳定，因此工具当前仅支持模块编译方式。最终工具支持的编译选项会与编译器一致，支持其他编译方式。
 
-`-r` 用来指定生成扫描报告的格式，目前支持`json`格式和`csv`格式。
+`-r` 指定生成扫描报告的格式，目前支持`json`格式和`csv`格式。
 
 `-r`需要与`-o`选项配合使用，如果没有`-o`指定输出到文件，即使指定了`-r`也不会生成扫描报告。如果指定了`-o`没有指定`-r`，那么默认生成`json`格式的扫描报告。
 
@@ -70,7 +70,7 @@ cjlint -f ./src -r csv -o ./output/report  // 在output目录下生成report.csv
 
 `-c`, `-m` 在开发者需要时用以指定`config`和`modules`所在的目录路径。
 
-在默认情况下，`cjlint`会调用其所在目录下的`config`和`modules`作为默认的配置目录和依赖目录。若有需要，开发者可以用命令行选项 `-c`， `-m`来指定`config`和`modules`所在的目录路径。
+`cjlint`默认使用其所在目录下的`config`和`modules`作为配置和依赖目录。开发者可通过命令行选项 `-c` 和 `-m` 指定其他目录路径。
 
 例：指定的 config 和 modules 的路径分别为：`./tools/cjlint/config` 和 `./tools/cjlint/modules`。则`config`和`modules`所在的目录路径同为`./tools/cjlint`, 所以命令应为：
 
@@ -89,9 +89,9 @@ cjlint --import-path "fileDir1 fileDir2"
 
 ## 规则级告警屏蔽
 
-可执行文件`cjlint`同目录下的`config`配置目录中，有`cjlint_rule_list.json`和`exclude_lists.json`两个配置文件。其中，`cjlint_rule_list.json`为规则列表配置文件，开发者可以通过增减其中的配置信息来决定进行哪些规则的检查。`exclude_lists.json`为告警屏蔽配置文件，开发者可以通过添加告警信息来屏蔽某一条规则的某一条告警。
+可执行文件`cjlint`同目录下的`config`配置目录中包含`cjlint_rule_list.json`和`exclude_lists.json`两个配置文件。`cjlint_rule_list.json`为规则列表配置文件，用于决定执行哪些规则检查。`exclude_lists.json`为告警屏蔽配置文件，用于屏蔽特定规则的告警。
 
-例： 若开发者只想检查如下 5 条规则，则`cjlint_rule_list.json`配置文件中只添加要检查的 5 条规则。
+例：若开发者只想检查如下 5 条规则，则`cjlint_rule_list.json`配置文件中只添加要检查的 5 条规则。
 
 ```json
 {
@@ -105,7 +105,7 @@ cjlint --import-path "fileDir1 fileDir2"
 }
 ```
 
-例： 若开发者想要屏蔽某一条规则的某一条告警，可以在`exclude_lists.json`配置文件中添加屏蔽信息。
+例：若开发者想要屏蔽某一条规则的某一条告警，可以在`exclude_lists.json`配置文件中添加屏蔽信息。
 
 > **注意：**
 >
@@ -342,7 +342,7 @@ func foo(a: Int64, b: Int64, c: Int64, d: Int64) {
 
 1. `cjlint` 可以通过将 G.SYN.01 添加至 `cjlint_rule_list.json` 以启用禁用语法的检查。如果使用了禁用的语法元素，`cjlint` 将会报错。
 
-2. 当前所支持`cjlint`检查的禁用语法如表中所示:
+2. 当前`cjlint`支持检查的禁止使用语法如表中所示:
 
    | 禁用语法     | 关键词          | 说明                                             |
    | ------------ | --------------- | ------------------------------------------------ |

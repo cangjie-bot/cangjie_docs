@@ -101,7 +101,7 @@ output
 
 #### 多文件场景
 
-对于多文件场景，推荐使用项目管理工具的命令`cjpm build --coverage` 或 `cjpm test --coverage` ，具体用法请参见[项目管理工具](./cjpm_manual.md)。
+对于多文件场景，推荐使用项目管理工具的命令`cjpm build --coverage` 或 `cjpm test --coverage`，具体用法请参见[项目管理工具](./cjpm_manual.md)。
 
 ## 命令说明
 
@@ -111,7 +111,7 @@ output
 
 ### cjcov -v | --version
 
-显示 `cjcov` 的版本号。指定 `-v` 或者 `--version` 参数后，输入其他任何选项参数都不生效，只会显示版本号。如 `--version` 和 `--help` 同时使用，则显示 `version` 信息后退出。
+显示 `cjcov` 的版本号。指定 `-v` 或者 `--version` 参数后，输入其他任何选项参数都不生效，只会显示版本号。如 `--version` 和 `--help` 同时使用，则显示版本号信息后退出。
 
 ### cjcov --verbose
 
@@ -148,11 +148,11 @@ line number:    4  ==>  data: [(0, 0), (1, 1)]
 
 ### cjcov --html-details
 
-如果指定该参数，表示会生成仓颉文件对应的 `html`。在总的 `index` 文件里面会有每个子 `html` 的索引。子 `html` 文件和 `index.html` 放在同一个目录。
+如果指定该参数，表示会生成源代码文件对应的 `html` 覆盖报告。在总的 `index` 文件里面会有每个子 `html` 的索引。子 `html` 文件和 `index.html` 放在同一个目录。
 
-子 `html` 文件名是由目录和文件名由下划线拼接起来。如源文件是 `src/main.cj`，生成的 `html` 名字为 `src_main.cj.html`。如果源文件路径带有特殊字符会被替换成 `=`，下文[文件名包含特殊字符](#文件名包含特殊字符)章节会有更详细的描述。
+子 `html` 文件名由目录名和文件名通过下划线拼接而成。例如，源文件为 `src/main.cj` 时，生成的 `html` 文件名为 `src_main.cj.html`。如果源文件路径包含特殊字符，这些字符将被替换为 `=`。有关详细信息，请参见[文件名包含特殊字符](#文件名包含特殊字符)章节。
 
-如果没有指定该参数，表示不会生成子 `html` 。在总的 `index` 文件里面会显示每个子 `html` 的覆盖率数据，但是不能跳转到对应的子 `html` 文件。
+如果没有指定该参数，表示不会生成子 `html`。在总的 `index` 文件里面会显示每个子 `html` 的覆盖率数据，但是不能跳转到对应的子 `html` 文件。
 
 该参数默认不生效。即默认只会生成一个 `index.html`, 不会生成子 `html` 文件。
 
@@ -166,7 +166,7 @@ line number:    4  ==>  data: [(0, 0), (1, 1)]
 
 ### cjcov -k |  --keep
 
-指定该参数后则不会删除生成的 `gcov` 中间文件。如果 `gcov` 文件不删除，会造成执行次数的累加，可能会影响覆盖率数据的准确性。
+指定该参数后则不会删除生成的 `gcov` 中间文件。如果保留这些文件，后续测试运行时会重复计算覆盖率数据，可能导致最终覆盖率结果不准确。
 
 默认该参数不生效，即默认会删除 `gcov` 中间文件。
 
@@ -178,7 +178,7 @@ line number:    4  ==>  data: [(0, 0), (1, 1)]
 
 ### cjcov -r ROOT | --root=ROOT
 
-该参数指定的 `ROOT` 参数，表示在 `ROOT` 目录或者在其递归子目录能找到 `gcda` 文件，`gcda` 和 `gcno` 文件默认会生成在一起，建议不要手动特意去把 `gcda` 文件和 `gcno` 文件分开存放，不然可能会发生程序不能运行的情况。
+该参数指定的 `ROOT` 参数表示在 `ROOT` 目录或其递归子目录中查找 `gcda` 文件。`gcda` 和 `gcno` 文件默认会生成在一起，请不要手动将 `gcda` 文件和 `gcno` 文件分开存放，否则可能导致程序无法运行。
 
 参数指定的 `ROOT` 目录如果不存在，`cjcov` 工具会有报错提示。
 
@@ -188,7 +188,7 @@ line number:    4  ==>  data: [(0, 0), (1, 1)]
 
 该参数指定的 `OUTPUT` 参数，表示 `html` 覆盖率报告的输出路径。
 
-如果该 `OUTPUT` 目录不存在，而且其父目录也不存在，`cjcov` 工具会有报错提示；如果 `OUTPUT` 目录不存在，但其父目录存在，`cjcov` 会帮助创建 `OUTPUT` 目录。
+如果 `OUTPUT` 目录及其父目录均不存在，`cjcov` 工具将显示错误提示。若 `OUTPUT` 目录不存在但其父目录存在，`cjcov` 工具将自动创建 `OUTPUT` 目录。
 
 不指定该参数，默认会以当前目录为 `OUTPUT` 目录来存放 `html` 文件。
 
@@ -262,7 +262,7 @@ line number:    4  ==>  data: [(0, 0), (1, 1)]
 cjcov --root=./ -s "/usr1/cangjie" -e "/usr1/cangjie-tools/tests/LLVM" --html-details --output=html_output
 ```
 
-最后 `html` 中呈现的源文件相对路径是,其中以 `/usr1/cangjie-tools/tests/LLVM` 路径开头的文件不会出现在 `html` 的文件列表中。
+在生成的 HTML 报告中，源文件的相对路径会被呈现，但以 `/usr1/cangjie-tools/tests/LLVM` 开头的路径不会出现在文件列表中。
 
 ```text
 tests/API/test01/src/1.cj
@@ -453,7 +453,7 @@ src
 
 **原因：** 使用 `cjc --test` 编译，仓颉测试框架会生成一个新的 `main` 作为程序入口，源代码中的 `main` 不再作为程序入口并且不会被执行。
 
-**建议：** 在使用 `cjc --test` 之后，建议不用再手写多余的 `main` 。
+**建议：** 在使用 `cjc --test` 之后，建议不用再手写多余的 `main`。
 
 ## FAQ
 
@@ -461,7 +461,7 @@ src
 
 **解决方法：**
 
-方法 1：设置 `CANGJIE_HOME` 环境变量, `cjcov` 可通过 `CANGJIE_HOME` 环境变量找到 `llvm-cov` 命令，设置方法如下：
+方法 1：设置 `CANGJIE_HOME` 环境变量，`cjcov` 可通过 `CANGJIE_HOME` 环境变量找到 `llvm-cov` 命令，设置方法如下：
 假设 `which cjc` 显示 `/work/cangjie/bin/cjc`, 并且 `/work/cangjie/bin/llvm/bin` 和 `/work/cangjie/bin/llvm/lib` 目录都存在，则可设置：
 
 ```shell
