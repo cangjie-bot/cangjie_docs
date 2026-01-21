@@ -121,7 +121,7 @@ multipleLineMethodChainOverLineLength = true
 > **说明：**
 >
 > 若客制化的格式化工具配置文件读取失败，则读取 CANGJIE_HOME 环境下的默认格式化工具配置文件 `cangjie-format.toml`。
-> 若 CANGJIE_HOME 环境下的默认格式化工具配置文件 `cangjie-format.toml` 同样读取失败，则使用 `cjfmt` 内置格式化配置选项。
+> 若 CANGJIE_HOME 内置的默认格式化工具配置文件 `cangjie-format.toml` 同样读取失败，则使用 `cjfmt` 内置格式化配置选项。
 > 若格式化工具配置文件中的某个配置选项读取失败，则该配置选项使用 `cjfmt` 内置格式化配置选项。
 
 ### 片段格式化
