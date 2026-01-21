@@ -4,7 +4,7 @@
 
 `HLE`(Hyper-Lang extension)是一个仓颉调用ArkTS互操作代码模板自动生成工具。
 
-该工具的输入是ArkTS接口声明文件，例如后缀.d.ts或者.d.ets结尾的文件，输出为包含BUILD.gn文件和src文件夹。src文件夹中包含的cj文件中存放生成的互操作代码。工具也会输出包含ArkTS文件的所有信息的json文件。
+该工具的输入是 ArkTS 接口声明文件，例如后缀为.d.ts或.d.ets的文件。输出包含BUILD.gn文件和src文件夹。src文件夹中的cj文件存放生成的互操作代码。此外，工具还会输出包含ArkTS文件所有信息的json文件。
 
 ## 参数含义
 
@@ -14,7 +14,7 @@
 | `-r`            | typescript编译器的绝对路径                  | 可选参数 |-                      |
 | `-d`            | d.ts或者d.ets文件输入所在文件夹的绝对路径    | 可选参数 | 和`-i`参数二选一或者两者同时存在                     |
 | `-o`            | 输出保存互操作代码的目录                    | 可选参数 | 缺省时输出至当前目录 |
-| `-j`            | 分析d.t或者d.ets文件的路径                 | 可选参数 |   -                   |
+| `-j`            | 分析d.ts或者d.ets文件的路径                 | 可选参数 |   -                   |
 | `--module-name` | 自定义生成的仓颉包名                        | 可选参数 |    -                  |
 | `--lib`         | 生成三方库代码                              | 可选参数 |  -                    |
 | `--help`        | 帮助选项                                   | 可选参数 | -                     |
@@ -32,4 +32,3 @@ main  -i  /path/to/test.d.ts  -o  out  –j  /path/to/analysis.js --module-name=
 ```sh
 main -i  /path/to/test.d.ts -o out -j /path/to/analysis.js --module-name=ohos.hilog
 ```
-
