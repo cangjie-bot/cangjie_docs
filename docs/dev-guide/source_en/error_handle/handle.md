@@ -3,6 +3,7 @@
 The previous section discussed how to define custom exceptions. Now let's learn how to throw and handle exceptions.
 
 - Since exceptions are of `class` type, you only need to create them in the same way as class objects. For example, the expression `FatherException()` creates an exception of type `FatherException`.
+- The Cangjie language supports creating exception chains (only for `Exception`), such as the expression `let fatherException = FatherException("this is message", causeException)`, where causeException is another exception and serves as the cause that triggered fatherException. When printing the exception stack trace, it will recursively print the cause.
 - The Cangjie language provides the `throw` keyword for throwing exceptions. When using `throw`, the expression following it must be a subtype of `Exception` (note that `Error`, though also an exception type, cannot be manually thrown via `throw`). For example, `throw ArithmeticException("I am an Exception!")` will throw an arithmetic exception when executed.
 - Exceptions thrown via the `throw` keyword must be caught and handled. If an exception is not caught, the system will invoke the default exception handler.
 

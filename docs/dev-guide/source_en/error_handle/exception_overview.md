@@ -41,7 +41,10 @@ The following table shows the main functions of `Exception` and their descriptio
 | Function Type | Function and Description                                                                     |
 | :------------ |:-------------------------------------------------------------------------------------------|
 | Constructor   | `init()` Default constructor.                                                              |
+| Constructor   | `init(causedBy: Exception)` Constructor that allows setting a cause exception.               |
 | Constructor   | `init(message: String)` Constructor that allows setting an exception message.               |
+| Constructor   | `init(message: String, causedBy: Exception)` Constructor that allows setting an exception message and a cause exception.               |
+| Property      | `mut prop causedBy: ?Exception` Allows setting a cause exception and returns the cause exception. |
 | Property      | `open prop message: String` Returns detailed information about the exception. The message is initialized in the exception class constructor and defaults to an empty string. |
 | Method        | `open func toString(): String` Returns the exception type name and detailed information, where the detailed information defaults to using the `message` property. |
 | Method        | `func getClassName(): String` Returns the user-defined class name. Subclasses need to override this method to return their own names. |
