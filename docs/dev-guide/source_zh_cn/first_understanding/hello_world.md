@@ -30,3 +30,51 @@ cjc hello.cj -o hello
 > **注意：**
 >
 > 以上编译命令是针对 Linux 和 macOS 平台的，如果使用 Windows 平台，只需要将编译命令改为 `cjc hello.cj -o hello.exe` 即可。
+
+## 使用 cjpm 编译运行
+
+除了直接调用 `cjc` 编译器外，您还可以使用仓颉包管理工具 `cjpm` (Cangjie Package Manager) 来快速创建、管理和运行仓颉项目。这是开发中更常用的方式。
+
+首先，创建一个新的目录hello_cjpm用于存放项目文件，并进入该目录：
+
+然后，使用 `cjpm init` 命令初始化一个新的仓颉模块：
+
+```bash
+cjpm init
+```
+
+执行成功后，终端会提示 `cjpm init success`。此时，`cjpm` 会在当前目录下生成默认的项目结构：
+
+```bash
+hello_cjpm
+├── cjpm.toml
+└── src
+    └── main.cj
+```
+
+- **cjpm.toml**: 项目的配置文件。
+- **src/main.cj**: 默认生成的源码文件，其内容如下：
+
+```cangjie
+//声明当前源文件属于 hello_cjpm 包
+package hello_cjpm  
+
+main(): Int64 {
+    println("hello world")
+    return 0
+}
+```
+
+在项目根目录下（即 `cjpm.toml` 所在目录），直接执行以下命令即可编译并运行程序：
+
+```bash
+cjpm run
+```
+
+`cjpm` 会自动处理依赖检查、编译构建以及运行可执行文件的全过程。您将在终端看到如下输出：
+
+```bash
+Hello World
+
+cjpm run success
+```

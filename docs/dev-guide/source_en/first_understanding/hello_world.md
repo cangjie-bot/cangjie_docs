@@ -30,3 +30,51 @@ Hello, Cangjie
 > **Note:**
 >
 > The above compilation command is for Linux and macOS platforms. If you're using Windows, simply modify the compilation command to `cjc hello.cj -o hello.exe`.
+
+## Compiling and Running with cjpm
+
+In addition to using the `cjc` compiler directly, you can also use the **Cangjie Package Manager** (`cjpm`) to quickly create, manage, and run Cangjie projects. This is a more common method for development.
+
+First, create a new directory named `hello_cjpm` to store the project files, and then enter the directory:
+
+Then, use the `cjpm init` command to initialize a new Cangjie module:
+
+```bash
+cjpm init
+```
+
+After a successful execution, the terminal will show `cjpm init success`. At this point, `cjpm` will generate the default project structure in the current directory:
+
+```bash
+hello_cjpm
+├── cjpm.toml
+└── src
+    └── main.cj
+```
+
+- **cjpm.toml**: The configuration file for the project.
+- **src/main.cj**: The default source code file. Its content is as follows:
+
+```bash
+// Declares that the current source file belongs to the hello_cjpm package
+package hello_cjpm  
+
+main(): Int64 {
+    println("hello world")
+    return 0
+}
+```
+
+In the project root directory (where `cjpm.toml` is located), run the following command to compile and run the program:
+
+```bash
+cjpm run
+```
+
+`cjpm` will automatically handle dependency checks, compilation, and the execution of the program. You will see the following output in the terminal:
+
+```bash
+Hello World
+
+cjpm run success
+```
