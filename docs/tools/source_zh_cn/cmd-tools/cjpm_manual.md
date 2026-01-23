@@ -1544,6 +1544,7 @@ performance_analysis = true # 开启编译性能分析功能
 incremental = true # 是否默认开启增量编译
 cjc-jobs = 10 # 设置透传给 cjc 的并行数
 enable-heuristic-parallelism = true # 开启启发式 cjc 并行配置
+compile-pipeline-parallel = true # 是否开启流水并行编译优化
 [profile.build.combined]
 demo = "dynamic" # 将模块整体编译成一个动态库文件，key 值为模块名
 ```
@@ -1575,6 +1576,15 @@ demo
 - 配置 `cjc-jobs` 时（有效范围为 `(0, 999999999]`），`cjc` 的并行数将指定为 `cjc-jobs` 的值，例如，假设有效值为 `10`，则 `cjpm` 会将 `-j10` 透传给 `cjc` 编译命令；
 - 配置 `enable-heuristic-parallelism` 时，`cjpm` 会基于当前正在进行的 `cjc` 进程数，自动计算一个合适的并行数，并透传给 `cjc` 编译命令；
 - 二者均未配置时，`cjpm` 不会透传 `-j` 选项给 `cjc` 编译命令，此时 `cjc` 会基于硬件能力自动计算最大并行数。
+
+`compile-pipeline-parallel` 配置项的取值为 `true` 或 `false`，代表是否开启流水并行编译优化。当开启此功能时，`cjpm` 会在上游包的 `cjo` 编译产物就绪时开始下游包的编译，从而提升编译流程整体的并行度，可以更充分地利用 CPU 资源，减少编译耗时。
+
+> **注意：**
+>
+> - 目前 `compile-pipeline-parallel` 配置项为实验特性，暂不稳定，开发者若想启用该配置，需要注意如下限制：
+>     - 需要在 `[profile]` 字段中指定 `experimental = true`；
+>     - 开启 `LTO` 优化编译模式后， `compile-pipeline-parallel` 选项不会生效；
+>     - `compile-pipeline-parallel` 选项仅支持 `Linux/macOS/Windows` 平台。
 
 `combined` 配置项是一个键值对，其中键为模块名，即 `package.name`，值为 `dynamic`。配置该配置项之前，该模块会根据 `package.output-type` 配置将各个包编译成独立的动态库或静态库文件；配置后，该模块的编译方式改为：
 
