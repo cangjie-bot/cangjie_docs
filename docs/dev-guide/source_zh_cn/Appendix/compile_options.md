@@ -41,7 +41,7 @@ $ cjc tool.cj --output-type=dylib
 
 ### `--compile-target=[exe|staticlib|dylib]` <sup>[frontend]</sup>
 
-该选项专用于 `--output-type=obj` 模式，默认为 `exe` 。因生成的 `.obj/.o` 文件属于编译中间产物，通过指定 `--compile-target` 可明确编译器采用对应编译策略，生成适配不同最终产物类型的中间文件；后续编译器可直接将该 `.obj/.o` 文件作为输入进行链接。
+该选项专用于 `--output-type=obj` 模式，默认为 `exe`。因生成的 `.obj/.o` 文件属于编译中间产物，通过指定 `--compile-target` 可明确编译器采用对应编译策略，生成适配不同最终产物类型的中间文件；后续编译器可直接将该 `.obj/.o` 文件作为输入进行链接。
 
 > **注意：**
 >
@@ -59,7 +59,7 @@ main() {
 ```
 
 ```shell
-# 1.指定 --output-type 为 obj ，并明确 --compile-target 为 exe
+# 1.指定 --output-type 为 obj，并明确 --compile-target 为 exe
 cjc main.cj --output-type=obj --experimental -o main.o --compile-target=exe
 
 # 2.将中间产物链接为可执行文件
@@ -70,9 +70,9 @@ cjc main.o -lcangjie-std-core -o main --experimental
 
 **规格说明：**
 
-1. 不支持以 `.o` 文件作为输入并再次指定 `--output-type=obj` 的场景。 无效用法示例：`cjc main.o --output-type=obj --compile-target=exe` 。
+1. 不支持以 `.o` 文件作为输入并再次指定 `--output-type=obj` 的场景。无效用法示例：`cjc main.o --output-type=obj --compile-target=exe`。
 2. 当 `--output-type` 指定为其他非 `obj` 类型时，`--compile-target` 选项不会生效（将被忽略）。无效用法示例：`cjc main.cj --output-type=exe --compile-target=dylib` 。
-3. 若输入文件仅为 `.o` 中间目标文件，当前步骤配置的 `--output-type`（默认值为 `exe`）必须与生成该 `.o` 文件时指定的 `--compile-target` 保持逻辑一致。例如，若 `.o` 文件是通过 `--compile-target=dylib` 编译生成（用于构建动态库），则链接该文件时也需将 `--output-type` 指定为 `dylib` ，否则可能导致链接失败或产物类型不匹配。
+3. 若输入文件仅为 `.o` 中间目标文件，当前步骤配置的 `--output-type`（默认值为 `exe`）必须与生成该 `.o` 文件时指定的 `--compile-target` 保持逻辑一致。例如，若 `.o` 文件是通过 `--compile-target=dylib` 编译生成（用于构建动态库），则链接该文件时也需将 `--output-type` 指定为 `dylib`，否则可能导致链接失败或产物类型不匹配。
 
 ### `--package`, `-p` <sup>[frontend]</sup>
 
