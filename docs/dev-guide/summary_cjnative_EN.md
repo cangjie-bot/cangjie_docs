@@ -87,6 +87,13 @@
     - [Terminating Threads](source_en/concurrency/terminal_thread.md)
     - [Synchronization Mechanisms](source_en/concurrency/sync.md)
     - [Thread Sleep Duration (sleep)](source_en/concurrency/sleep.md)
+<!--Del_sink-->
+- [Modal Types]()
+    - [Modal Types Overview](source_en/modal_type/modal_overview.md)
+    - [Rules for Local Mode](source_en/modal_type/local_mode_rules.md)
+    - [exclave Expressions](source_en/modal_type/exclave.md)
+    - [Copyable and demode](source_en/modal_type/copyable_and_demode.md)
+<!--DelEnd_sink-->
 - [Basic I/O Operations]()
     - [I/O Stream Overview](source_en/Basic_IO/basic_IO_overview.md)
     - [I/O Node Streams](source_en/Basic_IO/basic_IO_source_stream.md)
