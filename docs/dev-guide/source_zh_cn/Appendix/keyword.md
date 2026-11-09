@@ -28,3 +28,7 @@
 | UInt8        | UInt16     | UInt32    |
 | UInt64       | UIntNative | var       |
 | VArray       | where      | while     |
+
+使用编译选项 `--experimental --enable-local-mode` 开启 local 模式后，`exclave`、`demode` 也是关键字，用于模态类型，详见[模态类型](../modal_type/modal_overview.md)章节。未开启时，它们是普通标识符。将关键字用作标识符时，可以使用原始标识符，语法参见[标识符](../basic_programming_concepts/identifier.md)。
+
+`local` 不是关键字，只有出现在模态类型的 `@` 之后时才表示模式，在其他位置仍可作为普通标识符使用。

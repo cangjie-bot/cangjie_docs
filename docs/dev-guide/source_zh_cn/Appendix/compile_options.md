@@ -1943,6 +1943,15 @@ It is resumed, a = 9
 > - Effect Handler 当前仍属于实验性特性，该选项可能在未来版本中发生变化，请谨慎使用。
 > - 使用 Effect Handler 需引入 `stdx.effect` 库。<!--DelEnd-->
 
+### `--enable-local-mode` <sup>[frontend]</sup>
+
+启用 local 模式，详见[模态类型](../modal_type/modal_overview.md)。
+
+> **注意：**
+>
+> - 此选项必须配合 `--experimental` 选项一同使用。
+> - local 模式当前仍属于实验性特性，该选项可能在未来版本中发生变化，请谨慎使用。
+
 ### `--experimental` <sup>[frontend]</sup>
 
 启用实验性功能，允许在命令行使用其他实验性功能选项。

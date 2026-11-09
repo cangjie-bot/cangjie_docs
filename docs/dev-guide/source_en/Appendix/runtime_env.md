@@ -45,6 +45,20 @@ Example:
 export cjRegionSize=1024kb
 ```
 
+### `cjLocalRegionMaxSize`
+
+Specifies the maximum memory that a single local region can allocate after [local mode](../modal_type/modal_overview.md#enabling-local-mode) is enabled. The default value is 256MB. When the limit is exceeded, a `LocalRegionOutOfMemoryError` is thrown.
+
+A local region here is a memory area set aside for local objects. It is not the same concept as the thread-local buffer of the GC heap region allocator configured by `cjRegionSize`.
+
+Supported units are KB, MB, and GB (case-insensitive). A unit is required, and the size must be greater than 0. If the value is 0 or has no unit, the runtime prints an error log and uses the default value.
+
+For example, to set the limit of a single local region to 128MB:
+
+```shell
+export cjLocalRegionMaxSize=128MB
+```
+
 ### `cjLargeThresholdSize`
 
 Objects requiring large contiguous memory spaces (e.g., long arrays) are called large objects. Frequent allocation of large objects in the heap may lead to insufficient contiguous space, triggering heap overflow issues. Increasing the maximum size of large objects can improve the continuity of heap space.
@@ -235,6 +249,16 @@ Example:
 
 ```shell
 export cjHeapDumpOnOOM=on
+```
+
+#### `cjEnableLocalObjectDump`
+
+Specifies whether heap dumps include local objects. By default, they do not. The feature is enabled only when this variable is set to `1`, `true`, or `TRUE`; any other value, including `on` and `True`, leaves it disabled. This differs from the values accepted by `cjHeapDumpOnOOM`.
+
+Example:
+
+```shell
+export cjEnableLocalObjectDump=true
 ```
 
 #### `cjHeapDumpLog`
