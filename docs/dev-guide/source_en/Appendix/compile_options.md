@@ -316,6 +316,39 @@ By using `--import-path ./libs`, `./libs` is added to the AST file search path f
 
 `--import-path` provides the same functionality as the `CANGJIE_PATH` environment variable, but paths specified via `--import-path` take precedence.
 
+### `--compat-version <value>` <sup>[frontend]</sup>
+
+When artifacts need to be deployed to devices or system images that ship an earlier version of the Cangjie runtime and standard library, specify the compatibility target version with this option to enable the compatibility compilation mode. A minimal example:
+
+```shell
+cjc --compat-version 1.3 main.cj
+```
+
+After upgrading to a newer Cangjie SDK, developers can use this option to specify a supported earlier Cangjie SDK version as the compatibility target, declaring the runtime environment that the artifacts need to remain compatible with. The design goal of the compatibility mode is to provide compatibility capabilities around the artifact contracts of the target version (such as the ABI, the compiler-runtime interaction protocol, and the `cjo` format), so that artifacts can be deployed to environments that ship the runtime and standard library of the target version (such as system images); the concrete scope of the compatibility capabilities is defined by the compatibility change list released with each version.
+
+The compatibility mode is not equivalent to using the earlier SDK: code generation fixes and the standard library are not rolled back and still follow the behavior of the newer version. For details, see the description below.
+
+`<value>` is a two-segment version number in the form `major.minor`, corresponding to the major and minor version numbers of an officially released LTS/STS version. Compatibility is maintained within the same `major.minor` version. The compatibility target is determined by the first official release of that version (for example, 1.3.0); patch versions are not distinguished. The range of allowed values is determined by the compiler. Currently, the supported value is `1.3`. Use `cjc -h` to view the values supported by the current compiler.
+
+- If this option is not specified, the compiler compiles according to the behavior of the current SDK version.
+- If no value is provided for this option, the compiler reports an error.
+- If `<value>` is invalid (for example, a value such as `1.3.0` or `abc` that does not match the `major.minor` format, or a version that is not supported), the compiler reports an error and lists the currently supported compatibility versions.
+
+- This option can be specified multiple times. Identical values are treated as a single specification; different values cause a compilation error.
+
+The categories of incompatible changes governed by the compatibility mode are as follows:
+
+- **Stricter syntax and semantic checks**: Check rules tightened by the newer compiler fall under the governance of the compatibility mode. How such changes are handled under a compatibility target is defined by the compatibility change list released with each version, so that they do not directly cause compilation errors or artifact behavior changes.
+- **New feature support**: The dependence of new features on runtime capabilities of the old runtime image falls under the governance of the compatibility mode; the handling is likewise defined by the compatibility change list, so that compatibility issues do not surface only after deployment.
+- **Code generation fixes**: If the newer compiler fixes incorrect code generation, the program runs with the new behavior. The compatibility mode does not restore incorrect results produced by the earlier version.
+- **Standard library**: The compatibility mode does not roll back the standard library; the standard library of the current SDK is still used for compilation.
+
+> **Note:**
+>
+> - Artifacts generated in compatibility mode target the runtime environment of the compatibility target version; they are not guaranteed to run in environments of later versions.
+> - This option affects only the source code compiled in the current build. The compatibility version of binary dependencies, such as already compiled `cjo` files, static libraries, and dynamic libraries, is fixed when they are built and cannot be changed by this option.
+> - The incremental compilation cache built in non-compatibility mode cannot be mixed with the cache built in compatibility mode, and caches built with different compatibility target versions cannot be mixed with each other either. Switching to a compatibility mode or compatibility target version that has not been used before degrades the build to a full compilation; switching back to a previously used mode or version reuses its existing cache.
+
 ### `--scan-dependency` <sup>[frontend]</sup>
 
 The `--scan-dependency` command retrieves direct dependencies and other information for a specified package's source code or a package's `cjo` file, outputting the results in JSON format.
