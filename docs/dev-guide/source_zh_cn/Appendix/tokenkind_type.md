@@ -1,5 +1,9 @@
 # TokenKind 类型
 
+<!-- code_no_check -->
+<!-- TokenKind 枚举声明节选，不是独立可运行示例。 -->
+
+<!--RP1_sink-->
 ```cangjie
 public enum TokenKind <: ToString {
     | DOT //  "."
@@ -165,6 +169,9 @@ public enum TokenKind <: ToString {
     | RESUME //  "resume"
     | THROWING //  "throwing"
     | DOUBLE_COLON //  "::"
+    | EXCLAVE //  "exclave"
+    | DEMODE //  "demode"
         ...
 }
 ```
+<!--RP1End_sink-->

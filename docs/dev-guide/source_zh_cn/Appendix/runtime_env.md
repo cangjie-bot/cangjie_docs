@@ -45,6 +45,22 @@ export cjHeapSize=4GB
 export cjRegionSize=1024kb
 ```
 
+<!--Del_sink-->
+### `cjLocalRegionMaxSize`
+
+指定开启 [local mode](../modal_type/modal_overview.md#开启-local-mode)后，所有 local region 合计可占用的内存上限，由所有线程共用，默认值为 256MB。超过上限时会抛出 `LocalRegionOutOfMemoryError`。
+
+这里的 local region 是为 local 对象划分的内存区域，与 `cjRegionSize` 所配置的 GC 堆 region 分配器的 thread local buffer 不是同一概念。
+
+支持单位为 KB、MB、GB（不区分大小写），必须带单位，大小需大于 0。设置为 0 或不带单位时，运行时会打印错误日志并使用默认值。
+
+例如，将上限设为 128MB：
+
+```shell
+export cjLocalRegionMaxSize=128MB
+```
+<!--DelEnd_sink-->
+
 ### `cjLargeThresholdSize`
 
 需要大量连续内存空间的对象（例如长数组）称为大对象。堆内频繁分配大对象可能导致堆内连续空间不足，从而触发堆溢出问题。通过增加大对象的最大值，可以提升堆内空间的连续性。

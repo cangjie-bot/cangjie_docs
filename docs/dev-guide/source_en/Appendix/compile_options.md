@@ -1839,6 +1839,19 @@ It is resumed, a = 9
 > - Effect Handlers are currently experimental. This option may change in future versions; use with caution.
 > - Using Effect Handlers requires importing the `stdx.effect` library.<!--DelEnd-->
 
+<!--Del_sink-->
+
+### `--enable-local-mode` <sup>[frontend]</sup>
+
+Enables local mode. For details, see [Modal Types](../modal_type/modal_overview.md).
+
+> **Note:**
+>
+> - This option must be used together with the `--experimental` option.
+> - Local mode is currently experimental. This option may change in future versions; use with caution.
+
+<!--DelEnd_sink-->
+
 ### `--experimental` <sup>[frontend]</sup>
 
 Enables experimental features, allowing the use of other experimental options on the command line.

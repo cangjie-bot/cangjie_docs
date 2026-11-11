@@ -1,5 +1,9 @@
 # TokenKind Type
 
+<!-- code_no_check -->
+<!-- Excerpt of the TokenKind enum declaration, not a standalone runnable example. -->
+
+<!--RP1_sink-->
 ```cangjie
 public enum TokenKind <: ToString {
     | DOT //  "."
@@ -165,6 +169,9 @@ public enum TokenKind <: ToString {
     | RESUME //  "resume"
     | THROWING //  "throwing"
     | DOUBLE_COLON //  "::"               
+    | EXCLAVE //  "exclave"
+    | DEMODE //  "demode"
         ...
 }
 ```
+<!--RP1End_sink-->
