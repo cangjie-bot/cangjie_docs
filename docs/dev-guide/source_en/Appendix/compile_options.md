@@ -1268,6 +1268,7 @@ Rules for enabling/disabling aggressive parallel compilation:
     - `--coverage`
     - Compiling for Windows targets
     - Compiling for macOS targets
+    - Compiling with `cjc-frontend` where `-o` specifies an output file (instead of a directory)
 
 - If `--aggressive-parallel-compile=<value>` or `--apc=<value>` is used, the state of aggressive parallel compilation is controlled by `value`:
 

@@ -1377,6 +1377,7 @@ interface I {
     - `--coverage`
     - 编译 Windows 目标
     - 编译 macOS 目标
+    - `cjc-frontend` 编译时通过 `-o` 指定输出文件（而非目录）
 
 - 若使用 `--aggressive-parallel-compile=<value>` 或 `--apc=<value>`，则激进并行编译的开关由 `value` 控制：
 
