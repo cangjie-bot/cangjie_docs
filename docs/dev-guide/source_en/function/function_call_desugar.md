@@ -4,7 +4,7 @@
 
 Trailing lambda syntax can make function calls appear as if they were built-in language constructs, enhancing the language's extensibility.
 
-When the last parameter of a function is of function type, and the corresponding argument in the function call is a lambda, the trailing lambda syntax can be used by placing the lambda outside the parentheses at the end of the function call.
+When the last parameter of a function is a function type or a function type wrapped in one or more Option types, and the corresponding argument in the function call is a lambda, the trailing lambda syntax can be used by placing the lambda outside the parentheses at the end of the function call.
 
 For example, the following defines a `myIf` function where the first parameter is of type `Bool` and the second is a function type. When the first parameter is `true`, it returns the value from calling the second parameter; otherwise, it returns `0`. The `myIf` function can be called either as a regular function or using trailing lambda syntax.
 
@@ -43,6 +43,46 @@ func test() {
     f {i => i * i}
 }
 ```
+
+When the last parameter has a function type wrapped in one or more Option types, the trailing lambda is automatically wrapped using Some according to the parameter type.
+
+In the following example, the last parameter of `apply` is an Option type whose type argument is a function type.
+
+<!-- verify -->
+
+```cangjie
+func apply(value: Int64, callback: Option<(Int64) -> Int64>): Int64 {
+    match (callback) {
+        case Some(fn) => fn(value)
+        case None => value
+    }
+}
+
+func run(callback: Option<Option<() -> Int64>>): Int64 {
+    match (callback) {
+        case Some(Some(fn)) => fn()
+        case _ => 0
+    }
+}
+
+main() {
+    println(apply(10) { x => x + 1 })
+    println(apply(10, { x => x + 1 }))
+    println(run { 42 })
+    println(run() { => 42 })
+}
+```
+
+Program output:
+
+```text
+11
+11
+42
+42
+```
+
+Like a lambda passed inside the parentheses, a trailing lambda must satisfy the parameter's function type requirements, and its parameter types can be inferred from the context.
 
 ## Flow Expressions
 
