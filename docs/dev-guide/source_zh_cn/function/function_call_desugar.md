@@ -4,7 +4,7 @@
 
 尾随 lambda 可以使函数的调用看起来像是语言内置的语法一样，增加语言的可扩展性。
 
-当函数最后一个形参是函数类型，并且函数调用对应的实参是 lambda 时，可以使用尾随 lambda 语法，将 lambda 放在函数调用的尾部，圆括号外面。
+当函数最后一个形参是函数类型，或由一层或多层 Option 类型包装的函数类型，并且函数调用对应的实参是 lambda 时，可以使用尾随 lambda 语法，将 lambda 放在函数调用的尾部，圆括号外面。
 
 例如，下例中定义了一个 `myIf` 函数，它的第一个参数是 `Bool` 类型，第二个参数是函数类型。当第一个参数的值为 `true` 时，返回第二个参数调用后的值，否则返回 `0`。调用 `myIf` 时可以像普通函数一样调用，也可以使用尾随 lambda 的方式调用。
 
@@ -43,6 +43,46 @@ func test() {
     f {i => i * i}
 }
 ```
+
+当最后一个形参的类型是由一层或多层 Option 类型包装的函数类型时，传入的尾随 lambda 会按照形参类型自动进行 Some 包装。
+
+下面的示例中，`apply` 的最后一个形参是类型实参为函数类型的 Option 类型，`run` 的形参则在函数类型外包装了两层 Option 类型。两者都可以接收尾随 lambda。
+
+<!-- verify -->
+
+```cangjie
+func apply(value: Int64, callback: Option<(Int64) -> Int64>): Int64 {
+    match (callback) {
+        case Some(fn) => fn(value)
+        case None => value
+    }
+}
+
+func run(callback: Option<Option<() -> Int64>>): Int64 {
+    match (callback) {
+        case Some(Some(fn)) => fn()
+        case _ => 0
+    }
+}
+
+main() {
+    println(apply(10) { x => x + 1 })
+    println(apply(10, { x => x + 1 }))
+    println(run { 42 })
+    println(run() { => 42 })
+}
+```
+
+程序输出：
+
+```text
+11
+11
+42
+42
+```
+
+尾随 lambda 与在圆括号内传入 lambda 的方式一样，需要满足形参的函数类型要求，其参数类型可以从上下文推断。
 
 ## Flow 表达式
 
