@@ -33,3 +33,7 @@ $ cjc hello.cj
 This will generate an executable file named `main` in the working directory. By default, `cjc` compiles the given source code files into an executable and names it `main`.
 
 The above describes `cjc`'s default behavior when no compilation options are provided. You can control `cjc`'s behavior using compilation options, such as instructing `cjc` to perform whole-package compilation or specifying the name of the output file.
+
+> **Note:**
+>
+> When compiling large projects on Windows, the link command carries the paths of all object files and library files, or contains overlong arguments from the `LIBRARY_PATH` environment variable, and its length may exceed the Windows per-command-line limit, causing the linker to fail to start. To avoid this problem, when the link command length reaches the threshold, `cjc` automatically writes the link parameters to a response file (a file from which the linker reads parameters, equivalent to providing them on the command line) and starts the linker with `@<file path>`. With the `--save-temps <dir>` option, the response file is generated directly in the specified directory and kept after the build for troubleshooting. When compiling with the `-V` option, the response file path appears in the printed linker command (in the `@<file path>` form).
