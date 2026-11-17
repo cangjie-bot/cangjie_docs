@@ -1216,7 +1216,7 @@ src
 
 - 除当前构建模块的 `root` 包以外，参与本次构建的所有源码包都会以 `LTO` 优化编译模式生成对应的 `.bc` 文件。这些源码包包括当前模块的所有子包，以及当前模块直接、间接依赖的源码模块的 `root` 包和子包；宏包、测试包和仅提供二进制产物的依赖不会生成此类 `.bc` 文件；
 - 非 iOS 平台，该模块的 `root` 包会将这些源码包生成的 `.bc` 文件全部作为链接输入，并输出动态库，即使这些包未被该 `root` 包显式导入；
-- iOS 平台，该模块的 `root` 包会将这些源码包生成的 `.bc` 文件全部作为链接输入，并输出静态库（`.a`）。
+- iOS 平台，该模块的 `root` 包会将这些源码包生成的 `.bc` 文件全部作为链接输入，无论这些源码包是否被该 `root` 包显式导入。最终根据入口模块的 `profile.build.combined` 配置，输出静态库（`static`，`.a`）或动态库（`dynamic`，`.dylib`）。
 
 ### include, exclude
 
@@ -1594,7 +1594,7 @@ level = "full" # 是否开启 `LTO` （Link Time Optimization 链接时优化）
 keep-pkg-visibility = ["pkgA", "pkgB", ...] # 用于在LTO场景控制包中的符号可见性是否隐藏
 
 [profile.build.combined]
-demo = "dynamic" # 非 iOS 平台将模块整体编译成动态库；iOS 平台需配置为 "static"
+demo = "dynamic" # 非 iOS 平台仅支持 "dynamic"；iOS 平台支持 "static" 或 "dynamic"，且需同时开启 LTO
 ```
 
 编译流程的控制项，所有字段均可缺省，不配置时不生效，顶层模块设置的 `profile.build` 项才会生效。
@@ -1643,11 +1643,11 @@ demo
 > - 开启 `LTO` 优化编译模式后， `compile-pipeline-parallel` 选项不会生效；
 > - `compile-pipeline-parallel` 选项仅支持 `Linux/macOS/Windows` 平台。
 
-`combined` 配置项是一个键值对，其中键为模块名，即 `package.name`。非 iOS 平台的值为 `dynamic`；iOS 平台使用 `lto-combine` 时值必须为 `static`。配置该配置项之前，该模块会根据 `package.output-type` 配置将各个包编译成独立的动态库或静态库文件；配置后，该模块的编译方式改为：
+`combined` 配置项是一个键值对，其中键为模块名，即 `package.name`。非 iOS 平台的值为 `dynamic`；iOS 平台支持 `static` 和 `dynamic`，分别生成静态库（`.a`）和动态库（`.dylib`），且必须同时开启 `profile.build.lto`。配置该配置项之前，该模块会根据 `package.output-type` 配置将各个包编译成独立的动态库或静态库文件；配置后，该模块的编译方式改为：
 
 - 非 iOS 平台，模块内除 `root` 包以外的子包以静态库形式编译；
 - 非 iOS 平台的 `root` 包以动态库形式编译，并且链接所有子包的静态库，无论子包是否被 `root` 包依赖。其他模块以二进制依赖形式依赖该动态库时，可以使用所有子包内的符号；
-- iOS 平台的 `root` 包以静态库（`.a`）形式编译，并且通过 LTO 合并所有子包的中间产物。
+- iOS 平台，模块内除 `root` 包以外的普通源码子包生成 LTO 中间产物，再由 `root` 包统一合并，无论这些子包是否被 `root` 包显式导入。`root` 包的最终产物类型由 `profile.build.combined` 决定；若与 `package.output-type` 不一致，CJPM 会提示告警，并采用合并配置指定的类型。
 
 例如，假设模块 `demo` 的结构如下：
 
@@ -1692,6 +1692,9 @@ demo = "dynamic"
 >     - 非工作空间场景下，模块配置了该字段后，其所有直接和间接依赖的源码模块会自动被视为也配置了该字段，无需手动逐个配置；若模块未配置该字段，则 `combined` 整体不生效，某个依赖模块配置了该字段也不会生效；
 >     - 工作空间场景下，当前实际参与编译的所有工作空间成员都配置了该字段后，这些成员所有直接和间接依赖的源码模块才会自动被视为也配置了该字段；若有成员未配置，则 `combined` 整体不生效；
 >     - 构建脚本依赖的源码模块中，若配置了 `profile.build.combined`，不会生效；
+> - iOS 模块级 `lto-combine`：每个源码模块各生成一个库，库类型都按入口模块的 `combined` 配置确定。
+> - iOS 工程级 `lto-combine`：将当前模块和它依赖的源码模块合并成一个库。
+> - iOS 工作空间实际参与编译的成员均配置 `combined` 时，配置值必须统一为 `static` 或统一为 `dynamic`，不能混用两种类型。
 
 若启用了 `combined` 配置，可能会出现无法通过导入关系识别的循环依赖，导致出现 `cyclic dependency` 循环依赖报错，解决方式如下：
 
@@ -1715,13 +1718,42 @@ demo = "dynamic"
 | `Linux/OpenHarmony/Android/iOS` | 仅配置 `profile.build.lto` | LTO | 按 `package.output-type` 生成 | 各包分别编译，并使用 LTO 优化 |
 | `Linux/OpenHarmony/Android/Windows` | 仅配置 `profile.build.combined` | 模块级 `combine` | 动态库 | 子包编译为静态库并链接进 `root` 包 |
 | `Linux/OpenHarmony/Android` | 同时配置 `profile.build.lto` 和 `profile.build.combined` | 模块级 `lto-combine` | 动态库 | 所有子包先生成 LTO 中间产物，再由 `root` 包合并 |
-| `iOS` | 同时配置 `profile.build.lto` 和 `profile.build.combined` | 模块级 `lto-combine` | 静态库 | 所有子包先生成 LTO 中间产物，再由 `root` 包合并 |
+| `iOS` | 同时配置 `profile.build.lto` 和 `profile.build.combined` | 模块级 `lto-combine` | 由 `profile.build.combined` 指定的静态库或动态库 | 所有子包先生成 LTO 中间产物，再由 `root` 包合并 |
 | `Linux/OpenHarmony/Android` | 追加 `combine-all-deps = true` | 工程级 `lto-combine` | 动态库 | 将当前构建图中除当前模块 `root` 包外的源码包生成的 `.bc` 文件全部合并 |
-| `iOS` | 追加 `combine-all-deps = true` | 工程级 `lto-combine` | 静态库 | 将当前构建图中除当前模块 `root` 包外的源码包生成的 `.bc` 文件全部合并 |
+| `iOS` | 追加 `combine-all-deps = true` | 工程级 `lto-combine` | 由入口模块 `profile.build.combined` 指定的静态库或动态库 | 将当前构建图中除当前模块 `root` 包外的源码包生成的 `.bc` 文件全部合并 |
 
 > **注意：**
 >
-> iOS 平台不支持单独使用 `combine`。在 iOS 平台使用模块级或工程级 `lto-combine` 时，`profile.build.combined` 中入口模块的值必须配置为 `static`。
+> iOS 平台不支持单独使用 `combine`。模块级和工程级 `lto-combine` 均须开启 LTO，支持 `full` 和 `thin` 模式；`profile.build.combined` 可配置为 `static` 或 `dynamic`。
+
+在 iOS 平台，模块级和工程级动态库合并模式均可在合并 LTO bitcode（`.bc`）的同时，链接仓颉原生静态库（`.a`）、仓颉动态库（`.dylib`），以及通过 `ffi.c` 配置的 C 静态库或动态库。iOS 静态合并模式主要合并 `.bc`，其原生 C 库依赖由应用在最终链接时处理。
+
+以下为 iOS 模块级动态库合并的配置片段，其余模块配置保留：
+
+```toml
+[package]
+name = "demo"
+output-type = "dynamic"
+
+[profile.build.lto]
+level = "full"
+
+[profile.build.combined]
+demo = "dynamic"
+```
+
+上例使用 `full` LTO，生成 `libdemo.dylib`。
+
+若需生成静态库，将 `combined` 中的值改为 `static` 即可。如果 `package.output-type` 仍为 `dynamic`，CJPM 会提示它被 `combined` 配置覆盖，最终仍生成静态库。目标平台及交叉编译环境仍需按相关章节配置。
+
+若需开启工程级合并，在同一配置文件中追加：
+
+```toml
+[package.package-configuration.demo]
+combine-all-deps = true
+```
+
+链接动态库依赖会在根动态库中保留相应依赖关系，不会将被依赖动态库的代码合并进根库。模块级合并可能保留源码依赖模块的动态库；工程级合并会将参与合并的源码依赖纳入入口根库，但不意味着标准库、运行时及第三方动态库都会被合并。集成到 iOS 应用时，仍需按实际依赖配置动态库的嵌入、加载路径和签名。
 
 #### profile.test
 
@@ -1943,7 +1975,7 @@ main(): Int64 {
 > **注意：**
 >
 > 依赖的仓颉动态库文件可能是其他模块通过配置 `profile.build.combined` 生成的 `root` 包编译产物，包含其所有子包的符号。因此，在依赖检查时，如果找不到某个包对应的仓颉库，会使用该包对应的 `root` 包作为依赖，并打印告警提示。开发者需要保证以此方式导入的 `root` 包是通过对应方式生成的仓颉库文件，否则该库文件可能不会包含子包的符号，导致编译报错。
-> 例如，源码中通过 `import demo.aoo` 导入了 `demo.aoo` 包，在二进制依赖中没有找到该包对应的仓颉库，`cjpm` 会尝试寻找该包对应的 `root` 包的动态库，即 `libdemo.so`，如果找到则使用该库作为依赖。
+> 例如，源码中通过 `import demo.aoo` 导入了 `demo.aoo` 包，在二进制依赖中没有找到该包对应的仓颉库，`cjpm` 会尝试寻找该包对应的 `root` 包的动态库，即 Linux 平台的 `libdemo.so` 或 iOS 平台的 `libdemo.dylib`，如果找到则使用该库作为依赖。
 
 #### target.target-name.compile-macros-for-target
 

@@ -154,7 +154,7 @@ In addition to the cross-compilation supported Cangjie package, you also need to
 
 ### Compilation
 
-Currently, Cangjie cross-compilation to iOS only supports compiling static libraries. When cross-compiling Cangjie code to `iOS` devices, specify the following additional options:
+This section describes cross-compiling to `iOS` using a static library as an example. When cross-compiling Cangjie code to `iOS` devices, specify the following additional options:
 
 - `--target=aarch64-apple-ios<version>` specifies the target platform `ios` for cross-compilation
 - `--output-type=staticlib` specifies the output file type as a static library
@@ -178,7 +178,9 @@ cjc main.cj --output-type=staticlib --target=aarch64-apple-ios17.5 -o libmain.a
 
 `main.cj` is the Cangjie code being cross-compiled, `aarch64-apple-ios17.5` is the target platform, and `--output-type=staticlib` specifies the output file type as a static library.
 
-In addition to adding the Cangjie compilation output to the `Xcode` project, the following configurations are required when building with `Xcode`:
+Module-level or project-level `lto-combine` builds with CJPM can also produce `.dylib` dynamic libraries. Enable `profile.build.lto` and set the corresponding module's value under `profile.build.combined` to `dynamic`. For configuration details and dynamic library integration considerations, see [Compilation Optimization and Build Artifact Consolidation](../../../tools/source_en/cmd-tools/cjpm_manual.md#compilation-optimization-and-build-artifact-consolidation) in the CJPM manual.
+
+When integrating the static library described above into an `Xcode` project, the following configurations are also required:
 
 1. Select a directory based on the runtime target (device or simulator):
 

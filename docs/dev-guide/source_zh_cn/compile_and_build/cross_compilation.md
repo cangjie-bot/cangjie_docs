@@ -153,7 +153,7 @@ $ adb shell "LD_LIBRARY_PATH=/data/local/tmp /data/local/tmp/main"
 
 ### 编译
 
-当前仓颉交叉编译至 `iOS` 仅支持编译静态库，交叉编译仓颉代码至 `iOS` 设备时需要额外指定以下选项：
+本节以生成静态库为例，介绍交叉编译至 `iOS` 的步骤。交叉编译仓颉代码至 `iOS` 设备时，需要额外指定以下选项：
 
 - `--target=aarch64-apple-ios<version>` 指定目标平台 `ios` 进行交叉编译
 - `--output-type=staticlib`指定输出文件的类型为静态库
@@ -179,7 +179,9 @@ cjc main.cj --output-type=staticlib --target=aarch64-apple-ios17.5 -o libmain.a
 
 `main.cj` 是交叉编译的仓颉代码， `aarch64-apple-ios17.5` 为目标平台，`--output-type=staticlib` 指定输出文件的类型为静态库。
 
-除需要将仓颉代码的编译产物添加到 `Xcode` 工程外，使用 `Xcode` 构建还需要进行以下配置：
+使用 CJPM 进行模块级或工程级 `lto-combine` 构建时，也可以生成 `.dylib` 动态库。需开启 `profile.build.lto`，并将 `profile.build.combined` 中对应模块的值设为 `dynamic`。具体配置和动态库集成注意事项，参见 CJPM 手册的[编译优化与编译产物合一](../../../tools/source_zh_cn/cmd-tools/cjpm_manual.md#编译优化与编译产物合一)。
+
+将上述静态库集成到 `Xcode` 工程时，还需要进行以下配置：
 
 1. 根据需要的运行目标（设备或模拟器）选择一个目录：
 
