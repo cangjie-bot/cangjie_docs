@@ -81,5 +81,5 @@
 /docs/dev-guide/source_en/struct/ @Timi3 @guoyuqing
 
 # 指定docs/tools目录下文件的Code Owner
-/docs/tools/source_zh_cn/ @guoyuqing @zxudong
-/docs/tools/source_en/ @guoyuqing @zxudong
+/docs/tools/source_zh_cn/ @guoyuqing @zjdd
+/docs/tools/source_en/ @guoyuqing @zjdd
