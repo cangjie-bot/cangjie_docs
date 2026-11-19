@@ -14,7 +14,7 @@ HLE 自动生成 C 语言到仓颉的胶水代码，支持函数、结构体、�
 | char               | UInt8            |
 | signed char        | Int8             |
 | unsigned char      | UInt8            |
-| short              | Int64            |
+| short              | Int16            |
 | int                | Int32            |
 | unsigned int       | UInt32           |
 | long               | Int64            |

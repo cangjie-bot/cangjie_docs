@@ -14,7 +14,7 @@ The tool supports the following basic types:
 | char               | UInt8            |
 | signed char        | Int8             |
 | unsigned char      | UInt8            |
-| short              | Int64            |
+| short              | Int16            |
 | int                | Int32            |
 | unsigned int       | UInt32           |
 | long               | Int64            |
