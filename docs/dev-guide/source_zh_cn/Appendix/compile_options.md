@@ -1008,7 +1008,7 @@ cjc --target=arch-os-env --sysroot /usr/sdk/arch-os-env hello.cj -o hello
 
 输出各编译阶段内存消耗数据到一份文件中，该文件以 .mem.prof 为后缀， 保存在 `output` 指定的目录中，若`output` 指定的是一个文件，则 .mem.prof 与该文件同级。
 
-### `--sanitize=[address|thread|hwsaddress]` <sup>[frontend]</sup>
+### `--sanitize=[address|thread|hwaddress]` <sup>[frontend]</sup>
 
 用于开启 sanitizer 编译期间插桩功能，运行时检测程序中的各种错误。并链接对应 sanitizer 的库。使用该选项前需下载支持 sanitizer 功能的专属 SDK 包（如 cangjie-sdk-linux-aarch64-sanitizer.tar.gz），并确保 SDK 已正确部署。
 
@@ -1284,7 +1284,7 @@ package my_pkg
 class TestFoo {
     @TestCase
     func testInvertSlashes() {
-        @Assert("\\Users\\Adimn\\Documents".invertSlashes(), "/Users/Adimn/Documents")
+        @Assert("\\Users\\Admin\\Documents".invertSlashes(), "/Users/Admin/Documents")
     }
 }
 ```
@@ -1806,7 +1806,7 @@ obf-cf-* pro0.MyClassA.myfunc(**.MyClassB, ***, ...)
 
 **值得注意的是**，该功能存在与 gcc/llvm 实现不一致的地方：不会在 constructor 插入 `void __sanitizer_cov_trace_pc_guard_init(uint32_t *start, uint32_t *stop)`，而是在 package 初始化阶段插入函数调用 `uint32_t *__cj_sancov_pc_guard_ctor(uint64_t edgeCount)`。
 
-`__cj_sancov_pc_guard_ctor` 回调函数需要开发者自行实现，开启 SanCov 的 package 会尽可能早地调用该回调函数，入参是该 Package 的 Edge 个数，返回值是通常是 calloc 创建的内存区域。
+`__cj_sancov_pc_guard_ctor` 回调函数需要开发者自行实现，开启 SanCov 的 package 会尽可能早地调用该回调函数，入参是该 Package 的 Edge 个数，返回值通常是 calloc 创建的内存区域。
 
 如果需要调用 `__sanitizer_cov_trace_pc_guard_init`，建议在 `__cj_sancov_pc_guard_ctor` 中调用，使用动态创建的缓冲区计算该函数的入参和返回值。
 
@@ -1826,7 +1826,7 @@ uint32_t *__cj_sancov_pc_guard_ctor(uint64_t edgeCount) {
 
 **值得注意的是**，该功能存在与 gcc/llvm 实现不一致的地方：不会在 constructor 插入 `void __sanitizer_cov_8bit_counters_init(char *start, char *stop)`，而是在 package 初始化阶段插入函数调用 `uint8_t *__cj_sancov_8bit_counters_ctor(uint64_t edgeCount)`。
 
-`__cj_sancov_pc_guard_ctor` 回调函数需要开发者自行实现，开启 SanCov 的 package 会尽可能早地调用该回调函数，入参是该 Package 的 Edge 个数，返回值是通常是 calloc 创建的内存区域。
+`__cj_sancov_8bit_counters_ctor` 回调函数需要开发者自行实现，开启 SanCov 的 package 会尽可能早地调用该回调函数，入参是该 Package 的 Edge 个数，返回值通常是 calloc 创建的内存区域。
 
 如果需要调用 `__sanitizer_cov_8bit_counters_init`，建议在 `__cj_sancov_8bit_counters_ctor` 中调用，使用动态创建的缓冲区计算该函数的入参和返回值。
 
@@ -1846,7 +1846,7 @@ uint8_t *__cj_sancov_8bit_counters_ctor(uint64_t edgeCount) {
 
 **值得注意的是**，该功能存在与 gcc/llvm 实现不一致的地方：不会在 constructor 插入 `void __sanitizer_cov_bool_flag_init(bool *start, bool *stop)`，而是在 package 初始化阶段插入函数调用 `bool *__cj_sancov_bool_flag_ctor(uint64_t edgeCount)`。
 
-`__cj_sancov_bool_flag_ctor` 回调函数需要开发者自行实现，开启 SanCov 的 package 会尽可能早地调用该回调函数，入参是该 Package 的 Edge 个数，返回值是通常是 calloc 创建的内存区域。
+`__cj_sancov_bool_flag_ctor` 回调函数需要开发者自行实现，开启 SanCov 的 package 会尽可能早地调用该回调函数，入参是该 Package 的 Edge 个数，返回值通常是 calloc 创建的内存区域。
 
 如果需要调用 `__sanitizer_cov_bool_flag_init`，建议在 `__cj_sancov_bool_flag_ctor` 中调用，使用动态创建的缓冲区计算该函数的入参和返回值。
 
