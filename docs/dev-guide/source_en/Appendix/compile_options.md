@@ -318,22 +318,26 @@ By using `--import-path ./libs`, `./libs` is added to the AST file search path f
 
 ### `--compat-version <value>` <sup>[frontend]</sup>
 
-When artifacts need to be deployed to devices or system images that ship an earlier version of the Cangjie runtime and standard library, specify the compatibility target version with this option to enable the compatibility compilation mode. A minimal example:
+This option enables compatibility compilation after an SDK upgrade. After upgrading to a newer Cangjie SDK, if the artifacts still need to be deployed to devices or system images that ship an earlier version of the Cangjie runtime and standard library, specify a supported earlier version as the compatibility target with this option to enable the compatibility compilation mode; if the deployment target is the runtime environment matching the current SDK version, this option is not needed. A minimal example:
 
 ```shell
 cjc --compat-version 1.3 main.cj
 ```
 
-After upgrading to a newer Cangjie SDK, developers can use this option to specify a supported earlier Cangjie SDK version as the compatibility target, declaring the runtime environment that the artifacts need to remain compatible with. The design goal of the compatibility mode is to provide compatibility capabilities around the artifact contracts of the target version (such as the ABI, the compiler-runtime interaction protocol, and the `cjo` format), so that artifacts can be deployed to environments that ship the runtime and standard library of the target version (such as system images); the concrete scope of the compatibility capabilities is defined by the compatibility change list released with each version.
+The design goal of the compatibility mode is to provide compatibility capabilities around the artifact contracts of the target version (such as the ABI, the compiler-runtime interaction protocol, and the `cjo` format), so that artifacts can be deployed to environments that ship the runtime and standard library of the target version (such as system images); the concrete scope of the compatibility capabilities is defined by the compatibility change list released with each version.
 
 The compatibility mode is not equivalent to using the earlier SDK: code generation fixes and the standard library are not rolled back and still follow the behavior of the newer version. For details, see the description below.
 
-`<value>` is a two-segment version number in the form `major.minor`, corresponding to the major and minor version numbers of an officially released LTS/STS version. Compatibility is maintained within the same `major.minor` version. The compatibility target is determined by the first official release of that version (for example, 1.3.0); patch versions are not distinguished. The range of allowed values is determined by the compiler. Currently, the supported value is `1.3`. Use `cjc -h` to view the values supported by the current compiler.
+`<value>` is a two-segment version number in the form `major.minor`, corresponding to the major and minor version numbers of an officially released LTS/STS version. Compatibility is maintained within the same `major.minor` version, and the compatibility target is determined by the first official release of that version (for example, `1.3` corresponds to the official release `1.3.0`); patch versions are not distinguished. Note that the value itself accepts only the two-segment form without a patch segment, so write `1.3` rather than `1.3.0`. The format requirements are as follows:
+
+- The value consists of two segments of decimal digits separated by a single `.`, for example `1.3`;
+- Both `major` and `minor` are non-negative integers of at most two digits (in the range 0–99);
+- A patch segment (such as `1.3.0`), leading zeros (such as `01.3`), a sign (such as `-1.3`), a prefix or suffix (such as `v1.3` or `1.3a`), consecutive `.` (such as `1..3`), whitespace, or other characters are not accepted;
+- A format-valid value must also be within the range of compatibility versions supported by the compiler. The range of allowed values is determined by the compiler; currently, the supported value is `1.3`. Use `cjc -h` to view the values supported by the current compiler; a format-valid but unsupported value (such as `1.2`) is also rejected.
 
 - If this option is not specified, the compiler compiles according to the behavior of the current SDK version.
 - If no value is provided for this option, the compiler reports an error.
-- If `<value>` is invalid (for example, a value such as `1.3.0` or `abc` that does not match the `major.minor` format, or a version that is not supported), the compiler reports an error and lists the currently supported compatibility versions.
-
+- If `<value>` does not match the format requirements above, or is not within the range of supported compatibility versions, the compiler reports an error and lists the currently supported compatibility versions.
 - This option can be specified multiple times. Identical values are treated as a single specification; different values cause a compilation error.
 
 The categories of incompatible changes governed by the compatibility mode are as follows:
