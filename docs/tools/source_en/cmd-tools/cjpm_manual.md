@@ -62,6 +62,7 @@ Available options:
   --no-feature-deduce           disables auto-enabling of features, deduced from other options, machine properties, etc.
   -m, --member <value>          specify a member module of the workspace
   --target <value>              generate code for the given target platform
+  --compat-version <value>      generate artifacts according to the specified compatibility version
   --target-dir <value>          specify target directory
   -o, --output <value>          specify product name when compiling an executable file
   -l, --lint                    enable cjlint code check
@@ -130,6 +131,7 @@ The `check` command is used to check the dependencies required by the project. U
 
 - `-m, --member <value>` can only be used in a workspace to specify a single module as the check entry point.
 - `--no-tests` when configured, test-related dependencies will not be printed.
+- `--compat-version <value>` specifies the compatibility target version, which is passed to `cjc` during dependency scanning so that the dependency analysis results are consistent with a build using the same compatibility version. For details, see the [build](#build) section.
 - `--skip-script` when configured, the build script compilation and execution will be skipped.
 
 Examples:
@@ -187,6 +189,7 @@ The `tree` command is used to visually display the package dependency relationsh
 - `-p, --package <value>` specifies a package as the root node to display its sub-dependencies. The value required is the package name.
 - `--invert <value>` specifies a package as the root node and inverts the dependency tree to show which packages depend on it. The value required is the package name.
 - `--target <value>` includes dependencies for the specified target platform in the analysis and displays the dependency relationships.
+- `--compat-version <value>` specifies the compatibility target version, which is passed to `cjc` during dependency scanning so that the dependency analysis results are consistent with a build using the same compatibility version. For details, see the [build](#build) section.
 - `--no-tests` excludes dependencies listed in the `test-dependencies` field.
 - `--skip-script` when configured, the build script compilation and execution will be skipped.
 
@@ -275,6 +278,7 @@ cjpm tree success
 - `-m, --member <value>` can only be used in a workspace to specify a single module as the compilation entry point.
 - `--target <value>` when specified, enables cross-compilation to the target platform. For `cjpm.toml` configuration, refer to the [target](#target) section.
 - `--target-dir <value>` specifies the output directory for the build artifacts.
+- `--compat-version <value>` specifies the compatibility target version and enables the compatibility compilation mode. The value is a two-segment version number in the form `major.minor`, such as `1.3`. For details, see the notes below.
 - `-o, --output <value>` specifies the name of the output executable file. The default name is `main` (`main.exe` on Windows). Note that compiling an executable named `cjc` is currently not supported.
 - `-l, --lint` Used to invoke the Cangjie language static analysis tool for code inspection during compilation.
 - `--mock` enables `mock` testing for classes in the build version with this option.
@@ -285,6 +289,9 @@ cjpm tree success
 > - The `-i, --incremental` option only enables package-level incremental compilation in `cjpm`. Developers can manually pass `--incremental-compile` and `--experimental` compilation options in the configuration file's `compile-option` field to enable function-level incremental compilation provided by the `cjc` compiler.
 > - The `-i, --incremental` option currently only supports incremental analysis based on source code. If imported library content changes, developers need to rebuild using full compilation.
 > - Source files ending with `_test.cj` and test cases within ordinary source files are ignored during the `build` phase. Other compilation-related commands `(run/install/bundle)` also ignore the aforementioned files during the compilation phase.
+> - When `--compat-version <value>` is specified, all source packages in the dependency graph of the current build (including workspace member modules, source dependency modules, macro packages, and host-platform tasks in cross-compilation scenarios) are compiled by `cjc` with the same value. The compatibility version of binary dependencies introduced through `bin-dependencies`, such as `cjo` files, static libraries, and dynamic libraries, is fixed when they are built and is not affected by this option. The build script `build.cj` itself and the compilation and dependency scanning of its script dependencies do not carry this option. For the behavior of the compatibility mode, see the description of `--compat-version` in the [Compilation Options](../../../dev-guide/source_en/Appendix/compile_options.md) section of the *Cangjie Programming Language Development Guide*.
+> - `cjpm` only checks whether the value of `--compat-version` is in the `major.minor` format and reports an error when no value is provided or the format is invalid. The supported compatibility versions are determined by `cjc`, which reports an error if the value is not supported. If this option is not specified, `cjpm` does not pass it to `cjc`, and compilation follows the behavior of the current SDK version.
+> - `--compat-version` can be specified multiple times. Identical values are treated as a single specification; different values cause an error `Error: the '--compat-version' option is specified with different values '1.3' and '1.4'`.
 
 Intermediate files generated during compilation are stored in the `target` folder by default, while executable files are stored in `target/release/bin` or `target/debug/bin` folders based on the compilation mode. To run the executable, refer to the `run` command.
 
@@ -357,6 +364,7 @@ In other commands involving package dependency resolution (e.g., `tree`), simila
 - `--skip-build` skips the compilation process and directly runs the binary.
 - `--run-args <value>` passes arguments to the binary being executed.
 - `--target-dir <value>` specifies the output directory for the executable.
+- `--compat-version <value>` specifies the compatibility target version used during the compilation phase. For details, see the [build](#build) section.
 - `-g` runs the `debug` version of the binary.
 - `-V, --verbose` displays execution logs.
 - `--skip-script` when configured, the build script compilation and execution will be skipped.
@@ -516,6 +524,7 @@ The unit test code structure for a module is as follows, where `xxx.cj` contains
 - `-m, --member <value>` Can only be used in a workspace to specify testing a single module.
 - `--target <value>` When specified, cross-compiles unit test artifacts for the target platform. Refer to the [target](#target) section for `cjpm.toml` configurations.
 - `--target-dir <value>` Specifies the output directory for unit test artifacts.
+- `--compat-version <value>` Specifies the compatibility target version used to compile both the code under test and the unit tests. For details, see the [build](#build) section.
 - `--dry-run` When enabled, only prints the test cases without execution.
 - `--filter <value>` Filters a subset of tests. The `value` format is as follows:
     - `--filter=*` Matches all test classes.
@@ -619,6 +628,7 @@ Summary: TOTAL: 1
 - `-m, --member <value>`: Only usable in a workspace, specifies a single module to test.
 - `--target <value>`: Specifies cross-compilation for the target platform. Refer to the `cross-compile-configuration` section in `cjpm.toml` for configuration details.
 - `--target-dir <value>`: Specifies the output directory for unit test artifacts.
+- `--compat-version <value>`: Specifies the compatibility target version used to compile both the code under test and the benchmarks. For details, see the [build](#build) section.
 - `--dry-run`: Prints the test cases without executing them.
 - `--filter <value>`: Filters a subset of tests. The `value` format is as follows:
     - `--filter=*`: Matches all test classes.
@@ -702,6 +712,7 @@ The `install` command installs a Cangjie project. It first compiles the project 
 - `-j, --jobs <N>`: Specifies the maximum number of parallel compilation jobs. The final maximum concurrency is the minimum of `N` and `2 × CPU cores`.
 - `--cfg`: Allows passing custom `cfg` options from `cjpm.toml`.
 - `--target-dir <value>`: Specifies the output directory for compilation artifacts.
+- `--compat-version <value>`: Specifies the compatibility target version used to compile the project to install. For details, see the [build](#build) section.
 - `--name <value>`: Specifies the name of the installed artifact.
 - `--skip-build`: Skips the compilation phase and directly installs artifacts. Requires the project to be already compiled and only works for local installations.
 - `--list`: Prints the list of installed artifacts.

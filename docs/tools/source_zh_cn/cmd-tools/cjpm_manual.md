@@ -64,6 +64,7 @@ Available options:
   --no-feature-deduce           disables auto-enabling of features, deduced from other options, machine properties, etc.
   -m, --member <value>          specify a member module of the workspace
   --target <value>              generate code for the given target platform
+  --compat-version <value>      generate artifacts according to the specified compatibility version
   --target-dir <value>          specify target directory
   --script-dir <value>          specify build script output directory
   -o, --output <value>          specify product name when compiling an executable file
@@ -133,6 +134,7 @@ Available options:
 
 - `-m, --member <value>` 仅可在工作空间下使用，可用于指定单个模块作为检查入口
 - `--no-tests` 配置后，测试相关的依赖将不会被打印
+- `--compat-version <value>` 指定兼容目标版本，扫描依赖时将其传递给 `cjc`，使依赖分析结果与使用同一兼容版本构建时一致，说明请参见 [build](#build) 章节
 - `--skip-script` 配置后，将会跳过构建脚本的编译运行
 
 例如：
@@ -192,6 +194,7 @@ Error: can not find the following dependencies
 - `-p, --package <value>` 指定某个包为根节点，从而展示它的子依赖包，需要配置的值是包名
 - `--invert <value>` 指定某个包为根节点并反转依赖树，从而展示它被哪些包所依赖，需要配置的值是包名
 - `--target <value>` 将指定目标平台的依赖项加入分析，并展示依赖关系
+- `--compat-version <value>` 指定兼容目标版本，扫描依赖时将其传递给 `cjc`，使依赖分析结果与使用同一兼容版本构建时一致，说明请参见 [build](#build) 章节
 - `--no-tests` 排除 `test-dependencies` 字段的依赖项
 - `--skip-script` 配置后，将会跳过构建脚本的编译运行
 
@@ -280,6 +283,7 @@ cjpm tree success
 - `-m, --member <value>` 仅可在工作空间下使用，可用于指定单个模块作为编译入口
 - `--target <value>` 指定后，可交叉编译代码到目标平台，`cjpm.toml` 中的配置可参考 [target](#target) 章节
 - `--target-dir <value>` 用于指定输出产物的存放路径
+- `--compat-version <value>` 用于指定兼容目标版本，开启兼容编译模式。取值为两段式版本号 `major.minor`，如 `1.3`，详细说明请参见下方注意事项
 - `-o, --output <value>` 用于指定输出可执行文件的名称，默认名称为 `main`（`Windows` 系统下则默认为 `main.exe`）。注意，当前不支持编译名称为 `cjc` 的可执行文件
 - `-l, --lint` 用于在编译时调用仓颉语言静态检查工具进行代码检查
 - `--mock` 带有此选项的构建版本中的类可用于在测试中进行 `mock` 测试
@@ -290,6 +294,9 @@ cjpm tree success
 > - `-i, --incremental` 选项仅会开启 `cjpm` 包级别的增量编译。开发者可以在配置文件的 `compile-option` 字段自行透传 `--incremental-compile` 和 `--experimental` 编译选项，从而开启 `cjc` 编译器提供的函数粒度增量功能。
 > - `-i, --incremental` 选项目前仅支持基于源码的增量分析。如果导入的库内容有变更，需要开发者重新使用全量方式构建。
 > - 以 `_test.cj` 结尾的源码文件和普通源码文件内的测试用例在 `build` 阶段会被忽略，其余涉及编译的命令 `(run/install/bundle)` 在编译阶段也会忽略上述文件。
+> - 指定 `--compat-version <value>` 后，本次构建依赖图内的所有源码包（包括工作空间各成员模块、源码依赖模块、宏包，以及交叉编译场景下在宿主平台编译的任务）均使用同一取值调用 `cjc` 编译。`bin-dependencies` 引入的 `cjo`、静态库、动态库等二进制依赖的兼容版本在其构建时已确定，不受该选项影响。构建脚本 `build.cj` 本体及其脚本依赖的编译和依赖扫描不携带该选项。兼容模式的具体行为请参见《仓颉编程语言开发指南》的[编译选项](../../../dev-guide/source_zh_cn/Appendix/compile_options.md)章节中 `--compat-version` 的说明。
+> - `cjpm` 仅校验 `--compat-version` 的取值是否符合 `major.minor` 格式，未提供取值或格式不符时报错。受支持的兼容版本由 `cjc` 决定，取值不受支持时由 `cjc` 报错。未指定该选项时，`cjpm` 不会向 `cjc` 传递该选项，按当前 SDK 版本的行为编译。
+> - `--compat-version` 可以重复指定，取值相同时视为指定一次，取值不同时报错 `Error: the '--compat-version' option is specified with different values '1.3' and '1.4'`。
 
 编译生成的中间文件默认会存放在 `target` 文件夹，而可执行文件会根据编译模式存放到 `target/release/bin` 或 `target/debug/bin` 文件夹。运行可执行文件的方式可参考 [run](#run)。
 
@@ -362,6 +369,7 @@ Error: cjpm build failed
 - `--skip-build` 跳过编译流程，直接运行
 - `--run-args <value>` 透传参数给本次运行的二进制产物
 - `--target-dir <value>` 用于指定运行产物的存放路径
+- `--compat-version <value>` 用于指定兼容目标版本，编译阶段将按该版本编译，说明请参见 [build](#build) 章节
 - `-g` 用于运行 `debug` 版本的产物
 - `-V, --verbose` 用于展示运行日志
 - `--skip-script` 配置后，将会跳过构建脚本的编译运行
@@ -584,6 +592,7 @@ cjpm run finished
 - `-m, --member <value>` 仅可在工作空间下使用，可用于指定测试单个模块
 - `--target <value>` 指定后，可交叉编译生成目标平台的单元测试结果，`cjpm.toml` 中的配置可参考 [target](#target) 章节
 - `--target-dir <value>` 用于指定单元测试产物的存放路径
+- `--compat-version <value>` 用于指定兼容目标版本，编译被测代码和单元测试时均按该版本编译，说明请参见 [build](#build) 章节
 - `--dry-run` 配置后，将不执行用例，仅打印
 - `--filter <value>` 用于过滤测试的子集，`value` 的形式如下所示：
     - `--filter=*` 匹配所有测试类
@@ -687,6 +696,7 @@ Summary: TOTAL: 1
 - `-m, --member <value>` 仅可在工作空间下使用，可用来指定测试单个模块
 - `--target <value>` 指定后，可交叉编译生成目标平台的单元测试结果，`cjpm.toml` 中的配置可参考 `cross-compile-configuration` 部分
 - `--target-dir <value>` 用来指定单元测试产物的存放路径
+- `--compat-version <value>` 用于指定兼容目标版本，编译被测代码和基准测试时均按该版本编译，说明请参见 [build](#build) 章节
 - `--dry-run` 配置后，将不执行用例，仅打印
 - `--filter <value>` 用于过滤测试的子集，`value` 的形式如下所示：
     - `--filter=*` 匹配所有测试类
@@ -840,6 +850,7 @@ target
 - `-j, --jobs <N>` 用于指定并行编译的最大并发数，最终的最大并发数取 `N` 和 `2倍 CPU 核数` 的最小值。
 - `--cfg` 指定后，能够透传 `cjpm.toml` 中的自定义 `cfg` 选项。
 - `--target-dir <value>` 用于指定编译产物的存放路径。
+- `--compat-version <value>` 用于指定兼容目标版本，编译待安装项目时按该版本编译，说明请参见 [build](#build) 章节。
 - `--name <value>` 用于指定最终安装的产物名。
 - `--skip-build` 用于跳过编译阶段以直接安装产物，需要项目处于编译完成状态，且仅在本地安装场景下生效。
 - `--list` 用于打印已安装产物列表。
