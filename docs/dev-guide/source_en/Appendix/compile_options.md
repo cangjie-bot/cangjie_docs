@@ -1020,7 +1020,7 @@ Prints time consumption data for each compilation phase.
 
 Prints memory consumption data for each compilation phase.
 
-### --sanitize=[address|thread|hwsaddress]
+### --sanitize=[address|thread|hwaddress]
 
 Enables the Sanitizer compile-time instrumentation feature, detects various errors in the program during runtime, and links the corresponding Sanitizer runtime libraries. Prior to using this option, you need to download the dedicated SDK package with Sanitizer support (e.g., cangjie-sdk-linux-aarch64-sanitizer.tar.gz) and ensure the proper deployment of the SDK.
 
@@ -1714,7 +1714,7 @@ Enabling this option inserts an accumulator at each Edge, which increments by on
 
 **Notably**, this feature differs from gcc/llvm implementations: it does not insert `void __sanitizer_cov_8bit_counters_init(char *start, char *stop)` in the constructor. Instead, it inserts a function call `uint8_t *__cj_sancov_8bit_counters_ctor(uint64_t edgeCount)` during package initialization.
 
-The `__cj_sancov_pc_guard_ctor` callback function must be implemented by the developer. Packages with SanCov enabled will call this callback as early as possible. The input parameter is the number of Edges in the Package, and the return value is typically a memory region created by calloc.
+The `__cj_sancov_8bit_counters_ctor` callback function must be implemented by the developer. Packages with SanCov enabled will call this callback as early as possible. The input parameter is the number of Edges in the Package, and the return value is typically a memory region created by calloc.
 
 If `__sanitizer_cov_8bit_counters_init` needs to be called, it is recommended to call it within `__cj_sancov_8bit_counters_ctor`, using dynamically created buffers to compute the function's input parameters and return value.
 
