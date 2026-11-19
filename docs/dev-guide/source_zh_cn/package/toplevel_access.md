@@ -172,7 +172,7 @@ public func f4() {
 >
 > 同一个包内，`private` 修饰的同名自定义类型（如 `struct`、`class`、`enum` 和 `interface` 等），在某些场景下不支持，不支持场景由编译器进行报错。
 
-例如在以下程序中，`example1.cj` 与 `example2.cj`文件包名相同，在 `example1.cj` 文件中定义了 `private` 修饰的类 `A`, 在 `example2.cj` 文件中定义了 `private` 修饰的结构体 `A`。
+例如在以下程序中，`example1.cj` 与 `example2.cj` 文件包名相同，在 `example1.cj` 文件中定义了 `private` 修饰的类 `A`，在 `example2.cj` 文件中定义了 `private` 修饰的结构体 `A`。
 
 <!-- compile -->
 

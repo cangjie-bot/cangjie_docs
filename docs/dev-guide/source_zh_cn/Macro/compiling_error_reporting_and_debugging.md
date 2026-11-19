@@ -328,7 +328,7 @@ class Demo {
   @M{} - 2 // macro M return 2
 
   // after expansion
-  // ===== Emitted my Macro M at line 1 ===
+  // ===== Emitted by Macro M at line 1 ===
   2
   // ===== End of the Emit =====
   - 2

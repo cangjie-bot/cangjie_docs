@@ -308,7 +308,9 @@ interface I {
 open class C <: I {
     protected func f() {} // Compiler Error, f needs to be public semantics
 }
-```## Interface Inheritance and Interface Implementation
+```
+
+## Interface Inheritance and Interface Implementation
 
 When implementing multiple interfaces for a type, you can use `&` to separate multiple interfaces in the declaration, with no specific order required between the implemented interfaces.
 

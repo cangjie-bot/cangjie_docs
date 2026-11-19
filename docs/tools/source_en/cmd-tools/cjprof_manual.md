@@ -357,7 +357,7 @@ std::vector<ConstructorNode> GetRootNodesBySnapshotID(uint64_t id, std::set<uint
 - id: Heap snapshot ID
 - rootTypes: Collection of root node types
 
-Returns the corresponding list of Constructor node.
+Returns the corresponding list of Constructor nodes.
 
 `GetRootNodesBySnapshotID` supports the following root node types:
 
@@ -666,7 +666,7 @@ Returns the diff Constructor node that the matched diff Instance node belongs to
 - std::vector\<Frame\> frames: List of stack frames in the thread
 - uint64_t id: Thread ID
 
-`Frame` represents a stack frame information in the thread, containing the following fields:
+`Frame` represents stack frame information in the thread, containing the following fields:
 
 - std::string funcName: Function name corresponding to the stack frame
 - std::string fileName: Source file name corresponding to the stack frame

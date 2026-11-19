@@ -50,7 +50,7 @@ main() {
     (websocket, respHeaders) = WebSocket.upgradeFromClient(client, u, subProtocols: subProtocol, headers: headers)
     client.close()
 
-    println("subProtocol: ${websocket.subProtocol}") // fool1
+    println("subProtocol: ${websocket.subProtocol}") // foo1
     println(respHeaders.getFirst("rsp") ?? "") // echo
 
     // 3 消息收发

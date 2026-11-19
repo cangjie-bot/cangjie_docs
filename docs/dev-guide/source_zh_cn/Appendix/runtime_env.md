@@ -215,7 +215,7 @@ export MRT_LOG_PATH=/home/cangjie/runtime/runtime_log.txt
 
 #### `MRT_LOG_LEVEL`
 
-指定 runtime 运维日志的最小输出级别，大于等于这个级别的日志会被打印，默认值为 e，支持设置值为[v|d|i|w|e|f|s]。v（VERBOSE）、d（DEBUGY）、i（INFO）、w（WARNING）、e（ERROR）、f（FATAL）、s（FATAL_WITHOUT_ABORT）。
+指定 runtime 运维日志的最小输出级别，大于等于这个级别的日志会被打印，默认值为 e，支持设置值为[v|d|i|w|e|f|s]。v（VERBOSE）、d（DEBUG）、i（INFO）、w（WARNING）、e（ERROR）、f（FATAL）、s（FATAL_WITHOUT_ABORT）。
 
 例如：
 
@@ -309,7 +309,7 @@ export cjEnableGwpAsan=true
 
 #### cjGwpAsanSampleRate
 
-在仓颉 GWP-Asan 内存安全检测功能开启状态下，通过环境变量 `cjGwpAsanSampleRate` 设置采样频率。`cjGwpAsanSampleRate` 支持设置为 32 位整形数值范围内的正整数，即 $(0, 2^{31} - 1]$ 。默认值为 5000，即每 5000 次 acquireArrayRawData 接口调用，进行一次采样。Linux 设置参考如下：
+在仓颉 GWP-Asan 内存安全检测功能开启状态下，通过环境变量 `cjGwpAsanSampleRate` 设置采样频率。`cjGwpAsanSampleRate` 支持设置为 32 位整型数值范围内的正整数，即 $(0, 2^{31} - 1]$ 。默认值为 5000，即每 5000 次 acquireArrayRawData 接口调用，进行一次采样。Linux 设置参考如下：
 
 ```shell
 export cjGwpAsanSampleRate=1000
@@ -372,7 +372,7 @@ export cjGwpAsanHelp=true
         let array = Array<UInt8>(4, repeat: 0)
         let cp = acquireArrayRawData(array)
 
-        // array 数组实际可访问的范围是 [0, 4)，而下述写操作访问了第 6 个字节，导致仓颉堆内存向前溢出 2 个字节。错误报告中使用 array[size+1] 表示该向后越界行为。
+        // array 数组实际可访问的范围是 [0, 4)，而下述写操作访问了第 6 个字节，导致仓颉堆内存向后溢出 2 个字节。错误报告中使用 array[size+1] 表示该向后越界行为。
         cp.pointer.write(5, 2)
         releaseArrayRawData(cp)
     }

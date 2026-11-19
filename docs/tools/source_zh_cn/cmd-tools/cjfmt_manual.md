@@ -33,7 +33,7 @@ Options:
                      eg: cjfmt -f a.cj -c ./config/cangjie-format.toml
                      eg: cjfmt -d ~/testsrc -c ~/home/project/config/cangjie-format.toml
    -l <region>   Only format lines in the specified region for the provided file. Only valid if a single file was specified.
-                 Region has a format of [start:end] where 'start' and 'end' are integer numbers representing first and last lines to be formated in the specified file.
+                 Region has a format of [start:end] where 'start' and 'end' are integer numbers representing first and last lines to be formatted in the specified file.
                  Line count starts with 1.
                      eg: cjfmt -f a.cj -o ./fmta.cj -l 1:25
 ```
@@ -63,7 +63,7 @@ cjfmt -f ../../../test/uilang/Thread.cj
 - 选项 `-o` 新建一个 `.cj` 文件导出格式化后的代码，源文件和输出文件支持相对路径和绝对路径。
 
 ```shell
-cjfmt -f ../../../test/uilang/Thread.cj -o ../../../test/formated/Thread.cj
+cjfmt -f ../../../test/uilang/Thread.cj -o ../../../test/formatted/Thread.cj
 ```
 
 ### 目录格式化
@@ -105,7 +105,7 @@ cjfmt -f a.cj -c ./cangjie-format.toml
 indentWidth = 4 # Range of indentWidth: [0, 8]
 
 # limit length
-linelimitLength = 120 # Range of indentWidth: [1, 120]
+linelimitLength = 120 # Range of linelimitLength: [1, 120]
 
 # line break type
 lineBreakType = "LF" # "LF" or "CRLF"
@@ -158,7 +158,7 @@ cjfmt -f a.cj -o b.cj -l 10:25 // 仅格式化第10行至第25行
 ```cangjie
 // 第一部分，版权信息
 /*
- * Copyright (c) [Year of First Pubication]-[Year of Latest Update]. [Company Name]. All rights reserved.
+ * Copyright (c) [Year of First Publication]-[Year of Latest Update]. [Company Name]. All rights reserved.
  */
 
 // 第二部分，package 声明

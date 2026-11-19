@@ -55,7 +55,7 @@ The response code specification for all `APIs` in this chapter is as follows:
 * **200**: Success
 * **400**: Parameter error, possibly due to metadata or index parsing error.
 * **401**: User authentication failed.
-* **403**: User lacks permission or artifact name already in use(package names are case-insensitive; names that differ only by case are treated as the same package).
+* **403**: User lacks permission or artifact name already in use (package names are case-insensitive; names that differ only by case are treated as the same package).
 * **404**: File does not exist.
 * **409**: Uploaded artifact package conflicts with an existing one in the repository.
 * **429**: Rate limit exceeded.

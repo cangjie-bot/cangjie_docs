@@ -460,7 +460,7 @@ src
     <!-- code_no_check -->
 
     ```cangjie
-    extend Int8 <: Formatter { // This line wil not account for the coverage.
+    extend Int8 <: Formatter { // This line will not account for the coverage.
       ...
     }
 

@@ -671,7 +671,7 @@ count = 1000
 1. 一个线程在进入 `synchronized` 修饰的代码块之前，会自动获取 `Lock` 实例对应的锁，如果无法获取锁，则当前线程被阻塞；
 2. 一个线程在退出 `synchronized` 修饰的代码块之前，会自动释放该 `Lock` 实例的锁。
 
-对于控制转移表达式（如 `break`、`continue`、`return`、`throw`），在导致程序的执行跳出 `synchronized` 代码块时，也符合上面第 2 条的说明，也就说也会自动释放 `synchronized` 表达式对应的锁。
+对于控制转移表达式（如 `break`、`continue`、`return`、`throw`），在导致程序的执行跳出 `synchronized` 代码块时，也符合上面第 2 条的说明，也就是说也会自动释放 `synchronized` 表达式对应的锁。
 
 下方示例演示了在 `synchronized` 代码块中出现 `break` 语句的情况：
 
@@ -721,7 +721,7 @@ in main, count = 10
 
 ## 线程局部变量 ThreadLocal
 
-使用 core 包中的 `ThreadLocal` 可以创建并使用线程局部变量，每一个线程都有它独立的一个存储空间来保存这些线程局部变量。因此，在每个线程可以安全地访问他们各自的线程局部变量，而不受其他线程的影响。
+使用 core 包中的 `ThreadLocal` 可以创建并使用线程局部变量，每一个线程都有它独立的一个存储空间来保存这些线程局部变量。因此，每个线程可以安全地访问它们各自的线程局部变量，而不受其他线程的影响。
 
 <!-- code_no_check -->
 ```cangjie

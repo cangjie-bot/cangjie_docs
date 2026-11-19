@@ -233,7 +233,7 @@ main() {
 
 ## Calling Conventions
 
-Calling conventions describe how callers and callees interact (e.g., parameter passing, stack cleanup). Both sides must use the same calling convention. Cangjie uses `@CallingConv` to represent calling conventions, currently only supporting `CDECL`, which represents default calling convention for clang's C compiler across platforms, and more may be extended in the future as scenarios require.
+Calling conventions describe how callers and callees interact (e.g., parameter passing, stack cleanup). Both sides must use the same calling convention. Cangjie uses `@CallingConv` to represent calling conventions, currently only supporting `CDECL`, which represents the default calling convention for clang's C compiler across platforms, and more may be extended in the future as scenarios require.
 
 C functions called via FFI use `CDECL` by default when no calling convention is specified. Example calling C's `rand`:
 
@@ -298,7 +298,9 @@ main() {
 
 ## Type Mapping
 
-### Basic TypesThe mapping between Cangjie and C language for basic data types follows these general principles
+### Basic Types
+
+The mapping between Cangjie and C language for basic data types follows these general principles:
 
 1. Cangjie types do not include reference types that point to managed memory;
 2. Cangjie types and C types share the same memory layout.
@@ -599,7 +601,9 @@ main() {
     println(sizeOf<Data>())
     println(alignOf<Data>())
 }
-```When running on a 64-bit machine, the output will be:
+```
+
+When running on a 64-bit machine, the output will be:
 
 ```text
 16

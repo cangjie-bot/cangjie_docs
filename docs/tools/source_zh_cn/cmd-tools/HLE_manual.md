@@ -48,7 +48,7 @@
 | `-r`            | typescript 编译器的绝对路径                  | 必选参数 | 只给 ArkTS 生成仓颉 bindings 时使用 |
 | `-d`            | d.ts，d.ets 或者 .h 文件输入所在文件夹的绝对路径    | 可选参数 | 和`-i`参数二选一或者两者同时存在                     |
 | `-o`            | 输出保存互操作代码的目录                    | 可选参数 | 缺省时输出至当前目录 |
-| `-j`            | 分析 d.t 或者 d.ets 文件的路径                 | 可选参数 | 只给 ArkTS 生成仓颉 bindings 时使用 |
+| `-j`            | 分析 d.ts 或者 d.ets 文件的路径                 | 可选参数 | 只给 ArkTS 生成仓颉 bindings 时使用 |
 | `--module-name` | 自定义生成的仓颉包名                        | 可选参数 | NA |
 | `--lib`         | 生成三方库代码                              | 可选参数 | 只给 ArkTS 生成仓颉 bindings 时使用 |
 | `-c`            | 生成 C 到仓颉的绑定代码                              | 可选参数 | 只给 C 语言生成仓颉 bindings 时使用 |
@@ -62,7 +62,7 @@
 可使用如下的命令生成 ArkTS 到 Cangjie 绑定代码：
 
 ```sh
-hle -i /path/to/test.d.ts -o out –j ${CANGJIE_HOME}/tools/dtsparser/analysis.js --module-name="my_module"
+hle -i /path/to/test.d.ts -o out -j ${CANGJIE_HOME}/tools/dtsparser/analysis.js --module-name="my_module"
 ```
 
 在 Windows 环境，文件目录当前不支持符号“\\”，仅支持使用“/”。

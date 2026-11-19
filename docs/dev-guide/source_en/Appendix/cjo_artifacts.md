@@ -134,7 +134,7 @@ Delete outdated cjo files and recompile the corresponding packages.
 
 ### How to view dependency information of cjo files
 
-Use [`cjc --scan-dependency`](compile_options.md#--scan-dependency-frontend) `mypackage.cjo` command to view dependency relationships.
+Use the [`cjc --scan-dependency`](compile_options.md#--scan-dependency-frontend) `mypackage.cjo` command to view dependency relationships.
 
 ### Why can't cjo files be found
 

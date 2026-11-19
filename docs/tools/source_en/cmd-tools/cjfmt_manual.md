@@ -62,7 +62,7 @@ cjfmt -f ../../../test/uilang/Thread.cj
 - Option `-o` creates a new `.cj` file with formatted output (supports relative/absolute paths for both source and output):
 
 ```shell
-cjfmt -f ../../../test/uilang/Thread.cj -o ../../../test/formated/Thread.cj
+cjfmt -f ../../../test/uilang/Thread.cj -o ../../../test/formatted/Thread.cj
 ```
 
 ### Directory Formatting
@@ -104,16 +104,16 @@ Default cangjie-format.toml configuration (also represents built-in defaults):
 indentWidth = 4 # Range of indentWidth: [0, 8]
 
 # limit length
-linelimitLength = 120 # Range of indentWidth: [1, 120]
+linelimitLength = 120 # Range of linelimitLength: [1, 120]
 
 # line break type
 lineBreakType = "LF" # "LF" or "CRLF"
 
-# allow Multi-line Method Chain when it's level equal or greater than multipleLineMethodChainLevel
+# allow Multi-line Method Chain when its level equal to or greater than multipleLineMethodChainLevel
 allowMultiLineMethodChain = false
 
 # if allowMultiLineMethodChain's value is true,
-# and method chain's level is equal or greater than multipleLineMethodChainLevel,
+# and method chain's level is equal to or greater than multipleLineMethodChainLevel,
 # method chain will be formatted to multi-line method chain.
 # e.g. A.b().c() level is 2, A.b().c().d() level is 3
 # ObjectA.b().c().d().e().f() =>
@@ -125,7 +125,7 @@ allowMultiLineMethodChain = false
 #     .f()
 multipleLineMethodChainLevel = 5 # Range of multipleLineMethodChainLevel: [2, 10]
 
-# allow Multi-line Method Chain when it's length greater than linelimitLength
+# allow Multi-line Method Chain when its length greater than linelimitLength
 multipleLineMethodChainOverLineLength = true
 ```
 
@@ -154,7 +154,7 @@ cjfmt -f a.cj -o b.cj -l 10:25 // Formats only lines 10-25
 ```cangjie
 // Part 1: Copyright
 /*
- * Copyright (c) [Year of First Pubication]-[Year of Latest Update]. [Company Name]. All rights reserved.
+ * Copyright (c) [Year of First Publication]-[Year of Latest Update]. [Company Name]. All rights reserved.
  */
 
 // Part 2: Package declaration

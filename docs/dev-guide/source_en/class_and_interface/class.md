@@ -240,7 +240,7 @@ class Rectangle {
 }
 
 // Invoke the auto-generated parameterless constructor
-let r = Rectangle() // r.width = 10，r.height = 20
+let r = Rectangle() // r.width = 10, r.height = 20
 ```
 
 ### Class Finalizer

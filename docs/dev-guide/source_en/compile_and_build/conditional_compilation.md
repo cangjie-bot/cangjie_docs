@@ -135,7 +135,7 @@ When compiled and executed on an `x86_64` architecture platform, it will output 
 
 `env` provides additional information, such as the ABI (Application Binary Interface) of the target platform, to eliminate ambiguities between different target platforms. It supports `==` and `!=` operators.
 
-Supported environment: `ohos`,`gnu`,`simulator`,`android` and default(empty string).
+Supported environments: `ohos`, `gnu`, `simulator`, `android` and default (empty string).
 
 Usage example:
 
@@ -152,7 +152,7 @@ main() {
 }
 ```
 
-When compiled and executed on the OpenHarmony target platform, you will get information `ohos`; when compile on other target platform, you will get information `other`
+When compiled and executed on the OpenHarmony target platform, you will get information `ohos`; when compiled on other target platforms, you will get information `other`.
 
 ### backend
 
@@ -375,7 +375,7 @@ feature lion
 
 Usage example 2:
 
-Cangjie cross-compiled to the target platform `aarch64-linux-android31`. The conditional variables are set as shown in the code below. If you need to cross-compile to other platforms, please refer to the [Target platform and Conditional Compilation Mapping Table](#target-platform-and-conditional-compilation-mapping-table) .
+Cangjie cross-compiled to the target platform `aarch64-linux-android31`. The conditional variables are set as shown in the code below. If you need to cross-compile to other platforms, please refer to the [Target platform and Conditional Compilation Mapping Table](#target-platform-and-conditional-compilation-mapping-table).
 
 ```cangjie
 @When[os == "Linux" && arch == "aarch64" && env == "android"]
@@ -392,7 +392,7 @@ main() {
 
 ### Target platform and Conditional Compilation Mapping Table
 
-The target platforms supported by Cangjie's cross-compilation are determined by the build-in conditional variables `os`, `arch` and `env`. The mapping between this three variables and the target platforms is shown in the table below:
+The target platforms supported by Cangjie's cross-compilation are determined by the built-in conditional variables `os`, `arch` and `env`. The mapping between these three variables and the target platforms is shown in the table below:
 
 | target platform                     | arch      | os        | env         |
 | ----------------------------- | --------- | --------- | ----------- |
@@ -409,5 +409,5 @@ The target platforms supported by Cangjie's cross-compilation are determined by 
 | arm64-apple-ios[11+]-simulator<sup>[ios target]</sup> | "aarch64" | "iOS"     | "simulator" |
 | arm-linux-android23             | "arm"     | "Linux"     | "android"   |
 
-<sup>'[android target]</sup> aarch64-linux-android[23+], the number following the android suffix the API Level. If no number is specified, the default API Level is 23; specifying a number (e.g., aarch64-linux-android33) indicates that the Android API Level is this number, and the number of API Level must greater than or equal to 23.
-<sup>[ios target]</sup> arm64-apple-ios[11+],  the number following the ios suffix the ios version. If no number is specified, the default ios version is 11; specifying a number(e.g., arm64-apple-ios26)indicates that the ios version is 26,and the number of ios version must greater than or equal to 11.
+<sup>'[android target]</sup> aarch64-linux-android[23+], the number following the android suffix is the API Level. If no number is specified, the default API Level is 23; specifying a number (e.g., aarch64-linux-android33) indicates that the Android API Level is this number, and the number of API Level must be greater than or equal to 23.
+<sup>[ios target]</sup> arm64-apple-ios[11+],  the number following the ios suffix is the ios version. If no number is specified, the default ios version is 11; specifying a number (e.g., arm64-apple-ios26) indicates that the ios version is 26, and the number of ios version must be greater than or equal to 11.

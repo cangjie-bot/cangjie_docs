@@ -429,7 +429,7 @@ let n: Int64 = unsafe { f2() }
 
 ### Modification Scenarios
 
-The definition of a struct type being visible outside the module differs from the global variables and functions described above.We call a struct type **visible outside the module** when it satisfies any of the following conditions:
+The definition of a struct type being visible outside the module differs from the global variables and functions described above. We call a struct type **visible outside the module** when it satisfies any of the following conditions:
 
 1. The struct type has the public modifier and the package where it resides has the public modifier.
 2. The struct type is used in the type definition of member variables in other module-externally-visible struct/class types.
@@ -804,7 +804,7 @@ Modifications to any instance member function not visible outside the module sat
 
 | Change Behavior | API Compatibility | ABI Compatibility |
 |-|-|-|
-| Adding an instance property | Compatible | Adding an instance member function with overriding semantics (with the override modifier or with the override modifier omitted), incompatible; otherwise, compatible |
+| Adding an instance property | Compatible | Adding an instance property with overriding semantics (with the override modifier or with the override modifier omitted), incompatible; otherwise, compatible |
 | Deleting a public instance property | Incompatible | Incompatible |
 | Deleting a non-public instance property | Compatible | Compatible |
 
@@ -1479,7 +1479,7 @@ Modifications to any static member variable not visible outside the module satis
 
 | Change Behavior | API Compatibility | ABI Compatibility |
 |-|-|-|
-| Adding a static member function | Compatible | Adding a static member function with overriding semantics (with the redef modifier or with the override modifier omitted), incompatible; otherwise, compatible |
+| Adding a static member function | Compatible | Adding a static member function with overriding semantics (with the redef modifier or with the redef modifier omitted), incompatible; otherwise, compatible |
 | Deleting a static member function with the public/protected modifier | Incompatible | Incompatible |
 | Deleting a static member function without the public/protected modifier | Compatible | Compatible |
 
@@ -2012,7 +2012,6 @@ Modifications to any interface type not visible outside the module satisfy API +
 | Adding the mut modifier and the corresponding setter function | Incompatible | Incompatible |
 | Deleting the mut modifier and the corresponding setter function | Incompatible | Incompatible |
 | Modifying the property name | Incompatible | Incompatible |
-| Modifying the property name | Incompatible | Incompatible |
 | Modifying the property type | Incompatible | Incompatible |
 | Modifying the getter/setter functions of a property not marked with @Frozen | Compatible | Compatible |
 | Modifying the getter/setter functions of a property marked with @Frozen | Compatible | Incompatible |
@@ -2467,4 +2466,4 @@ Modifications to any instance property not visible outside the module satisfy AP
 
 | Change Behavior | API Compatibility | ABI Compatibility |
 |-|-|-|
-| Adding, deleting, and modifying package declaration statements| Incompatible | Incompatible |
+| Adding, deleting, and modifying package declaration statements | Incompatible | Incompatible |

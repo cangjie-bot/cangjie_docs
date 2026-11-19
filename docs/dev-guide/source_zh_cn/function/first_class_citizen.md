@@ -38,7 +38,7 @@ func hello(): Unit {
     }
     ```
 
-- 示例：函数名为 `returnTuple`，其类型是 `(Int64, Int64) -> (Int64, Int64)`，两个参数类型均为 `Int64`, 返回类型为元组类型：`(Int64, Int64)`。
+- 示例：函数名为 `returnTuple`，其类型是 `(Int64, Int64) -> (Int64, Int64)`，两个参数类型均为 `Int64`，返回类型为元组类型：`(Int64, Int64)`。
 
     <!-- compile -->
 

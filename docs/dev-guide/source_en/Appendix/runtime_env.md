@@ -314,7 +314,9 @@ When Cangjie GWP-Asan is enabled, the sampling frequency can be set via the `cjG
 
 ```shell
 export cjGwpAsanSampleRate=1000
-```> **Note:**
+```
+
+> **Note:**
 >
 > In Cangjie GWP-Asan memory safety detection, sampling impacts performance. Higher sampling rates result in greater performance overhead but detect more issues; lower sampling rates reduce performance impact but detect fewer issues. Adjust the sampling rate according to actual requirements.
 

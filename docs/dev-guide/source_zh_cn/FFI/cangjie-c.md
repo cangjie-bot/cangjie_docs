@@ -542,7 +542,7 @@ struct S {
 
 ### 字符串
 
-特别地，对于 C 语言中的字符串类型，仓颉中设计了一个 `CString` 类型来对应。为简化为 C 语言字符串的操作，`CString` 提供了以下成员函数：
+特别地，对于 C 语言中的字符串类型，仓颉中设计了一个 `CString` 类型来对应。为简化 C 语言字符串的操作，`CString` 提供了以下成员函数：
 
 - `init(p: CPointer<UInt8>)`  通过 CPointer 构造一个 CString
 - `func getChars()` 获取字符串的地址，类型为 `CPointer<UInt8>`

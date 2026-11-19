@@ -935,7 +935,7 @@ cjpm install org::boo-2.0.0         # 从中心仓安装 org 组织下名为 boo
 [dependencies] # 源码依赖配置项，非必需
   aoo = "1.0.0" # 导入中心仓依赖
   boo = { version = "2.0.0" } # 导入中心仓依赖
-  coo = { git = "xxx"，branch = "dev" } # 导入 `git` 依赖
+  coo = { git = "xxx",branch = "dev" } # 导入 `git` 依赖
   doo = { path = "./pro1" } # 导入源码依赖
 
 [test-dependencies] # 测试阶段的依赖配置项，格式和 dependencies 相同，非必需
@@ -994,9 +994,9 @@ cjpm install org::boo-2.0.0         # 从中心仓安装 org 组织下名为 boo
 
 当前仓颉模块组织名。若不配置该字段，则当前仓颉模块为无组织模块。
 
-一个合法的仓颉组织名名称必须是一个合法的标识符，标准与 `name` 相同。
+一个合法的仓颉组织名称必须是一个合法的标识符，标准与 `name` 相同。
 
-`organization` 配置后，模块代码中包声明及包导入需以 `组织名 + ::` 为前缀的型式带上组织名，模块代码的相关产物名、目录名将以 `@ + 组织名` 为后缀的型式带上组织名，例子如下：
+`organization` 配置后，模块代码中包声明及包导入需以 `组织名 + ::` 为前缀的形式带上组织名，模块代码的相关产物名、目录名将以 `@ + 组织名` 为后缀的形式带上组织名，例子如下：
 
 ```toml
 # cjpm.toml
@@ -1129,7 +1129,7 @@ link-option = "-z noexecstack -z relro -z now --strip-all"
 
 ### target-dir
 
-该字段可以指定编译产物的存放路径，不指定时默认为 `target` 文件夹。若该字段不为空，执行 `cjpm clean` 时会删除该字段所指向的文件夹，开发者需自身保证清理该目录行为的安全性。
+该字段可以指定编译产物的存放路径，不指定时默认为 `target` 文件夹。若该字段不为空，执行 `cjpm clean` 时会删除该字段所指向的文件夹，开发者需自行保证清理该目录行为的安全性。
 
 > **注意：**
 >
@@ -1141,7 +1141,7 @@ target-dir = "temp"
 
 ### script-dir
 
-该字段可以指定构建脚本产物的存放路径，不指定时默认为 `build-script-cache` 文件夹。若该字段不为空，执行 `cjpm clean` 时会删除该字段所指向的文件夹，开发者需自身保证清理该目录行为的安全性。
+该字段可以指定构建脚本产物的存放路径，不指定时默认为 `build-script-cache` 文件夹。若该字段不为空，执行 `cjpm clean` 时会删除该字段所指向的文件夹，开发者需自行保证清理该目录行为的安全性。
 
 ```text
 script-dir = "temp"
@@ -2010,7 +2010,7 @@ main(): Int64 {
 
 ```text
 [target.目标平台]
-  compile-macros-for-target = ["pkg1", "pkg2"] # 配置项为字符串数字形式，可选值是宏包名
+  compile-macros-for-target = ["pkg1", "pkg2"] # 配置项为字符串数组形式，可选值是宏包名
 ```
 
 #### target 相关字段合并规则
@@ -2380,7 +2380,7 @@ import std.process.*
 /*
  * Error code:
  * 0: success.
- * other: cjpm will finish running command. Check target-dir/build-script-cache/module-name/script-log for error outputs defind by user in functions.
+ * other: cjpm will finish running command. Check target-dir/build-script-cache/module-name/script-log for error outputs defined by user in functions.
  */
 
 main(): Int64 {
@@ -2590,7 +2590,7 @@ func concatM(s1: String, s2: String): String {
 package test
 
 import std.unittest.* // testfame
-import std.unittest.testmacro.* // macro_Defintion
+import std.unittest.testmacro.* // macro_Definition
 
 @Test
 public class TestM {
@@ -2622,7 +2622,7 @@ func concatk(s1: String, s2: String): String {
 package test.koo
 
 import std.unittest.* // testfame
-import std.unittest.testmacro.* // macro_Defintion
+import std.unittest.testmacro.* // macro_Definition
 
 @Test
 public class TestK {
@@ -2661,7 +2661,7 @@ func concatZ(s1: String, s2: String): String {
 package pro0.zoo
 
 import std.unittest.* // testfame
-import std.unittest.testmacro.* // macro_Defintion
+import std.unittest.testmacro.* // macro_Definition
 
 @Test
 public class TestZ {
@@ -2825,7 +2825,7 @@ cjpm build --no-feature-deduce --enable-features=user.tests_in_source_sets.arch.
 │       │   │           └── tests_in_source_sets.cjo
 ```
 
-上述示例中，通过 `user.tests_in_source_sets.arch.big` 制定了具体所编译的 `source-set` 生成了二进制文件。具体各个配置项含义、选项含义与项目结构信息将在后续逐步展开说明。
+上述示例中，通过 `user.tests_in_source_sets.arch.big` 指定了具体所编译的 `source-set` 生成了二进制文件。具体各个配置项含义、选项含义与项目结构信息将在后续逐步展开说明。
 
 <!--Del-->关于跨平台编译的通用概念与配置原理，请参见[跨平台编译](../../../dev-guide/source_zh_cn/multiplatform/common_platform.md#跨平台编译)。<!--DelEnd-->
 

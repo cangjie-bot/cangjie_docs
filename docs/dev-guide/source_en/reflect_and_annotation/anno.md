@@ -301,7 +301,9 @@ The same annotation class cannot be applied multiple times to the same target (i
 @Marked
 @Marked // Error
 class A {}
-````Annotation` is not inherited, therefore a type's annotation metadata only comes from the annotations declared during its definition. If annotation metadata from a parent type is needed, developers must manually query it using reflection interfaces.
+```
+
+`@Annotation` is not inherited, therefore a type's annotation metadata only comes from the annotations declared during its definition. If annotation metadata from a parent type is needed, developers must manually query it using reflection interfaces.
 
 In the following example, `A` is annotated with `@Marked`, `B` inherits from `A`, but `B` does not inherit `A`'s annotation.
 

@@ -83,7 +83,7 @@
     }
     ```
 
-   索引操作符赋值形式 `[]` 内的参数序列对应操作符重载的非命名参数，可以是 1 个或多个，可以是任意类型。`=` 右侧的表达式对应操作符重载的命名参数，有且只能有一个命名参数，该命名参数的名称必须是 value, 不能有默认值，value 可以是任意类型。返回类型必须是 Unit 类型。
+   索引操作符赋值形式 `[]` 内的参数序列对应操作符重载的非命名参数，可以是 1 个或多个，可以是任意类型。`=` 右侧的表达式对应操作符重载的命名参数，有且只能有一个命名参数，该命名参数的名称必须是 value，不能有默认值，value 可以是任意类型。返回类型必须是 Unit 类型。
 
    需要注意的是，value 只是一种特殊的标记，在索引操作符赋值时并不需要使用命名参数的形式调用。
 
@@ -142,7 +142,7 @@
 
     class B <: A {
         public init() {
-            super() // OK, super()  calls the constuctor of the super class
+            super() // OK, super()  calls the constructor of the super class
         }
 
         public func goo() {

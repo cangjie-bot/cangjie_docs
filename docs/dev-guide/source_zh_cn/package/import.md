@@ -33,7 +33,7 @@ import package1.bar
 import package1.fuzz
 ```
 
-除了通过 `import fullPackagename.itemName` 语法导入一个特定的顶层声明或定义外，还可以使用 `import packageName.*` 语法将 `packageName` 包中所有可见的顶层声明或定义全部导入。例如：
+除了通过 `import fullPackageName.itemName` 语法导入一个特定的顶层声明或定义外，还可以使用 `import packageName.*` 语法将 `packageName` 包中所有可见的顶层声明或定义全部导入。例如：
 
 <!-- code_check_manual -->
 
@@ -288,7 +288,7 @@ func bar() {
 
 在功能繁多的大型项目的开发过程中，这样的场景是非常常见的：包 `p2` 大量地使用从包 `p1` 中导入的声明，当包 `p3` 导入包 `p2` 并使用其中的功能时，`p1` 中的声明同样需要对包 `p3` 可见。如果要求包 `p3` 自行导入 `p2` 中使用到的 `p1` 中的声明，这个过程将过于繁琐。因此希望能够在 `p2` 被导入时一并导入 `p2` 使用到的 `p1` 中的声明。
 
-在仓颉编程语言中，`import` 可以被 `private`、`internal`、`protected`、`public` 访问修饰符修饰。其中，被 `public`、`protected` 或者 `internal` 修饰的 `import` 可以把导入的成员重导出（如果这些导入的成员没有因为名称冲突或者被遮盖导致在本包中不可用）。其他包可以根据可见性直接导入并使用本包中用重导出的内容，无需从原包中导入这些内容。
+在仓颉编程语言中，`import` 可以被 `private`、`internal`、`protected`、`public` 访问修饰符修饰。其中，被 `public`、`protected` 或者 `internal` 修饰的 `import` 可以把导入的成员重导出（如果这些导入的成员没有因为名称冲突或者被遮盖导致在本包中不可用）。其他包可以根据可见性直接导入并使用本包中重导出的内容，无需从原包中导入这些内容。
 
 - `private import` 表示导入的内容仅当前文件内可访问，`private` 是 `import` 的默认修饰符，不写访问修饰符的 `import` 等价于 `private import`。
 - `internal import` 表示导入的内容在当前包及其子包（包括子包的子包）均可访问。非当前包访问需要显式 `import`。

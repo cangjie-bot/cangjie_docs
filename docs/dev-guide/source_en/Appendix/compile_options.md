@@ -13,7 +13,7 @@ This chapter introduces commonly used `cjc` compilation options. If an option is
 
 ### `--output-type=[exe|staticlib|dylib|obj]` <sup>[frontend]</sup>
 
-Specifies the type of the output file. In `exe` mode, an executable file is generated; in `staticlib` mode, a static library file (`.a` file) is generated; in `dylib` mode, a dynamic library file is generated (`.so` on Linux, `.dll` on Windows, and `.dylib` on macOS); in `obj` mode ,  an intermediate object file is generated ( `.o` on Linux and macOS, `obj` on Windows).
+Specifies the type of the output file. In `exe` mode, an executable file is generated; in `staticlib` mode, a static library file (`.a` file) is generated; in `dylib` mode, a dynamic library file is generated (`.so` on Linux, `.dll` on Windows, and `.dylib` on macOS); in `obj` mode, an intermediate object file is generated ( `.o` on Linux and macOS, `.obj` on Windows).
 
 > **Note:** 
 >
@@ -37,7 +37,7 @@ This compiles `tool.cj` into a dynamic link library. On Linux, `cjc` will genera
 
 This option is exclusively applicable to the `--output-type=obj` mode, with a default value of exe. Since the generated `.obj/.o` files are compilation intermediate products, specifying the `--compile-target` option enables the compiler to adopt the corresponding compilation strategy, thus generating intermediate files tailored for different types of final products. The compiler can directly take these `.obj/.o` files as input for subsequent linking processes.
 
-> **NOTE：**
+> **NOTE:**
 >
 > This is an experimental feature with potential risks, and it must be used in conjunction with the `--experimental` option.
 
@@ -58,12 +58,12 @@ cjc main.cj --output-type=obj --experimental -o main.o --compile-target=exe
 cjc main.o -lcangjie-std-core -o main --experimental
 ```
 
-In Step 2, the parameter -lcangjie-std-core is used to specify the standard library dependencies required during the compilation process. In manual linking scenarios, the naming of dependent libraries must strictly conform to the prescribed naming convention(e.g., -lcangjie-std-math, -lcangjie-std-collection.concurrent, etc.). Failure to comply with this naming convention will result in undefined symbol errors.
+In Step 2, the parameter -lcangjie-std-core is used to specify the standard library dependencies required during the compilation process. In manual linking scenarios, the naming of dependent libraries must strictly conform to the prescribed naming convention (e.g., -lcangjie-std-math, -lcangjie-std-collection.concurrent, etc.). Failure to comply with this naming convention will result in undefined symbol errors.
 
 **Critical Notes**:
 
-1. This option does not support scenarios where `a .o` file is used as the input while the `--output-type=obj` option is specified again.Invalid usage example: `cjc main.o --output-type=obj --compile-target=exe`.
-2. When `--output-type` is set to a non-obj type, the `--compile-target` option will not take effect (and will be ignored).Invalid usage example: `cjc main.cj --output-type=exe --compile-target=dylib`.
+1. This option does not support scenarios where `a .o` file is used as the input while the `--output-type=obj` option is specified again. Invalid usage example: `cjc main.o --output-type=obj --compile-target=exe`.
+2. When `--output-type` is set to a non-obj type, the `--compile-target` option will not take effect (and will be ignored). Invalid usage example: `cjc main.cj --output-type=exe --compile-target=dylib`.
 3. If the input file is solely `a .o` intermediate target file, the `--output-type` configured in the current step (with a default value of exe) must be logically consistent with the `--compile-target` specified when generating the `.o` file. For instance, if `a.o` file is compiled with `--compile-target=dylib` (intended for dynamic library generation), then `--output-type` should also be set to dylib during the linking phase. Otherwise, linking failures or mismatches in product types may occur.
 
 
@@ -1226,7 +1226,7 @@ The compilation commands are as follows:
 
 ```shell
 # Compile the production part of the package first, only `main.cj` file would be compiled here
-cjc -p my_pkg --output-type=static -o=output/libmain.a
+cjc -p my_pkg --output-type=staticlib -o=output/libmain.a
 # Compile the test part of the package, Only `main_test.cj` file would be compiled here
 cjc -p my_pkg --test-only -L output -lmain
 ```

@@ -104,7 +104,7 @@ $ cjc test.cj --target=arm-linux-android23 \
 - `/home/rus/opt/android-ndk-r27d/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/` is the directory `<lib-path>` containing `libclang_rt.builtins-arm-android.a`
 - `/home/rus/opt/android-ndk-r27d/toolchains/llvm/prebuilt/linux-x86_64/bin` is the toolchain binary directory `<toolchain-bin-path>`
 
-> **Notes：**
+> **Notes:**
 >
 > ARM32 does not support reflection-related features, stack expansion, runtime tracing, and other related functionalities.
 
@@ -146,9 +146,9 @@ $ adb shell "LD_LIBRARY_PATH=/data/local/tmp /data/local/tmp/main"
 
 ### Package Download
 
-The Cangjie SDK that supports cross-compiling for iOS is provided as `cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz` .
+The Cangjie SDK that supports cross-compiling for iOS is provided as `cangjie-sdk-mac-aarch64-ios.x.y.z.tar.gz`.
 
-To cross-compile to `iOS` on a `macOS` platform, download and install the package that matches your host architecture . The Cangjie runtime and standard libraries natively support `iOS 11` and above (for exceptions, refer to the "Cangjie Programming Language Library API" manual).
+To cross-compile to `iOS` on a `macOS` platform, download and install the package that matches your host architecture. The Cangjie runtime and standard libraries natively support `iOS 11` and above (for exceptions, refer to the "Cangjie Programming Language Library API" manual).
 
 In addition to the cross-compilation supported Cangjie package, you also need to download `Xcode`. After installation, install the iOS development components in Xcode. Refer to the "Downloading and installing additional Xcode components" section in the Xcode manual for specific steps.
 
@@ -159,11 +159,11 @@ This section describes cross-compiling to `iOS` using a static library as an exa
 - `--target=aarch64-apple-ios<version>` specifies the target platform `ios` for cross-compilation
 - `--output-type=staticlib` specifies the output file type as a static library
 
-> **Notes：**
+> **Notes:**
 >
 > The version number specified by \<version> is recommended to align with the SDK version supported by the installed Xcode (e.g., 17.5).
 
-Currently, Cangjie supports cross-compiling to the x86_64 architecture iOS simulator from an aarch64 architecture environment (the compiled product for this architecture requires Rosetta in Xcode to run).For running on iOS simulators, specify:
+Currently, Cangjie supports cross-compiling to the x86_64 architecture iOS simulator from an aarch64 architecture environment (the compiled product for this architecture requires Rosetta in Xcode to run). For running on iOS simulators, specify:
 
 - `--target=aarch64-apple-ios-simulator` or `--target=x86_64-apple-ios-simulator` specifies the target platform `ios-simulator` for cross-compilation
 - `--output-type=staticlib` specifies the output file type as a static library
@@ -198,7 +198,7 @@ When integrating the static library described above into an `Xcode` project, the
 
     - `-lc++`
 
-   Note: The linking options must be added in the exact order listed above. Replace `$CANGJIE_HOME` with the actual Cangjie installation directory. For simulator targets, replace `ios_aarch64_cjnative` with `ios_simulator_aarch64_cjnative`.For targets built with Xcode 15, the additional linker flags `-Wl,-ld_classic` or `-Wl,-no_compact_unwind` must be appended in `Build Settings > Other Linker Flags` to suppress linker  assertion `Assertion failed: (false && "compact unwind compressed function offset doesn't fit in 24 bits")`  encountered in certain use-cases.
+   Note: The linking options must be added in the exact order listed above. Replace `$CANGJIE_HOME` with the actual Cangjie installation directory. For simulator targets, replace `ios_aarch64_cjnative` with `ios_simulator_aarch64_cjnative`. For targets built with Xcode 15, the additional linker flags `-Wl,-ld_classic` or `-Wl,-no_compact_unwind` must be appended in `Build Settings > Other Linker Flags` to suppress linker assertion `Assertion failed: (false && "compact unwind compressed function offset doesn't fit in 24 bits")` encountered in certain use-cases.
 
 3. Set the `Build Settings > Dead Code Stripping` field in the `Xcode` project to `No`.
 
