@@ -28,9 +28,9 @@ type B = LongNameClassB // Error, type 'LongNameClassB' is not defined
 <!-- compile.error  -->
 
 ```cangjie
-type A = (Int64, A) // Error, 'A' refered itself
+type A = (Int64, A) // Error, 'A' referred itself
 
-type B = (Int64, C) // Error, 'B' and 'C' are circularly refered
+type B = (Int64, C) // Error, 'B' and 'C' are circularly referred
 
 type C = (B, Int64)
 ```
@@ -142,7 +142,7 @@ main() {
 
 类型别名也是可以声明类型形参的，但是不能对其形参使用 `where` 声明约束，对于泛型变元的约束会在后面给出解释。
 
-当一个泛型类型的名称过长时，可以使用类型别名来为其声明一个更短的别名。例如，有一个类型为 `RecordData` ，可以把他用类型别名简写为 `RD` ：
+当一个泛型类型的名称过长时，可以使用类型别名来为其声明一个更短的别名。例如，有一个类型为 `RecordData` ，可以把它用类型别名简写为 `RD` ：
 
 <!-- compile -->
 

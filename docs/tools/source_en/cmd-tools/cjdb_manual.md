@@ -45,7 +45,7 @@ The following demonstrates the usage on the `Windows` platform:
 >   command           -- Commands for managing custom LLDB commands.
 >   disassemble       -- Disassemble specified instructions in the current target.  Defaults to the current function for the current thread and stack frame.
 >   expression        -- Evaluate an expression on the current thread.  Displays any returned value with LLDB's default formatting.
->   frame             -- Commands for selecting and examing the current thread's stack frames.
+>   frame             -- Commands for selecting and examining the current thread's stack frames.
 > ...
 > ```
 >
@@ -794,7 +794,7 @@ Use the `cjthread` command to view Cangjie call stacks.
 
 4. The Cangjie `cjdb` is built upon `lldb`, thus supporting all native basic functionalities of `lldb`. For details, refer to the [lldb official documentation](https://lldb.llvm.org).
 
-5. If developers run cjdb on system environments newer than the version of `llvm15.0.4` , compatibility issues and risks may arise, such as in C language interoperability scenarios where `cjdb` cannot properly resolve C code file and line number information.
+5. If developers run cjdb on system environments newer than the version of `llvm15.0.4`, compatibility issues and risks may arise, such as in C language interoperability scenarios where `cjdb` cannot properly resolve C code file and line number information.
 
     ```c
     int32_t cfoo()
@@ -853,7 +853,7 @@ Use the `cjthread` command to view Cangjie call stacks.
 
     Cause: The container was created without SYS_PTRACE capability.
 
-    Solution: Create new container with following options and remove existing container:
+    Solution: Create a new container with the following options and remove the existing container:
 
     ```shell
     docker run --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --security-opt apparmor=unconfined

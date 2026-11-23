@@ -559,7 +559,7 @@ The unit test code structure for a module is as follows, where `xxx.cj` contains
 - `--progress-brief` Displays a brief (single-line) progress report instead of a detailed one.
 - `--progress-entries-limit <value>` Limits the number of entries displayed in the progress report. Default: `0`. Allowed values:
     - `0` No limit on the number of entries.
-    - `1` Have limit on the number of entries: at most 1 test case with 1 group is displayed.
+    - `1` Has a limit on the number of entries: at most 1 test case with 1 group is displayed.
     - `n` Where `n` is a positive integer, specifying the maximum number of entries (including test cases and groups) displayed simultaneously in the terminal.
 
 Examples of `cjpm test` parameter usage:
@@ -1264,7 +1264,7 @@ incremental = true # Whether to enable incremental compilation by default.
 
 [profile.build.lto]
 level = "full" # Whether to enable `LTO` (Link Time Optimization) compilation mode.
-keep-pkg-visibility = ["pkgA", "pkgB", ...] # This configuration is used to control symbol hiding for `LTO` is enabled.
+keep-pkg-visibility = ["pkgA", "pkgB", ...] # This configuration is used to control symbol hiding when `LTO` is enabled.
 
 [profile.build.combined]
 demo = "dynamic" # Non-iOS platforms support only "dynamic"; iOS supports "static" or "dynamic" and requires LTO to be enabled.
@@ -1868,7 +1868,7 @@ The configuration file format is as follows:
 The configuration content is described as follows:
 
 - `repository.home` is used to configure the central repository URL and the user's personal token. The `cjpm` tool interacts with the central repository address specified in the `registry` field, and all interaction requests will include the user's token information for authentication.
-- `repository.cache` is used to configure the local path for storing source code modules downloaded from the central repository or Git. Environment variables can be used to configure field values, Refer to[Environment Variable Configuration](#environment-variable-configuration), If not configured, it defaults to the `.cjpm` directory in the user's home directory. Once the local path is determined, Git source code modules are downloaded to the `git` subdirectory under this path. Central repository source code modules are downloaded to the `repository/source` subdirectory under this path.
+- `repository.cache` is used to configure the local path for storing source code modules downloaded from the central repository or Git. Environment variables can be used to configure field values, refer to [Environment Variable Configuration](#environment-variable-configuration). If not configured, it defaults to the `.cjpm` directory in the user's home directory. Once the local path is determined, Git source code modules are downloaded to the `git` subdirectory under this path. Central repository source code modules are downloaded to the `repository/source` subdirectory under this path.
 - `global.strict-tls` is used to configure the TLS certificate verification method. The default is normal verification; when set to `false`, certificate verification is disabled.
 
 ## Configuration and Cache Directories
@@ -2021,7 +2021,7 @@ import std.process.*
 /*
  * Error code:
  * 0: success.
- * other: cjpm will finish running command. Check target-dir/build-script-cache/module-name/script-log for error outputs defind by user in functions.
+ * other: cjpm will finish running command. Check target-dir/build-script-cache/module-name/script-log for error outputs defined by user in functions.
  */
 
 main(): Int64 {
@@ -2223,7 +2223,7 @@ func concatM(s1: String, s2: String): String {
 package test
 
 import std.unittest.* // testfame
-import std.unittest.testmacro.* // macro_Defintion
+import std.unittest.testmacro.* // macro_Definition
 
 @Test
 public class TestM{
@@ -2251,7 +2251,7 @@ func concatk(s1: String, s2: String): String {
 package test.koo
 
 import std.unittest.* // testfame
-import std.unittest.testmacro.* // macro_Defintion
+import std.unittest.testmacro.* // macro_Definition
 
 @Test
 public class TestK{
@@ -2542,8 +2542,8 @@ The `condition` specifies one or more `features` that must be enabled to compile
 
 [source-set.${source set fully qualified name}]
     condition.1 = ["feature.arch.little"]
-    condiiton.alpha = ["feature.env.ohos"]
-    condiiton.beta= ["feature.os.linux", "feature.os.posix"]# Both features must be satisfied.
+    condition.alpha = ["feature.env.ohos"]
+    condition.beta = ["feature.os.linux", "feature.os.posix"]# Both features must be satisfied.
 ```
 
 #### Special Source Sets and Their Configuration

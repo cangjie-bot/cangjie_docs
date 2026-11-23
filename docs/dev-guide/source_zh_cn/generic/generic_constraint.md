@@ -54,7 +54,7 @@ main() {
 10
 ```
 
-如果 genericPrint 函数的类型实参没有实现 ToString 接口，那么编译器会报错。例如传入一个函数做为参数时：
+如果 genericPrint 函数的类型实参没有实现 ToString 接口，那么编译器会报错。例如传入一个函数作为参数时：
 
 <!-- compile.error -->
 

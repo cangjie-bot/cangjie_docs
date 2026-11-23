@@ -567,7 +567,7 @@ open class A {
     let a: Int64 = 10
 }
 
-class B <: A { // OK: 'B' Inheritance 'A'
+class B <: A { // OK: 'B' Inherits 'A'
     let b: Int64 = 20
 }
 

@@ -43,7 +43,7 @@
 >   command           -- Commands for managing custom LLDB commands.
 >   disassemble       -- Disassemble specified instructions in the current target.  Defaults to the current function for the current thread and stack frame.
 >   expression        -- Evaluate an expression on the current thread.  Displays any returned value with LLDB's default formatting.
->   frame             -- Commands for selecting and examing the current thread's stack frames.
+>   frame             -- Commands for selecting and examining the current thread's stack frames.
 > ...
 > ```
 >
@@ -280,7 +280,7 @@ Process 2884 stopped
 watchpoint set variable -w read variable_name
 ```
 
-`-w` 指定观察点点类型，有 `read`、`write`、`read_write` 三种类型。
+`-w` 指定观察点类型，有 `read`、`write`、`read_write` 三种类型。
 
 `wa s v`是`watchpoint set variable`的缩写。
 

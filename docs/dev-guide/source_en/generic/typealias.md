@@ -26,9 +26,9 @@ Direct or indirect circular references are prohibited in one or more type alias 
 <!-- compile.error  -->
 
 ```cangjie
-type A = (Int64, A) // Error, 'A' refered itself
+type A = (Int64, A) // Error, 'A' referred itself
 
-type B = (Int64, C) // Error, 'B' and 'C' are circularly refered
+type B = (Int64, C) // Error, 'B' and 'C' are circularly referred
 
 type C = (B, Int64)
 ```

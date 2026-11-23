@@ -234,7 +234,7 @@ For obvious reasons, the parameters and return values of `public` member
 functions of a foreign type may only have Java-compatible types, and so do
 the parameters of its `public` constructors.
 
-The member variables of an interop class may have any types, as they are not
+The member variables of an interop class may have any types, as they are
 not exposed to Java even if they are `public`. `public` member properties are
 exposed, though:
 
@@ -903,7 +903,7 @@ _`Java-string`_`.toString()` and `JString(`_`Cangjie-string`_`)`. However,
 converting _all_ Java string values automatically as they cross the
 inter-language border may lead to substantial CPU and memory overheads
 in certain scenarios. If Cangjie code does not actually manipulate a Java
-string, but merely passes it back to Java, or accesses it only in rare egde
+string, but merely passes it back to Java, or accesses it only in rare edge
 cases, or does not use it at all, the conversion is a waste of computational
 resources, which is undesirable in mobile applications.
 
@@ -929,7 +929,7 @@ See [Null Handling](#null-handling) for details.
    relationship. This means that member functions of interop classes that
    override methods of their mirrored Java supertypes should use the same
    parameter and return value type, `?JString` <!-- !!! and `?JArray<?JString>`, -->
-   for the `override` modifer to work as expected:
+   for the `override` modifier to work as expected:
 
    ```cangjie
    @JavaMirror
@@ -1170,7 +1170,7 @@ on the mirror member:
 > in Java and Cangjie.
 >
 > In Java, access to a `protected` member or constructor of a class
-> is permitted from anywhere within the same package and from subclassses
+> is permitted from anywhere within the same package and from subclasses
 > defined in other packages.
 >
 > In Cangjie, that modifier also permits access from subpackages and
@@ -1463,11 +1463,11 @@ public class Node <: Record {
 Cangjie has no concept of null references and hence no equivalent for the Java
 null type. If Java reference types were mirrored direct to the respective
 mirror types, any `null` value returned to Cangjie from a Java method would
-result in a `NoneValueException`. That would also happens if Cangjie code
+result in a `NoneValueException`. That would also happen if Cangjie code
 accessed a member variable of such type mirroring a field containing `null`.
 Conversely, if Java called an [interop class](#interop-classes) method and
 passed `null` as one of the parameters, the Java `NullPointerException` would
-gets thrown.
+get thrown.
 
 Finally, there also has to be a way to pass a `null` value from Cangjie
 to a Java method or constructor designed to accept it.
@@ -1507,7 +1507,7 @@ public interface I {
 `Option<T>` wrapping also fully applies to [interop classes](#interop-classes),
 as values of such types may be passed to/from Java. Furthermore, its application
 to the types of parameters of interop class member functions and constructors
-exposed to Java and to the types of return values of such member fuhctions is
+exposed to Java and to the types of return values of such member functions is
 recommended.
 
 And for the same reason, you should use `Option<T>` wrapping when declaring
@@ -2676,7 +2676,7 @@ following characteristics gets thrown:
 
 * The elements of the array returned by `getStackTrace()` are **TBD**.
 
-That Java exception does _not_ retain any intformation about the original
+That Java exception does _not_ retain any information about the original
 Cangjie exception other than the message associated with the latter, and is
 processed further as if it was a Java exception in the first place
 (see above for details).

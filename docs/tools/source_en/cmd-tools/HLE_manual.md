@@ -48,7 +48,7 @@ The input of this tool is the interface declaration file of ArkTS or C language,
 | `-r`                | Absolute path of typescript compiler          | Required       | Used only when generating ArkTS Cangjie bindings |
 | `-d`                | Absolute path of the folder where d.ts, d.ets or .h file input is located | Optional       | Choose one from `-i` or both |
 | `-o`                | Directory to save the output interoperability code | Optional       | Output to the current directory by default |
-| `-j`                | Path to analyze d.t or d.ets files            | Optional       | Used only when generating ArkTS Cangjie bindings |
+| `-j`                | Path to analyze d.ts or d.ets files            | Optional       | Used only when generating ArkTS Cangjie bindings |
 | `--module-name`     | Custom generated Cangjie package name         | Optional       | NA |
 | `--lib`             | Generate third-party library code             | Optional       | Used only when generating ArkTS Cangjie bindings |
 | `-c`                | Generate C to Cangjie binding code             | Optional       | Used only when generating C language Cangjie bindings |
@@ -62,7 +62,7 @@ The input of this tool is the interface declaration file of ArkTS or C language,
 You can use the following command to generate ArkTS to Cangjie binding code:
 
 ```sh
-hle -i /path/to/test.d.ts -o out –j ${CANGJIE_HOME}/tools/dtsparser/analysis.js --module-name="my_module"
+hle -i /path/to/test.d.ts -o out -j ${CANGJIE_HOME}/tools/dtsparser/analysis.js --module-name="my_module"
 ```
 
 In the Windows environment, the file directory currently does not support the symbol "\\", only "/" is supported.

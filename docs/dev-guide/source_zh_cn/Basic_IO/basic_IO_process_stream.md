@@ -136,7 +136,7 @@ main(): Unit {
     /* 写入字符串 */
     stringWriter.write("number")
 
-    /* 写入字符串并自动转行 */
+    /* 写入字符串并自动换行 */
     stringWriter.writeln(" is:")
 
     /* 写入数字 */
