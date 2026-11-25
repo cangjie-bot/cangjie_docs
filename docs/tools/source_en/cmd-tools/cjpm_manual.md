@@ -694,6 +694,74 @@ Output: cjpm clean success
 >
 > On Windows, cleaning executable files or parent directories immediately after subprocess execution may fail. If this occurs, retry the `clean` command after a short delay.
 
+### bundle
+
+`bundle` packages the current Cangjie project into a source distribution package in the format expected by the central repository.
+
+`bundle` accepts several options:
+
+- `-V, --verbose` prints the installation log.
+- `--skip-test` skips the unit test stage.
+- `--skip-lint` skips the static check stage.
+
+The `bundle` workflow is as follows:
+
+1. Module check
+
+    A `cjpm` module can be packaged only when it meets the following conditions:
+
+    - The module name and organization name follow the specification:
+        - The length is in the range [3, 64], and both names follow the module and organization name specification;
+        - Neither name is a Cangjie keyword (case-insensitive);
+        - The organization name is not `default`.
+    - `cjpm.toml` contains a module description (`description`).
+    - The root directory contains the Chinese document `README_zh.md` or the English document `README.md`.
+    - All dependencies of the module come from the central repository.
+
+    Packaging fails if the module does not meet the conditions above.
+
+2. Compilation check: the module is compiled to make sure that it builds. If `--skip-test` is not set, the unit tests run as well. A compilation or test failure fails the packaging.
+3. Static code check: if `--skip-lint` is not set, `cjlint` runs; an `error`-level finding fails the packaging.
+4. Packaging: the module is packaged into a `tar.gz` source distribution package according to the user configuration; see the [`include/exclude` field](#include-exclude). The package is placed in the build output directory under the name `module-name-version.cjp`. A metadata file for the package, under the name `meta-data.json`, is generated in the same directory.
+
+For example, for the module `demo` below, `cjpm.toml` sets `version = "1.0.0"`:
+
+```text
+demo
+├── src
+│    ├── demo.cj
+│    ├── demo-config.txt
+│    └── aoo
+│         ├── aoo.cj
+│         └── aoo-config.txt
+├── test
+│    ├── test.cj
+│    └── test-config.txt
+├── README.md
+└── cjpm.toml
+```
+
+Because no build output directory is configured, it defaults to `target`. After `cjpm bundle`, the `target` directory contains the following:
+
+```text
+target
+├── demo-1.0.0.cjp  # source distribution package
+├── meta-data.json  # package metadata
+└── other build artifacts
+```
+
+Extracting `demo-1.0.0.cjp` as `tar.gz` with the `tar` command yields the same content as the `demo` directory above.
+
+### publish
+
+`publish` uploads the source distribution package to the central repository.
+
+When `publish` runs, `cjpm` looks for a `module-name-version.cjp` source distribution package and the `meta-data.json` metadata file in the build output directory. If either file is missing, or the checksum recorded in the metadata does not match the package, the default `bundle` workflow runs again. `cjpm` then uploads the package and the metadata to the central repository.
+
+> **Note:**
+>
+> The `publish` feature requires the central repository to be configured correctly; see [Project Management Configuration File Specification](#project-management-configuration-file-specification).
+
 ### install
 
 The `install` command installs a Cangjie project. It first compiles the project and then installs the artifacts to the specified path, naming them after the project (with `.exe` suffix on Windows). The installed project must be of type `executable`.
