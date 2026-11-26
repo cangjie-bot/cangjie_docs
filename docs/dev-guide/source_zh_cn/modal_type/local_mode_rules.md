@@ -279,7 +279,7 @@ func viaLocal(s: String @ local?): String @ local? {
 
 `this @ local!` 和 `this @ local?` 的构造函数，函数体必须以 exclave 表达式开头，通常直接用 `exclave` 修饰 `init` 来表达（参见 [exclave 表达式](./exclave.md)）。在这样的构造函数中可以给成员赋值，适用[实例成员变量的赋值](#实例成员变量的赋值)中对 `this` 初始化的例外规则。
 
-构造实例时，可以在构造调用之后显式写上 mode 来选择构造函数，例如 `Order("pen", 2) @ local!`。省略 mode 时，编译器会按上下文推断，例如变量类型、形参类型或返回类型；若无法唯一推断，则默认为 `@ ~local`。确定 mode 后，从 `this` mode 与之相同的构造函数中，按函数重载规则选择。下面通过变量类型选择构造函数：
+构造实例时，可以在构造调用之后显式写上 mode，例如 `Order("pen", 2) @ local!`，以选择具有对应 `this` mode 的构造函数。省略 mode 时，编译器可以根据目标类型或匹配的构造函数推断 mode。没有目标类型时，只有存在匹配的 `@ ~local` 构造函数，调用才会默认选择 `@ ~local`。下面展示如何通过变量类型选择构造函数，完整规则见 [mode 自动推断](#mode-自动推断)。
 
 <!-- verify -->
 <!-- cfg="--experimental --enable-local-mode" -->
@@ -476,6 +476,176 @@ class Child <: Base {
         super() // Error，没有 this @ local! 的构造函数
     }
 }
+```
+
+## mode 自动推断
+
+变量类型、函数形参类型和函数返回类型都可以提供目标类型。
+
+### 构造调用
+
+对于未显式标注 mode 的非 `Copyable` 类或结构体的构造调用，编译器在重载决议过程中确定 mode。
+
+1. 没有目标类型时，编译器先判断哪些构造函数与实参匹配。如果有多种 `this` mode 的构造函数都匹配，编译器优先选择匹配的 `@ ~local` 构造函数。如果没有匹配的 `@ ~local` 构造函数，则匹配的 `@ local!` 和 `@ local?` 构造函数在 mode 上优先级相同。
+2. 有目标类型时，编译器考虑结果类型是目标类型的子类型的构造函数，子类型检查包含 mode。其他重载条件相同时，优先选择 `this` mode 与目标 mode 完全一致的构造函数。例如，目标为 `@ local?` 时，其他条件相同的 `@ local?` 构造函数优先于 `@ local!` 或 `@ ~local` 构造函数。
+3. 选中的构造函数的 `this` mode 决定结果的 mode。如果重载决议无法选出唯一的最佳候选，编译器会报告构造调用歧义。
+
+第一次调用 `Order("ink")` 时，两个构造函数都匹配。由于没有目标类型，编译器优先选择 `@ ~local` 构造函数。第二次调用时，`showKind` 的形参提供了目标类型 `Order @ local!`，编译器因此选择 `this @ local!` 构造函数。
+
+<!-- verify -->
+<!-- cfg="--experimental --enable-local-mode" -->
+
+```cangjie
+class Order {
+    var kind: Int64
+    init(_: String) {
+        this.kind = 0
+    }
+    exclave init(this @ local!, _: String @ local!) {
+        this.kind = 1
+    }
+}
+
+func showKind(order: Order @ local!) {
+    println(order.kind)
+}
+
+main() {
+    let order = Order("ink")
+    println(order.kind)
+    showKind(Order("ink"))
+}
+```
+
+执行结果为：
+
+```text
+0
+1
+```
+
+下面的类只有一个 `this @ local!` 构造函数。调用没有目标类型，编译器根据匹配的构造函数推断出 `@ local!`。
+
+<!-- verify -->
+<!-- cfg="--experimental --enable-local-mode" -->
+
+```cangjie
+class LocalItem {
+    let count: Int64
+
+    exclave init(this @ local!) {
+        count = 1
+    }
+}
+
+main() {
+    let item = LocalItem()
+    let localItem: LocalItem @ local! = item
+    println(localItem.count)
+}
+```
+
+执行结果为：
+
+```text
+1
+```
+
+下例的两个构造函数只有 `this` mode 不同，且没有 `@ ~local` 版本。调用 `LocalOrder()` 时，编译器无法从上下文确定实例的 mode，因此报构造调用歧义。可以在调用后显式写出所需的 mode。
+
+<!-- compile.error -->
+<!-- cfg="--experimental --enable-local-mode" -->
+
+```cangjie
+class LocalOrder {
+    exclave init(this @ local!) {}
+    exclave init(this @ local?) {}
+}
+
+main() {
+    LocalOrder() @ local! // OK
+    LocalOrder() // Error, ambiguous match for constructor call 'LocalOrder'
+}
+```
+
+### 字面量
+
+编译器可以从目标类型推断字面量表达式的 mode。没有目标类型时，数组和元组字面量使用元素 mode 的公共父 mode，无法推断公共父 mode 时默认为 `@ ~local`。其余字面量默认为 `@ ~local`。
+
+下例中，`show` 的形参类型是 `String @ local!`，编译器据此将字符串字面量的 mode 推断为 `@ local!`。
+
+<!-- verify -->
+<!-- cfg="--experimental --enable-local-mode" -->
+
+```cangjie
+func show(label: String @ local!) {
+    println(label.size)
+}
+
+main() {
+    show("label")
+}
+```
+
+执行结果为：
+
+```text
+5
+```
+
+如果先用 `let s = "label"` 绑定该字面量，初始化表达式没有目标类型，因此 `s` 的 mode 是 `@ ~local`。随后调用 `show(s)` 会报告类型不匹配。
+
+### 其他情况
+
+其他情况下，如果表达式需要确定 mode，而编译器无法唯一推断，就会报错。
+
+下例的两个 `if` 表达式都没有目标类型。第一个表达式中，`heap` 和 `local` 都是非 `Copyable` 值，结果使用它们的公共父 mode `@ local?`。第二个 `if` 中，两个分支类型的公共父类型是 `Item`。`count` 的类型实现了 `Copyable`，其 mode 可以自由转换，因此推断结果的 mode 时只考虑非 `Copyable` 分支 `local`。该分支的类型是 `Label @ local!`，所以结果类型为 `Item @ local!`。
+
+<!-- verify -->
+<!-- cfg="--experimental --enable-local-mode" -->
+
+```cangjie
+interface Item {
+    func size(this @ local?): Int64
+}
+
+struct Count <: Item & Copyable {
+    public func size(this @ local?): Int64 { 1 }
+}
+
+class Label <: Item {
+    init() {}
+    exclave init(this @ local!) {}
+    public func size(this @ local?): Int64 { 2 }
+}
+
+func check(flag: Bool) {
+    let heap = Label() @ ~local
+    let local = Label() @ local!
+    let count = Count()
+
+    let label = if (flag) { heap } else { local } // Label @ local?
+    let item = if (flag) { count } else { local } // Item @ local!
+
+    let common: Label @ local? = label
+    let localItem: Item @ local! = item
+    println(common.size())
+    println(localItem.size())
+}
+
+main() {
+    check(true)
+    check(false)
+}
+```
+
+执行结果为：
+
+```text
+2
+1
+2
+2
 ```
 
 ## 成员函数的 this mode

@@ -279,7 +279,7 @@ For non-`Copyable` types, the mode of an instance is determined by the construct
 
 The body of a `this @ local!` or `this @ local?` constructor must begin with an exclave expression, which is usually expressed by modifying `init` with `exclave` directly (see [exclave Expressions](./exclave.md)). Members can be assigned in such a constructor, and the exception for initializing `this` described in [Assignment to Instance Member Variables](#assignment-to-instance-member-variables) applies.
 
-When constructing an instance, you can explicitly write a mode after the constructor call to select a constructor, such as `Order("pen", 2) @ local!`. If the mode is omitted, the compiler infers it from the context, such as the variable type, the parameter type, or the return type; if it cannot be uniquely inferred, it defaults to `@ ~local`. Once the mode is determined, a constructor is selected from those with the same `this` mode according to the function overloading rules. The following example selects constructors by the variable type:
+When constructing an instance, you can specify a mode after the constructor call, as in `Order("pen", 2) @ local!`, to select a constructor with that `this` mode. If you omit the mode, the compiler can use the target type or the modes of the matching constructors. Without a target type, the call defaults to `@ ~local` only if an `@ ~local` constructor matches. The following example shows how a variable type can guide constructor selection. See [Automatic Mode Inference](#automatic-mode-inference) for the full rules.
 
 <!-- verify -->
 <!-- cfg="--experimental --enable-local-mode" -->
@@ -476,6 +476,176 @@ class Child <: Base {
         super() // Error, no constructor with this @ local!
     }
 }
+```
+
+## Automatic Mode Inference
+
+A variable type, a function parameter type, or a function return type can provide a target type.
+
+### Constructor Calls
+
+For a constructor call of a non-`Copyable` class or struct with no explicit mode, the compiler resolves the mode as part of overload resolution.
+
+1. Without a target type, the compiler first checks which constructors match the arguments. If constructors with multiple `this` modes match, it gives priority to the matching `@ ~local` constructors. If none of those match, the compiler considers the matching `@ local!` and `@ local?` constructors without preferring either mode.
+2. With a target type, the compiler considers constructors whose result types are subtypes of the target type, including its mode. Among otherwise equivalent overloads, it prefers the constructor whose `this` mode exactly matches the target mode. For example, for an `@ local?` target, it prefers an `@ local?` constructor over an otherwise equivalent `@ local!` or `@ ~local` constructor.
+3. The selected constructor’s `this` mode determines the result mode. If overload resolution leaves multiple candidates with no single best match, the compiler reports an ambiguous constructor call.
+
+Both constructors match the first call to `Order("ink")`. With no target type, the compiler selects the `@ ~local` constructor. In the second call, the parameter of `showKind` provides the target type `Order @ local!`, so the compiler selects the `this @ local!` constructor.
+
+<!-- verify -->
+<!-- cfg="--experimental --enable-local-mode" -->
+
+```cangjie
+class Order {
+    var kind: Int64
+    init(_: String) {
+        this.kind = 0
+    }
+    exclave init(this @ local!, _: String @ local!) {
+        this.kind = 1
+    }
+}
+
+func showKind(order: Order @ local!) {
+    println(order.kind)
+}
+
+main() {
+    let order = Order("ink")
+    println(order.kind)
+    showKind(Order("ink"))
+}
+```
+
+The output is:
+
+```text
+0
+1
+```
+
+The class below has only a `this @ local!` constructor. The call has no target type, so the compiler infers `@ local!` from the matching constructor.
+
+<!-- verify -->
+<!-- cfg="--experimental --enable-local-mode" -->
+
+```cangjie
+class LocalItem {
+    let count: Int64
+
+    exclave init(this @ local!) {
+        count = 1
+    }
+}
+
+main() {
+    let item = LocalItem()
+    let localItem: LocalItem @ local! = item
+    println(localItem.count)
+}
+```
+
+The output is:
+
+```text
+1
+```
+
+The two constructors below differ only in their `this` modes, and neither uses `@ ~local`. When `LocalOrder()` has no expected type, the compiler cannot determine the instance mode and reports an ambiguous constructor call. Specify the desired mode after the call to resolve it.
+
+<!-- compile.error -->
+<!-- cfg="--experimental --enable-local-mode" -->
+
+```cangjie
+class LocalOrder {
+    exclave init(this @ local!) {}
+    exclave init(this @ local?) {}
+}
+
+main() {
+    LocalOrder() @ local! // OK
+    LocalOrder() // Error, ambiguous match for constructor call 'LocalOrder'
+}
+```
+
+### Literals
+
+The compiler can infer the mode of a literal expression from its target type. Without a target type, an array or tuple literal uses the common supermode of its elements if one can be inferred, and defaults to `@ ~local` otherwise. Other literals default to `@ ~local`.
+
+In the following example, the parameter type of `show` is `String @ local!`, so the compiler infers `@ local!` as the mode of the string literal.
+
+<!-- verify -->
+<!-- cfg="--experimental --enable-local-mode" -->
+
+```cangjie
+func show(label: String @ local!) {
+    println(label.size)
+}
+
+main() {
+    show("label")
+}
+```
+
+The output is:
+
+```text
+5
+```
+
+If you first bind the literal with `let s = "label"`, the initializer has no target type, so `s` has mode `@ ~local`. The call `show(s)` then fails with a type mismatch.
+
+### Other Cases
+
+In other cases, when an expression requires a mode and the compiler cannot infer it unambiguously, it reports an error.
+
+Neither `if` expression in the example has a target type. In the first expression, `heap` and `local` are both non-`Copyable`, so the result has their common supermode, `@ local?`. In the second `if`, the common supertype of the two branches is `Item`. The type of `count` implements `Copyable`, so its mode can be freely converted. The compiler therefore uses only the non-`Copyable` branch, `local`, to infer the result mode. That branch has type `Label @ local!`, so the result type is `Item @ local!`.
+
+<!-- verify -->
+<!-- cfg="--experimental --enable-local-mode" -->
+
+```cangjie
+interface Item {
+    func size(this @ local?): Int64
+}
+
+struct Count <: Item & Copyable {
+    public func size(this @ local?): Int64 { 1 }
+}
+
+class Label <: Item {
+    init() {}
+    exclave init(this @ local!) {}
+    public func size(this @ local?): Int64 { 2 }
+}
+
+func check(flag: Bool) {
+    let heap = Label() @ ~local
+    let local = Label() @ local!
+    let count = Count()
+
+    let label = if (flag) { heap } else { local } // Label @ local?
+    let item = if (flag) { count } else { local } // Item @ local!
+
+    let common: Label @ local? = label
+    let localItem: Item @ local! = item
+    println(common.size())
+    println(localItem.size())
+}
+
+main() {
+    check(true)
+    check(false)
+}
+```
+
+The output is:
+
+```text
+2
+1
+2
+2
 ```
 
 ## The this Mode of Member Functions
