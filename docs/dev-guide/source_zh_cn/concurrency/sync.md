@@ -149,7 +149,7 @@ main() {
     var t2 = A()
     var y2 = obj2.compareAndSwap(t2, A()) // x and t1 are not the same object, CAS fails, y2: false
     println(y2)
-    y2 = obj2.compareAndSwap(t1, A()) // CAS successes, y2: true
+    y2 = obj2.compareAndSwap(t1, A()) // CAS succeeds, y2: true
     println(y2)
 }
 ```
