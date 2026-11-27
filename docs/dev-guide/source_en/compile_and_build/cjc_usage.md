@@ -37,3 +37,20 @@ The above describes `cjc`'s default behavior when no compilation options are pro
 > **Note:**
 >
 > When compiling large projects on Windows, the link command carries the paths of all object files and library files, or contains overlong arguments from the `LIBRARY_PATH` environment variable, and its length may exceed the Windows per-command-line limit, causing the linker to fail to start. To avoid this problem, when the link command length reaches the threshold, `cjc` automatically writes the link parameters to a response file (a file from which the linker reads parameters, equivalent to providing them on the command line) and starts the linker with `@<file path>`. With the `--save-temps <dir>` option, the response file is generated directly in the specified directory and kept after the build for troubleshooting. When compiling with the `-V` option, the response file path appears in the printed linker command (in the `@<file path>` form).
+
+## Linkers Used by `cjc`
+
+After backend compilation, `cjc` invokes a linker to produce the final output. The linkers used on each target platform are as follows:
+
+| Target Platform | Linker | Condition | Linker Source |
+| --- | --- | --- | --- |
+| Linux | `ld` | Default | System linker |
+| Linux | `ld.lld` | When `--lto=[full\|thin]` or hardware memory safety detection is enabled | Provided with the SDK |
+| macOS / iOS | `ld64.lld` | Default | Provided with the SDK |
+| Windows | `ld.lld` | Default | Provided with the SDK |
+| OHOS | `ld.lld` | Default | Provided with the SDK |
+| Android | `ld.lld` | Default | Provided with the SDK |
+
+`ld.lld` and `ld64.lld` are the corresponding drivers of LLVM `lld`, provided by the SDK in the `$CANGJIE_HOME/third_party/llvm/bin` directory.
+
+Arguments passed through `--link-option` and `--link-options` are forwarded directly to the linker listed above. The available arguments depend on the linker type. For details, refer to the documentation of the corresponding linker.
