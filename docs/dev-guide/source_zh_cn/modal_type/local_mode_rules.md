@@ -599,53 +599,21 @@ main() {
 
 其他情况下，如果表达式需要确定 mode，而编译器无法唯一推断，就会报错。
 
-下例的两个 `if` 表达式都没有目标类型。第一个表达式中，`heap` 和 `local` 都是非 `Copyable` 值，结果使用它们的公共父 mode `@ local?`。第二个 `if` 中，两个分支类型的公共父类型是 `Item`。`count` 的类型实现了 `Copyable`，其 mode 可以自由转换，因此推断结果的 mode 时只考虑非 `Copyable` 分支 `local`。该分支的类型是 `Label @ local!`，所以结果类型为 `Item @ local!`。
+下例中的 lambda 形参 `x` 没有类型标注。两个调用都要求 `x` 的类型为 `String`，但 `useLocal` 要求 `@ local!`，`useHeap` 要求 `@ ~local`。没有一种 mode 能同时满足两个调用的要求，因此编译器无法推断形参类型，并提示需要添加类型标注。
 
-<!-- verify -->
+<!-- compile.error -->
 <!-- cfg="--experimental --enable-local-mode" -->
 
 ```cangjie
-interface Item {
-    func size(this @ local?): Int64
-}
-
-struct Count <: Item & Copyable {
-    public func size(this @ local?): Int64 { 1 }
-}
-
-class Label <: Item {
-    init() {}
-    exclave init(this @ local!) {}
-    public func size(this @ local?): Int64 { 2 }
-}
-
-func check(flag: Bool) {
-    let heap = Label() @ ~local
-    let local = Label() @ local!
-    let count = Count()
-
-    let label = if (flag) { heap } else { local } // Label @ local?
-    let item = if (flag) { count } else { local } // Item @ local!
-
-    let common: Label @ local? = label
-    let localItem: Item @ local! = item
-    println(common.size())
-    println(localItem.size())
-}
+func useLocal(_: String @ local!) {}
+func useHeap(_: String @ ~local) {}
 
 main() {
-    check(true)
-    check(false)
+    let f = { x => // Error, parameters of this lambda expression must have type annotations
+        useLocal(x)
+        useHeap(x)
+    }
 }
-```
-
-执行结果为：
-
-```text
-2
-1
-2
-2
 ```
 
 ## 成员函数的 this mode

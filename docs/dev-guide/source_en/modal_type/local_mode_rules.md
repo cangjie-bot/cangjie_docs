@@ -488,7 +488,7 @@ For a constructor call of a non-`Copyable` class or struct with no explicit mode
 
 1. Without a target type, the compiler first checks which constructors match the arguments. If constructors with multiple `this` modes match, it gives priority to the matching `@ ~local` constructors. If none of those match, the compiler considers the matching `@ local!` and `@ local?` constructors without preferring either mode.
 2. With a target type, the compiler considers constructors whose result types are subtypes of the target type, including its mode. Among otherwise equivalent overloads, it prefers the constructor whose `this` mode exactly matches the target mode. For example, for an `@ local?` target, it prefers an `@ local?` constructor over an otherwise equivalent `@ local!` or `@ ~local` constructor.
-3. The selected constructor’s `this` mode determines the result mode. If overload resolution leaves multiple candidates with no single best match, the compiler reports an ambiguous constructor call.
+3. The selected constructor's `this` mode determines the result mode. If overload resolution leaves multiple candidates with no single best match, the compiler reports an ambiguous constructor call.
 
 Both constructors match the first call to `Order("ink")`. With no target type, the compiler selects the `@ ~local` constructor. In the second call, the parameter of `showKind` provides the target type `Order @ local!`, so the compiler selects the `this @ local!` constructor.
 
@@ -599,53 +599,21 @@ If you first bind the literal with `let s = "label"`, the initializer has no tar
 
 In other cases, when an expression requires a mode and the compiler cannot infer it unambiguously, it reports an error.
 
-Neither `if` expression in the example has a target type. In the first expression, `heap` and `local` are both non-`Copyable`, so the result has their common supermode, `@ local?`. In the second `if`, the common supertype of the two branches is `Item`. The type of `count` implements `Copyable`, so its mode can be freely converted. The compiler therefore uses only the non-`Copyable` branch, `local`, to infer the result mode. That branch has type `Label @ local!`, so the result type is `Item @ local!`.
+In the following lambda, the parameter `x` has no type annotation. Both calls require `x` to have type `String`, but `useLocal` requires `@ local!` and `useHeap` requires `@ ~local`. No single mode satisfies both calls, so the compiler cannot infer the parameter type and asks for a type annotation.
 
-<!-- verify -->
+<!-- compile.error -->
 <!-- cfg="--experimental --enable-local-mode" -->
 
 ```cangjie
-interface Item {
-    func size(this @ local?): Int64
-}
-
-struct Count <: Item & Copyable {
-    public func size(this @ local?): Int64 { 1 }
-}
-
-class Label <: Item {
-    init() {}
-    exclave init(this @ local!) {}
-    public func size(this @ local?): Int64 { 2 }
-}
-
-func check(flag: Bool) {
-    let heap = Label() @ ~local
-    let local = Label() @ local!
-    let count = Count()
-
-    let label = if (flag) { heap } else { local } // Label @ local?
-    let item = if (flag) { count } else { local } // Item @ local!
-
-    let common: Label @ local? = label
-    let localItem: Item @ local! = item
-    println(common.size())
-    println(localItem.size())
-}
+func useLocal(_: String @ local!) {}
+func useHeap(_: String @ ~local) {}
 
 main() {
-    check(true)
-    check(false)
+    let f = { x => // Error, parameters of this lambda expression must have type annotations
+        useLocal(x)
+        useHeap(x)
+    }
 }
-```
-
-The output is:
-
-```text
-2
-1
-2
-2
 ```
 
 ## The this Mode of Member Functions
