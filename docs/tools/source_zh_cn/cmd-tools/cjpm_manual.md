@@ -1965,7 +1965,9 @@ cfg3 = "-O2"
 
 > **注意：**
 >
-> 如果同时通过 `package-option` 和 `path-option` 导入了相同的包，则 `package-option` 字段的优先级更高。
+> - 如果同时通过 `package-option` 和 `path-option` 导入了相同的包，则 `package-option` 字段的优先级更高。
+> - 如果模块 A 依赖二进制包 B，而 B 又依赖二进制包 C，即使 A 的源码没有直接导入 C，也需要在 A 的 `bin-dependencies` 中配置 C 的 `.cjo` 路径。可以通过 `path-option` 指定 C 的 `.cjo` 所在目录，或通过 `package-option` 指定该文件的路径。
+> - 遗漏 C 时，报错阶段取决于链接器及其选项。例如，在 Linux 上使用系统链接器 `ld` 生成共享库时，链接器默认允许保留未解析的符号，因此构建可能成功，但运行时若无法解析 C 的符号，程序就会报错。在 macOS 上，`ld64.lld` 默认会在链接时报告未定义符号，导致构建失败。各平台的链接器选择见[《`cjc` 使用的链接器》](../../../dev-guide/source_zh_cn/compile_and_build/cjc_usage.md#cjc-使用的链接器)。
 
 其中，源码 `main.cj` 调用 `pro0.xoo`、`pro0.yoo`、`pro1.zoo` 包的代码示例如下所示。
 
