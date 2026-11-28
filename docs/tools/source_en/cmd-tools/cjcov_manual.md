@@ -48,10 +48,10 @@ cjcov -version or cjcov -v
 | [`--html-details`](#cjcov---html-details) | Generate `html` coverage reports corresponding to source code files |
 | [`-x, --xml`](#cjcov--x----xml) | Generate a `coverage.xml` file at the specified output path |
 | [`-j, --json`](#cjcov--j----json) | Generate a `coverage.json` file at the specified output path |
-| [`-k, --keep`](#cjcov--k-----keep) | Keep the generated `gcov` intermediate files |
+| [`-k, --keep`](#cjcov--k----keep) | Keep the generated `gcov` intermediate files |
 | [`-b, --branches`](#cjcov--b----branches) | Generate branch coverage information |
 | [`-r ROOT, --root=ROOT`](#cjcov--r-root----rootroot) | Search for `gcda` files in the `ROOT` directory or its recursive subdirectories |
-| [`-o OUTPUT, --output=OUTPUT`](#cjcov--o-output-----outputoutput) | Specify the output path for the `html` coverage report |
+| [`-o OUTPUT, --output=OUTPUT`](#cjcov--o-output----outputoutput) | Specify the output path for the `html` coverage report |
 | [`-s SOURCE, --source=SOURCE`](#-s-source----sourcesource) | Specify the code path of Cangjie source files |
 | [`-e EXCLUDE, --exclude=EXCLUDE`](#-e-exclude----excludeexclude) | Specify the list of source files for which coverage information should not be generated |
 | [`-i INCLUDE, --include=INCLUDE`](#-i-include----includeinclude) | Specify the list of source files for which coverage information should be generated |

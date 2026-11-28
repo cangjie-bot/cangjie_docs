@@ -88,7 +88,7 @@ Unlike the `is` operator, which is used for type checking, and the `as` operator
 
 In the conditions of `if` expressions and `while` expressions, type patterns can be used through "let patterns".
 
-For more information about type patterns, see [Type Patterns](../enum_and_pattern_match/pattern_overview.md#type-patterns). For more information about "let patterns", see [Examples of "Conditions" Involving let Patterns](../basic_programming_concepts/expression.md#examples-of-conditions-involving-let-patterns).
+For more information about type patterns, see [Type Patterns](../enum_and_pattern_match/pattern_overview.md#type-pattern). For more information about "let patterns", see [Examples of "Conditions" Involving let Patterns](../basic_programming_concepts/expression.md#examples-of-conditions-involving-let-patterns).
 
 The following example demonstrates subtype conversion with type patterns in the conditions of `if` expressions and `while` expressions:
 
