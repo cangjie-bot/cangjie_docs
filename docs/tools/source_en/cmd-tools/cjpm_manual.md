@@ -1659,6 +1659,12 @@ This field is used to import pre-compiled Cangjie library output files suitable 
 └── cjpm.toml
 ```
 
+> **Note:**
+>
+> Include the `.cjo` paths of indirect binary dependencies in the current module's `bin-dependencies`. For example, if module A depends on module B and B depends on binary package C, A must configure C even if A does not import C directly. In A's `bin-dependencies`, use `path-option` to specify the directory containing C's `.cjo` file or `package-option` to specify the file itself.
+>
+> If C is missing, the linker and its options determine when the error occurs. For example, when building a shared library on Linux, `ld.lld` allows unresolved symbols by default. The build may succeed, but the program will fail at runtime if it cannot resolve a symbol from C. On macOS, `ld64.lld` reports undefined symbols at link time by default, causing the build to fail. For linker selection by platform, see [Linkers Used by `cjc`](../../../dev-guide/source_en/compile_and_build/cjc_usage.md#linkers-used-by-cjc).
+
 Method 1: Import via `path-option`:
 
 ```text
