@@ -1924,10 +1924,6 @@ cfg3 = "-O2"
 
 该字段用于导入已编译好的、适用于指定 `target` 的仓颉库产物文件，以导入下述的 `pro0` 模块和 `pro1` 模块的三个包来举例说明。
 
-> **注意：**
->
-> 非特殊需求场景，不建议使用该字段，请使用上文介绍的 `dependencies` 字段导入模块源码。
-
 ```text
 ├── test
 │    ├── pro0
@@ -1942,11 +1938,6 @@ cfg3 = "-O2"
 │    └── main.cj
 └── cjpm.toml
 ```
-
-> **注意：**
->
-> - 当前模块的 `bin-dependencies` 也需要包含间接二进制依赖的 `.cjo` 路径。例如，模块 A 依赖模块外的包 B，而 B 又依赖二进制包 C，即使 A 的源码没有直接导入 C，也需要在 A 的 `bin-dependencies` 中通过 `path-option` 指定 C 的 `.cjo` 所在目录，或通过 `package-option` 指定该文件的路径。
-> - 遗漏 C 时，报错阶段取决于链接器及其选项。例如，在 Linux 上使用 `ld.lld` 生成共享库时，链接器默认允许保留未解析的符号，因此构建可能成功，但运行时若无法解析 C 的符号，程序就会报错。在 macOS 上，`ld64.lld` 默认会在链接时报告未定义符号，导致构建失败。各平台的链接器选择见[《`cjc` 使用的链接器》](../../../dev-guide/source_zh_cn/compile_and_build/cjc_usage.md#cjc-使用的链接器)。
 
 方式一，通过 `path-option` 导入：
 
@@ -1968,10 +1959,6 @@ cfg3 = "-O2"
 
 `package-option` 选项为 `map` 结构，`pro0.xoo` 名称作为 `key` (`toml` 配置文件中含有 `.` 的字符串作为整体时，需要用 `""` 包含)，所以 `key` 的值为 `libpro0.xoo.so` 。前端文件 `cjo` 的路径作为 `value`，对应于该 `cjo` 的 `.a` 或 `.so` 需放置在相同路径下。
 
-> **注意：**
->
-> 如果同时通过 `package-option` 和 `path-option` 导入了相同的包，则 `package-option` 字段的优先级更高。
-
 其中，源码 `main.cj` 调用 `pro0.xoo`、`pro0.yoo`、`pro1.zoo` 包的代码示例如下所示。
 
 <!-- code_no_check -->
@@ -1990,8 +1977,12 @@ main(): Int64 {
 
 > **注意：**
 >
-> 依赖的仓颉动态库文件可能是其他模块通过配置 `profile.build.combined` 生成的 `root` 包编译产物，包含其所有子包的符号。因此，在依赖检查时，如果找不到某个包对应的仓颉库，会使用该包对应的 `root` 包作为依赖，并打印告警提示。开发者需要保证以此方式导入的 `root` 包是通过对应方式生成的仓颉库文件，否则该库文件可能不会包含子包的符号，导致编译报错。
-> 例如，源码中通过 `import demo.aoo` 导入了 `demo.aoo` 包，在二进制依赖中没有找到该包对应的仓颉库，`cjpm` 会尝试寻找该包对应的 `root` 包的动态库，即 Linux 平台的 `libdemo.so` 或 iOS 平台的 `libdemo.dylib`，如果找到则使用该库作为依赖。
+> - 当前模块的 `bin-dependencies` 也需要包含间接二进制依赖的 `.cjo` 路径。例如，模块 A 依赖模块外的包 B，而 B 又依赖二进制包 C，即使 A 的源码没有直接导入 C，也需要在 A 的 `bin-dependencies` 中通过 `path-option` 指定 C 的 `.cjo` 所在目录，或通过 `package-option` 指定该文件的路径。
+> - 遗漏 C 时，报错阶段取决于链接器及其选项。例如，在 Linux 上使用 `ld.lld` 生成共享库时，链接器默认允许保留未解析的符号，因此构建可能成功，但运行时若无法解析 C 的符号，程序就会报错。在 macOS 上，`ld64.lld` 默认会在链接时报告未定义符号，导致构建失败。各平台的链接器选择见[《`cjc` 使用的链接器》](../../../dev-guide/source_zh_cn/compile_and_build/cjc_usage.md#cjc-使用的链接器)。
+> - 非特殊需求场景，不建议使用该字段，请使用上文介绍的 `dependencies` 字段导入模块源码。
+> - 如果同时通过 `package-option` 和 `path-option` 导入了相同的包，则 `package-option` 字段的优先级更高。
+> - 依赖的仓颉动态库文件可能是其他模块通过配置 `profile.build.combined` 生成的 `root` 包编译产物，包含其所有子包的符号。因此，在依赖检查时，如果找不到某个包对应的仓颉库，会使用该包对应的 `root` 包作为依赖，并打印告警提示。开发者需要保证以此方式导入的 `root` 包是通过对应方式生成的仓颉库文件，否则该库文件可能不会包含子包的符号，导致编译报错。
+>   例如，源码中通过 `import demo.aoo` 导入了 `demo.aoo` 包，在二进制依赖中没有找到该包对应的仓颉库，`cjpm` 会尝试寻找该包对应的 `root` 包的动态库，即 Linux 平台的 `libdemo.so` 或 iOS 平台的 `libdemo.dylib`，如果找到则使用该库作为依赖。
 
 #### target.target-name.compile-macros-for-target
 
