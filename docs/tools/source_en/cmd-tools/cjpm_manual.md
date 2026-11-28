@@ -1682,8 +1682,8 @@ The `package-option` is a `map` structure, where `pro0.xoo` serves as the `key` 
 > **Note:**
 >
 > - If the same package is imported via both `package-option` and `path-option`, the `package-option` field takes higher precedence.
-> - Include the `.cjo` paths of indirect binary dependencies in the current module's `bin-dependencies`. For example, if module A depends on package B from another module and B depends on binary package C, A must configure C even if A does not import C directly. In A's `bin-dependencies`, use `path-option` to specify the directory containing C's `.cjo` file or `package-option` to specify the file itself.
-> - If C is missing, the linker and its options determine when the error occurs. For example, when building a shared library on Linux, `ld.lld` allows unresolved symbols by default. The build may succeed, but the program will fail at runtime if it cannot resolve a symbol from C. On macOS, `ld64.lld` reports undefined symbols at link time by default, causing the build to fail. For linker selection by platform, see [Linkers Used by `cjc`](../../../dev-guide/source_en/compile_and_build/cjc_usage.md#linkers-used-by-cjc).
+> - If module A depends on binary package B and B depends on binary package C, include the path to C's `.cjo` file in A's `bin-dependencies`, even if A does not import C directly. Use `path-option` to specify the directory containing C's `.cjo` file or `package-option` to specify the file itself.
+> - If C is missing, the linker and its options determine when the error occurs. For example, when building a shared library on Linux, the system linker `ld` allows unresolved symbols by default. The build may succeed, but the program will fail at runtime if it cannot resolve a symbol from C. On macOS, `ld64.lld` reports undefined symbols at link time by default, causing the build to fail. For linker selection by platform, see [Linkers Used by `cjc`](../../../dev-guide/source_en/compile_and_build/cjc_usage.md#linkers-used-by-cjc).
 
 The following code example in `main.cj` demonstrates calling the `pro0.xoo`, `pro0.yoo`, and `pro1.zoo` packages:
 
